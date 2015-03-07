@@ -46,5 +46,23 @@
     "webpack": "^1.7.1",
     "webpack-dev-server": "^1.7.0"
   },
+  "keywords": [
+    "autosuggest",
+    "autocomplete",
+    "auto-suggest",
+    "auto-complete",
+    "auto suggest",
+    "auto complete",
+    "react autosuggest",
+    "react autocomplete",
+    "react auto-suggest",
+    "react auto-complete",
+    "react auto suggest",
+    "react auto complete",
+    "react-autosuggest",
+    "react-autocomplete",
+    "react-auto-suggest",
+    "react-auto-complete"
+  ],
   "license": "MIT"
 }
