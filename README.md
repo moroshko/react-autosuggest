@@ -1,4 +1,4 @@
-# React Autosugest
+# React Autosuggest
 
 ## Installation
 
