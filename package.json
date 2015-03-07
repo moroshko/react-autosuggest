@@ -1,0 +1,50 @@
+{
+  "name": "react-autosuggest",
+  "version": "1.0.0",
+  "description": "React autosuggest component",
+  "main": "src/Autosuggest.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moroshko/react-autosuggest.git"
+  },
+  "author": "Misha Moroshko <michael.moroshko@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/moroshko/react-autosuggest/issues"
+  },
+  "homepage": "https://github.com/moroshko/react-autosuggest",
+  "scripts": {
+    "start": "node server.js",
+    "test": "jest",
+    "build": "webpack"
+  },
+  "jest": {
+    "rootDir": ".",
+    "testDirectoryName": "tests",
+    "scriptPreprocessor": "<rootDir>/jest-script-preprocessor",
+    "unmockedModulePathPatterns": [
+      "react"
+    ]
+  },
+  "dependencies": {
+    "react": "^0.12.2"
+  },
+  "devDependencies": {
+    "babel-core": "^4.6.6",
+    "babel-eslint": "^1.0.12",
+    "babel-jest": "^4.0.0",
+    "babel-loader": "^4.0.0",
+    "css-loader": "^0.9.1",
+    "eslint": "^0.15.1",
+    "eslint-loader": "^0.4.0",
+    "extract-text-webpack-plugin": "^0.3.8",
+    "jest-cli": "^0.4.0",
+    "json-loader": "^0.5.1",
+    "less": "^2.4.0",
+    "less-loader": "^2.0.0",
+    "react-hot-loader": "^1.1.6",
+    "style-loader": "^0.8.3",
+    "webpack": "^1.7.1",
+    "webpack-dev-server": "^1.7.0"
+  },
+  "license": "MIT"
+}
