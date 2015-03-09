@@ -1,3 +1,14 @@
-.my-component {
-  color: red;
+.react-autosuggest {
+  position: relative;
+}
+.react-autosuggest__suggestions {
+  position: absolute;
+  border: 1px solid black;
+  background-color: #fff;
+}
+.react-autosuggest__suggestion {
+  cursor: pointer;
+}
+.react-autosuggest__suggestion--focused {
+  background-color: #ccc;
 }

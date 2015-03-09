@@ -51,7 +51,7 @@ function(input, callback) {
 * `callback` - Should be called once the suggestions are in hand, or error occurs.
 
   * Success example: `callback(null, ['Mentone', 'Mentone East'])`
-  * Error example - `callback(new Error("Couldn't get locations"))`
+  * Error example: `callback(new Error("Couldn't get locations"))`
 
 ## Development
 
