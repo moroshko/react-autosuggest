@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React autosuggest component",
   "main": "src/Autosuggest.js",
   "repository": {
