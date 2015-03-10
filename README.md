@@ -1,3 +1,5 @@
+[ ![Codeship Status for moroshko/react-autosuggest](https://codeship.com/projects/d5551f90-a93f-0132-8761-02471a552951/status?branch=master)](https://codeship.com/projects/67612)
+
 # React Autosuggest
 
 [WAI-ARIA compliant](http://www.w3.org/TR/wai-aria-practices/#autocomplete) React autosuggest component.
