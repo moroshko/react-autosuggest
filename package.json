@@ -15,7 +15,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "jest",
-    "build": "webpack"
+    "build": "webpack",
+    "deploy": "gh-pages-deploy"
   },
   "jest": {
     "rootDir": ".",
@@ -24,6 +25,9 @@
     "unmockedModulePathPatterns": [
       "react"
     ]
+  },
+  "gh-pages-deploy": {
+    "staticpath": "examples/dist"
   },
   "dependencies": {
     "react": "^0.12.2"
@@ -37,6 +41,7 @@
     "eslint": "^0.15.1",
     "eslint-loader": "^0.4.0",
     "extract-text-webpack-plugin": "^0.3.8",
+    "gh-pages-deploy": "^0.3.0",
     "jest-cli": "^0.4.0",
     "json-loader": "^0.5.1",
     "less": "^2.4.0",
