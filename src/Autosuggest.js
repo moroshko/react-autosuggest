@@ -176,7 +176,7 @@ var Autosuggest = React.createClass({
       });
 
       var suggestionContent = this.props.suggestionRenderer
-        ? this.props.suggestionRenderer(suggestion, this.state.value)
+        ? this.props.suggestionRenderer(suggestion, this.state.valueBeforeUpDown || this.state.value)
         : suggestion;
 
       return (

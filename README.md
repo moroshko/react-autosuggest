@@ -70,7 +70,7 @@ function(suggestion, input) {
 ```
 
 * `suggestion` - The suggestion (e.g. `'Mentone'`)
-* `input` - The value of the input field (e.g. `'Men'`)
+* `input` - The value of the input field (e.g. `'Men'`). If user interacts using the Up or Down keys, it will contain the value of the input field **prior** to those interactions.
 
 For example:
 
