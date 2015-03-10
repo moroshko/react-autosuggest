@@ -59,6 +59,34 @@ function(input, callback) {
   * Success example: `callback(null, ['Mentone', 'Mentone East'])`
   * Error example: `callback(new Error("Couldn't get locations"))`
 
+##### suggestionRenderer
+
+Function that renders a single suggestion.
+
+```javascript
+function(suggestion, input) {
+  ...
+}
+```
+
+* `suggestion` - The suggestion (e.g. `'Mentone'`)
+* `input` - The value of the input field (e.g. `'Men'`)
+
+For example:
+
+```javascript
+function renderLocation(suggestion, input) {
+  return (
+    <span><strong>{suggestion.slice(0, input.length)}</strong>{suggestion.slice(input.length)}</span>
+  );
+}
+```
+
+```xml
+<Autosuggest suggestions={getLocations} suggestionRenderer={renderLocation} />
+```
+
+
 ## Styling
 
 The `<Autosuggest />` component comes with no styles. You can use the following classes to style it:

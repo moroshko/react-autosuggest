@@ -1,6 +1,7 @@
 'use strict';
 
 require('./Autosuggest.less');
+require('./app.less');
 
 var React = require('react');
 var Autosuggest = require('../../src/Autosuggest');
@@ -16,12 +17,26 @@ function getLocations(input, callback) {
   }, 300);
 }
 
+function renderLocation(suggestion, input) {
+  return (
+    <span><strong>{suggestion.slice(0, input.length)}</strong>{suggestion.slice(input.length)}</span>
+  );
+}
+
 var App = React.createClass({
   render: function() {
     return (
-      <div>
-        <strong>Where</strong>
-        <Autosuggest suggestions={getLocations} />
+      <div className="examples">
+        <div className="example">
+          <h2>Basic Example</h2>
+          <strong>Where</strong>
+          <Autosuggest suggestions={getLocations} />
+        </div>
+        <div className="example">
+          <h2>Custom suggestion renderer</h2>
+          <strong>Where</strong>
+          <Autosuggest suggestions={getLocations} suggestionRenderer={renderLocation} />
+        </div>
       </div>
     );
   }

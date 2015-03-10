@@ -12,3 +12,9 @@
 .react-autosuggest__suggestion--focused {
   background-color: #ccc;
 }
+.examples {
+  display: flex;
+}
+.examples .example {
+  margin-left: 100px;
+}

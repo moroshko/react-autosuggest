@@ -5,8 +5,9 @@ var guid = 0;
 
 var Autosuggest = React.createClass({
   propTypes: {
-    initialValue: React.PropTypes.string, // Initial value
-    suggestions: React.PropTypes.func     // Function to get the suggestions
+    initialValue: React.PropTypes.string,    // Initial value
+    suggestions: React.PropTypes.func,       // Function to get the suggestions
+    suggestionRenderer: React.PropTypes.func // Function to render a single suggestion
   },
   getDefaultProps: function() {
     return {
@@ -174,6 +175,10 @@ var Autosuggest = React.createClass({
           index === this.state.focusedSuggestionIndex
       });
 
+      var suggestionContent = this.props.suggestionRenderer
+        ? this.props.suggestionRenderer(suggestion, this.state.value)
+        : suggestion;
+
       return (
         <div id={'react-autosuggest-' + this.id + '-suggestion-' + index}
              className={classes}
@@ -182,7 +187,7 @@ var Autosuggest = React.createClass({
              onMouseEnter={this.onSuggestionMouseEnter.bind(this, index)}
              onMouseLeave={this.onSuggestionMouseLeave}
              onMouseDown={this.onSuggestionMouseDown.bind(this, suggestion)}>
-          {suggestion}
+          {suggestionContent}
         </div>
       );
     }, this);
