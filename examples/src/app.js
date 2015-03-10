@@ -29,13 +29,13 @@ var App = React.createClass({
       <div className="examples">
         <div className="example">
           <h2>Basic Example</h2>
-          <strong>Where</strong>
-          <Autosuggest suggestions={getLocations} />
+          <label htmlFor="basic-example">Where</label>
+          <Autosuggest inputId="basic-example" suggestions={getLocations} />
         </div>
         <div className="example">
           <h2>Custom suggestion renderer</h2>
-          <strong>Where</strong>
-          <Autosuggest suggestions={getLocations} suggestionRenderer={renderLocation} />
+          <label htmlFor="custom-renderer-example">Where</label>
+          <Autosuggest inputId="custom-renderer-example" suggestions={getLocations} suggestionRenderer={renderLocation} />
         </div>
       </div>
     );

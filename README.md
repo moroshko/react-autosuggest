@@ -35,15 +35,24 @@ function getSuburbs(input, callback) {
 
 ### Options
 
+##### inputId (optional)
+
+The `id` of the input field. For example:
+
+```xml
+<label htmlFor="locations-autosuggest">Where</label>
+<Autosuggest inputId="locations-autosuggest" suggestions={getLocations} />
+```
+
 ##### initialValue (optional)
 
 Specifies the initial value of the input field. Defaults to `''`. For example:
 
 ```xml
-<Autosuggest initialValue={'Mordialloc'} suggestions={getSuburbs} />
+<Autosuggest initialValue="Mordialloc" suggestions={getSuburbs} />
 ```
 
-##### suggestions
+##### suggestions (required)
 
 Function to get the suggestions.
 
@@ -59,7 +68,7 @@ function(input, callback) {
   * Success example: `callback(null, ['Mentone', 'Mentone East'])`
   * Error example: `callback(new Error("Couldn't get locations"))`
 
-##### suggestionRenderer
+##### suggestionRenderer (optional)
 
 Function that renders a single suggestion.
 

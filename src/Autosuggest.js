@@ -6,12 +6,14 @@ var guid = 0;
 var Autosuggest = React.createClass({
   propTypes: {
     initialValue: React.PropTypes.string,    // Initial value
+    inputId: React.PropTypes.string,         // id of the input field
     suggestions: React.PropTypes.func,       // Function to get the suggestions
     suggestionRenderer: React.PropTypes.func // Function to render a single suggestion
   },
   getDefaultProps: function() {
     return {
-      initialValue: ''
+      initialValue: '',
+      inputId: null
     };
   },
   getInitialState: function() {
@@ -208,7 +210,8 @@ var Autosuggest = React.createClass({
 
     return (
       <div className="react-autosuggest">
-        <input type="text"
+        <input id={this.props.inputId}
+               type="text"
                value={this.state.value}
                role="combobox"
                aria-autocomplete="list"
