@@ -16,6 +16,19 @@ function getSuburbs(input, callback) {
   }));
 }
 
+function setInputValue(value) {
+  React.addons.TestUtils.Simulate.change(input, { target: { value: value } });
+}
+
+function expectSuggestions(expectedSuggestions) {
+  suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+  expect(suggestions.length).toBe(expectedSuggestions.length);
+
+  for (var i = 0; i < expectedSuggestions.length; i++) {
+    expect(suggestions[i].getDOMNode().textContent === expectedSuggestions[i]);
+  }
+}
+
 describe('Autosuggest', function() {
   describe('Basics', function() {
     beforeEach(function() {
@@ -30,26 +43,22 @@ describe('Autosuggest', function() {
     });
 
     it('should not show suggestions by default', function() {
-      suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-      expect(suggestions.length).toBe(0);
+      expectSuggestions([]);
     });
 
     it('should show suggestions when matches exist', function() {
-      React.addons.TestUtils.Simulate.change(input, { target: { value: 'm' } });
-      suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-      expect(suggestions.length).toBe(2);
+      setInputValue('m');
+      expectSuggestions(['Mill Park', 'Mordialloc']);
     });
 
     it('should show suggestions when case insensitive matches exist', function() {
-      React.addons.TestUtils.Simulate.change(input, { target: { value: 'NUNA' } });
-      suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-      expect(suggestions.length).toBe(1);
+      setInputValue('NUNA');
+      expectSuggestions(['Nunawading']);
     });
 
     it('should show not suggestions when no matches exist', function() {
-      React.addons.TestUtils.Simulate.change(input, { target: { value: 'a' } });
-      suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-      expect(suggestions.length).toBe(0);
+      setInputValue('a');
+      expectSuggestions([]);
     });
   });
 });
