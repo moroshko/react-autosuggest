@@ -1,8 +1,7 @@
 'use strict';
 
-require('./Autosuggest.less');
-
 var React = require('react/addons');
+var guid = 0;
 
 var Autosuggest = React.createClass({
   propTypes: {
@@ -15,6 +14,8 @@ var Autosuggest = React.createClass({
     };
   },
   getInitialState: function() {
+    guid += 1;
+    this.id = guid;
     this.cache = {};
 
     return {
@@ -83,6 +84,7 @@ var Autosuggest = React.createClass({
       case 13: // enter
         this.setState({
           suggestions: [],
+          focusedSuggestionIndex: null,
           valueBeforeUpDown: null
         });
 
@@ -153,6 +155,7 @@ var Autosuggest = React.createClass({
     this.setState({
       value: suggestion,
       suggestions: [],
+      focusedSuggestionIndex: null,
       valueBeforeUpDown: null
     }, function() {
       // This code executes after the component is re-rendered
@@ -172,7 +175,9 @@ var Autosuggest = React.createClass({
       });
 
       return (
-        <div className={classes}
+        <div id={'react-autosuggest-' + this.id + '-suggestion-' + index}
+             className={classes}
+             role="option"
              key={'suggestion' + index}
              onMouseEnter={this.onSuggestionMouseEnter.bind(this, index)}
              onMouseLeave={this.onSuggestionMouseLeave}
@@ -183,14 +188,28 @@ var Autosuggest = React.createClass({
     }, this);
 
     return (
-      <div className="react-autosuggest__suggestions">{content}</div>
+      <div id={'react-autosuggest-' + this.id}
+           className="react-autosuggest__suggestions"
+           role="listbox">
+        {content}
+      </div>
     );
   },
   render: function() {
+    var ariaActivedescendant =
+      this.state.focusedSuggestionIndex === null
+        ? null
+        : 'react-autosuggest-' + this.id + '-suggestion-' + this.state.focusedSuggestionIndex;
+
     return (
       <div className="react-autosuggest">
         <input type="text"
                value={this.state.value}
+               role="combobox"
+               aria-autocomplete="list"
+               aria-owns={'react-autosuggest-' + this.id}
+               aria-expanded={this.state.suggestions.length > 0}
+               aria-activedescendant={ariaActivedescendant}
                ref="input"
                onChange={this.onInputChange}
                onKeyDown={this.onInputKeyDown}

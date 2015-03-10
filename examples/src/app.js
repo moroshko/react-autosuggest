@@ -1,5 +1,7 @@
 'use strict';
 
+require('./Autosuggest.less');
+
 var React = require('react');
 var Autosuggest = require('../../src/Autosuggest');
 var suburbs = require('json!./suburbs.json');

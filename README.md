@@ -1,5 +1,7 @@
 # React Autosuggest
 
+[WAI-ARIA compliant](http://www.w3.org/TR/wai-aria-practices/#autocomplete) React autosuggest component.
+
 ## Installation
 
 ```bash
@@ -52,6 +54,16 @@ function(input, callback) {
 
   * Success example: `callback(null, ['Mentone', 'Mentone East'])`
   * Error example: `callback(new Error("Couldn't get locations"))`
+
+## Styling
+
+The `<Autosuggest />` component comes with no styles. You can use the following classes to style it:
+
+* `react-autosuggest` - Component's wrapper. It includes both the input field and the suggestions list.
+* `react-autosuggest__suggestions` - Suggestions list wrapper
+* `react-autosuggest__suggestion` - Single suggestion wrapper
+
+Example: [`examples/src/Autosuggest.less`](https://github.com/moroshko/react-autosuggest/blob/master/examples/src/Autosuggest.less)
 
 ## Development
 
