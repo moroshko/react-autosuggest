@@ -27,7 +27,8 @@
     ]
   },
   "gh-pages-deploy": {
-    "staticpath": "examples/dist"
+    "staticpath": "examples/dist",
+    "noprompt": true
   },
   "dependencies": {
     "react": "^0.12.2"
