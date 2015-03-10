@@ -2,6 +2,10 @@
 
 [WAI-ARIA compliant](http://www.w3.org/TR/wai-aria-practices/#autocomplete) React autosuggest component.
 
+## Demo
+
+[Live Examples](http://moroshko.github.io/react-autosuggest)
+
 ## Installation
 
 ```bash
