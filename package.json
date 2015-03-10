@@ -21,7 +21,7 @@
   "jest": {
     "rootDir": ".",
     "testDirectoryName": "tests",
-    "scriptPreprocessor": "<rootDir>/jest-script-preprocessor",
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
     "unmockedModulePathPatterns": [
       "react"
     ]
