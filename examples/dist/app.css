@@ -16,5 +16,9 @@
   display: flex;
 }
 .examples .example {
+  max-width: 300px;
   margin-left: 100px;
+}
+.examples .example label {
+  font-weight: bold;
 }

@@ -40,17 +40,25 @@ var App = React.createClass({
         <div className="example">
           <h2>Basic Example</h2>
           <label htmlFor="basic-example">Where</label>
-          <Autosuggest inputId="basic-example" suggestions={getLocations} />
+          <Autosuggest inputId="basic-example"
+                       inputPlaceholder="Enter location..."
+                       suggestions={getLocations} />
         </div>
         <div className="example">
           <h2>Custom suggestion renderer</h2>
           <label htmlFor="custom-renderer-example">Where</label>
-          <Autosuggest inputId="custom-renderer-example" suggestions={getLocations} suggestionRenderer={renderLocation} />
+          <Autosuggest inputId="custom-renderer-example"
+                       inputPlaceholder="Enter location..."
+                       suggestions={getLocations}
+                       suggestionRenderer={renderLocation} />
         </div>
         <div className="example">
           <h2>Limiting the amount of suggestions displayed</h2>
           <label htmlFor="limit-example">Where</label>
-          <Autosuggest inputId="limit-example" suggestions={getLocationsWithLimit} suggestionRenderer={renderLocation} />
+          <Autosuggest inputId="limit-example"
+                       inputPlaceholder="Enter location..."
+                       suggestions={getLocationsWithLimit}
+                       suggestionRenderer={renderLocation} />
         </div>
       </div>
     );
