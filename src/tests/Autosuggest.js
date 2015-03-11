@@ -8,6 +8,7 @@ var SimulateNative = React.addons.TestUtils.SimulateNative;
 var Autosuggest = require('../Autosuggest.js');
 var TestUtils = React.addons.TestUtils;
 var suburbs = ['Cheltenham', 'Mill Park', 'Mordialloc', 'Nunawading'];
+var reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 var autosuggest, input, suggestions;
 
 function getSuburbs(input, callback) {
@@ -20,8 +21,13 @@ function getSuburbs(input, callback) {
 
 function renderLocation(suggestion, input) {
   return (
-    <span><strong>{suggestion.slice(0, input.length)}</strong>{suggestion.slice(input.length)}</span>
+    <span>{suggestion.slice(0, input.length)}<strong>{suggestion.slice(input.length)}</strong></span>
   );
+}
+
+// See: http://stackoverflow.com/q/28979533/247243
+function stripReactAttributes(html) {
+  return html.replace(reactAttributesRegex, '');
 }
 
 function setInputValue(value) {
@@ -160,8 +166,7 @@ describe('Autosuggest', function() {
 
     it('should use the specified suggestionRenderer function', function() {
       suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-      // TODO
-      //console.log(suggestions[0].getDOMNode().innerHTML);
+      expect(stripReactAttributes(suggestions[0].getDOMNode().innerHTML)).toBe('<span><span>M</span><strong>ill Park</strong></span>');
     });
   });
 

@@ -29,7 +29,7 @@ function getLocationsWithLimit(input, callback) {
 
 function renderLocation(suggestion, input) {
   return (
-    <span><strong>{suggestion.slice(0, input.length)}</strong>{suggestion.slice(input.length)}</span>
+    <span>{suggestion.slice(0, input.length)}<strong>{suggestion.slice(input.length)}</strong></span>
   );
 }
 
