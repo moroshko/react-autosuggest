@@ -18,6 +18,12 @@ function getSuburbs(input, callback) {
   }));
 }
 
+function renderLocation(suggestion, input) {
+  return (
+    <span><strong>{suggestion.slice(0, input.length)}</strong>{suggestion.slice(input.length)}</span>
+  );
+}
+
 function setInputValue(value) {
   Simulate.change(input, { target: { value: value } });
 }
@@ -79,17 +85,27 @@ function expectFocusedSuggestion(suggestion) {
   }
 }
 
-describe('Autosuggest', function() {
-  beforeEach(function() {
-    autosuggest = TestUtils.renderIntoDocument(
-      <Autosuggest initialValue="my value" suggestions={getSuburbs} />
-    );
-    input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
-  });
+function createAutosuggest(Autosuggest) {
+  autosuggest = TestUtils.renderIntoDocument(Autosuggest);
+}
 
+describe('Autosuggest', function() {
   describe('Basics', function() {
+    beforeEach(function() {
+      createAutosuggest(
+        <Autosuggest initialValue="my value"
+                     inputId="my-autosuggest"
+                     suggestions={getSuburbs} />
+      );
+      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+    });
+
     it('should set initial value', function() {
       expectInputValue('my value');
+    });
+
+    it('should set input\'s id', function() {
+      expect(input.id).toBe('my-autosuggest');
     });
 
     it('should not show suggestions by default', function() {
@@ -130,8 +146,33 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('Interacting with suggestions', function() {
+  describe('Suggestion renderer', function() {
     beforeEach(function() {
+      createAutosuggest(
+        <Autosuggest initialValue="my value"
+                     inputId="my-autosuggest"
+                     suggestions={getSuburbs}
+                     suggestionRenderer={renderLocation} />
+      );
+      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      setInputValue('m');
+    });
+
+    it('should use the specified suggestionRenderer function', function() {
+      suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+      // TODO
+      //console.log(suggestions[0].getDOMNode().innerHTML);
+    });
+  });
+
+  describe('Keyboard interactions', function() {
+    beforeEach(function() {
+      createAutosuggest(
+        <Autosuggest initialValue="my value"
+                     inputId="my-autosuggest"
+                     suggestions={getSuburbs} />
+      );
+      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
       setInputValue('m');
     });
 
@@ -189,6 +230,12 @@ describe('Autosuggest', function() {
 
   describe('Revealing the suggestions using keyboard', function() {
     beforeEach(function() {
+      createAutosuggest(
+        <Autosuggest initialValue="my value"
+                     inputId="my-autosuggest"
+                     suggestions={getSuburbs} />
+      );
+      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
       setInputValue('m');
       clickEscape();
     });
@@ -208,6 +255,12 @@ describe('Autosuggest', function() {
 
   describe('Mouse interactions', function() {
     beforeEach(function() {
+      createAutosuggest(
+        <Autosuggest initialValue="my value"
+                     inputId="my-autosuggest"
+                     suggestions={getSuburbs} />
+      );
+      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
       setInputValue('m');
     });
 
