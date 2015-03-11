@@ -71,7 +71,8 @@
     "react-autosuggest",
     "react-autocomplete",
     "react-auto-suggest",
-    "react-auto-complete"
+    "react-auto-complete",
+    "react-component"
   ],
   "license": "MIT"
 }

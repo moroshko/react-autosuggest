@@ -1,4 +1,4 @@
-[ ![Codeship Status for moroshko/react-autosuggest](https://codeship.com/projects/d5551f90-a93f-0132-8761-02471a552951/status?branch=master)](https://codeship.com/projects/67612)
+[ ![Codeship Status for moroshko/react-autosuggest](https://codeship.com/projects/41810250-aa07-0132-fbf4-4e62e8945e03/status?branch=master)](https://codeship.com/projects/67868)
 
 # React Autosuggest
 
