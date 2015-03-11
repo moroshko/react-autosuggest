@@ -3,6 +3,8 @@
 jest.dontMock('../Autosuggest.js');
 
 var React = require('react/addons');
+var Simulate = React.addons.TestUtils.Simulate;
+var SimulateNative = React.addons.TestUtils.SimulateNative;
 var Autosuggest = require('../Autosuggest.js');
 var TestUtils = React.addons.TestUtils;
 var suburbs = ['Cheltenham', 'Mill Park', 'Mordialloc', 'Nunawading'];
@@ -17,24 +19,40 @@ function getSuburbs(input, callback) {
 }
 
 function setInputValue(value) {
-  React.addons.TestUtils.Simulate.change(input, { target: { value: value } });
+  Simulate.change(input, { target: { value: value } });
 }
 
-function clickSuggestion(suggestionIndex) {
+function mouseDownSuggestion(suggestionIndex) {
   suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-  React.addons.TestUtils.Simulate.mouseDown(suggestions[suggestionIndex].getDOMNode());
+  Simulate.mouseDown(suggestions[suggestionIndex].getDOMNode());
+}
+
+// See: https://github.com/facebook/react/issues/1297
+function mouseOver(from, to) {
+  SimulateNative.mouseOut(from, { relatedTarget: to });
+  SimulateNative.mouseOver(to, { relatedTarget: from });
+}
+
+function mouseOverFromInputToSuggestion(suggestionIndex) {
+  suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+  mouseOver(input, suggestions[suggestionIndex].getDOMNode());
+}
+
+function mouseOverFromSuggestionToInput(suggestionIndex) {
+  suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+  mouseOver(suggestions[suggestionIndex].getDOMNode(), input);
 }
 
 function clickEscape() {
-  React.addons.TestUtils.Simulate.keyDown(input, { keyCode: 27 });
+  Simulate.keyDown(input, { keyCode: 27 });
 }
 
 function clickDown() {
-  React.addons.TestUtils.Simulate.keyDown(input, { keyCode: 40 });
+  Simulate.keyDown(input, { keyCode: 40 });
 }
 
 function clickUp() {
-  React.addons.TestUtils.Simulate.keyDown(input, { keyCode: 38 });
+  Simulate.keyDown(input, { keyCode: 38 });
 }
 
 function expectInputValue(expectedValue) {
@@ -62,14 +80,14 @@ function expectFocusedSuggestion(suggestion) {
 }
 
 describe('Autosuggest', function() {
-  describe('Basics', function() {
-    beforeEach(function() {
-      autosuggest = TestUtils.renderIntoDocument(
-        <Autosuggest initialValue="my value" suggestions={getSuburbs} />
-      );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
-    });
+  beforeEach(function() {
+    autosuggest = TestUtils.renderIntoDocument(
+      <Autosuggest initialValue="my value" suggestions={getSuburbs} />
+    );
+    input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+  });
 
+  describe('Basics', function() {
     it('should set initial value', function() {
       expectInputValue('my value');
     });
@@ -117,11 +135,6 @@ describe('Autosuggest', function() {
       setInputValue('m');
     });
 
-    it('should set input field value when suggestion is clicked', function() {
-      clickSuggestion(1);
-      expectInputValue('Mordialloc');
-    });
-
     it('should focus on first suggestion and change input value when Down is clicked', function() {
       clickDown();
       expectFocusedSuggestion('Mill Park');
@@ -135,13 +148,91 @@ describe('Autosuggest', function() {
       expectInputValue('Mordialloc');
     });
 
-    it('should remove focus from suggestions when last suggestion is focused and Down is clicked ', function() {
+    it('should remove focus from suggestions when last suggestion is focused and Down is clicked', function() {
       clickDown();
       clickDown();
       clickDown();
       // TODO
       //expectFocusedSuggestion(null);
       //expectInputValue('m');
+    });
+
+    it('should hide suggestions and revert back input\'s value when ESC is clicked after Down', function() {
+      clickDown();
+      clickEscape();
+      expectSuggestions([]);
+      expectInputValue('m');
+    });
+
+    it('should focus on last suggestion and change input value when Up is clicked', function() {
+      clickUp();
+      expectFocusedSuggestion('Mordialloc');
+      expectInputValue('Mordialloc');
+    });
+
+    it('should focus on previous suggestion and change input value when Up is clicked again', function() {
+      clickUp();
+      clickUp();
+      expectFocusedSuggestion('Mill Park');
+      expectInputValue('Mill Park');
+    });
+
+    it('should remove focus from suggestions when first suggestion is focused and Up is clicked', function() {
+      clickUp();
+      clickUp();
+      clickUp();
+      // TODO
+      //expectFocusedSuggestion(null);
+      //expectInputValue('m');
+    });
+  });
+
+  describe('Revealing the suggestions using keyboard', function() {
+    beforeEach(function() {
+      setInputValue('m');
+      clickEscape();
+    });
+
+    it('should show suggestions when Down is clicked', function() {
+      clickDown();
+      expectSuggestions(['Mill Park', 'Mordialloc']);
+      expectFocusedSuggestion(null);
+    });
+
+    it('should show suggestions when Up is clicked', function() {
+      clickUp();
+      expectSuggestions(['Mill Park', 'Mordialloc']);
+      expectFocusedSuggestion(null);
+    });
+  });
+
+  describe('Mouse interactions', function() {
+    beforeEach(function() {
+      setInputValue('m');
+    });
+
+    it('should set input field value when suggestion is clicked', function() {
+      mouseDownSuggestion(1);
+      expectInputValue('Mordialloc');
+    });
+
+    it('should focus on suggestion but not change input\'s value when mouse enters the suggestion', function() {
+      mouseOverFromInputToSuggestion(0);
+      expectFocusedSuggestion('Mill Park');
+      expectInputValue('m');
+    });
+
+    it('should not have focused suggestions when mouse leaves the suggestion', function() {
+      mouseOverFromInputToSuggestion(0);
+      mouseOverFromSuggestionToInput(0);
+      expectFocusedSuggestion(null);
+    });
+
+    it('should remember focused suggestion when mouse enters suggestion', function() {
+      mouseOverFromInputToSuggestion(0);
+      clickDown();
+      expectFocusedSuggestion('Mordialloc');
+      expectInputValue('Mordialloc');
     });
   });
 });
