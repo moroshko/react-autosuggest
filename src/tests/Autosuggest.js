@@ -198,9 +198,8 @@ describe('Autosuggest', function() {
       clickDown();
       clickDown();
       clickDown();
-      // TODO
-      //expectFocusedSuggestion(null);
-      //expectInputValue('m');
+      expectFocusedSuggestion(null);
+      expectInputValue('m');
     });
 
     it('should hide suggestions and revert back input\'s value when ESC is clicked after Down', function() {
@@ -227,9 +226,8 @@ describe('Autosuggest', function() {
       clickUp();
       clickUp();
       clickUp();
-      // TODO
-      //expectFocusedSuggestion(null);
-      //expectInputValue('m');
+      expectFocusedSuggestion(null);
+      expectInputValue('m');
     });
   });
 

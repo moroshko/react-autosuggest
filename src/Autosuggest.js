@@ -63,7 +63,7 @@ var Autosuggest = React.createClass({
   focusOnSuggestion: function(suggestionIndex) {
     var newState = {
       focusedSuggestionIndex: suggestionIndex,
-      value: this.state.suggestions[suggestionIndex]
+      value: (suggestionIndex === null ? this.state.valueBeforeUpDown : this.state.suggestions[suggestionIndex])
     };
 
     if (this.state.valueBeforeUpDown === null) {
@@ -83,7 +83,7 @@ var Autosuggest = React.createClass({
     this.getSuggestions(newValue);
   },
   onInputKeyDown: function(event) {
-    var newState;
+    var newState, newSuggestionIndex;
 
     switch (event.keyCode) {
       case 13: // enter
@@ -115,11 +115,15 @@ var Autosuggest = React.createClass({
         if (this.state.suggestions.length === 0) {
           this.getSuggestions(this.state.value);
         } else {
-          this.focusOnSuggestion(
-            this.state.focusedSuggestionIndex === null || this.state.focusedSuggestionIndex === 0
-              ? this.state.suggestions.length - 1
-              : this.state.focusedSuggestionIndex - 1
-          );
+          if (this.state.focusedSuggestionIndex === 0) {
+            newSuggestionIndex = null;
+          } else if (this.state.focusedSuggestionIndex === null) {
+            newSuggestionIndex = this.state.suggestions.length - 1;
+          } else {
+            newSuggestionIndex = this.state.focusedSuggestionIndex - 1;
+          }
+
+          this.focusOnSuggestion(newSuggestionIndex);
         }
 
         event.preventDefault(); // Prevent the cursor from jumping to input's start
@@ -130,11 +134,15 @@ var Autosuggest = React.createClass({
         if (this.state.suggestions.length === 0) {
           this.getSuggestions(this.state.value);
         } else {
-          this.focusOnSuggestion(
-            this.state.focusedSuggestionIndex === null
-              ? 0
-              : (this.state.focusedSuggestionIndex + 1) % this.state.suggestions.length
-          );
+          if (this.state.focusedSuggestionIndex === null) {
+            newSuggestionIndex = 0;
+          } else if (this.state.focusedSuggestionIndex === this.state.suggestions.length - 1) {
+            newSuggestionIndex = null;
+          } else {
+            newSuggestionIndex = this.state.focusedSuggestionIndex + 1;
+          }
+
+          this.focusOnSuggestion(newSuggestionIndex);
         }
 
         break;
