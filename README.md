@@ -126,4 +126,4 @@ Now, open `http://localhost:3000/examples/dist/index.html`
 
 ## License
 
-[MIT](http://mit-license.org)
+[MIT](http://moroshko.mit-license.org)

@@ -8,58 +8,40 @@ var Autosuggest = require('../../src/Autosuggest');
 var suburbs = require('json!./suburbs.json');
 
 function getLocations(input, callback) {
-  var regex = new RegExp('^' + input, 'i');
+  var suburbMatchRegex = new RegExp('\\b' + input, 'i');
 
   setTimeout(function() {
     callback(null, suburbs.filter(function(suburb) {
-      return regex.test(suburb);
-    }));
-  }, 300);
-}
-
-function getLocationsWithLimit(input, callback) {
-  var regex = new RegExp('^' + input, 'i');
-
-  setTimeout(function() {
-    callback(null, suburbs.filter(function(suburb) {
-      return regex.test(suburb);
+      return suburb.search(suburbMatchRegex) !== -1;
     }).slice(0, 7));
   }, 300);
 }
 
 function renderLocation(suggestion, input) {
+  var suburbMatchRegex = new RegExp('\\b' + input, 'i');
+  var firstMatchIndex = suggestion.search(suburbMatchRegex);
+
+  if (firstMatchIndex === -1) {
+    return suggestion;
+  }
+
+  var beforeMatch = suggestion.slice(0, firstMatchIndex);
+  var match = suggestion.slice(firstMatchIndex, firstMatchIndex + input.length);
+  var afterMatch = suggestion.slice(firstMatchIndex + input.length);
+
   return (
-    <span><strong>{suggestion.slice(0, input.length)}</strong>{suggestion.slice(input.length)}</span>
+    <span>{beforeMatch}<strong>{match}</strong>{afterMatch}</span>
   );
 }
 
 var App = React.createClass({
   render: function() {
     return (
-      <div className="examples">
-        <div className="example">
-          <h2>Basic Example</h2>
-          <label htmlFor="basic-example">Where</label>
-          <Autosuggest inputId="basic-example"
-                       inputPlaceholder="Enter location..."
-                       suggestions={getLocations} />
-        </div>
-        <div className="example">
-          <h2>Custom suggestion renderer</h2>
-          <label htmlFor="custom-renderer-example">Where</label>
-          <Autosuggest inputId="custom-renderer-example"
-                       inputPlaceholder="Enter location..."
-                       suggestions={getLocations}
-                       suggestionRenderer={renderLocation} />
-        </div>
-        <div className="example">
-          <h2>Limiting the amount of suggestions displayed</h2>
-          <label htmlFor="limit-example">Where</label>
-          <Autosuggest inputId="limit-example"
-                       inputPlaceholder="Enter location..."
-                       suggestions={getLocationsWithLimit}
-                       suggestionRenderer={renderLocation} />
-        </div>
+      <div>
+        <h1>react-autosuggest</h1>
+        <Autosuggest inputPlaceholder="Where do you live?"
+                     suggestions={getLocations}
+                     suggestionRenderer={renderLocation} />
       </div>
     );
   }

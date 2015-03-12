@@ -35,10 +35,12 @@ var Autosuggest = React.createClass({
   },
   getSuggestions: function(input) {
     if (input.length === 0) {
-      return;
-    }
-
-    if (this.cache[input]) {
+      this.setState({
+        suggestions: [],
+        focusedSuggestionIndex: null,
+        valueBeforeUpDown: null
+      });
+    } else if (this.cache[input]) {
       this.setState({
         suggestions: this.cache[input],
         focusedSuggestionIndex: null,
@@ -47,7 +49,7 @@ var Autosuggest = React.createClass({
     } else {
       this.props.suggestions(input, function(error, suggestions) {
         if (error) {
-          console.log('Error: ', error);
+          throw error;
         } else {
           this.cache[input] = suggestions;
 

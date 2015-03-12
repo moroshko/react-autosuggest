@@ -332,8 +332,19 @@ describe('Autosuggest', function() {
         expect(input.getAttribute('aria-expanded')).toBe('true');
       });
 
-      it('input\'s aria-activedescendant should be the id of the focused suggestion', function() {
+      it('input\'s aria-expanded should become false when input is cleared', function() {
+        setInputValue('');
+        expect(input.getAttribute('aria-expanded')).toBe('false');
+      });
+
+      it('input\'s aria-activedescendant should be the id of the focused suggestion when using keyboard', function() {
         clickDown();
+        suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+        expect(input.getAttribute('aria-activedescendant')).toBe(suggestions[0].getDOMNode().id);
+      });
+
+      it('input\'s aria-activedescendant should be the id of the focused suggestion when using mouse', function() {
+        mouseOverFromInputToSuggestion(0);
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
         expect(input.getAttribute('aria-activedescendant')).toBe(suggestions[0].getDOMNode().id);
       });

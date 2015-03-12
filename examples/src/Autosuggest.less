@@ -1,17 +1,45 @@
 .react-autosuggest {
+  @font-size: 18px;
+  @border-color: #aaa;
+  @border-radius: 4px;
+
   position: relative;
+
+  input {
+    width: 240px;
+    height: 30px;
+    padding: 10px 20px;
+    font-size: @font-size;
+    border: 1px solid @border-color;
+    border-radius: @border-radius;
+
+    &[aria-expanded="true"] {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
 
   &__suggestions {
     position: absolute;
-    border: 1px solid black;
+    top: 51px;
+    width: 280px;
+    border: 1px solid @border-color;
     background-color: #fff;
+    font-size: @font-size;
+    border-bottom-left-radius: @border-radius;
+    border-bottom-right-radius: @border-radius;
   }
 
   &__suggestion {
     cursor: pointer;
+    padding: 10px 20px;
 
     &--focused {
-      background-color: #ccc;
+      background-color: #ddd;
     }
   }
 }
