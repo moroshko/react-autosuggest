@@ -6,7 +6,7 @@
 
 ## Demo
 
-[Live Examples](http://moroshko.github.io/react-autosuggest)
+[Live Example](http://moroshko.github.io/react-autosuggest)
 
 ## Installation
 
