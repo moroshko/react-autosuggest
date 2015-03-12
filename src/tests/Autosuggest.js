@@ -99,19 +99,24 @@ describe('Autosuggest', function() {
   describe('Basics', function() {
     beforeEach(function() {
       createAutosuggest(
-        <Autosuggest initialValue="my value"
-                     inputId="my-autosuggest"
+        <Autosuggest inputId="my-autosuggest"
+                     inputPlaceholder="Enter location..."
+                     initialValue="my value"
                      suggestions={getSuburbs} />
       );
       input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
     });
 
-    it('should set initial value', function() {
-      expectInputValue('my value');
-    });
-
     it('should set input\'s id', function() {
       expect(input.id).toBe('my-autosuggest');
+    });
+
+    it('should set input\'s placeholder', function() {
+      expect(input.getAttribute('placeholder')).toBe('Enter location...');
+    });
+
+    it('should set initial value', function() {
+      expectInputValue('my value');
     });
 
     it('should not show suggestions by default', function() {
@@ -155,8 +160,8 @@ describe('Autosuggest', function() {
   describe('Suggestion renderer', function() {
     beforeEach(function() {
       createAutosuggest(
-        <Autosuggest initialValue="my value"
-                     inputId="my-autosuggest"
+        <Autosuggest inputId="my-autosuggest"
+                     initialValue="my value"
                      suggestions={getSuburbs}
                      suggestionRenderer={renderLocation} />
       );
@@ -173,8 +178,8 @@ describe('Autosuggest', function() {
   describe('Keyboard interactions', function() {
     beforeEach(function() {
       createAutosuggest(
-        <Autosuggest initialValue="my value"
-                     inputId="my-autosuggest"
+        <Autosuggest inputId="my-autosuggest"
+                     initialValue="my value"
                      suggestions={getSuburbs} />
       );
       input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
@@ -234,8 +239,8 @@ describe('Autosuggest', function() {
   describe('Revealing the suggestions using keyboard', function() {
     beforeEach(function() {
       createAutosuggest(
-        <Autosuggest initialValue="my value"
-                     inputId="my-autosuggest"
+        <Autosuggest inputId="my-autosuggest"
+                     initialValue="my value"
                      suggestions={getSuburbs} />
       );
       input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
@@ -259,8 +264,8 @@ describe('Autosuggest', function() {
   describe('Mouse interactions', function() {
     beforeEach(function() {
       createAutosuggest(
-        <Autosuggest initialValue="my value"
-                     inputId="my-autosuggest"
+        <Autosuggest inputId="my-autosuggest"
+                     initialValue="my value"
                      suggestions={getSuburbs} />
       );
       input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
@@ -289,6 +294,65 @@ describe('Autosuggest', function() {
       clickDown();
       expectFocusedSuggestion('Mordialloc');
       expectInputValue('Mordialloc');
+    });
+  });
+
+  describe('Accessibility attributes', function() {
+    beforeEach(function() {
+      createAutosuggest(
+        <Autosuggest suggestions={getSuburbs} />
+      );
+      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+    });
+
+    describe('when Autosuggest is rendered', function() {
+      it('input\'s role should be combobox', function() {
+        expect(input.getAttribute('role')).toBe('combobox');
+      });
+
+      it('input\'s aria-autocomplete should be list', function() {
+        expect(input.getAttribute('aria-autocomplete')).toBe('list');
+      });
+
+      it('input\'s aria-expanded should be false', function() {
+        expect(input.getAttribute('aria-expanded')).toBe('false');
+      });
+
+      it('input\'s aria-activedescendant should not present', function() {
+        expect(input.getAttribute('aria-activedescendant')).toBeNull();
+      });
+    });
+
+    describe('when suggestions appear', function() {
+      beforeEach(function() {
+        setInputValue('m');
+      });
+
+      it('input\'s aria-expanded should be true', function() {
+        expect(input.getAttribute('aria-expanded')).toBe('true');
+      });
+
+      it('input\'s aria-activedescendant should be the id of the focused suggestion', function() {
+        clickDown();
+        suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+        expect(input.getAttribute('aria-activedescendant')).toBe(suggestions[0].getDOMNode().id);
+      });
+
+      it('suggestion\'s role should be option', function() {
+        clickDown();
+        suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+        expect(suggestions[0].getDOMNode().getAttribute('role')).toBe('option');
+      });
+
+      it('input\'s aria-owns should be equal to suggestions list\'s id', function() {
+        suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
+        expect(input.getAttribute('aria-owns')).toBe(suggestionsList.getDOMNode().id);
+      });
+
+      it('suggestions list\'s role should be listbox', function() {
+        suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
+        expect(suggestionsList.getDOMNode().getAttribute('role')).toBe('listbox');
+      });
     });
   });
 });
