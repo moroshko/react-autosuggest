@@ -21,7 +21,7 @@ function getSuburbs(input, callback) {
 
 function renderLocation(suggestion, input) {
   return (
-    <span>{suggestion.slice(0, input.length)}<strong>{suggestion.slice(input.length)}</strong></span>
+    <span><strong>{suggestion.slice(0, input.length)}</strong>{suggestion.slice(input.length)}</span>
   );
 }
 
@@ -171,7 +171,7 @@ describe('Autosuggest', function() {
 
     it('should use the specified suggestionRenderer function', function() {
       suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-      expect(stripReactAttributes(suggestions[0].getDOMNode().innerHTML)).toBe('<span><span>M</span><strong>ill Park</strong></span>');
+      expect(stripReactAttributes(suggestions[0].getDOMNode().innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span></span>');
     });
   });
 
