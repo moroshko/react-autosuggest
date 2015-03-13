@@ -1,10 +1,12 @@
 'use strict';
 
 require('./Autosuggest.less');
+require('./Footer.less');
 require('./app.less');
 
 var React = require('react');
 var Autosuggest = require('../../src/Autosuggest');
+var Footer = require('./Footer');
 var suburbs = require('json!./suburbs.json');
 
 function getLocations(input, callback) {
@@ -42,6 +44,7 @@ var App = React.createClass({
         <Autosuggest inputPlaceholder="Where do you live?"
                      suggestions={getLocations}
                      suggestionRenderer={renderLocation} />
+        <Footer />
       </div>
     );
   }

@@ -33,8 +33,25 @@
 .react-autosuggest__suggestion--focused {
   background-color: #ddd;
 }
+.footer {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 10px;
+}
+.footer img {
+  margin-right: 5px;
+  border-radius: 4px;
+}
+.footer strong {
+  color: red;
+}
+.footer a {
+  text-decoration: none;
+  color: #3BA3D7;
+}
 #app {
   display: flex;
   justify-content: center;
-  font-family: Helvetica, Arial;
+  font-family: 'Helvetica Neue', Helvetica, Arial;
 }
