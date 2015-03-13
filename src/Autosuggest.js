@@ -1,6 +1,7 @@
 'use strict';
 
-var React = require('react/addons');
+var React = require('react');
+var classnames = require('classnames');
 var guid = 0;
 
 var Autosuggest = React.createClass({
@@ -174,7 +175,9 @@ var Autosuggest = React.createClass({
       valueBeforeUpDown: null
     }, function() {
       // This code executes after the component is re-rendered
-      this.refs.input.getDOMNode().focus();
+      setTimeout(function() {
+        React.findDOMNode(this.refs.input).focus();
+      }.bind(this));
     });
   },
   renderSuggestions: function() {
@@ -183,7 +186,7 @@ var Autosuggest = React.createClass({
     }
 
     var content = this.state.suggestions.map(function(suggestion, index) {
-      var classes = React.addons.classSet({
+      var classes = classnames({
         'react-autosuggest__suggestion': true,
         'react-autosuggest__suggestion--focused':
           index === this.state.focusedSuggestionIndex
