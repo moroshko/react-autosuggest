@@ -34,25 +34,26 @@
     "noprompt": true
   },
   "dependencies": {
-    "react": "^0.12.2"
+    "classnames": "^1.1.4",
+    "react": "^0.13.0"
   },
   "devDependencies": {
-    "babel-core": "^4.6.6",
-    "babel-eslint": "^1.0.12",
+    "babel-core": "^4.7.9",
+    "babel-eslint": "^2.0.0",
     "babel-jest": "^4.0.0",
-    "babel-loader": "^4.0.0",
+    "babel-loader": "^4.1.0",
     "css-loader": "^0.9.1",
-    "eslint": "^0.15.1",
-    "eslint-loader": "^0.4.0",
+    "eslint": "^0.16.2",
+    "eslint-loader": "^0.6.0",
     "extract-text-webpack-plugin": "^0.3.8",
     "gh-pages-deploy": "^0.3.0",
     "jest-cli": "^0.4.0",
     "json-loader": "^0.5.1",
     "less": "^2.4.0",
-    "less-loader": "^2.0.0",
-    "react-hot-loader": "^1.1.6",
+    "less-loader": "^2.1.0",
+    "react-hot-loader": "^1.2.3",
     "style-loader": "^0.8.3",
-    "webpack": "^1.7.1",
+    "webpack": "^1.7.3",
     "webpack-dev-server": "^1.7.0"
   },
   "keywords": [
