@@ -37,11 +37,15 @@ function renderLocation(suggestion, input) {
 }
 
 var App = React.createClass({
+  componentDidMount: function() {
+    React.findDOMNode(this.refs.location.refs.input).focus();
+  },
   render: function() {
     return (
       <div>
         <h1>react-autosuggest</h1>
         <Autosuggest inputPlaceholder="Where do you live?"
+                     ref="location"
                      suggestions={getLocations}
                      suggestionRenderer={renderLocation} />
         <Footer />
