@@ -6,11 +6,11 @@ var guid = 0;
 
 var Autosuggest = React.createClass({
   propTypes: {
-    initialValue: React.PropTypes.string,     // Input's initial value
-    inputId: React.PropTypes.string,          // Input's id
-    inputPlaceholder: React.PropTypes.string, // Input's placeholder 
-    suggestions: React.PropTypes.func,        // Function to get the suggestions
-    suggestionRenderer: React.PropTypes.func  // Function to render a single suggestion
+    initialValue: React.PropTypes.string,         // Input's initial value
+    inputId: React.PropTypes.string,              // Input's id
+    inputPlaceholder: React.PropTypes.string,     // Input's placeholder 
+    suggestions: React.PropTypes.func.isRequired, // Function to get the suggestions
+    suggestionRenderer: React.PropTypes.func      // Function to render a single suggestion
   },
   getDefaultProps: function() {
     return {
