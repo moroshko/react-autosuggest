@@ -7,6 +7,7 @@ require('./app.less');
 var React = require('react');
 var Autosuggest = require('../../src/Autosuggest');
 var Footer = require('./Footer');
+var ForkMeOnGitHub = require('./ForkMeOnGitHub');
 var suburbs = require('json!./suburbs.json');
 
 function getLocations(input, callback) {
@@ -49,6 +50,7 @@ var App = React.createClass({
                      suggestions={getLocations}
                      suggestionRenderer={renderLocation} />
         <Footer />
+        <ForkMeOnGitHub user="moroshko" repo="react-autosuggest" />
       </div>
     );
   }
