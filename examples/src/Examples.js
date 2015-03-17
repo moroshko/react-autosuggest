@@ -46,33 +46,58 @@ var Examples = React.createClass({
       activeExample: this.examples[0]
     };
   },
-  componentDidMount: function() {
-    React.findDOMNode(this.refs.location.refs.input).focus();
-  },
   changeExample: function(example) {
     this.setState({
       activeExample: example
     });
   },
+  renderMenu: function() {
+    return (
+      <div className="examples-menu">
+        {this.examples.map(function(example) {
+          var classes = classnames({
+            'examples-menu__item': true,
+            'examples-menu__item--active': example === this.state.activeExample
+          });
+
+          return (
+            <div className={classes}
+                 key={example}
+                 onClick={this.changeExample.bind(null, example)}>
+              {example}
+            </div>
+          );
+        }, this)}
+      </div>
+    );
+  },
+  renderExample: function() {
+    switch (this.state.activeExample) {
+      case 'Basic example':
+        return (
+          <Autosuggest inputId="basic-example"
+                       inputPlaceholder="Where do you live?"
+                       ref="basicExample"
+                       key="basicExample"
+                       suggestions={getLocations}
+                       suggestionRenderer={renderLocation} />
+        );
+      case 'Multiple groups':
+        return (
+          <Autosuggest inputId="multiple-groups"
+                       inputPlaceholder="Coming soon..."
+                       ref="multipleGroups"
+                       key="multipleGroups"
+                       suggestions={getLocations}
+                       suggestionRenderer={renderLocation} />
+        );
+    }
+  },
   render: function() {
     return (
       <div className="examples">
-        <div className="examples-menu">
-          {this.examples.map(function(example) {
-            var classes = classnames({
-              'examples-menu__item': true,
-              'examples-menu__item--active': example === this.state.activeExample
-            });
-
-            return (
-              <div className={classes} onClick={this.changeExample.bind(null, example)}>{example}</div>
-            );
-          }, this)}
-        </div>
-        <Autosuggest inputPlaceholder="Where do you live?"
-                     ref="location"
-                     suggestions={getLocations}
-                     suggestionRenderer={renderLocation} />
+        {this.renderMenu()}
+        {this.renderExample()}
       </div>
     );
   }
