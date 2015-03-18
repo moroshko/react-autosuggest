@@ -8,6 +8,10 @@ var classnames = require('classnames');
 var Autosuggest = require('../../src/Autosuggest');
 var suburbs = require('json!./suburbs.json');
 
+function randomInt(min, max) {
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
 function getLocations(input, callback) {
   var suburbMatchRegex = new RegExp('\\b' + input, 'i');
 
@@ -15,6 +19,57 @@ function getLocations(input, callback) {
     callback(null, suburbs.filter(function(suburb) {
       return suburb.search(suburbMatchRegex) !== -1;
     }).slice(0, 7));
+  }, 300);
+}
+
+function getMultiSectionLocations(input, callback) {
+  var firstSectionMatchRegex = new RegExp('^' + input, 'i');
+  var secondSectionMatchRegex = new RegExp('^(?!' + input + ')\\w+ ' + input, 'i');
+  var thirdSectionMatchRegex = new RegExp('^(?!' + input + ')\\w+ (?!' + input + ')\\w+ ' + input, 'i');
+
+  var firstSectionSuburbs = suburbs.filter(function(suburb) {
+    return suburb.search(firstSectionMatchRegex) !== -1;
+  });
+
+  var secondSectionSuburbs = suburbs.filter(function(suburb) {
+    return suburb.search(secondSectionMatchRegex) !== -1;
+  });
+
+  var thirdSectionSuburbs = suburbs.filter(function(suburb) {
+    return suburb.search(thirdSectionMatchRegex) !== -1;
+  });
+
+  var result = [];
+  var firstSectionCount, secondSectionCount, thirdSectionCount;
+
+  if (thirdSectionSuburbs.length > 0) {
+    thirdSectionCount = randomInt(1, Math.min(3, thirdSectionSuburbs.length));
+
+    result.unshift({
+      sectionName: 'Third word match',
+      suggestions: thirdSectionSuburbs.slice(0, thirdSectionCount)
+    });
+  }
+
+  if (secondSectionSuburbs.length > 0) {
+    secondSectionCount = randomInt(1, Math.min(3, secondSectionSuburbs.length));
+
+    result.unshift({
+      sectionName: 'Second word match',
+      suggestions: secondSectionSuburbs.slice(0, secondSectionCount)
+    });
+  }
+
+  if (firstSectionSuburbs.length > 0) {
+    firstSectionCount = Math.min(10 - secondSectionCount - thirdSectionCount, firstSectionSuburbs.length);
+
+    result.unshift({
+      suggestions: firstSectionSuburbs.slice(0, firstSectionCount)
+    });
+  }
+
+  setTimeout(function() {
+    callback(null, result);
   }, 300);
 }
 
@@ -39,11 +94,11 @@ var Examples = React.createClass({
   getInitialState: function() {
     this.examples = [
       'Basic example',
-      'Multiple groups'
+      'Multiple sections'
     ];
 
     return {
-      activeExample: this.examples[0]
+      activeExample: this.examples[1]
     };
   },
   changeExample: function(example) {
@@ -82,13 +137,13 @@ var Examples = React.createClass({
                        suggestions={getLocations}
                        suggestionRenderer={renderLocation} />
         );
-      case 'Multiple groups':
+      case 'Multiple sections':
         return (
-          <Autosuggest inputId="multiple-groups"
-                       inputPlaceholder="Coming soon..."
-                       ref="multipleGroups"
-                       key="multipleGroups"
-                       suggestions={getLocations}
+          <Autosuggest inputId="multiple-sections"
+                       inputPlaceholder="Where are you based?"
+                       ref="multipleSections"
+                       key="multipleSections"
+                       suggestions={getMultiSectionLocations}
                        suggestionRenderer={renderLocation} />
         );
     }
