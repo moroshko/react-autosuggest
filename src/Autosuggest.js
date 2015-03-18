@@ -36,7 +36,7 @@ var Autosuggest = React.createClass({
                               // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
   },
-  getSuggestions: function(input) { // TODO: Rename from get to load?
+  showSuggestions: function(input) {
     if (input.length === 0) {
       this.setState({
         suggestions: null,
@@ -105,7 +105,7 @@ var Autosuggest = React.createClass({
       valueBeforeUpDown: null
     });
 
-    this.getSuggestions(newValue);
+    this.showSuggestions(newValue);
   },
   onInputKeyDown: function(event) {
     var newState, newSectionIndex, newSuggestionIndex;
@@ -141,7 +141,7 @@ var Autosuggest = React.createClass({
 
       case 38: // up
         if (this.state.suggestions === null) {
-          this.getSuggestions(this.state.value);
+          this.showSuggestions(this.state.value);
         } else {
           this.focusOnSuggestion(sectionIterator.prev([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
         }
@@ -152,7 +152,7 @@ var Autosuggest = React.createClass({
 
       case 40: // down
         if (this.state.suggestions === null) {
-          this.getSuggestions(this.state.value);
+          this.showSuggestions(this.state.value);
         } else {
           this.focusOnSuggestion(sectionIterator.next([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
         }
@@ -202,7 +202,7 @@ var Autosuggest = React.createClass({
     return 'react-autosuggest-' + this.id + '-suggestion-' +
            (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
   },
-  renderSuggestionsSection: function(suggestions, sectionIndex) {
+  renderSuggestionsList: function(suggestions, sectionIndex) {
     return suggestions.map(function(suggestion, suggestionIndex) {
       var classes = classnames({
         'react-autosuggest__suggestion': true,
@@ -237,16 +237,23 @@ var Autosuggest = React.createClass({
 
     if (this.multipleSections) {
       content = this.state.suggestions.map(function(section, sectionIndex) {
-        return (
+        var sectionName = section.sectionName ? (
+          <div className="react-autosuggest__suggestions-section-name">
+            {section.sectionName}
+          </div>
+        ) : null;
+
+        return section.suggestions.length === 0 ? null : (
           <div className="react-autosuggest__suggestions-section"
                key={'section-' + sectionIndex}>
-            <div>{section.sectionName}</div>
-            {this.renderSuggestionsSection(section.suggestions, sectionIndex)}
+            {sectionName}
+            {this.renderSuggestionsList(section.suggestions, sectionIndex)}
           </div>
         );
+        
       }, this);
     } else {
-      content = this.renderSuggestionsSection(this.state.suggestions, null);
+      content = this.renderSuggestionsList(this.state.suggestions, null);
     }
 
     return (

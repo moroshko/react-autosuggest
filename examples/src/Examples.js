@@ -61,7 +61,7 @@ function getMultiSectionLocations(input, callback) {
   }
 
   if (firstSectionSuburbs.length > 0) {
-    firstSectionCount = Math.min(10 - secondSectionCount - thirdSectionCount, firstSectionSuburbs.length);
+    firstSectionCount = Math.min(8 - secondSectionCount - thirdSectionCount, firstSectionSuburbs.length);
 
     result.unshift({
       suggestions: firstSectionSuburbs.slice(0, firstSectionCount)

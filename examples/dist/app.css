@@ -1,3 +1,25 @@
+.footer {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 10px;
+}
+.footer img {
+  margin-right: 5px;
+  border-radius: 4px;
+}
+.footer strong {
+  color: red;
+}
+.footer a {
+  text-decoration: none;
+  color: #3BA3D7;
+}
+#app {
+  display: flex;
+  justify-content: center;
+  font-family: 'Helvetica Neue', Helvetica, Arial;
+}
 .react-autosuggest {
   position: relative;
 }
@@ -27,6 +49,16 @@
   border-bottom-right-radius: 4px;
   z-index: 2;
 }
+.react-autosuggest__suggestions-section:first-child .react-autosuggest__suggestions-section-name {
+  border-top: 0;
+}
+.react-autosuggest__suggestions-section-name {
+  padding: 10px 0 0 10px;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #777;
+  border-top: 1px solid #777;
+}
 .react-autosuggest__suggestion {
   cursor: pointer;
   padding: 10px 20px;
@@ -34,25 +66,21 @@
 .react-autosuggest__suggestion--focused {
   background-color: #ddd;
 }
-.footer {
+.examples {
   display: flex;
-  align-items: center;
-  position: absolute;
-  bottom: 10px;
 }
-.footer img {
-  margin-right: 5px;
+.examples-menu {
+  margin-right: 30px;
+  padding: 10px 50px 20px 0;
+  font-size: 18px;
   border-radius: 4px;
 }
-.footer strong {
-  color: red;
+.examples-menu__item {
+  padding: 5px 0;
+  color: #777;
+  cursor: pointer;
 }
-.footer a {
-  text-decoration: none;
+.examples-menu__item--active {
   color: #3BA3D7;
-}
-#app {
-  display: flex;
-  justify-content: center;
-  font-family: 'Helvetica Neue', Helvetica, Arial;
+  cursor: default;
 }
