@@ -19,6 +19,18 @@ function getSuburbs(input, callback) {
   }));
 }
 
+function getMultipleSectionsSuburbs(input, callback) {
+  callback(null, [{
+    suggestions: ['Forest Hill', 'Flinders Street']
+  }, {
+    sectionName: 'Second section',
+    suggestions: ['Hobart', 'Adelaide']
+  }, {
+    sectionName: 'Third section',
+    suggestions: ['Dandenong']
+  }]);
+}
+
 function renderLocation(suggestion, input) {
   return (
     <span><strong>{suggestion.slice(0, input.length)}</strong>{suggestion.slice(input.length)}</span>
@@ -88,6 +100,23 @@ function expectFocusedSuggestion(suggestion) {
   } else {
     expect(focusedSuggestions.length).toBe(1);
     expect(focusedSuggestions[0].getDOMNode().textContent).toBe(suggestion);
+  }
+}
+
+function expectSections(expectedSections) {
+  var sections = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestions-section');
+  
+  expect(sections.length).toBe(expectedSections.length);
+
+  for (var i = 0; i < sections.length; i++) {
+    var sectionName = TestUtils.scryRenderedDOMComponentsWithClass(sections[i], 'react-autosuggest__suggestions-section-name');
+
+    if (expectedSections[i] === null) {
+      expect(sectionName.length).toBe(0);
+    } else {
+      expect(sectionName.length).toBe(1);
+      expect(sectionName[0].getDOMNode().textContent).toBe(expectedSections[i]);
+    }
   }
 }
 
@@ -364,6 +393,20 @@ describe('Autosuggest', function() {
         suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
         expect(suggestionsList.getDOMNode().getAttribute('role')).toBe('listbox');
       });
+    });
+  });
+
+  describe('Multiple sections', function() {
+    beforeEach(function() {
+      createAutosuggest(
+        <Autosuggest suggestions={getMultipleSectionsSuburbs} />
+      );
+      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      setInputValue('m');
+    });
+
+    it('should render section names', function() {
+      expectSections([null, 'Second section', 'Third section']);
     });
   });
 });

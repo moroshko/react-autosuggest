@@ -98,7 +98,7 @@ var Examples = React.createClass({
     ];
 
     return {
-      activeExample: this.examples[1]
+      activeExample: this.examples[0]
     };
   },
   changeExample: function(example) {
