@@ -17,7 +17,7 @@
     "test": "jest",
     "build": "webpack",
     "deploy": "gh-pages-deploy",
-    "dist": "babel src/Autosuggest.js -o dist/Autosuggest.js"
+    "dist": "babel src/Autosuggest.js -o dist/Autosuggest.js; babel src/sectionIterator.js -o dist/sectionIterator.js"
   },
   "jest": {
     "rootDir": ".",
@@ -35,19 +35,19 @@
     "noprompt": true
   },
   "dependencies": {
-    "classnames": "^1.1.4",
-    "react": "^0.13.0"
+    "classnames": "^1.2.0",
+    "react": "^0.13.1"
   },
   "devDependencies": {
-    "babel": "^4.7.12",
-    "babel-core": "^4.7.9",
-    "babel-eslint": "^2.0.0",
+    "babel": "^4.7.16",
+    "babel-core": "^4.7.16",
+    "babel-eslint": "^2.0.2",
     "babel-jest": "^4.0.0",
-    "babel-loader": "^4.1.0",
+    "babel-loader": "^4.2.0",
     "css-loader": "^0.9.1",
-    "eslint": "^0.16.2",
-    "eslint-loader": "^0.6.0",
-    "extract-text-webpack-plugin": "^0.3.8",
+    "eslint": "^0.17.1",
+    "eslint-loader": "^0.7.0",
+    "extract-text-webpack-plugin": "^0.4.0",
     "gh-pages-deploy": "^0.3.0",
     "jest-cli": "^0.4.0",
     "json-loader": "^0.5.1",

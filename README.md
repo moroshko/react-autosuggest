@@ -75,8 +75,22 @@ function(input, callback) {
 * `input` - The value of the input field
 * `callback` - Should be called once the suggestions are in hand, or error occurs.
 
-  * Success example: `callback(null, ['Mentone', 'Mentone East'])`
+  * Success example: `callback(null, <suggestions>)` (see `<suggestions>` format below)
   * Error example: `callback(new Error("Couldn't get locations"))`
+
+`<suggestions>` can be have one of the following two formats:
+
+* **Single section with no title:** Array of strings, e.g.: `['Mentone', 'Mentone East']`
+* **One or more sections with optional titles:** Array of objects with an optional `sectionName` and a mandatory `suggestions` keys, e.g.:
+
+```json
+[{
+  suggestions: ['Mentone', 'Mentone East']   // This section won't have a title
+}, {
+  sectionName: 'Second section',
+  suggestions: ['Altona Meadows', 'University of Melbourne']
+}]
+```
 
 ##### suggestionRenderer (optional)
 
@@ -88,7 +102,7 @@ function(suggestion, input) {
 }
 ```
 
-* `suggestion` - The suggestion (e.g. `'Mentone'`)
+* `suggestion` - The suggestion string (e.g. `'Mentone'`)
 * `input` - The value of the input field (e.g. `'Men'`). If user interacts using the Up or Down keys, it will contain the value of the input field **prior** to those interactions.
 
 For example:
@@ -112,6 +126,8 @@ The `<Autosuggest />` component comes with no styles. You can use the following 
 
 * `react-autosuggest` - Component's wrapper. It includes both the input field and the suggestions list.
 * `react-autosuggest__suggestions` - Suggestions list wrapper
+* `react-autosuggest__suggestions-section` - Suggestions section wrapper (exists only when displaying multiple sections)
+* `react-autosuggest__suggestions-section-name` - Suggestions section name wrapper (exists only when displaying multiple sections and `sectionName` is specified)
 * `react-autosuggest__suggestion` - Single suggestion wrapper
 
 Example: [`examples/src/Autosuggest.less`](https://github.com/moroshko/react-autosuggest/blob/master/examples/src/Autosuggest.less)
