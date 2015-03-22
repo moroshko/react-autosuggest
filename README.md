@@ -83,7 +83,7 @@ function(input, callback) {
 * **Single section with no title:** Array of strings, e.g.: `['Mentone', 'Mentone East']`
 * **One or more sections with optional titles:** Array of objects with an optional `sectionName` and a mandatory `suggestions` keys, e.g.:
 
-```json
+```javascript
 [{
   suggestions: ['Mentone', 'Mentone East']   // This section won't have a title
 }, {
