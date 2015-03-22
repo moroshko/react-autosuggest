@@ -274,6 +274,7 @@ var Autosuggest = React.createClass({
                type="text"
                value={this.state.value}
                placeholder={this.props.inputPlaceholder}
+               autoComplete="off"
                role="combobox"
                aria-autocomplete="list"
                aria-owns={'react-autosuggest-' + this.id}
