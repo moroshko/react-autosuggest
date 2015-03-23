@@ -17,7 +17,7 @@ module.exports = {
   
   module: {
     loaders: [
-      { test: /\.js$/, loaders: ['react-hot', 'babel'/*, 'eslint'*/], exclude: /node_modules/ },
+      { test: /\.js$/, loaders: ['react-hot', 'babel', 'eslint'], exclude: /node_modules/ },
       { test: /\.less$/, loader: ExtractTextPlugin.extract('style', 'css!less'), exclude: /node_modules/ }
     ]
   },

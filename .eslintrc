@@ -6,6 +6,10 @@
   "parser": "babel-eslint",
   "rules": {
     "space-after-keywords": "always",
-    "quotes": "single"
+    "quotes": "single",
+
+    // https://github.com/babel/babel-eslint/issues/8
+    "no-undef": 0,
+    "no-unused-vars": 0
   }
 }

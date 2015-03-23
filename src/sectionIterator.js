@@ -15,7 +15,7 @@ function nextNonEmptySectionIndex(sectionIndex) {
   }
 
   while (sectionIndex < data.length && data[sectionIndex] === 0) {
-    sectionIndex++; 
+    sectionIndex++;
   }
 
   return sectionIndex === data.length ? null : sectionIndex;
@@ -29,15 +29,15 @@ function prevNonEmptySectionIndex(sectionIndex) {
   }
 
   while (sectionIndex >= 0 && data[sectionIndex] === 0) {
-    sectionIndex--; 
+    sectionIndex--;
   }
-  
+
   return sectionIndex === -1 ? null : sectionIndex;
 }
 
 function next(position) {
   var [sectionIndex, itemIndex] = position;
-  
+
   if (multipleSections) {
     if (itemIndex === null || itemIndex === data[sectionIndex] - 1) {
       sectionIndex = nextNonEmptySectionIndex(sectionIndex);
@@ -65,7 +65,7 @@ function next(position) {
 
 function prev(position) {
   var [sectionIndex, itemIndex] = position;
-  
+
   if (multipleSections) {
     if (itemIndex === null || itemIndex === 0) {
       sectionIndex = prevNonEmptySectionIndex(sectionIndex);

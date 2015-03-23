@@ -55,7 +55,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "49c9aa441e45d40fe469";
+/******/ 	var hotCurrentHash = "3b4beba1c6963c865ed4";
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = [];
 /******/ 	
@@ -541,7 +541,7 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(__resourceQuery) {var io = __webpack_require__(11);
+	/* WEBPACK VAR INJECTION */(function(__resourceQuery) {var io = __webpack_require__(8);
 	var scriptElements = document.getElementsByTagName("script");
 	io = io.connect(true ?
 		__resourceQuery.substr(1) :
@@ -657,7 +657,7 @@
 						check();
 					}
 
-					__webpack_require__(7)(updatedModules, renewedModules);
+					__webpack_require__(4)(updatedModules, renewedModules);
 
 					if(upToDate()) {
 						console.log("[HMR] App is up to date.");
@@ -689,7 +689,7 @@
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(13), RootInstanceProvider = __webpack_require__(4), ReactMount = __webpack_require__(12), React = __webpack_require__(14); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(13), RootInstanceProvider = __webpack_require__(5), ReactMount = __webpack_require__(12), React = __webpack_require__(14); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
 
 	"use strict";
 
@@ -697,9 +697,9 @@
 	__webpack_require__(16);
 
 	var React = __webpack_require__(14);
-	var Examples = __webpack_require__(8);
-	var Footer = __webpack_require__(9);
-	var ForkMeOnGitHub = __webpack_require__(10);
+	var Examples = __webpack_require__(9);
+	var Footer = __webpack_require__(10);
+	var ForkMeOnGitHub = __webpack_require__(11);
 
 	var App = React.createClass({
 	  displayName: "App",
@@ -722,11 +722,42 @@
 
 	React.render(React.createElement(App, null), document.getElementById("app"));
 
-	/* REACT HOT LOADER */ })(); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(5), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(14))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "app.js" + ": " + err.message); } }); } } })(); }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
+	/* REACT HOT LOADER */ })(); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(6), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(14))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "app.js" + ": " + err.message); } }); } } })(); }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)(module)))
 
 /***/ },
 /* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	module.exports = function(updatedModules, renewedModules) {
+		var unacceptedModules = updatedModules.filter(function(moduleId) {
+			return renewedModules && renewedModules.indexOf(moduleId) < 0;
+		});
+
+		if(unacceptedModules.length > 0) {
+			console.warn("[HMR] The following modules couldn't be hot updated: (They would need a full reload!)");
+			unacceptedModules.forEach(function(moduleId) {
+				console.warn("[HMR]  - " + moduleId);
+			});
+		}
+
+		if(!renewedModules || renewedModules.length === 0) {
+			console.log("[HMR] Nothing hot updated.");
+		} else {
+			console.log("[HMR] Updated modules:");
+			renewedModules.forEach(function(moduleId) {
+				console.log("[HMR]  - " + moduleId);
+			});
+		}
+	};
+
+
+/***/ },
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -772,7 +803,7 @@
 	module.exports = RootInstanceProvider;
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -812,7 +843,7 @@
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(module) {
@@ -828,50 +859,26 @@
 
 
 /***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	module.exports = function(updatedModules, renewedModules) {
-		var unacceptedModules = updatedModules.filter(function(moduleId) {
-			return renewedModules && renewedModules.indexOf(moduleId) < 0;
-		});
-
-		if(unacceptedModules.length > 0) {
-			console.warn("[HMR] The following modules couldn't be hot updated: (They would need a full reload!)");
-			unacceptedModules.forEach(function(moduleId) {
-				console.warn("[HMR]  - " + moduleId);
-			});
-		}
-
-		if(!renewedModules || renewedModules.length === 0) {
-			console.log("[HMR] Nothing hot updated.");
-		} else {
-			console.log("[HMR] Updated modules:");
-			renewedModules.forEach(function(moduleId) {
-				console.log("[HMR]  - " + moduleId);
-			});
-		}
-	};
-
-
-/***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(13), RootInstanceProvider = __webpack_require__(4), ReactMount = __webpack_require__(12), React = __webpack_require__(14); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+	module.exports = __webpack_require__(20);
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(13), RootInstanceProvider = __webpack_require__(5), ReactMount = __webpack_require__(12), React = __webpack_require__(14); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
 
 	"use strict";
 
-	__webpack_require__(20);
 	__webpack_require__(21);
+	__webpack_require__(22);
 
 	var React = __webpack_require__(14);
 	var classnames = __webpack_require__(46);
-	var Autosuggest = __webpack_require__(22);
+	var Autosuggest = __webpack_require__(23);
 	var suburbs = __webpack_require__(47);
 
 	function randomInt(min, max) {
@@ -1029,14 +1036,14 @@
 
 	module.exports = Examples;
 
-	/* REACT HOT LOADER */ })(); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(5), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(14))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Examples.js" + ": " + err.message); } }); } } })(); }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
+	/* REACT HOT LOADER */ })(); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(6), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(14))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Examples.js" + ": " + err.message); } }); } } })(); }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)(module)))
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(13), RootInstanceProvider = __webpack_require__(4), ReactMount = __webpack_require__(12), React = __webpack_require__(14); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(13), RootInstanceProvider = __webpack_require__(5), ReactMount = __webpack_require__(12), React = __webpack_require__(14); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
 
 	"use strict";
 
@@ -1072,14 +1079,14 @@
 
 	module.exports = Footer;
 
-	/* REACT HOT LOADER */ })(); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(5), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(14))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Footer.js" + ": " + err.message); } }); } } })(); }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
+	/* REACT HOT LOADER */ })(); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(6), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(14))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Footer.js" + ": " + err.message); } }); } } })(); }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)(module)))
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(13), RootInstanceProvider = __webpack_require__(4), ReactMount = __webpack_require__(12), React = __webpack_require__(14); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(13), RootInstanceProvider = __webpack_require__(5), ReactMount = __webpack_require__(12), React = __webpack_require__(14); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
 
 	"use strict";
 
@@ -1110,15 +1117,8 @@
 
 	module.exports = ForkMeOnGitHub;
 
-	/* REACT HOT LOADER */ })(); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(5), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(14))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ForkMeOnGitHub.js" + ": " + err.message); } }); } } })(); }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(23);
-
+	/* REACT HOT LOADER */ })(); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(6), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(14))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ForkMeOnGitHub.js" + ": " + err.message); } }); } } })(); }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)(module)))
 
 /***/ },
 /* 12 */
@@ -2122,324 +2122,6 @@
 
 /***/ },
 /* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(13), RootInstanceProvider = __webpack_require__(4), ReactMount = __webpack_require__(12), React = __webpack_require__(14); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-
-	"use strict";
-
-	var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
-
-	var React = __webpack_require__(14);
-	var classnames = __webpack_require__(46);
-	var sectionIterator = __webpack_require__(50);
-	var guid = 0;
-
-	var Autosuggest = React.createClass({
-	  displayName: "Autosuggest",
-
-	  propTypes: {
-	    initialValue: React.PropTypes.string, // Input's initial value
-	    inputId: React.PropTypes.string, // Input's id
-	    inputPlaceholder: React.PropTypes.string, // Input's placeholder
-	    suggestions: React.PropTypes.func.isRequired, // Function to get the suggestions
-	    suggestionRenderer: React.PropTypes.func // Function to render a single suggestion
-	  },
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      initialValue: "",
-	      inputId: null,
-	      inputPlaceholder: null
-	    };
-	  },
-	  getInitialState: function getInitialState() {
-	    guid += 1;
-	    this.id = guid;
-	    this.cache = {};
-
-	    return {
-	      value: this.props.initialValue,
-	      suggestions: null,
-	      focusedSectionIndex: null, // Used when multiple sections are displayed
-	      focusedSuggestionIndex: null, // Index within a section
-	      valueBeforeUpDown: null // When user interacts using the Up and Down keys,
-	      // this field remembers input's value prior to
-	      // interaction in order to revert back if ESC hit.
-	      // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
-	    };
-	  },
-	  showSuggestions: function showSuggestions(input) {
-	    if (input.length === 0) {
-	      this.setState({
-	        suggestions: null,
-	        focusedSectionIndex: null,
-	        focusedSuggestionIndex: null,
-	        valueBeforeUpDown: null
-	      });
-	    } else if (this.cache[input]) {
-	      this.setState({
-	        suggestions: this.cache[input],
-	        focusedSectionIndex: null,
-	        focusedSuggestionIndex: null,
-	        valueBeforeUpDown: null
-	      });
-	    } else {
-	      this.props.suggestions(input, (function (error, suggestions) {
-	        if (error) {
-	          throw error;
-	        } else {
-	          this.cache[input] = suggestions;
-	          this.multipleSections = suggestions.length > 0 && typeof suggestions[0] === "object";
-
-	          if (this.multipleSections) {
-	            sectionIterator.setData(suggestions.map(function (suggestion) {
-	              return suggestion.suggestions.length;
-	            }));
-	          } else {
-	            sectionIterator.setData(suggestions.length);
-	          }
-
-	          this.setState({
-	            suggestions: suggestions,
-	            focusedSectionIndex: null,
-	            focusedSuggestionIndex: null,
-	            valueBeforeUpDown: null
-	          });
-	        }
-	      }).bind(this));
-	    }
-	  },
-	  getSuggestion: function getSuggestion(sectionIndex, suggestionIndex) {
-	    return this.multipleSections ? this.state.suggestions[sectionIndex].suggestions[suggestionIndex] : this.state.suggestions[suggestionIndex];
-	  },
-	  focusOnSuggestion: function focusOnSuggestion(suggestionPosition) {
-	    var _suggestionPosition = _slicedToArray(suggestionPosition, 2);
-
-	    var sectionIndex = _suggestionPosition[0];
-	    var suggestionIndex = _suggestionPosition[1];
-
-	    var newState = {
-	      focusedSectionIndex: sectionIndex,
-	      focusedSuggestionIndex: suggestionIndex,
-	      value: suggestionIndex === null ? this.state.valueBeforeUpDown : this.getSuggestion(sectionIndex, suggestionIndex)
-	    };
-
-	    // When users starts to interact with up/down keys, remember input's value.
-	    if (this.state.valueBeforeUpDown === null) {
-	      newState.valueBeforeUpDown = this.state.value;
-	    }
-
-	    this.setState(newState);
-	  },
-	  onInputChange: function onInputChange(event) {
-	    var newValue = event.target.value;
-
-	    this.setState({
-	      value: newValue,
-	      valueBeforeUpDown: null
-	    });
-
-	    this.showSuggestions(newValue);
-	  },
-	  onInputKeyDown: function onInputKeyDown(event) {
-	    var newState, newSectionIndex, newSuggestionIndex;
-
-	    switch (event.keyCode) {
-	      case 13:
-	        // enter
-	        this.setState({
-	          suggestions: null,
-	          focusedSectionIndex: null,
-	          focusedSuggestionIndex: null,
-	          valueBeforeUpDown: null
-	        });
-
-	        break;
-
-	      case 27:
-	        // escape
-	        newState = {
-	          suggestions: null,
-	          focusedSectionIndex: null,
-	          focusedSuggestionIndex: null,
-	          valueBeforeUpDown: null
-	        };
-
-	        if (this.state.valueBeforeUpDown !== null) {
-	          newState.value = this.state.valueBeforeUpDown;
-	        } else if (this.state.suggestions === null) {
-	          newState.value = "";
-	        }
-
-	        this.setState(newState);
-
-	        break;
-
-	      case 38:
-	        // up
-	        if (this.state.suggestions === null) {
-	          this.showSuggestions(this.state.value);
-	        } else {
-	          this.focusOnSuggestion(sectionIterator.prev([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
-	        }
-
-	        event.preventDefault(); // Prevent the cursor from jumping to input's start
-
-	        break;
-
-	      case 40:
-	        // down
-	        if (this.state.suggestions === null) {
-	          this.showSuggestions(this.state.value);
-	        } else {
-	          this.focusOnSuggestion(sectionIterator.next([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
-	        }
-
-	        break;
-	    }
-	  },
-	  onInputBlur: function onInputBlur() {
-	    this.setState({
-	      suggestions: null,
-	      focusedSectionIndex: null,
-	      focusedSuggestionIndex: null,
-	      valueBeforeUpDown: null
-	    });
-	  },
-	  onSuggestionMouseEnter: function onSuggestionMouseEnter(sectionIndex, suggestionIndex) {
-	    this.setState({
-	      focusedSectionIndex: sectionIndex,
-	      focusedSuggestionIndex: suggestionIndex
-	    });
-	  },
-	  onSuggestionMouseLeave: function onSuggestionMouseLeave() {
-	    this.setState({
-	      focusedSectionIndex: null,
-	      focusedSuggestionIndex: null
-	    });
-	  },
-	  onSuggestionMouseDown: function onSuggestionMouseDown(suggestion) {
-	    this.setState({
-	      value: suggestion,
-	      suggestions: null,
-	      focusedSectionIndex: null,
-	      focusedSuggestionIndex: null,
-	      valueBeforeUpDown: null
-	    }, function () {
-	      // This code executes after the component is re-rendered
-	      setTimeout((function () {
-	        React.findDOMNode(this.refs.input).focus();
-	      }).bind(this));
-	    });
-	  },
-	  getSuggestionId: function getSuggestionId(sectionIndex, suggestionIndex) {
-	    if (suggestionIndex === null) {
-	      return null;
-	    }
-
-	    return "react-autosuggest-" + this.id + "-suggestion-" + (sectionIndex === null ? "" : sectionIndex) + "-" + suggestionIndex;
-	  },
-	  renderSuggestionsList: function renderSuggestionsList(suggestions, sectionIndex) {
-	    return suggestions.map(function (suggestion, suggestionIndex) {
-	      var classes = classnames({
-	        "react-autosuggest__suggestion": true,
-	        "react-autosuggest__suggestion--focused": sectionIndex === this.state.focusedSectionIndex && suggestionIndex === this.state.focusedSuggestionIndex
-	      });
-
-	      var suggestionContent = this.props.suggestionRenderer ? this.props.suggestionRenderer(suggestion, this.state.valueBeforeUpDown || this.state.value) : suggestion;
-
-	      return React.createElement(
-	        "div",
-	        { id: this.getSuggestionId(sectionIndex, suggestionIndex),
-	          className: classes,
-	          role: "option",
-	          key: "suggestion-" + (suggestionIndex === null ? "" : suggestionIndex) + "-" + suggestionIndex,
-	          onMouseEnter: this.onSuggestionMouseEnter.bind(this, sectionIndex, suggestionIndex),
-	          onMouseLeave: this.onSuggestionMouseLeave,
-	          onMouseDown: this.onSuggestionMouseDown.bind(this, suggestion) },
-	        suggestionContent
-	      );
-	    }, this);
-	  },
-	  renderSuggestions: function renderSuggestions() {
-	    if (this.state.value === "" || this.state.suggestions === null) {
-	      return null;
-	    }
-
-	    var content;
-
-	    if (this.multipleSections) {
-	      content = this.state.suggestions.map(function (section, sectionIndex) {
-	        var sectionName = section.sectionName ? React.createElement(
-	          "div",
-	          { className: "react-autosuggest__suggestions-section-name" },
-	          section.sectionName
-	        ) : null;
-
-	        return section.suggestions.length === 0 ? null : React.createElement(
-	          "div",
-	          { className: "react-autosuggest__suggestions-section",
-	            key: "section-" + sectionIndex },
-	          sectionName,
-	          this.renderSuggestionsList(section.suggestions, sectionIndex)
-	        );
-	      }, this);
-	    } else {
-	      content = this.renderSuggestionsList(this.state.suggestions, null);
-	    }
-
-	    return React.createElement(
-	      "div",
-	      { id: "react-autosuggest-" + this.id,
-	        className: "react-autosuggest__suggestions",
-	        role: "listbox" },
-	      content
-	    );
-	  },
-	  render: function render() {
-	    var ariaActivedescendant = this.getSuggestionId(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex);
-
-	    return React.createElement(
-	      "div",
-	      { className: "react-autosuggest" },
-	      React.createElement("input", { id: this.props.inputId,
-	        type: "text",
-	        value: this.state.value,
-	        placeholder: this.props.inputPlaceholder,
-	        autoComplete: "off",
-	        role: "combobox",
-	        "aria-autocomplete": "list",
-	        "aria-owns": "react-autosuggest-" + this.id,
-	        "aria-expanded": this.state.suggestions !== null,
-	        "aria-activedescendant": ariaActivedescendant,
-	        ref: "input",
-	        onChange: this.onInputChange,
-	        onKeyDown: this.onInputKeyDown,
-	        onBlur: this.onInputBlur }),
-	      this.renderSuggestions()
-	    );
-	  }
-	});
-
-	module.exports = Autosuggest;
-
-	/* REACT HOT LOADER */ })(); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(5), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(14))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Autosuggest.js" + ": " + err.message); } }); } } })(); }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
-
-/***/ },
-/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/*! Socket.IO.js build:0.9.10, development. Copyright(c) 2011 LearnBoost <dev@learnboost.com> MIT Licensed */
@@ -6304,7 +5986,325 @@
 	);
 
 	})();
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)(module)))
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(13), RootInstanceProvider = __webpack_require__(5), ReactMount = __webpack_require__(12), React = __webpack_require__(14); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+
+	"use strict";
+
+	var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
+
+	var React = __webpack_require__(14);
+	var classnames = __webpack_require__(46);
+	var sectionIterator = __webpack_require__(50);
+	var guid = 0;
+
+	var Autosuggest = React.createClass({
+	  displayName: "Autosuggest",
+
+	  propTypes: {
+	    initialValue: React.PropTypes.string, // Input's initial value
+	    inputId: React.PropTypes.string, // Input's id
+	    inputPlaceholder: React.PropTypes.string, // Input's placeholder
+	    suggestions: React.PropTypes.func.isRequired, // Function to get the suggestions
+	    suggestionRenderer: React.PropTypes.func // Function to render a single suggestion
+	  },
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      initialValue: "",
+	      inputId: null,
+	      inputPlaceholder: null
+	    };
+	  },
+	  getInitialState: function getInitialState() {
+	    guid += 1;
+	    this.id = guid;
+	    this.cache = {};
+
+	    return {
+	      value: this.props.initialValue,
+	      suggestions: null,
+	      focusedSectionIndex: null, // Used when multiple sections are displayed
+	      focusedSuggestionIndex: null, // Index within a section
+	      valueBeforeUpDown: null // When user interacts using the Up and Down keys,
+	      // this field remembers input's value prior to
+	      // interaction in order to revert back if ESC hit.
+	      // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
+	    };
+	  },
+	  showSuggestions: function showSuggestions(input) {
+	    if (input.length === 0) {
+	      this.setState({
+	        suggestions: null,
+	        focusedSectionIndex: null,
+	        focusedSuggestionIndex: null,
+	        valueBeforeUpDown: null
+	      });
+	    } else if (this.cache[input]) {
+	      this.setState({
+	        suggestions: this.cache[input],
+	        focusedSectionIndex: null,
+	        focusedSuggestionIndex: null,
+	        valueBeforeUpDown: null
+	      });
+	    } else {
+	      this.props.suggestions(input, (function (error, suggestions) {
+	        if (error) {
+	          throw error;
+	        } else {
+	          this.cache[input] = suggestions;
+	          this.multipleSections = suggestions.length > 0 && typeof suggestions[0] === "object";
+
+	          if (this.multipleSections) {
+	            sectionIterator.setData(suggestions.map(function (suggestion) {
+	              return suggestion.suggestions.length;
+	            }));
+	          } else {
+	            sectionIterator.setData(suggestions.length);
+	          }
+
+	          this.setState({
+	            suggestions: suggestions,
+	            focusedSectionIndex: null,
+	            focusedSuggestionIndex: null,
+	            valueBeforeUpDown: null
+	          });
+	        }
+	      }).bind(this));
+	    }
+	  },
+	  getSuggestion: function getSuggestion(sectionIndex, suggestionIndex) {
+	    return this.multipleSections ? this.state.suggestions[sectionIndex].suggestions[suggestionIndex] : this.state.suggestions[suggestionIndex];
+	  },
+	  focusOnSuggestion: function focusOnSuggestion(suggestionPosition) {
+	    var _suggestionPosition = _slicedToArray(suggestionPosition, 2);
+
+	    var sectionIndex = _suggestionPosition[0];
+	    var suggestionIndex = _suggestionPosition[1];
+
+	    var newState = {
+	      focusedSectionIndex: sectionIndex,
+	      focusedSuggestionIndex: suggestionIndex,
+	      value: suggestionIndex === null ? this.state.valueBeforeUpDown : this.getSuggestion(sectionIndex, suggestionIndex)
+	    };
+
+	    // When users starts to interact with up/down keys, remember input's value.
+	    if (this.state.valueBeforeUpDown === null) {
+	      newState.valueBeforeUpDown = this.state.value;
+	    }
+
+	    this.setState(newState);
+	  },
+	  onInputChange: function onInputChange(event) {
+	    var newValue = event.target.value;
+
+	    this.setState({
+	      value: newValue,
+	      valueBeforeUpDown: null
+	    });
+
+	    this.showSuggestions(newValue);
+	  },
+	  onInputKeyDown: function onInputKeyDown(event) {
+	    var newState, newSectionIndex, newSuggestionIndex;
+
+	    switch (event.keyCode) {
+	      case 13:
+	        // enter
+	        this.setState({
+	          suggestions: null,
+	          focusedSectionIndex: null,
+	          focusedSuggestionIndex: null,
+	          valueBeforeUpDown: null
+	        });
+
+	        break;
+
+	      case 27:
+	        // escape
+	        newState = {
+	          suggestions: null,
+	          focusedSectionIndex: null,
+	          focusedSuggestionIndex: null,
+	          valueBeforeUpDown: null
+	        };
+
+	        if (this.state.valueBeforeUpDown !== null) {
+	          newState.value = this.state.valueBeforeUpDown;
+	        } else if (this.state.suggestions === null) {
+	          newState.value = "";
+	        }
+
+	        this.setState(newState);
+
+	        break;
+
+	      case 38:
+	        // up
+	        if (this.state.suggestions === null) {
+	          this.showSuggestions(this.state.value);
+	        } else {
+	          this.focusOnSuggestion(sectionIterator.prev([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
+	        }
+
+	        event.preventDefault(); // Prevent the cursor from jumping to input's start
+
+	        break;
+
+	      case 40:
+	        // down
+	        if (this.state.suggestions === null) {
+	          this.showSuggestions(this.state.value);
+	        } else {
+	          this.focusOnSuggestion(sectionIterator.next([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
+	        }
+
+	        break;
+	    }
+	  },
+	  onInputBlur: function onInputBlur() {
+	    this.setState({
+	      suggestions: null,
+	      focusedSectionIndex: null,
+	      focusedSuggestionIndex: null,
+	      valueBeforeUpDown: null
+	    });
+	  },
+	  onSuggestionMouseEnter: function onSuggestionMouseEnter(sectionIndex, suggestionIndex) {
+	    this.setState({
+	      focusedSectionIndex: sectionIndex,
+	      focusedSuggestionIndex: suggestionIndex
+	    });
+	  },
+	  onSuggestionMouseLeave: function onSuggestionMouseLeave() {
+	    this.setState({
+	      focusedSectionIndex: null,
+	      focusedSuggestionIndex: null
+	    });
+	  },
+	  onSuggestionMouseDown: function onSuggestionMouseDown(suggestion) {
+	    this.setState({
+	      value: suggestion,
+	      suggestions: null,
+	      focusedSectionIndex: null,
+	      focusedSuggestionIndex: null,
+	      valueBeforeUpDown: null
+	    }, function () {
+	      // This code executes after the component is re-rendered
+	      setTimeout((function () {
+	        React.findDOMNode(this.refs.input).focus();
+	      }).bind(this));
+	    });
+	  },
+	  getSuggestionId: function getSuggestionId(sectionIndex, suggestionIndex) {
+	    if (suggestionIndex === null) {
+	      return null;
+	    }
+
+	    return "react-autosuggest-" + this.id + "-suggestion-" + (sectionIndex === null ? "" : sectionIndex) + "-" + suggestionIndex;
+	  },
+	  renderSuggestionsList: function renderSuggestionsList(suggestions, sectionIndex) {
+	    return suggestions.map(function (suggestion, suggestionIndex) {
+	      var classes = classnames({
+	        "react-autosuggest__suggestion": true,
+	        "react-autosuggest__suggestion--focused": sectionIndex === this.state.focusedSectionIndex && suggestionIndex === this.state.focusedSuggestionIndex
+	      });
+
+	      var suggestionContent = this.props.suggestionRenderer ? this.props.suggestionRenderer(suggestion, this.state.valueBeforeUpDown || this.state.value) : suggestion;
+
+	      return React.createElement(
+	        "div",
+	        { id: this.getSuggestionId(sectionIndex, suggestionIndex),
+	          className: classes,
+	          role: "option",
+	          key: "suggestion-" + (suggestionIndex === null ? "" : suggestionIndex) + "-" + suggestionIndex,
+	          onMouseEnter: this.onSuggestionMouseEnter.bind(this, sectionIndex, suggestionIndex),
+	          onMouseLeave: this.onSuggestionMouseLeave,
+	          onMouseDown: this.onSuggestionMouseDown.bind(this, suggestion) },
+	        suggestionContent
+	      );
+	    }, this);
+	  },
+	  renderSuggestions: function renderSuggestions() {
+	    if (this.state.value === "" || this.state.suggestions === null) {
+	      return null;
+	    }
+
+	    var content;
+
+	    if (this.multipleSections) {
+	      content = this.state.suggestions.map(function (section, sectionIndex) {
+	        var sectionName = section.sectionName ? React.createElement(
+	          "div",
+	          { className: "react-autosuggest__suggestions-section-name" },
+	          section.sectionName
+	        ) : null;
+
+	        return section.suggestions.length === 0 ? null : React.createElement(
+	          "div",
+	          { className: "react-autosuggest__suggestions-section",
+	            key: "section-" + sectionIndex },
+	          sectionName,
+	          this.renderSuggestionsList(section.suggestions, sectionIndex)
+	        );
+	      }, this);
+	    } else {
+	      content = this.renderSuggestionsList(this.state.suggestions, null);
+	    }
+
+	    return React.createElement(
+	      "div",
+	      { id: "react-autosuggest-" + this.id,
+	        className: "react-autosuggest__suggestions",
+	        role: "listbox" },
+	      content
+	    );
+	  },
+	  render: function render() {
+	    var ariaActivedescendant = this.getSuggestionId(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex);
+
+	    return React.createElement(
+	      "div",
+	      { className: "react-autosuggest" },
+	      React.createElement("input", { id: this.props.inputId,
+	        type: "text",
+	        value: this.state.value,
+	        placeholder: this.props.inputPlaceholder,
+	        autoComplete: "off",
+	        role: "combobox",
+	        "aria-autocomplete": "list",
+	        "aria-owns": "react-autosuggest-" + this.id,
+	        "aria-expanded": this.state.suggestions !== null,
+	        "aria-activedescendant": ariaActivedescendant,
+	        ref: "input",
+	        onChange: this.onInputChange,
+	        onKeyDown: this.onInputKeyDown,
+	        onBlur: this.onInputBlur }),
+	      this.renderSuggestions()
+	    );
+	  }
+	});
+
+	module.exports = Autosuggest;
+
+	/* REACT HOT LOADER */ })(); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(6), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(14))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Autosuggest.js" + ": " + err.message); } }); } } })(); }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)(module)))
 
 /***/ },
 /* 24 */
@@ -13288,7 +13288,7 @@
 /* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(13), RootInstanceProvider = __webpack_require__(4), ReactMount = __webpack_require__(12), React = __webpack_require__(14); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(13), RootInstanceProvider = __webpack_require__(5), ReactMount = __webpack_require__(12), React = __webpack_require__(14); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
 
 	"use strict";
 
@@ -13397,8 +13397,8 @@
 	  prev: prev
 	};
 
-	/* REACT HOT LOADER */ })(); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(5), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(14))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "sectionIterator.js" + ": " + err.message); } }); } } })(); }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
+	/* REACT HOT LOADER */ })(); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(6), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(14))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "sectionIterator.js" + ": " + err.message); } }); } } })(); }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)(module)))
 
 /***/ },
 /* 51 */
@@ -19387,7 +19387,7 @@
 /* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var deepForceUpdate = __webpack_require__(162);
+	var deepForceUpdate = __webpack_require__(131);
 
 	var isRequestPending = false;
 
@@ -19830,7 +19830,7 @@
 
 	var DOMProperty = __webpack_require__(24);
 
-	var quoteAttributeValueForBrowser = __webpack_require__(131);
+	var quoteAttributeValueForBrowser = __webpack_require__(132);
 	var warning = __webpack_require__(44);
 
 	function shouldIgnoreValue(name, value) {
@@ -20076,14 +20076,14 @@
 
 	'use strict';
 
-	var CSSPropertyOperations = __webpack_require__(132);
+	var CSSPropertyOperations = __webpack_require__(133);
 	var DOMProperty = __webpack_require__(24);
 	var DOMPropertyOperations = __webpack_require__(99);
 	var ReactBrowserEventEmitter = __webpack_require__(25);
 	var ReactComponentBrowserEnvironment =
 	  __webpack_require__(100);
 	var ReactMount = __webpack_require__(12);
-	var ReactMultiChild = __webpack_require__(133);
+	var ReactMultiChild = __webpack_require__(134);
 	var ReactPerf = __webpack_require__(33);
 
 	var assign = __webpack_require__(56);
@@ -20628,11 +20628,11 @@
 	'use strict';
 
 	var EventConstants = __webpack_require__(51);
-	var EventPropagators = __webpack_require__(134);
+	var EventPropagators = __webpack_require__(135);
 	var ExecutionEnvironment = __webpack_require__(73);
-	var FallbackCompositionState = __webpack_require__(135);
-	var SyntheticCompositionEvent = __webpack_require__(136);
-	var SyntheticInputEvent = __webpack_require__(137);
+	var FallbackCompositionState = __webpack_require__(136);
+	var SyntheticCompositionEvent = __webpack_require__(137);
+	var SyntheticInputEvent = __webpack_require__(138);
 
 	var keyOf = __webpack_require__(97);
 
@@ -21127,13 +21127,13 @@
 
 	var EventConstants = __webpack_require__(51);
 	var EventPluginHub = __webpack_require__(52);
-	var EventPropagators = __webpack_require__(134);
+	var EventPropagators = __webpack_require__(135);
 	var ExecutionEnvironment = __webpack_require__(73);
 	var ReactUpdates = __webpack_require__(36);
-	var SyntheticEvent = __webpack_require__(138);
+	var SyntheticEvent = __webpack_require__(139);
 
 	var isEventSupported = __webpack_require__(57);
-	var isTextInputElement = __webpack_require__(139);
+	var isTextInputElement = __webpack_require__(140);
 	var keyOf = __webpack_require__(97);
 
 	var topLevelTypes = EventConstants.topLevelTypes;
@@ -21585,8 +21585,8 @@
 	'use strict';
 
 	var EventConstants = __webpack_require__(51);
-	var EventPropagators = __webpack_require__(134);
-	var SyntheticMouseEvent = __webpack_require__(140);
+	var EventPropagators = __webpack_require__(135);
+	var SyntheticMouseEvent = __webpack_require__(141);
 
 	var ReactMount = __webpack_require__(12);
 	var keyOf = __webpack_require__(97);
@@ -22110,7 +22110,7 @@
 
 	'use strict';
 
-	var AutoFocusMixin = __webpack_require__(141);
+	var AutoFocusMixin = __webpack_require__(142);
 	var ReactBrowserComponentMixin = __webpack_require__(110);
 	var ReactClass = __webpack_require__(79);
 	var ReactElement = __webpack_require__(27);
@@ -22179,7 +22179,7 @@
 	'use strict';
 
 	var EventConstants = __webpack_require__(51);
-	var LocalEventTrapMixin = __webpack_require__(142);
+	var LocalEventTrapMixin = __webpack_require__(143);
 	var ReactBrowserComponentMixin = __webpack_require__(110);
 	var ReactClass = __webpack_require__(79);
 	var ReactElement = __webpack_require__(27);
@@ -22232,7 +22232,7 @@
 	'use strict';
 
 	var EventConstants = __webpack_require__(51);
-	var LocalEventTrapMixin = __webpack_require__(142);
+	var LocalEventTrapMixin = __webpack_require__(143);
 	var ReactBrowserComponentMixin = __webpack_require__(110);
 	var ReactClass = __webpack_require__(79);
 	var ReactElement = __webpack_require__(27);
@@ -22284,8 +22284,8 @@
 
 	'use strict';
 
-	var CSSPropertyOperations = __webpack_require__(132);
-	var DOMChildrenOperations = __webpack_require__(143);
+	var CSSPropertyOperations = __webpack_require__(133);
+	var DOMChildrenOperations = __webpack_require__(144);
 	var DOMPropertyOperations = __webpack_require__(99);
 	var ReactMount = __webpack_require__(12);
 	var ReactPerf = __webpack_require__(33);
@@ -22453,7 +22453,7 @@
 	'use strict';
 
 	var EventConstants = __webpack_require__(51);
-	var LocalEventTrapMixin = __webpack_require__(142);
+	var LocalEventTrapMixin = __webpack_require__(143);
 	var ReactBrowserComponentMixin = __webpack_require__(110);
 	var ReactClass = __webpack_require__(79);
 	var ReactElement = __webpack_require__(27);
@@ -22501,9 +22501,9 @@
 
 	'use strict';
 
-	var AutoFocusMixin = __webpack_require__(141);
+	var AutoFocusMixin = __webpack_require__(142);
 	var DOMPropertyOperations = __webpack_require__(99);
-	var LinkedValueUtils = __webpack_require__(144);
+	var LinkedValueUtils = __webpack_require__(145);
 	var ReactBrowserComponentMixin = __webpack_require__(110);
 	var ReactClass = __webpack_require__(79);
 	var ReactElement = __webpack_require__(27);
@@ -22736,8 +22736,8 @@
 
 	'use strict';
 
-	var AutoFocusMixin = __webpack_require__(141);
-	var LinkedValueUtils = __webpack_require__(144);
+	var AutoFocusMixin = __webpack_require__(142);
+	var LinkedValueUtils = __webpack_require__(145);
 	var ReactBrowserComponentMixin = __webpack_require__(110);
 	var ReactClass = __webpack_require__(79);
 	var ReactElement = __webpack_require__(27);
@@ -22918,9 +22918,9 @@
 
 	'use strict';
 
-	var AutoFocusMixin = __webpack_require__(141);
+	var AutoFocusMixin = __webpack_require__(142);
 	var DOMPropertyOperations = __webpack_require__(99);
-	var LinkedValueUtils = __webpack_require__(144);
+	var LinkedValueUtils = __webpack_require__(145);
 	var ReactBrowserComponentMixin = __webpack_require__(110);
 	var ReactClass = __webpack_require__(79);
 	var ReactElement = __webpack_require__(27);
@@ -23062,7 +23062,7 @@
 
 	'use strict';
 
-	var EventListener = __webpack_require__(145);
+	var EventListener = __webpack_require__(146);
 	var ExecutionEnvironment = __webpack_require__(73);
 	var PooledClass = __webpack_require__(69);
 	var ReactInstanceHandles = __webpack_require__(30);
@@ -23070,8 +23070,8 @@
 	var ReactUpdates = __webpack_require__(36);
 
 	var assign = __webpack_require__(56);
-	var getEventTarget = __webpack_require__(146);
-	var getUnboundedScrollPosition = __webpack_require__(147);
+	var getEventTarget = __webpack_require__(147);
+	var getUnboundedScrollPosition = __webpack_require__(148);
 
 	/**
 	 * Finds the parent React component of `node`.
@@ -23298,8 +23298,8 @@
 	var CallbackQueue = __webpack_require__(68);
 	var PooledClass = __webpack_require__(69);
 	var ReactBrowserEventEmitter = __webpack_require__(25);
-	var ReactInputSelection = __webpack_require__(148);
-	var ReactPutListenerQueue = __webpack_require__(149);
+	var ReactInputSelection = __webpack_require__(149);
+	var ReactPutListenerQueue = __webpack_require__(150);
 	var Transaction = __webpack_require__(70);
 
 	var assign = __webpack_require__(56);
@@ -23475,14 +23475,14 @@
 	'use strict';
 
 	var EventConstants = __webpack_require__(51);
-	var EventPropagators = __webpack_require__(134);
-	var ReactInputSelection = __webpack_require__(148);
-	var SyntheticEvent = __webpack_require__(138);
+	var EventPropagators = __webpack_require__(135);
+	var ReactInputSelection = __webpack_require__(149);
+	var SyntheticEvent = __webpack_require__(139);
 
-	var getActiveElement = __webpack_require__(150);
-	var isTextInputElement = __webpack_require__(139);
+	var getActiveElement = __webpack_require__(151);
+	var isTextInputElement = __webpack_require__(140);
 	var keyOf = __webpack_require__(97);
-	var shallowEqual = __webpack_require__(151);
+	var shallowEqual = __webpack_require__(152);
 
 	var topLevelTypes = EventConstants.topLevelTypes;
 
@@ -23710,18 +23710,18 @@
 
 	var EventConstants = __webpack_require__(51);
 	var EventPluginUtils = __webpack_require__(76);
-	var EventPropagators = __webpack_require__(134);
-	var SyntheticClipboardEvent = __webpack_require__(152);
-	var SyntheticEvent = __webpack_require__(138);
-	var SyntheticFocusEvent = __webpack_require__(153);
-	var SyntheticKeyboardEvent = __webpack_require__(154);
-	var SyntheticMouseEvent = __webpack_require__(140);
-	var SyntheticDragEvent = __webpack_require__(155);
-	var SyntheticTouchEvent = __webpack_require__(156);
-	var SyntheticUIEvent = __webpack_require__(157);
-	var SyntheticWheelEvent = __webpack_require__(158);
+	var EventPropagators = __webpack_require__(135);
+	var SyntheticClipboardEvent = __webpack_require__(153);
+	var SyntheticEvent = __webpack_require__(139);
+	var SyntheticFocusEvent = __webpack_require__(154);
+	var SyntheticKeyboardEvent = __webpack_require__(155);
+	var SyntheticMouseEvent = __webpack_require__(141);
+	var SyntheticDragEvent = __webpack_require__(156);
+	var SyntheticTouchEvent = __webpack_require__(157);
+	var SyntheticUIEvent = __webpack_require__(158);
+	var SyntheticWheelEvent = __webpack_require__(159);
 
-	var getEventCharCode = __webpack_require__(159);
+	var getEventCharCode = __webpack_require__(160);
 
 	var invariant = __webpack_require__(41);
 	var keyOf = __webpack_require__(97);
@@ -24302,11 +24302,11 @@
 	'use strict';
 
 	var DOMProperty = __webpack_require__(24);
-	var ReactDefaultPerfAnalysis = __webpack_require__(160);
+	var ReactDefaultPerfAnalysis = __webpack_require__(161);
 	var ReactMount = __webpack_require__(12);
 	var ReactPerf = __webpack_require__(33);
 
-	var performanceNow = __webpack_require__(161);
+	var performanceNow = __webpack_require__(162);
 
 	function roundFloat(val) {
 	  return Math.floor(val * 100) / 100;
@@ -24573,7 +24573,7 @@
 
 	var PooledClass = __webpack_require__(69);
 	var CallbackQueue = __webpack_require__(68);
-	var ReactPutListenerQueue = __webpack_require__(149);
+	var ReactPutListenerQueue = __webpack_require__(150);
 	var Transaction = __webpack_require__(70);
 
 	var assign = __webpack_require__(56);
@@ -24674,6 +24674,48 @@
 /* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	var bindAutoBindMethods = __webpack_require__(163);
+	var traverseRenderedChildren = __webpack_require__(164);
+
+	function setPendingForceUpdate(internalInstance) {
+	  if (internalInstance._pendingForceUpdate === false) {
+	    internalInstance._pendingForceUpdate = true;
+	  }
+	}
+
+	function forceUpdateIfPending(internalInstance, React) {
+	  if (internalInstance._pendingForceUpdate === true) {
+	    // `|| internalInstance` for React 0.12 and earlier
+	    var instance = internalInstance._instance || internalInstance;
+
+	    if (instance.forceUpdate) {
+	      instance.forceUpdate();
+	    } else if (React && React.Component) {
+	      React.Component.prototype.forceUpdate.call(instance);
+	    }
+	  }
+	}
+
+	/**
+	 * Updates a React component recursively, so even if children define funky
+	 * `shouldComponentUpdate`, they are forced to re-render.
+	 * Makes sure that any newly added methods are properly auto-bound.
+	 */
+	function deepForceUpdate(internalInstance, React) {
+	  traverseRenderedChildren(internalInstance, bindAutoBindMethods);
+	  traverseRenderedChildren(internalInstance, setPendingForceUpdate);
+	  traverseRenderedChildren(internalInstance, forceUpdateIfPending, React);
+	}
+
+	module.exports = deepForceUpdate;
+
+
+/***/ },
+/* 132 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/**
 	 * Copyright 2013-2015, Facebook, Inc.
 	 * All rights reserved.
@@ -24703,7 +24745,7 @@
 
 
 /***/ },
-/* 132 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24720,13 +24762,13 @@
 
 	'use strict';
 
-	var CSSProperty = __webpack_require__(163);
+	var CSSProperty = __webpack_require__(165);
 	var ExecutionEnvironment = __webpack_require__(73);
 
-	var camelizeStyleName = __webpack_require__(164);
-	var dangerousStyleValue = __webpack_require__(165);
-	var hyphenateStyleName = __webpack_require__(166);
-	var memoizeStringOnly = __webpack_require__(167);
+	var camelizeStyleName = __webpack_require__(166);
+	var dangerousStyleValue = __webpack_require__(167);
+	var hyphenateStyleName = __webpack_require__(168);
+	var memoizeStringOnly = __webpack_require__(169);
 	var warning = __webpack_require__(44);
 
 	var processStyleName = memoizeStringOnly(function(styleName) {
@@ -24888,7 +24930,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)))
 
 /***/ },
-/* 133 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24906,10 +24948,10 @@
 	'use strict';
 
 	var ReactComponentEnvironment = __webpack_require__(92);
-	var ReactMultiChildUpdateTypes = __webpack_require__(168);
+	var ReactMultiChildUpdateTypes = __webpack_require__(170);
 
 	var ReactReconciler = __webpack_require__(34);
-	var ReactChildReconciler = __webpack_require__(169);
+	var ReactChildReconciler = __webpack_require__(171);
 
 	/**
 	 * Updating children of a component may trigger recursive updates. The depth is
@@ -25322,7 +25364,7 @@
 
 
 /***/ },
-/* 134 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25467,7 +25509,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)))
 
 /***/ },
-/* 135 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25487,7 +25529,7 @@
 	var PooledClass = __webpack_require__(69);
 
 	var assign = __webpack_require__(56);
-	var getTextContentAccessor = __webpack_require__(170);
+	var getTextContentAccessor = __webpack_require__(172);
 
 	/**
 	 * This helper class stores information about text content of a target node,
@@ -25562,7 +25604,7 @@
 
 
 /***/ },
-/* 136 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25579,7 +25621,7 @@
 
 	'use strict';
 
-	var SyntheticEvent = __webpack_require__(138);
+	var SyntheticEvent = __webpack_require__(139);
 
 	/**
 	 * @interface Event
@@ -25611,7 +25653,7 @@
 
 
 /***/ },
-/* 137 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25628,7 +25670,7 @@
 
 	'use strict';
 
-	var SyntheticEvent = __webpack_require__(138);
+	var SyntheticEvent = __webpack_require__(139);
 
 	/**
 	 * @interface Event
@@ -25661,7 +25703,7 @@
 
 
 /***/ },
-/* 138 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25682,7 +25724,7 @@
 
 	var assign = __webpack_require__(56);
 	var emptyFunction = __webpack_require__(74);
-	var getEventTarget = __webpack_require__(146);
+	var getEventTarget = __webpack_require__(147);
 
 	/**
 	 * @interface Event
@@ -25831,7 +25873,7 @@
 
 
 /***/ },
-/* 139 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25878,7 +25920,7 @@
 
 
 /***/ },
-/* 140 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25895,10 +25937,10 @@
 
 	'use strict';
 
-	var SyntheticUIEvent = __webpack_require__(157);
+	var SyntheticUIEvent = __webpack_require__(158);
 	var ViewportMetrics = __webpack_require__(55);
 
-	var getEventModifierState = __webpack_require__(171);
+	var getEventModifierState = __webpack_require__(173);
 
 	/**
 	 * @interface MouseEvent
@@ -25963,7 +26005,7 @@
 
 
 /***/ },
-/* 141 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25980,7 +26022,7 @@
 
 	'use strict';
 
-	var focusNode = __webpack_require__(172);
+	var focusNode = __webpack_require__(174);
 
 	var AutoFocusMixin = {
 	  componentDidMount: function() {
@@ -25994,7 +26036,7 @@
 
 
 /***/ },
-/* 142 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26054,7 +26096,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)))
 
 /***/ },
-/* 143 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26071,10 +26113,10 @@
 
 	'use strict';
 
-	var Danger = __webpack_require__(173);
-	var ReactMultiChildUpdateTypes = __webpack_require__(168);
+	var Danger = __webpack_require__(175);
+	var ReactMultiChildUpdateTypes = __webpack_require__(170);
 
-	var setTextContent = __webpack_require__(174);
+	var setTextContent = __webpack_require__(176);
 	var invariant = __webpack_require__(41);
 
 	/**
@@ -26195,7 +26237,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)))
 
 /***/ },
-/* 144 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26354,7 +26396,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)))
 
 /***/ },
-/* 145 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26447,7 +26489,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)))
 
 /***/ },
-/* 146 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26482,7 +26524,7 @@
 
 
 /***/ },
-/* 147 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26526,7 +26568,7 @@
 
 
 /***/ },
-/* 148 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26542,11 +26584,11 @@
 
 	'use strict';
 
-	var ReactDOMSelection = __webpack_require__(175);
+	var ReactDOMSelection = __webpack_require__(177);
 
 	var containsNode = __webpack_require__(38);
-	var focusNode = __webpack_require__(172);
-	var getActiveElement = __webpack_require__(150);
+	var focusNode = __webpack_require__(174);
+	var getActiveElement = __webpack_require__(151);
 
 	function isInDocument(node) {
 	  return containsNode(document.documentElement, node);
@@ -26665,7 +26707,7 @@
 
 
 /***/ },
-/* 149 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26725,7 +26767,7 @@
 
 
 /***/ },
-/* 150 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26758,7 +26800,7 @@
 
 
 /***/ },
-/* 151 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26806,7 +26848,7 @@
 
 
 /***/ },
-/* 152 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26823,7 +26865,7 @@
 
 	'use strict';
 
-	var SyntheticEvent = __webpack_require__(138);
+	var SyntheticEvent = __webpack_require__(139);
 
 	/**
 	 * @interface Event
@@ -26855,7 +26897,7 @@
 
 
 /***/ },
-/* 153 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26872,7 +26914,7 @@
 
 	'use strict';
 
-	var SyntheticUIEvent = __webpack_require__(157);
+	var SyntheticUIEvent = __webpack_require__(158);
 
 	/**
 	 * @interface FocusEvent
@@ -26898,7 +26940,7 @@
 
 
 /***/ },
-/* 154 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26915,11 +26957,11 @@
 
 	'use strict';
 
-	var SyntheticUIEvent = __webpack_require__(157);
+	var SyntheticUIEvent = __webpack_require__(158);
 
-	var getEventCharCode = __webpack_require__(159);
-	var getEventKey = __webpack_require__(176);
-	var getEventModifierState = __webpack_require__(171);
+	var getEventCharCode = __webpack_require__(160);
+	var getEventKey = __webpack_require__(178);
+	var getEventModifierState = __webpack_require__(173);
 
 	/**
 	 * @interface KeyboardEvent
@@ -26989,7 +27031,7 @@
 
 
 /***/ },
-/* 155 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27006,7 +27048,7 @@
 
 	'use strict';
 
-	var SyntheticMouseEvent = __webpack_require__(140);
+	var SyntheticMouseEvent = __webpack_require__(141);
 
 	/**
 	 * @interface DragEvent
@@ -27032,7 +27074,7 @@
 
 
 /***/ },
-/* 156 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27049,9 +27091,9 @@
 
 	'use strict';
 
-	var SyntheticUIEvent = __webpack_require__(157);
+	var SyntheticUIEvent = __webpack_require__(158);
 
-	var getEventModifierState = __webpack_require__(171);
+	var getEventModifierState = __webpack_require__(173);
 
 	/**
 	 * @interface TouchEvent
@@ -27084,7 +27126,7 @@
 
 
 /***/ },
-/* 157 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27101,9 +27143,9 @@
 
 	'use strict';
 
-	var SyntheticEvent = __webpack_require__(138);
+	var SyntheticEvent = __webpack_require__(139);
 
-	var getEventTarget = __webpack_require__(146);
+	var getEventTarget = __webpack_require__(147);
 
 	/**
 	 * @interface UIEvent
@@ -27150,7 +27192,7 @@
 
 
 /***/ },
-/* 158 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27167,7 +27209,7 @@
 
 	'use strict';
 
-	var SyntheticMouseEvent = __webpack_require__(140);
+	var SyntheticMouseEvent = __webpack_require__(141);
 
 	/**
 	 * @interface WheelEvent
@@ -27215,7 +27257,7 @@
 
 
 /***/ },
-/* 159 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27271,7 +27313,7 @@
 
 
 /***/ },
-/* 160 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27481,7 +27523,7 @@
 
 
 /***/ },
-/* 161 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27496,7 +27538,7 @@
 	 * @typechecks
 	 */
 
-	var performance = __webpack_require__(177);
+	var performance = __webpack_require__(179);
 
 	/**
 	 * Detect if we can use `window.performance.now()` and gracefully fallback to
@@ -27513,49 +27555,104 @@
 
 
 /***/ },
-/* 162 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var bindAutoBindMethods = __webpack_require__(178);
-	var traverseRenderedChildren = __webpack_require__(179);
+	/**
+	 * Based on https://github.com/facebook/react/blob/master/src/class/ReactClass.js#L637
+	 */
+	function bindAutoBindMethod(component, method) {
+	  var boundMethod = method.bind(component);
 
-	function setPendingForceUpdate(internalInstance) {
-	  if (internalInstance._pendingForceUpdate === false) {
-	    internalInstance._pendingForceUpdate = true;
-	  }
+	  boundMethod.__reactBoundContext = component;
+	  boundMethod.__reactBoundMethod = method;
+	  boundMethod.__reactBoundArguments = null;
+
+	  var componentName = component.constructor.displayName,
+	      _bind = boundMethod.bind;
+
+	  boundMethod.bind = function (newThis) {
+	    var args = Array.prototype.slice.call(arguments, 1);
+	    if (newThis !== component && newThis !== null) {
+	      console.warn(
+	        'bind(): React component methods may only be bound to the ' +
+	        'component instance. See ' + componentName
+	      );
+	    } else if (!args.length) {
+	      console.warn(
+	        'bind(): You are binding a component method to the component. ' +
+	        'React does this for you automatically in a high-performance ' +
+	        'way, so you can safely remove this call. See ' + componentName
+	      );
+	      return boundMethod;
+	    }
+
+	    var reboundMethod = _bind.apply(boundMethod, arguments);
+	    reboundMethod.__reactBoundContext = component;
+	    reboundMethod.__reactBoundMethod = method;
+	    reboundMethod.__reactBoundArguments = args;
+
+	    return reboundMethod;
+	  };
+
+	  return boundMethod;
 	}
 
-	function forceUpdateIfPending(internalInstance, React) {
-	  if (internalInstance._pendingForceUpdate === true) {
-	    // `|| internalInstance` for React 0.12 and earlier
-	    var instance = internalInstance._instance || internalInstance;
+	/**
+	 * Performs auto-binding similar to how React does it.
+	 * Skips already auto-bound methods.
+	 * Based on https://github.com/facebook/react/blob/master/src/class/ReactClass.js#L679.
+	 */
+	module.exports = function bindAutoBindMethods(component) {
+	  for (var autoBindKey in component.__reactAutoBindMap) {
+	    if (!component.__reactAutoBindMap.hasOwnProperty(autoBindKey)) {
+	      continue;
+	    }
 
-	    if (instance.forceUpdate) {
-	      instance.forceUpdate();
-	    } else if (React && React.Component) {
-	      React.Component.prototype.forceUpdate.call(instance);
+	    // Skip already bound methods
+	    if (component.hasOwnProperty(autoBindKey) &&
+	        component[autoBindKey].__reactBoundContext === component) {
+	      continue;
+	    }
+
+	    var method = component.__reactAutoBindMap[autoBindKey];
+	    component[autoBindKey] = bindAutoBindMethod(component, method);
+	  }
+	};
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function traverseRenderedChildren(internalInstance, callback, argument) {
+	  callback(internalInstance, argument);
+
+	  if (internalInstance._renderedComponent) {
+	    traverseRenderedChildren(
+	      internalInstance._renderedComponent,
+	      callback,
+	      argument
+	    );
+	  } else {
+	    for (var key in internalInstance._renderedChildren) {
+	      traverseRenderedChildren(
+	        internalInstance._renderedChildren[key],
+	        callback,
+	        argument
+	      );
 	    }
 	  }
 	}
 
-	/**
-	 * Updates a React component recursively, so even if children define funky
-	 * `shouldComponentUpdate`, they are forced to re-render.
-	 * Makes sure that any newly added methods are properly auto-bound.
-	 */
-	function deepForceUpdate(internalInstance, React) {
-	  traverseRenderedChildren(internalInstance, bindAutoBindMethods);
-	  traverseRenderedChildren(internalInstance, setPendingForceUpdate);
-	  traverseRenderedChildren(internalInstance, forceUpdateIfPending, React);
-	}
-
-	module.exports = deepForceUpdate;
+	module.exports = traverseRenderedChildren;
 
 
 /***/ },
-/* 163 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27680,7 +27777,7 @@
 
 
 /***/ },
-/* 164 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27726,7 +27823,7 @@
 
 
 /***/ },
-/* 165 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27743,7 +27840,7 @@
 
 	'use strict';
 
-	var CSSProperty = __webpack_require__(163);
+	var CSSProperty = __webpack_require__(165);
 
 	var isUnitlessNumber = CSSProperty.isUnitlessNumber;
 
@@ -27788,7 +27885,7 @@
 
 
 /***/ },
-/* 166 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27833,7 +27930,7 @@
 
 
 /***/ },
-/* 167 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27870,7 +27967,7 @@
 
 
 /***/ },
-/* 168 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27907,7 +28004,7 @@
 
 
 /***/ },
-/* 169 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -28038,7 +28135,7 @@
 
 
 /***/ },
-/* 170 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -28079,7 +28176,7 @@
 
 
 /***/ },
-/* 171 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -28130,7 +28227,7 @@
 
 
 /***/ },
-/* 172 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -28163,7 +28260,7 @@
 
 
 /***/ },
-/* 173 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -28353,7 +28450,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)))
 
 /***/ },
-/* 174 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -28399,7 +28496,7 @@
 
 
 /***/ },
-/* 175 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -28418,7 +28515,7 @@
 	var ExecutionEnvironment = __webpack_require__(73);
 
 	var getNodeForCharacterOffset = __webpack_require__(185);
-	var getTextContentAccessor = __webpack_require__(170);
+	var getTextContentAccessor = __webpack_require__(172);
 
 	/**
 	 * While `isCollapsed` is available on the Selection object and `collapsed`
@@ -28616,7 +28713,7 @@
 
 
 /***/ },
-/* 176 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -28633,7 +28730,7 @@
 
 	'use strict';
 
-	var getEventCharCode = __webpack_require__(159);
+	var getEventCharCode = __webpack_require__(160);
 
 	/**
 	 * Normalization of deprecated HTML5 `key` values
@@ -28725,7 +28822,7 @@
 
 
 /***/ },
-/* 177 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -28754,103 +28851,6 @@
 	}
 
 	module.exports = performance || {};
-
-
-/***/ },
-/* 178 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	/**
-	 * Based on https://github.com/facebook/react/blob/master/src/class/ReactClass.js#L637
-	 */
-	function bindAutoBindMethod(component, method) {
-	  var boundMethod = method.bind(component);
-
-	  boundMethod.__reactBoundContext = component;
-	  boundMethod.__reactBoundMethod = method;
-	  boundMethod.__reactBoundArguments = null;
-
-	  var componentName = component.constructor.displayName,
-	      _bind = boundMethod.bind;
-
-	  boundMethod.bind = function (newThis) {
-	    var args = Array.prototype.slice.call(arguments, 1);
-	    if (newThis !== component && newThis !== null) {
-	      console.warn(
-	        'bind(): React component methods may only be bound to the ' +
-	        'component instance. See ' + componentName
-	      );
-	    } else if (!args.length) {
-	      console.warn(
-	        'bind(): You are binding a component method to the component. ' +
-	        'React does this for you automatically in a high-performance ' +
-	        'way, so you can safely remove this call. See ' + componentName
-	      );
-	      return boundMethod;
-	    }
-
-	    var reboundMethod = _bind.apply(boundMethod, arguments);
-	    reboundMethod.__reactBoundContext = component;
-	    reboundMethod.__reactBoundMethod = method;
-	    reboundMethod.__reactBoundArguments = args;
-
-	    return reboundMethod;
-	  };
-
-	  return boundMethod;
-	}
-
-	/**
-	 * Performs auto-binding similar to how React does it.
-	 * Skips already auto-bound methods.
-	 * Based on https://github.com/facebook/react/blob/master/src/class/ReactClass.js#L679.
-	 */
-	module.exports = function bindAutoBindMethods(component) {
-	  for (var autoBindKey in component.__reactAutoBindMap) {
-	    if (!component.__reactAutoBindMap.hasOwnProperty(autoBindKey)) {
-	      continue;
-	    }
-
-	    // Skip already bound methods
-	    if (component.hasOwnProperty(autoBindKey) &&
-	        component[autoBindKey].__reactBoundContext === component) {
-	      continue;
-	    }
-
-	    var method = component.__reactAutoBindMap[autoBindKey];
-	    component[autoBindKey] = bindAutoBindMethod(component, method);
-	  }
-	};
-
-/***/ },
-/* 179 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	function traverseRenderedChildren(internalInstance, callback, argument) {
-	  callback(internalInstance, argument);
-
-	  if (internalInstance._renderedComponent) {
-	    traverseRenderedChildren(
-	      internalInstance._renderedComponent,
-	      callback,
-	      argument
-	    );
-	  } else {
-	    for (var key in internalInstance._renderedChildren) {
-	      traverseRenderedChildren(
-	        internalInstance._renderedChildren[key],
-	        callback,
-	        argument
-	      );
-	    }
-	  }
-	}
-
-	module.exports = traverseRenderedChildren;
 
 
 /***/ },

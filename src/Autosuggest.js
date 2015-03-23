@@ -9,7 +9,7 @@ var Autosuggest = React.createClass({
   propTypes: {
     initialValue: React.PropTypes.string,         // Input's initial value
     inputId: React.PropTypes.string,              // Input's id
-    inputPlaceholder: React.PropTypes.string,     // Input's placeholder 
+    inputPlaceholder: React.PropTypes.string,     // Input's placeholder
     suggestions: React.PropTypes.func.isRequired, // Function to get the suggestions
     suggestionRenderer: React.PropTypes.func      // Function to render a single suggestion
   },
@@ -31,7 +31,7 @@ var Autosuggest = React.createClass({
       focusedSectionIndex: null, // Used when multiple sections are displayed
       focusedSuggestionIndex: null, // Index within a section
       valueBeforeUpDown: null // When user interacts using the Up and Down keys,
-                              // this field remembers input's value prior to 
+                              // this field remembers input's value prior to
                               // interaction in order to revert back if ESC hit.
                               // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
@@ -250,7 +250,6 @@ var Autosuggest = React.createClass({
             {this.renderSuggestionsList(section.suggestions, sectionIndex)}
           </div>
         );
-        
       }, this);
     } else {
       content = this.renderSuggestionsList(this.state.suggestions, null);

@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/Autosuggest.js",
   "repository": {
@@ -15,9 +15,9 @@
   "scripts": {
     "start": "node server.js",
     "test": "jest",
-    "build": "webpack",
-    "deploy": "gh-pages-deploy",
-    "dist": "babel src/Autosuggest.js -o dist/Autosuggest.js; babel src/sectionIterator.js -o dist/sectionIterator.js"
+    "dist": "webpack --config webpack.dist.config.js",
+    "build": "webpack --config webpack.dev.config.js",
+    "deploy": "gh-pages-deploy"
   },
   "jest": {
     "rootDir": ".",
@@ -47,14 +47,14 @@
     "css-loader": "^0.9.1",
     "eslint": "^0.17.1",
     "eslint-loader": "^0.7.0",
-    "extract-text-webpack-plugin": "^0.4.0",
+    "extract-text-webpack-plugin": "^0.5.0",
     "gh-pages-deploy": "^0.3.0",
     "jest-cli": "^0.4.0",
     "json-loader": "^0.5.1",
     "less": "^2.4.0",
-    "less-loader": "^2.1.0",
+    "less-loader": "^2.2.0",
     "react-hot-loader": "^1.2.3",
-    "style-loader": "^0.8.3",
+    "style-loader": "^0.9.0",
     "webpack": "^1.7.3",
     "webpack-dev-server": "^1.7.0"
   },
