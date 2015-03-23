@@ -346,7 +346,7 @@ module.exports =
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = require("React");
+	module.exports = require("react");
 
 /***/ },
 /* 2 */
