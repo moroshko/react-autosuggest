@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/Autosuggest.js",
   "repository": {
@@ -15,7 +15,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "jest",
-    "dist": "webpack --config webpack.dist.config.js",
+    "dist": "babel src/Autosuggest.js -o dist/Autosuggest.js; babel src/sectionIterator.js -o dist/sectionIterator.js",
     "build": "webpack --config webpack.dev.config.js",
     "deploy": "gh-pages-deploy"
   },
