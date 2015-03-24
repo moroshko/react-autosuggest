@@ -46,6 +46,14 @@ The `id` of the input field. For example:
 <Autosuggest inputId="locations-autosuggest" suggestions={getLocations} />
 ```
 
+##### inputName (optional)
+
+The `name` of the input field. For example:
+
+```xml
+<Autosuggest inputName="locations-autosuggest" suggestions={getLocations} />
+```
+
 ##### inputPlaceholder (optional)
 
 The `placeholder` of the input field. For example:

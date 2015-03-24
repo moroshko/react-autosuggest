@@ -9,6 +9,7 @@ var Autosuggest = React.createClass({
   propTypes: {
     initialValue: React.PropTypes.string,         // Input's initial value
     inputId: React.PropTypes.string,              // Input's id
+    inputName: React.PropTypes.string,            // Input's name
     inputPlaceholder: React.PropTypes.string,     // Input's placeholder
     suggestions: React.PropTypes.func.isRequired, // Function to get the suggestions
     suggestionRenderer: React.PropTypes.func      // Function to render a single suggestion
@@ -17,6 +18,7 @@ var Autosuggest = React.createClass({
     return {
       initialValue: '',
       inputId: null,
+      inputName: null,
       inputPlaceholder: null
     };
   },
@@ -270,6 +272,7 @@ var Autosuggest = React.createClass({
     return (
       <div className="react-autosuggest">
         <input id={this.props.inputId}
+               name={this.props.inputName}
                type="text"
                value={this.state.value}
                placeholder={this.props.inputPlaceholder}

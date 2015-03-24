@@ -129,6 +129,7 @@ describe('Autosuggest', function() {
     beforeEach(function() {
       createAutosuggest(
         <Autosuggest inputId="my-autosuggest"
+                     inputName="my-autosuggest-name"
                      inputPlaceholder="Enter location..."
                      initialValue="my value"
                      suggestions={getSuburbs} />
@@ -138,6 +139,10 @@ describe('Autosuggest', function() {
 
     it('should set input\'s id', function() {
       expect(input.id).toBe('my-autosuggest');
+    });
+
+    it('should set input\'s name', function() {
+      expect(input.name).toBe('my-autosuggest-name');
     });
 
     it('should set input\'s placeholder', function() {
