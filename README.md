@@ -37,39 +37,6 @@ function getSuburbs(input, callback) {
 
 ### Options
 
-##### inputId (optional)
-
-The `id` of the input field. For example:
-
-```xml
-<label htmlFor="locations-autosuggest">Where</label>
-<Autosuggest inputId="locations-autosuggest" suggestions={getLocations} />
-```
-
-##### inputName (optional)
-
-The `name` of the input field. For example:
-
-```xml
-<Autosuggest inputName="locations-autosuggest" suggestions={getLocations} />
-```
-
-##### inputPlaceholder (optional)
-
-The `placeholder` of the input field. For example:
-
-```xml
-<Autosuggest inputPlaceholder="Enter locations..." suggestions={getLocations} />
-```
-
-##### initialValue (optional)
-
-Specifies the initial value of the input field. Defaults to `''`. For example:
-
-```xml
-<Autosuggest initialValue="Mordialloc" suggestions={getSuburbs} />
-```
-
 ##### suggestions (required)
 
 Function to get the suggestions.
@@ -127,6 +94,24 @@ function renderLocation(suggestion, input) {
 <Autosuggest suggestions={getLocations} suggestionRenderer={renderLocation} />
 ```
 
+##### inputAttributes (optional)
+
+Hash of attributes to pass to the input field. For example:
+
+```javascript
+var inputAttributes = {
+  id: 'locations-autosuggest',
+  name: 'locations-autosuggest',
+  className: 'my-sweet-locations-autosuggest',
+  placeholder: 'Enter locations...',
+  value: 'Mordialloc'   // Initial value
+};
+```
+
+```xml
+<label htmlFor="locations-autosuggest">Where</label>
+<Autosuggest inputAttributes={inputAttributes} suggestions={getLocations} />
+```
 
 ## Styling
 

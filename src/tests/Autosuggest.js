@@ -128,25 +128,21 @@ describe('Autosuggest', function() {
   describe('Basics', function() {
     beforeEach(function() {
       createAutosuggest(
-        <Autosuggest inputId="my-autosuggest"
-                     inputName="my-autosuggest-name"
-                     inputPlaceholder="Enter location..."
-                     initialValue="my value"
+        <Autosuggest inputAttributes={{ id: 'my-autosuggest',
+                                        name: 'my-autosuggest-name',
+                                        placeholder: 'Enter location...',
+                                        className: 'my-sweet-autosuggest',
+                                        value: 'my value' }}
                      suggestions={getSuburbs} />
       );
       input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
     });
 
-    it('should set input\'s id', function() {
+    it('should set input attributes', function() {
       expect(input.id).toBe('my-autosuggest');
-    });
-
-    it('should set input\'s name', function() {
       expect(input.name).toBe('my-autosuggest-name');
-    });
-
-    it('should set input\'s placeholder', function() {
       expect(input.getAttribute('placeholder')).toBe('Enter location...');
+      expect(input.className).toBe('my-sweet-autosuggest');
     });
 
     it('should set initial value', function() {
@@ -194,8 +190,7 @@ describe('Autosuggest', function() {
   describe('Suggestion renderer', function() {
     beforeEach(function() {
       createAutosuggest(
-        <Autosuggest inputId="my-autosuggest"
-                     initialValue="my value"
+        <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
                      suggestions={getSuburbs}
                      suggestionRenderer={renderLocation} />
       );
@@ -212,8 +207,7 @@ describe('Autosuggest', function() {
   describe('Keyboard interactions', function() {
     beforeEach(function() {
       createAutosuggest(
-        <Autosuggest inputId="my-autosuggest"
-                     initialValue="my value"
+        <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my-value' }}
                      suggestions={getSuburbs} />
       );
       input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
@@ -273,8 +267,7 @@ describe('Autosuggest', function() {
   describe('Revealing the suggestions using keyboard', function() {
     beforeEach(function() {
       createAutosuggest(
-        <Autosuggest inputId="my-autosuggest"
-                     initialValue="my value"
+        <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
                      suggestions={getSuburbs} />
       );
       input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
@@ -298,8 +291,7 @@ describe('Autosuggest', function() {
   describe('Mouse interactions', function() {
     beforeEach(function() {
       createAutosuggest(
-        <Autosuggest inputId="my-autosuggest"
-                     initialValue="my value"
+        <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
                      suggestions={getSuburbs} />
       );
       input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();

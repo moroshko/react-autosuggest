@@ -1,25 +1,20 @@
 'use strict';
 
 var React = require('react');
+var { PropTypes } = React;
 var classnames = require('classnames');
 var sectionIterator = require('./sectionIterator');
 var guid = 0;
 
 var Autosuggest = React.createClass({
   propTypes: {
-    initialValue: React.PropTypes.string,         // Input's initial value
-    inputId: React.PropTypes.string,              // Input's id
-    inputName: React.PropTypes.string,            // Input's name
-    inputPlaceholder: React.PropTypes.string,     // Input's placeholder
-    suggestions: React.PropTypes.func.isRequired, // Function to get the suggestions
-    suggestionRenderer: React.PropTypes.func      // Function to render a single suggestion
+    inputAttributes: PropTypes.objectOf(React.PropTypes.string), // Input's attributes (e.g. id, className)
+    suggestions: PropTypes.func.isRequired,                      // Function to get the suggestions
+    suggestionRenderer: PropTypes.func                           // Function to render a single suggestion
   },
   getDefaultProps: function() {
     return {
-      initialValue: '',
-      inputId: null,
-      inputName: null,
-      inputPlaceholder: null
+      inputAttributes: {}
     };
   },
   getInitialState: function() {
@@ -28,7 +23,7 @@ var Autosuggest = React.createClass({
     this.cache = {};
 
     return {
-      value: this.props.initialValue,
+      value: this.props.inputAttributes.value || '',
       suggestions: null,
       focusedSectionIndex: null, // Used when multiple sections are displayed
       focusedSuggestionIndex: null, // Index within a section
@@ -271,11 +266,9 @@ var Autosuggest = React.createClass({
 
     return (
       <div className="react-autosuggest">
-        <input id={this.props.inputId}
-               name={this.props.inputName}
+        <input {...this.props.inputAttributes}
                type="text"
                value={this.state.value}
-               placeholder={this.props.inputPlaceholder}
                autoComplete="off"
                role="combobox"
                aria-autocomplete="list"

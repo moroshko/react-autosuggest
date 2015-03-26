@@ -127,20 +127,30 @@ var Examples = React.createClass({
     );
   },
   renderExample: function() {
+    var inputAttributes;
+
     switch (this.state.activeExample) {
       case 'Basic example':
+        inputAttributes = {
+          id: 'basic-example',
+          placeholder: 'Where do you live?'
+        };
+
         return (
-          <Autosuggest inputId="basic-example"
-                       inputPlaceholder="Where do you live?"
+          <Autosuggest inputAttributes={inputAttributes}
                        ref="basicExample"
                        key="basicExample"
                        suggestions={getLocations}
                        suggestionRenderer={renderLocation} />
         );
       case 'Multiple sections':
+        inputAttributes = {
+          id: 'multiple-sections',
+          placeholder: 'Where are you based?'
+        };
+
         return (
-          <Autosuggest inputId="multiple-sections"
-                       inputPlaceholder="Where are you based?"
+          <Autosuggest inputAttributes={inputAttributes}
                        ref="multipleSections"
                        key="multipleSections"
                        suggestions={getMultiSectionLocations}

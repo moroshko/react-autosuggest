@@ -2,7 +2,11 @@
 
 var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var React = require("react");
+var PropTypes = React.PropTypes;
+
 var classnames = require("classnames");
 var sectionIterator = require("./sectionIterator");
 var guid = 0;
@@ -11,19 +15,13 @@ var Autosuggest = React.createClass({
   displayName: "Autosuggest",
 
   propTypes: {
-    initialValue: React.PropTypes.string, // Input's initial value
-    inputId: React.PropTypes.string, // Input's id
-    inputName: React.PropTypes.string, // Input's name
-    inputPlaceholder: React.PropTypes.string, // Input's placeholder
-    suggestions: React.PropTypes.func.isRequired, // Function to get the suggestions
-    suggestionRenderer: React.PropTypes.func // Function to render a single suggestion
+    inputAttributes: PropTypes.objectOf(React.PropTypes.string), // Input's attributes (e.g. id, className)
+    suggestions: PropTypes.func.isRequired, // Function to get the suggestions
+    suggestionRenderer: PropTypes.func // Function to render a single suggestion
   },
   getDefaultProps: function getDefaultProps() {
     return {
-      initialValue: "",
-      inputId: null,
-      inputName: null,
-      inputPlaceholder: null
+      inputAttributes: {}
     };
   },
   getInitialState: function getInitialState() {
@@ -32,7 +30,7 @@ var Autosuggest = React.createClass({
     this.cache = {};
 
     return {
-      value: this.props.initialValue,
+      value: this.props.inputAttributes.value || "",
       suggestions: null,
       focusedSectionIndex: null, // Used when multiple sections are displayed
       focusedSuggestionIndex: null, // Index within a section
@@ -276,11 +274,9 @@ var Autosuggest = React.createClass({
     return React.createElement(
       "div",
       { className: "react-autosuggest" },
-      React.createElement("input", { id: this.props.inputId,
-        name: this.props.inputName,
+      React.createElement("input", _extends({}, this.props.inputAttributes, {
         type: "text",
         value: this.state.value,
-        placeholder: this.props.inputPlaceholder,
         autoComplete: "off",
         role: "combobox",
         "aria-autocomplete": "list",
@@ -290,7 +286,7 @@ var Autosuggest = React.createClass({
         ref: "input",
         onChange: this.onInputChange,
         onKeyDown: this.onInputKeyDown,
-        onBlur: this.onInputBlur }),
+        onBlur: this.onInputBlur })),
       this.renderSuggestions()
     );
   }
