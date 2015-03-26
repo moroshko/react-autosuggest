@@ -40,43 +40,53 @@ var Autosuggest = React.createClass({
       // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
   },
+  resetSectionIterator: function resetSectionIterator(suggestions) {
+    if (this.multipleSections) {
+      sectionIterator.setData(suggestions.map(function (suggestion) {
+        return suggestion.suggestions.length;
+      }));
+    } else {
+      sectionIterator.setData(suggestions === null ? [] : suggestions.length);
+    }
+  },
+  isMultipleSections: function isMultipleSections(suggestions) {
+    return suggestions !== null && suggestions.length > 0 && typeof suggestions[0] === "object";
+  },
+  setSuggestionsState: function setSuggestionsState(suggestions) {
+    this.multipleSections = this.isMultipleSections(suggestions);
+    this.resetSectionIterator(suggestions);
+    this.setState({
+      suggestions: suggestions,
+      focusedSectionIndex: null,
+      focusedSuggestionIndex: null,
+      valueBeforeUpDown: null
+    });
+  },
+  suggestionsExist: function suggestionsExist(suggestions) {
+    if (this.isMultipleSections(suggestions)) {
+      return suggestions.some(function (section) {
+        return section.suggestions.length > 0;
+      });
+    }
+
+    return suggestions.length > 0;
+  },
   showSuggestions: function showSuggestions(input) {
     if (input.length === 0) {
-      this.setState({
-        suggestions: null,
-        focusedSectionIndex: null,
-        focusedSuggestionIndex: null,
-        valueBeforeUpDown: null
-      });
+      this.setSuggestionsState(null);
     } else if (this.cache[input]) {
-      this.setState({
-        suggestions: this.cache[input],
-        focusedSectionIndex: null,
-        focusedSuggestionIndex: null,
-        valueBeforeUpDown: null
-      });
+      this.setSuggestionsState(this.cache[input]);
     } else {
       this.props.suggestions(input, (function (error, suggestions) {
         if (error) {
           throw error;
         } else {
-          this.cache[input] = suggestions;
-          this.multipleSections = suggestions.length > 0 && typeof suggestions[0] === "object";
-
-          if (this.multipleSections) {
-            sectionIterator.setData(suggestions.map(function (suggestion) {
-              return suggestion.suggestions.length;
-            }));
-          } else {
-            sectionIterator.setData(suggestions.length);
+          if (!this.suggestionsExist(suggestions)) {
+            suggestions = null;
           }
 
-          this.setState({
-            suggestions: suggestions,
-            focusedSectionIndex: null,
-            focusedSuggestionIndex: null,
-            valueBeforeUpDown: null
-          });
+          this.cache[input] = suggestions;
+          this.setSuggestionsState(suggestions);
         }
       }).bind(this));
     }

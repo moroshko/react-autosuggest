@@ -39,39 +39,49 @@ var Autosuggest = React.createClass({
         return suggestion.suggestions.length;
       }));
     } else {
-      sectionIterator.setData(suggestions.length);
+      sectionIterator.setData(suggestions === null ? [] : suggestions.length);
     }
+  },
+  isMultipleSections: function(suggestions) {
+    return suggestions !== null &&
+           suggestions.length > 0 &&
+           typeof suggestions[0] === 'object';
+  },
+  setSuggestionsState: function(suggestions) {
+    this.multipleSections = this.isMultipleSections(suggestions);
+    this.resetSectionIterator(suggestions);
+    this.setState({
+      suggestions: suggestions,
+      focusedSectionIndex: null,
+      focusedSuggestionIndex: null,
+      valueBeforeUpDown: null
+    });
+  },
+  suggestionsExist: function(suggestions) {
+    if (this.isMultipleSections(suggestions)) {
+      return suggestions.some(function(section) {
+        return section.suggestions.length > 0;
+      });
+    }
+
+    return suggestions.length > 0;
   },
   showSuggestions: function(input) {
     if (input.length === 0) {
-      this.setState({
-        suggestions: null,
-        focusedSectionIndex: null,
-        focusedSuggestionIndex: null,
-        valueBeforeUpDown: null
-      });
+      this.setSuggestionsState(null);
     } else if (this.cache[input]) {
-      this.resetSectionIterator(this.cache[input]);
-      this.setState({
-        suggestions: this.cache[input],
-        focusedSectionIndex: null,
-        focusedSuggestionIndex: null,
-        valueBeforeUpDown: null
-      });
+      this.setSuggestionsState(this.cache[input]);
     } else {
       this.props.suggestions(input, function(error, suggestions) {
         if (error) {
           throw error;
         } else {
+          if (!this.suggestionsExist(suggestions)) {
+            suggestions = null;
+          }
+
           this.cache[input] = suggestions;
-          this.multipleSections = suggestions.length > 0 && (typeof suggestions[0] === 'object');
-          this.resetSectionIterator(suggestions);
-          this.setState({
-            suggestions: suggestions,
-            focusedSectionIndex: null,
-            focusedSuggestionIndex: null,
-            valueBeforeUpDown: null
-          });
+          this.setSuggestionsState(suggestions);
         }
       }.bind(this));
     }
