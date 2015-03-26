@@ -1,5 +1,8 @@
 [ ![Codeship Status for moroshko/react-autosuggest](https://codeship.com/projects/41810250-aa07-0132-fbf4-4e62e8945e03/status?branch=master)](https://codeship.com/projects/67868)
 
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][downloads-url]
+
 # React Autosuggest
 
 [WAI-ARIA compliant](http://www.w3.org/TR/wai-aria-practices/#autocomplete) React autosuggest component.
@@ -136,3 +139,8 @@ Now, open `http://localhost:3000/examples/dist/index.html`
 ## License
 
 [MIT](http://moroshko.mit-license.org)
+
+[npm-image]: https://img.shields.io/npm/v/react-autosuggest.svg
+[npm-url]: https://npmjs.org/package/react-autosuggest
+[downloads-image]: https://img.shields.io/npm/dm/react-autosuggest.svg
+[downloads-url]: https://npmjs.org/package/react-autosuggest
