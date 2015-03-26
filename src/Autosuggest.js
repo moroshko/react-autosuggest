@@ -25,13 +25,22 @@ var Autosuggest = React.createClass({
     return {
       value: this.props.inputAttributes.value || '',
       suggestions: null,
-      focusedSectionIndex: null, // Used when multiple sections are displayed
+      focusedSectionIndex: null,    // Used when multiple sections are displayed
       focusedSuggestionIndex: null, // Index within a section
-      valueBeforeUpDown: null // When user interacts using the Up and Down keys,
-                              // this field remembers input's value prior to
-                              // interaction in order to revert back if ESC hit.
-                              // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
+      valueBeforeUpDown: null       // When user interacts using the Up and Down keys,
+                                    // this field remembers input's value prior to
+                                    // interaction in order to revert back if ESC hit.
+                                    // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
+  },
+  resetSectionIterator: function(suggestions) {
+    if (this.multipleSections) {
+      sectionIterator.setData(suggestions.map(function(suggestion) {
+        return suggestion.suggestions.length;
+      }));
+    } else {
+      sectionIterator.setData(suggestions.length);
+    }
   },
   showSuggestions: function(input) {
     if (input.length === 0) {
@@ -42,6 +51,7 @@ var Autosuggest = React.createClass({
         valueBeforeUpDown: null
       });
     } else if (this.cache[input]) {
+      this.resetSectionIterator(this.cache[input]);
       this.setState({
         suggestions: this.cache[input],
         focusedSectionIndex: null,
@@ -55,15 +65,7 @@ var Autosuggest = React.createClass({
         } else {
           this.cache[input] = suggestions;
           this.multipleSections = suggestions.length > 0 && (typeof suggestions[0] === 'object');
-
-          if (this.multipleSections) {
-            sectionIterator.setData(suggestions.map(function(suggestion) {
-              return suggestion.suggestions.length;
-            }));
-          } else {
-            sectionIterator.setData(suggestions.length);
-          }
-
+          this.resetSectionIterator(suggestions);
           this.setState({
             suggestions: suggestions,
             focusedSectionIndex: null,

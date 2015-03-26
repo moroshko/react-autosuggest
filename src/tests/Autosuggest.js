@@ -406,4 +406,21 @@ describe('Autosuggest', function() {
       expectSections([null, 'Second section', 'Third section']);
     });
   });
+
+  describe('Misc', function() {
+    beforeEach(function() {
+      createAutosuggest(
+        <Autosuggest suggestions={getSuburbs} />
+      );
+      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+    });
+
+    it('should reset sectionIterator when getting cached suggestions', function() {
+      setInputValue('m');
+      setInputValue('mz');
+      setInputValue('m');
+      clickDown();
+      expectFocusedSuggestion('Mill Park');
+    });
+  });
 });
