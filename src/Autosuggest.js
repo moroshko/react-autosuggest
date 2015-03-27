@@ -223,7 +223,14 @@ var Autosuggest = React.createClass({
 
       var suggestionContent = this.props.suggestionRenderer
         ? this.props.suggestionRenderer(suggestion, this.state.valueBeforeUpDown || this.state.value)
-        : suggestion;
+        : typeof suggestion !== 'object'
+        ? suggestion
+        : suggestion['displayKey'] != null
+        ? suggestion['displayKey']
+        : null;
+        if(suggestionContent === null){
+          throw new Error('Invalid suggestion');
+        }
 
       return (
         <div id={this.getSuggestionId(sectionIndex, suggestionIndex)}
