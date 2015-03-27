@@ -45,7 +45,8 @@ var Autosuggest = React.createClass({
   isMultipleSections: function(suggestions) {
     return suggestions !== null &&
            suggestions.length > 0 &&
-           typeof suggestions[0] === 'object';
+           typeof suggestions[0] === 'object' &&
+           suggestions[0]['suggestions'] != null;
   },
   setSuggestionsState: function(suggestions) {
     this.multipleSections = this.isMultipleSections(suggestions);
