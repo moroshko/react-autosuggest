@@ -376,6 +376,30 @@ describe('Autosuggest', function() {
   });
 
   describe('Mouse interactions', function() {
+
+    describe('when suggestion is object', function() {
+
+      it('should set input field value when suggestion is clicked', function() {
+        createAutosuggest(
+          <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
+                       suggestions={getObjectSuggestions} />
+        );
+        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+        setInputValue('m');
+        mouseDownSuggestion(1);
+        expectInputValue('sug2');
+      });
+
+      it('should throw error if suggestion object does not contain displayKey', function() {
+        createAutosuggest(
+          <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
+                       suggestions={getInvalidObjectSuggestions} />
+        );
+        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+        expect(setInputValue.bind(null,'m')).toThrow('Invalid suggestion');
+      });
+    });
+
     beforeEach(function() {
       createAutosuggest(
         <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
