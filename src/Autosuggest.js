@@ -191,6 +191,10 @@ var Autosuggest = React.createClass({
     });
   },
   onSuggestionMouseDown: function(suggestion) {
+    suggestion = typeof suggestion !== 'object' ? suggestion : suggestion['displayKey'];
+    if(!suggestion) {
+      throw new Error("Invalid suggestion");
+    }
     this.setState({
       value: suggestion,
       suggestions: null,
