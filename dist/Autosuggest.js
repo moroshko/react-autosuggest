@@ -50,7 +50,7 @@ var Autosuggest = React.createClass({
     }
   },
   isMultipleSections: function isMultipleSections(suggestions) {
-    return suggestions !== null && suggestions.length > 0 && typeof suggestions[0] === "object" && suggestions[0].suggestions != null;
+    return suggestions !== null && suggestions.length > 0 && typeof suggestions[0] === "object";
   },
   setSuggestionsState: function setSuggestionsState(suggestions) {
     this.multipleSections = this.isMultipleSections(suggestions);
@@ -228,10 +228,7 @@ var Autosuggest = React.createClass({
         "react-autosuggest__suggestion--focused": sectionIndex === this.state.focusedSectionIndex && suggestionIndex === this.state.focusedSuggestionIndex
       });
 
-      var suggestionContent = this.props.suggestionRenderer ? this.props.suggestionRenderer(suggestion, this.state.valueBeforeUpDown || this.state.value) : typeof suggestion !== "object" ? suggestion : suggestion.displayKey != null ? suggestion.displayKey : null;
-      if (suggestionContent === null) {
-        throw new Error("Invalid suggestion");
-      }
+      var suggestionContent = this.props.suggestionRenderer ? this.props.suggestionRenderer(suggestion, this.state.valueBeforeUpDown || this.state.value) : suggestion;
 
       return React.createElement(
         "div",
