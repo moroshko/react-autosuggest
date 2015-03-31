@@ -5,7 +5,7 @@ import React from 'react';
 var style = {
   position: 'absolute',
   top: 0,
-  right: -40,
+  right: -41,
   border: 0
 };
 
