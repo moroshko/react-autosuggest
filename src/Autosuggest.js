@@ -82,30 +82,6 @@ class Autosuggest extends React.Component {
     }
   }
 
-  getSuggestion(sectionIndex, suggestionIndex) {
-    return this.isMultipleSections(this.state.suggestions)
-      ? this.state.suggestions[sectionIndex].suggestions[suggestionIndex]
-      : this.state.suggestions[suggestionIndex];
-  }
-
-  stripHTML(html) {
-    var div = document.createElement('div');
-
-    div.innerHTML = html;
-
-    return div.textContent;
-  }
-
-  suggestionToString(suggestion) {
-    var renderedSuggestion = this.renderSuggestion(suggestion);
-
-    if (React.isValidElement(renderedSuggestion)) {
-      return this.stripHTML(React.renderToStaticMarkup(renderedSuggestion));
-    } else {
-      return renderedSuggestion;
-    }
-  }
-
   focusOnSuggestion(suggestionPosition) {
     var [sectionIndex, suggestionIndex] = suggestionPosition;
     var newState = {
@@ -113,7 +89,7 @@ class Autosuggest extends React.Component {
       focusedSuggestionIndex: suggestionIndex,
       value: suggestionIndex === null
                ? this.state.valueBeforeUpDown
-               : this.suggestionToString(this.getSuggestion(sectionIndex, suggestionIndex))
+               : React.findDOMNode(this.refs[this.getSuggestionKey(sectionIndex, suggestionIndex)]).textContent
     };
 
     // When users starts to interact with up/down keys, remember input's value.
@@ -223,7 +199,12 @@ class Autosuggest extends React.Component {
            (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
   }
 
-  renderSuggestion(suggestion) {
+  getSuggestionKey(sectionIndex, suggestionIndex) {
+    return 'suggestion-' + (sectionIndex === null ? '' : sectionIndex) +
+           '-' + suggestionIndex;
+  }
+
+  renderSuggestionContent(suggestion) {
     if (this.props.suggestionRenderer) {
       return this.props.suggestionRenderer(suggestion, this.state.valueBeforeUpDown || this.state.value);
     }
@@ -243,16 +224,18 @@ class Autosuggest extends React.Component {
           sectionIndex === this.state.focusedSectionIndex &&
           suggestionIndex === this.state.focusedSuggestionIndex
       });
+      var suggestionKey = this.getSuggestionKey(sectionIndex, suggestionIndex);
 
       return (
         <div id={this.getSuggestionId(sectionIndex, suggestionIndex)}
              className={classes}
              role="option"
-             key={'suggestion-' + (suggestionIndex === null ? '' : suggestionIndex) + '-' + suggestionIndex}
+             key={suggestionKey}
+             ref={suggestionKey}
              onMouseEnter={this.onSuggestionMouseEnter.bind(this, sectionIndex, suggestionIndex)}
              onMouseLeave={this.onSuggestionMouseLeave.bind(this)}
              onMouseDown={this.onSuggestionMouseDown.bind(this, suggestion)}>
-          {this.renderSuggestion(suggestion)}
+          {this.renderSuggestionContent(suggestion)}
         </div>
       );
     }, this);
