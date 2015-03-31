@@ -56,9 +56,23 @@ function(input, callback) {
   * Success example: `callback(null, <suggestions>)` (see `<suggestions>` format below)
   * Error example: `callback(new Error("Couldn't get locations"))`
 
-`<suggestions>` can be have one of the following two formats:
+`<suggestions>` can be have one of the following three formats:
 
 * **Single section with no title:** Array of strings, e.g.: `['Mentone', 'Mentone East']`
+* **Single section with no title:** Array of objects with matching `displayKey` for
+  rendering, e.g.:
+```javascript
+<Autosuggest suggestions={getSuburbs}, displayKey={'name'} />
+
+[{
+  name: "Mentone",
+  data: "Anything"
+}, {
+  name: "Altona Meadows",
+  data: "More data"
+}]
+```
+
 * **One or more sections with optional titles:** Array of objects with an optional `sectionName` and a mandatory `suggestions` keys, e.g.:
 
 ```javascript

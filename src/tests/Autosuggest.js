@@ -31,6 +31,23 @@ function getMultipleSectionsSuburbs(input, callback) {
   }]);
 }
 
+function getObjectSuggestions(input, callback) {
+  callback(null, [
+    {
+      name: "sug1",
+      data: 5
+    },
+    {
+      name: "sug2",
+      data: 4
+    },
+  ]);
+}
+
+function getMixedSuggestions(input, callback) {
+  callback(null, ["sug1", 2, "sug3"]);
+}
+
 function renderLocation(suggestion, input) {
   return (
     <span><strong>{suggestion.slice(0, input.length)}</strong>{suggestion.slice(input.length)}</span>
@@ -105,7 +122,7 @@ function expectFocusedSuggestion(suggestion) {
 
 function expectSections(expectedSections) {
   var sections = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestions-section');
-  
+
   expect(sections.length).toBe(expectedSections.length);
 
   for (var i = 0; i < sections.length; i++) {
@@ -188,19 +205,74 @@ describe('Autosuggest', function() {
   });
 
   describe('Suggestion renderer', function() {
-    beforeEach(function() {
-      createAutosuggest(
-        <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
-                     suggestions={getSuburbs}
-                     suggestionRenderer={renderLocation} />
-      );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
-      setInputValue('m');
+
+    describe('when suggestionRenderer provided', function(){
+
+      it('should use the specified suggestionRenderer function', function() {
+        createAutosuggest(
+          <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
+                       suggestions={getSuburbs}
+                       suggestionRenderer={renderLocation} />
+        );
+        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+        setInputValue('m');
+
+        suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+        expect(stripReactAttributes(suggestions[0].getDOMNode().innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span></span>');
+      });
+
+      it('should pass regular objects to the suggestionRenderer function', function() {
+        var renderer = jest.genMockFunction();
+        createAutosuggest(
+          <Autosuggest suggestions={getObjectSuggestions}
+                       suggestionRenderer={renderer} />
+        );
+        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+        setInputValue('m');
+
+        expect(renderer.mock.calls.length).toEqual(2);
+        expect(renderer.mock.calls[0][0]['name']).toEqual('sug1');
+        expect(renderer.mock.calls[1][0]['name']).toEqual('sug2');
+      });
     });
 
-    it('should use the specified suggestionRenderer function', function() {
-      suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-      expect(stripReactAttributes(suggestions[0].getDOMNode().innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span></span>');
+    describe('when suggestionRenderer not provided', function(){
+
+      it('should render suggestion as is if it is not an object, i.e. string or number', function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getMixedSuggestions} />
+        );
+        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+        setInputValue('m');
+
+        suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+        expect(suggestions.length).toEqual(3);
+        expect(suggestions[0].props.children).toEqual('sug1');
+        expect(suggestions[1].props.children).toEqual(2);
+        expect(suggestions[2].props.children).toEqual('sug3');
+      });
+
+      it('should render suggestion as object\'s displayKey when suggestion is object ', function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getObjectSuggestions}
+                       displayKey={'name'} />
+        );
+        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+        setInputValue('m');
+
+        suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+        expect(suggestions.length).toEqual(2);
+        expect(suggestions[0].props.children).toEqual('sug1');
+        expect(suggestions[1].props.children).toEqual('sug2');
+      });
+
+      it('should throw error if suggestion is object and does not contain displayKey', function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getObjectSuggestions} />
+        );
+        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+        expect(setInputValue.bind(null, 'm')).toThrow('Invalid suggestion');
+      });
     });
   });
 
@@ -289,6 +361,31 @@ describe('Autosuggest', function() {
   });
 
   describe('Mouse interactions', function() {
+
+    describe('when suggestion is object', function() {
+
+      it('should set input field value when suggestion is clicked', function() {
+        createAutosuggest(
+          <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
+                       suggestions={getObjectSuggestions}
+                       displayKey={'name'} />
+        );
+        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+        setInputValue('m');
+        mouseDownSuggestion(1);
+        expectInputValue('sug2');
+      });
+
+      it('should throw error if suggestion object does not contain displayKey', function() {
+        createAutosuggest(
+          <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
+                       suggestions={getObjectSuggestions} />
+        );
+        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+        expect(setInputValue.bind(null,'m')).toThrow('Invalid suggestion');
+      });
+    });
+
     beforeEach(function() {
       createAutosuggest(
         <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
@@ -390,6 +487,37 @@ describe('Autosuggest', function() {
         suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
         expect(suggestionsList.getDOMNode().getAttribute('role')).toBe('listbox');
       });
+    });
+  });
+
+  describe('isMultipleSections', function(){
+
+    it('returns true if suggestions are multiple section objects', function() {
+      createAutosuggest(
+        <Autosuggest suggestions={getMultipleSectionsSuburbs} />
+      );
+      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      setInputValue('m');
+      expect(autosuggest.isMultipleSections(autosuggest.state.suggestions)).toBe(true);
+    });
+
+    it('returns false if suggestions are strings or numbers', function() {
+      createAutosuggest(
+        <Autosuggest suggestions={getMixedSuggestions} />
+      );
+      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      setInputValue('m');
+      expect(autosuggest.isMultipleSections(autosuggest.state.suggestions)).toBe(false);
+    });
+
+    it('returns false if suggestions are regular objects', function() {
+      createAutosuggest(
+        <Autosuggest suggestions={getObjectSuggestions}
+                     displayKey={'name'} />
+      );
+      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      setInputValue('m');
+      expect(autosuggest.isMultipleSections(autosuggest.state.suggestions)).toBe(false);
     });
   });
 

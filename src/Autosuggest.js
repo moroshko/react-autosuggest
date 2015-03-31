@@ -10,7 +10,8 @@ var Autosuggest = React.createClass({
   propTypes: {
     inputAttributes: PropTypes.objectOf(React.PropTypes.string), // Input's attributes (e.g. id, className)
     suggestions: PropTypes.func.isRequired,                      // Function to get the suggestions
-    suggestionRenderer: PropTypes.func                           // Function to render a single suggestion
+    suggestionRenderer: PropTypes.func,                          // Function to render a single suggestion
+    displayKey: PropTypes.string                                 // String that represents the key inside suggestion objects used to display the suggestion
   },
   getDefaultProps: function() {
     return {
@@ -45,7 +46,8 @@ var Autosuggest = React.createClass({
   isMultipleSections: function(suggestions) {
     return suggestions !== null &&
            suggestions.length > 0 &&
-           typeof suggestions[0] === 'object';
+           typeof suggestions[0] === 'object' &&
+           suggestions[0]['suggestions'] != null;
   },
   setSuggestionsState: function(suggestions) {
     this.multipleSections = this.isMultipleSections(suggestions);
@@ -190,6 +192,10 @@ var Autosuggest = React.createClass({
     });
   },
   onSuggestionMouseDown: function(suggestion) {
+    suggestion = typeof suggestion !== 'object' ? suggestion : suggestion[this.props.displayKey];
+    if(!suggestion) {
+      throw new Error("Invalid suggestion");
+    }
     this.setState({
       value: suggestion,
       suggestions: null,
@@ -222,7 +228,14 @@ var Autosuggest = React.createClass({
 
       var suggestionContent = this.props.suggestionRenderer
         ? this.props.suggestionRenderer(suggestion, this.state.valueBeforeUpDown || this.state.value)
-        : suggestion;
+        : typeof suggestion !== 'object'
+        ? suggestion
+        : suggestion[this.props.displayKey] != null
+        ? suggestion[this.props.displayKey]
+        : null;
+        if(suggestionContent === null){
+          throw new Error('Invalid suggestion');
+        }
 
       return (
         <div id={this.getSuggestionId(sectionIndex, suggestionIndex)}
