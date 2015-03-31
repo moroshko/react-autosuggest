@@ -8,6 +8,10 @@ function randomInt(min, max) {
   return min + Math.floor(Math.random() * (max - min + 1));
 }
 
+function suburbObjToString(suburbObj) {
+  return suburbObj.suburb;
+}
+
 function getLocations(input, callback) {
   var firstSectionMatchRegex = new RegExp('^' + input, 'i');
   var secondSectionMatchRegex = new RegExp('^(?!' + input + ')\\w+ ' + input, 'i');
@@ -33,7 +37,7 @@ function getLocations(input, callback) {
 
     locations.unshift({
       sectionName: 'Third word match',
-      suggestions: thirdSectionSuburbs.slice(0, thirdSectionCount)
+      suggestions: thirdSectionSuburbs.slice(0, thirdSectionCount).map(suburbObjToString)
     });
   }
 
@@ -42,7 +46,7 @@ function getLocations(input, callback) {
 
     locations.unshift({
       sectionName: 'Second word match',
-      suggestions: secondSectionSuburbs.slice(0, secondSectionCount)
+      suggestions: secondSectionSuburbs.slice(0, secondSectionCount).map(suburbObjToString)
     });
   }
 
@@ -50,7 +54,7 @@ function getLocations(input, callback) {
     firstSectionCount = Math.min(8 - secondSectionCount - thirdSectionCount, firstSectionSuburbs.length);
 
     locations.unshift({
-      suggestions: firstSectionSuburbs.slice(0, firstSectionCount)
+      suggestions: firstSectionSuburbs.slice(0, firstSectionCount).map(suburbObjToString)
     });
   }
 

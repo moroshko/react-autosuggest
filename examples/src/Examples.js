@@ -18,7 +18,7 @@ class Examples extends React.Component {
     ];
 
     this.state = {
-      activeExample: decodeURI(location.search.replace(/.*=/, '')) || 'Basic example'
+      activeExample: decodeURI(location.hash).split('#')[1] || this.examples[0]
     };
   }
   changeExample(example) {

@@ -22,17 +22,17 @@ function getLocations(input, callback) {
 
 function renderLocation(suggestionObj, input) {
   var suburbMatchRegex = new RegExp('\\b' + input, 'i');
-  var firstMatchIndex = suggestionObj.suggestion.search(suburbMatchRegex);
+  var firstMatchIndex = suggestionObj.suburb.search(suburbMatchRegex);
 
   if (firstMatchIndex === -1) {
     return (
-      <span>{suggestionObj.suggestion} VIC {suggestionObj.postcode}</span>
+      <span>{suggestionObj.suburb} VIC {suggestionObj.postcode}</span>
     );
   }
 
-  var beforeMatch = suggestionObj.suggestion.slice(0, firstMatchIndex);
-  var match = suggestionObj.suggestion.slice(firstMatchIndex, firstMatchIndex + input.length);
-  var afterMatch = suggestionObj.suggestion.slice(firstMatchIndex + input.length);
+  var beforeMatch = suggestionObj.suburb.slice(0, firstMatchIndex);
+  var match = suggestionObj.suburb.slice(firstMatchIndex, firstMatchIndex + input.length);
+  var afterMatch = suggestionObj.suburb.slice(firstMatchIndex + input.length);
 
   return (
     <span>{beforeMatch}<strong>{match}</strong>{afterMatch} VIC {suggestionObj.postcode}</span>

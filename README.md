@@ -7,9 +7,11 @@
 
 [WAI-ARIA compliant](http://www.w3.org/TR/wai-aria-practices/#autocomplete) React autosuggest component.
 
-## Demo
+## Live Examples
 
-<a href="//moroshko.github.io/react-autosuggest" target="_blank">Live Example</a>
+* <a href="//moroshko.github.io/react-autosuggest" target="_blank">Basic example</a><br>
+* <a href="//moroshko.github.io/react-autosuggest#Custom renderer" target="_blank">Custom renderer</a><br>
+* <a href="//moroshko.github.io/react-autosuggest#Multiple sections" target="_blank">Multiple sections</a>
 
 ## Installation
 
@@ -53,23 +55,31 @@ function(input, callback) {
 * `input` - The value of the input field
 * `callback` - Should be called once the suggestions are in hand, or error occurs.
 
-  * Success example: `callback(null, <suggestions>)` (see `<suggestions>` format below)
+  * Success example: `callback(null, `[\<suggestions>](#suggestions)`)`
   * Error example: `callback(new Error("Couldn't get locations"))`
 
-`<suggestions>` can be have one of the following two formats:
+<a name="suggestions"></a>
+`<suggestions>` can have one of the following two formats:
 
-* **Single section with no title:** Array of strings, e.g.: `['Mentone', 'Mentone East']`
-* **One or more sections with optional titles:** Array of objects with an optional `sectionName` and a mandatory `suggestions` keys, e.g.:
+* **To display a single section with no title:** `[`[\<suggestion>](#suggestion)`, `[\<suggestion>](#suggestion)`, ...]`
+* **To display one or more sections with optional titles:** Array of objects with an optional `sectionName` and a mandatory `suggestions` keys, e.g.:
 
-```javascript
-[{
-  suggestions: ['Mentone', 'Mentone East']   // This section won't have a title
-}, {
-  sectionName: 'Second section',
-  suggestions: ['Altona Meadows', 'University of Melbourne']
-}]
+```javascript    
+    [{
+      suggestions: [<suggestion>, <suggestion>]   // This section won't have a title
+    }, {
+      sectionName: 'Second section',
+      suggestions: [<suggestion>, <suggestion>, <suggestion>]
+    }]
 ```
 
+<a name="suggestion"></a>
+`<suggestion>` can have one of the following two formats:
+
+* String, e.g.: `'Mentone'`
+* Object, e.g.: `{ suburb: 'Mentone', postcode: '3194' }`. This object cannot have a `suggestions` key, and you must implement the [`suggestionRenderer`](#suggestionRenderer) function to specify how to render this object.
+
+<a name="suggestionRenderer"></a>
 ##### suggestionRenderer (optional)
 
 Function that renders a single suggestion.
