@@ -10,7 +10,8 @@ var Autosuggest = React.createClass({
   propTypes: {
     inputAttributes: PropTypes.objectOf(React.PropTypes.string), // Input's attributes (e.g. id, className)
     suggestions: PropTypes.func.isRequired,                      // Function to get the suggestions
-    suggestionRenderer: PropTypes.func                           // Function to render a single suggestion
+    suggestionRenderer: PropTypes.func,                          // Function to render a single suggestion
+    displayKey: PropTypes.string                                 // String that represents the key inside suggestion objects used to display the suggestion
   },
   getDefaultProps: function() {
     return {
@@ -191,7 +192,7 @@ var Autosuggest = React.createClass({
     });
   },
   onSuggestionMouseDown: function(suggestion) {
-    suggestion = typeof suggestion !== 'object' ? suggestion : suggestion['displayKey'];
+    suggestion = typeof suggestion !== 'object' ? suggestion : suggestion[this.props.displayKey];
     if(!suggestion) {
       throw new Error("Invalid suggestion");
     }
@@ -229,8 +230,8 @@ var Autosuggest = React.createClass({
         ? this.props.suggestionRenderer(suggestion, this.state.valueBeforeUpDown || this.state.value)
         : typeof suggestion !== 'object'
         ? suggestion
-        : suggestion['displayKey'] != null
-        ? suggestion['displayKey']
+        : suggestion[this.props.displayKey] != null
+        ? suggestion[this.props.displayKey]
         : null;
         if(suggestionContent === null){
           throw new Error('Invalid suggestion');

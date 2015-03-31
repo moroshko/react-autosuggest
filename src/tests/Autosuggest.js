@@ -35,26 +35,11 @@ function getObjectSuggestions(input, callback) {
   callback(null, [
     {
       name: "sug1",
-      data: 5,
-      displayKey: "sug1"
+      data: 5
     },
     {
       name: "sug2",
-      data: 4,
-      displayKey: "sug2"
-    },
-  ]);
-}
-
-function getInvalidObjectSuggestions(input, callback) {
-  callback(null, [
-    {
-      name: "sug1",
-      data: 5,
-    },
-    {
-      name: "sug2",
-      data: 4,
+      data: 4
     },
   ]);
 }
@@ -269,7 +254,8 @@ describe('Autosuggest', function() {
 
       it('should render suggestion as object\'s displayKey when suggestion is object ', function() {
         createAutosuggest(
-          <Autosuggest suggestions={getObjectSuggestions} />
+          <Autosuggest suggestions={getObjectSuggestions}
+                       displayKey={'name'} />
         );
         input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
         setInputValue('m');
@@ -282,11 +268,10 @@ describe('Autosuggest', function() {
 
       it('should throw error if suggestion is object and does not contain displayKey', function() {
         createAutosuggest(
-          <Autosuggest suggestions={getInvalidObjectSuggestions} />
+          <Autosuggest suggestions={getObjectSuggestions} />
         );
         input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
         expect(setInputValue.bind(null, 'm')).toThrow('Invalid suggestion');
-        // setInputValue('m');
       });
     });
   });
@@ -382,7 +367,8 @@ describe('Autosuggest', function() {
       it('should set input field value when suggestion is clicked', function() {
         createAutosuggest(
           <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
-                       suggestions={getObjectSuggestions} />
+                       suggestions={getObjectSuggestions}
+                       displayKey={'name'} />
         );
         input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
         setInputValue('m');
@@ -393,7 +379,7 @@ describe('Autosuggest', function() {
       it('should throw error if suggestion object does not contain displayKey', function() {
         createAutosuggest(
           <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
-                       suggestions={getInvalidObjectSuggestions} />
+                       suggestions={getObjectSuggestions} />
         );
         input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
         expect(setInputValue.bind(null,'m')).toThrow('Invalid suggestion');
@@ -526,7 +512,8 @@ describe('Autosuggest', function() {
 
     it('returns false if suggestions are regular objects', function() {
       createAutosuggest(
-        <Autosuggest suggestions={getObjectSuggestions} />
+        <Autosuggest suggestions={getObjectSuggestions}
+                     displayKey={'name'} />
       );
       input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
       setInputValue('m');
