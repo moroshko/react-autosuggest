@@ -59,17 +59,17 @@ function(input, callback) {
 `<suggestions>` can be have one of the following three formats:
 
 * **Single section with no title:** Array of strings, e.g.: `['Mentone', 'Mentone East']`
-* **Single section with no title:** Array of objects with `displayKey` for
+* **Single section with no title:** Array of objects with matching `displayKey` for
   rendering, e.g.:
 ```javascript
+<Autosuggest suggestions={getSuburbs}, displayKey={'name'} />
+
 [{
   name: "Mentone",
-  data: "Anything",
-  displayKey: "Mentone"
+  data: "Anything"
 }, {
   name: "Altona Meadows",
-  data: "More data",
-  displayKey: "Alt. Meadows"
+  data: "More data"
 }]
 ```
 
