@@ -1,5 +1,7 @@
 'use strict';
 
+require('./Footer.less');
+
 import React from 'react';
 
 class Footer extends React.Component {
