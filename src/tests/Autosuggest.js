@@ -20,6 +20,13 @@ function getSuburbs(input, callback) {
   }));
 }
 
+function getIllegalSuburbs(input, callback) {
+  callback(null, [
+    { suburb: 'Mill Park', postcode: '3083' },
+    { suburb: 'Nunawading', postcode: '3131' }
+  ]);
+}
+
 function getMultipleSectionsSuburbs(input, callback) {
   callback(null, [{
     suggestions: ['Forest Hill', 'Flinders Street']
@@ -49,7 +56,7 @@ function setInputValue(value) {
 
 function mouseDownSuggestion(suggestionIndex) {
   suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-  Simulate.mouseDown(suggestions[suggestionIndex].getDOMNode());
+  Simulate.mouseDown(React.findDOMNode(suggestions[suggestionIndex]));
 }
 
 // See: https://github.com/facebook/react/issues/1297
@@ -60,12 +67,12 @@ function mouseOver(from, to) {
 
 function mouseOverFromInputToSuggestion(suggestionIndex) {
   suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-  mouseOver(input, suggestions[suggestionIndex].getDOMNode());
+  mouseOver(input, React.findDOMNode(suggestions[suggestionIndex]));
 }
 
 function mouseOverFromSuggestionToInput(suggestionIndex) {
   suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-  mouseOver(suggestions[suggestionIndex].getDOMNode(), input);
+  mouseOver(React.findDOMNode(suggestions[suggestionIndex]), input);
 }
 
 function clickEscape() {
@@ -89,7 +96,7 @@ function expectSuggestions(expectedSuggestions) {
   expect(suggestions.length).toBe(expectedSuggestions.length);
 
   for (let i = 0; i < expectedSuggestions.length; i++) {
-    expect(suggestions[i].getDOMNode().textContent === expectedSuggestions[i]);
+    expect(React.findDOMNode(suggestions[i]).textContent === expectedSuggestions[i]);
   }
 }
 
@@ -100,7 +107,7 @@ function expectFocusedSuggestion(suggestion) {
     expect(focusedSuggestions.length).toBe(0);
   } else {
     expect(focusedSuggestions.length).toBe(1);
-    expect(focusedSuggestions[0].getDOMNode().textContent).toBe(suggestion);
+    expect(React.findDOMNode(focusedSuggestions[0]).textContent).toBe(suggestion);
   }
 }
 
@@ -116,7 +123,7 @@ function expectSections(expectedSections) {
       expect(sectionName.length).toBe(0);
     } else {
       expect(sectionName.length).toBe(1);
-      expect(sectionName[0].getDOMNode().textContent).toBe(expectedSections[i]);
+      expect(React.findDOMNode(sectionName[0]).textContent).toBe(expectedSections[i]);
     }
   }
 }
@@ -166,6 +173,14 @@ describe('Autosuggest', function() {
     });
   });
 
+  describe('Illegal params', function() {
+    it('should throw an error when "suggestions" are objects but "suggestionRenderer()" isn\'t provided', function() {
+      createAutosuggest(<Autosuggest suggestions={getIllegalSuburbs} />);
+      input = React.findDOMNode(TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input'));
+      expect(setInputValue.bind(null, 'a')).toThrow('When <suggestion> is an object, you must implement the suggestionRenderer() function to specify how to render it.');
+    });
+  });
+
   describe('Basics', function() {
     beforeEach(function() {
       createAutosuggest(
@@ -176,7 +191,7 @@ describe('Autosuggest', function() {
                                         value: 'my value' }}
                      suggestions={getSuburbs} />
       );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      input = React.findDOMNode(TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input'));
     });
 
     it('should set input attributes', function() {
@@ -235,13 +250,13 @@ describe('Autosuggest', function() {
                      suggestions={getSuburbs}
                      suggestionRenderer={renderLocation} />
       );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      input = React.findDOMNode(TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input'));
       setInputValue('m');
     });
 
     it('should use the specified suggestionRenderer function', function() {
       suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-      expect(stripReactAttributes(suggestions[0].getDOMNode().innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span></span>');
+      expect(stripReactAttributes(React.findDOMNode(suggestions[0]).innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span></span>');
     });
   });
 
@@ -251,7 +266,7 @@ describe('Autosuggest', function() {
         <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my-value' }}
                      suggestions={getSuburbs} />
       );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      input = React.findDOMNode(TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input'));
       setInputValue('m');
     });
 
@@ -311,7 +326,7 @@ describe('Autosuggest', function() {
         <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
                      suggestions={getSuburbs} />
       );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      input = React.findDOMNode(TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input'));
       setInputValue('m');
       clickEscape();
     });
@@ -335,7 +350,7 @@ describe('Autosuggest', function() {
         <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
                      suggestions={getSuburbs} />
       );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      input = React.findDOMNode(TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input'));
       setInputValue('m');
     });
 
@@ -369,7 +384,7 @@ describe('Autosuggest', function() {
       createAutosuggest(
         <Autosuggest suggestions={getSuburbs} />
       );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      input = React.findDOMNode(TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input'));
     });
 
     describe('when Autosuggest is rendered', function() {
@@ -407,29 +422,29 @@ describe('Autosuggest', function() {
       it('input\'s aria-activedescendant should be the id of the focused suggestion when using keyboard', function() {
         clickDown();
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(input.getAttribute('aria-activedescendant')).toBe(suggestions[0].getDOMNode().id);
+        expect(input.getAttribute('aria-activedescendant')).toBe(React.findDOMNode(suggestions[0]).id);
       });
 
       it('input\'s aria-activedescendant should be the id of the focused suggestion when using mouse', function() {
         mouseOverFromInputToSuggestion(0);
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(input.getAttribute('aria-activedescendant')).toBe(suggestions[0].getDOMNode().id);
+        expect(input.getAttribute('aria-activedescendant')).toBe(React.findDOMNode(suggestions[0]).id);
       });
 
       it('suggestion\'s role should be option', function() {
         clickDown();
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(suggestions[0].getDOMNode().getAttribute('role')).toBe('option');
+        expect(React.findDOMNode(suggestions[0]).getAttribute('role')).toBe('option');
       });
 
       it('input\'s aria-owns should be equal to suggestions list\'s id', function() {
         suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
-        expect(input.getAttribute('aria-owns')).toBe(suggestionsList.getDOMNode().id);
+        expect(input.getAttribute('aria-owns')).toBe(React.findDOMNode(suggestionsList).id);
       });
 
       it('suggestions list\'s role should be listbox', function() {
         suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
-        expect(suggestionsList.getDOMNode().getAttribute('role')).toBe('listbox');
+        expect(React.findDOMNode(suggestionsList).getAttribute('role')).toBe('listbox');
       });
     });
   });
@@ -439,7 +454,7 @@ describe('Autosuggest', function() {
       createAutosuggest(
         <Autosuggest suggestions={getMultipleSectionsSuburbs} />
       );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      input = React.findDOMNode(TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input'));
       setInputValue('m');
     });
 
@@ -453,7 +468,7 @@ describe('Autosuggest', function() {
       createAutosuggest(
         <Autosuggest suggestions={getSuburbs} />
       );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      input = React.findDOMNode(TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input'));
     });
 
     it('should reset sectionIterator when getting cached suggestions', function() {
