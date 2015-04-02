@@ -126,6 +126,46 @@ function createAutosuggest(Autosuggest) {
 }
 
 describe('Autosuggest', function() {
+  describe('isMultipleSections()', function() {
+    beforeEach(function() {
+      createAutosuggest(<Autosuggest suggestions={getSuburbs} />);
+    });
+
+    it('should be multiple sections', function() {
+      expect(autosuggest.isMultipleSections([ { suggestions: [] }])).toBe(true);
+      expect(autosuggest.isMultipleSections([ { suggestions: ['a', 'b'] }])).toBe(true);
+      expect(autosuggest.isMultipleSections([ { sectionName: 'First', suggestions: ['a', 'b'] }])).toBe(true);
+    });
+
+    it('should not be multiple sections', function() {
+      expect(autosuggest.isMultipleSections(null)).toBe(false);
+      expect(autosuggest.isMultipleSections([])).toBe(false);
+      expect(autosuggest.isMultipleSections(['a', 'b'])).toBe(false);
+      expect(autosuggest.isMultipleSections([ { sectionName: 'First' }])).toBe(false);
+      expect(autosuggest.isMultipleSections([ { suburb: 'Mentone', postcode: 3192 }])).toBe(false);
+    });
+  });
+
+  describe('suggestionsExist()', function() {
+    beforeEach(function() {
+      createAutosuggest(<Autosuggest suggestions={getSuburbs} />);
+    });
+
+    it('should have suggestions', function() {
+      expect(autosuggest.suggestionsExist([ { suggestions: ['a'] }])).toBe(true);
+      expect(autosuggest.suggestionsExist([ { suburb: 'Mentone', postcode: 3192 }])).toBe(true);
+      expect(autosuggest.suggestionsExist([ { sectionName: 'First', suggestions: ['a', 'b'] }])).toBe(true);
+      expect(autosuggest.suggestionsExist([ { sectionName: 'First', suggestions: [] }, { sectionName: 'Second', suggestions: ['a'] }])).toBe(true);
+    });
+
+    it('should not have suggestions', function() {
+      expect(autosuggest.suggestionsExist(null)).toBe(false);
+      expect(autosuggest.suggestionsExist([])).toBe(false);
+      expect(autosuggest.suggestionsExist([ { suggestions: [] }])).toBe(false);
+      expect(autosuggest.suggestionsExist([ { sectionName: 'First', suggestions: [] }, { sectionName: 'Second', suggestions: [] }])).toBe(false);
+    });
+  });
+
   describe('Basics', function() {
     beforeEach(function() {
       createAutosuggest(

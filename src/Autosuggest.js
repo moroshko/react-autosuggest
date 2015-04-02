@@ -58,7 +58,7 @@ class Autosuggest extends React.Component {
       });
     }
 
-    return suggestions.length > 0;
+    return suggestions !== null && suggestions.length > 0;
   }
 
   showSuggestions(input) {
