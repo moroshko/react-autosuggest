@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Autosuggest from '../../../src/Autosuggest';
+import SourceCodeLink from '../SourceCodeLink/SourceCodeLink';
 import suburbs from 'json!../suburbs.json';
 
 function getLocations(input, callback) {
@@ -47,10 +48,12 @@ class CustomRenderer extends React.Component {
     };
 
     return (
-      <Autosuggest inputAttributes={inputAttributes}
-                   suggestions={getLocations}
-                   suggestionRenderer={renderLocation}
-                   key="custom-renderer" />
+      <div>
+        <Autosuggest inputAttributes={inputAttributes}
+                     suggestions={getLocations}
+                     suggestionRenderer={renderLocation} />
+        <SourceCodeLink file="examples/src/CustomRenderer/CustomRenderer.js" />
+      </div>
     );
   }
 }

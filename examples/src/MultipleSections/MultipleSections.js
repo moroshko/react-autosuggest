@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Autosuggest from '../../../src/Autosuggest';
+import SourceCodeLink from '../SourceCodeLink/SourceCodeLink';
 import suburbs from 'json!../suburbs.json';
 
 function randomInt(min, max) {
@@ -78,9 +79,11 @@ class MultipleSections extends React.Component {
     };
 
     return (
-      <Autosuggest inputAttributes={inputAttributes}
-                   suggestions={getLocations}
-                   key="multiple-sections" />
+      <div>
+        <Autosuggest inputAttributes={inputAttributes}
+                     suggestions={getLocations} />
+        <SourceCodeLink file="examples/src/MultipleSections/MultipleSections.js" />
+      </div>
     );
   }
 }

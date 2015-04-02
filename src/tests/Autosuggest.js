@@ -2,17 +2,18 @@
 
 jest.dontMock('../Autosuggest.js');
 
-var React = require('react/addons');
-var Simulate = React.addons.TestUtils.Simulate;
-var SimulateNative = React.addons.TestUtils.SimulateNative;
-var Autosuggest = require('../Autosuggest.js');
-var TestUtils = React.addons.TestUtils;
-var suburbs = ['Cheltenham', 'Mill Park', 'Mordialloc', 'Nunawading'];
-var reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
-var autosuggest, input, suggestions;
+import React from 'react/addons';
+import Autosuggest from '../Autosuggest.js';
+
+let TestUtils = React.addons.TestUtils;
+let Simulate = TestUtils.Simulate;
+let SimulateNative = TestUtils.SimulateNative;
+let suburbs = ['Cheltenham', 'Mill Park', 'Mordialloc', 'Nunawading'];
+let reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
+let autosuggest, input, suggestions;
 
 function getSuburbs(input, callback) {
-  var regex = new RegExp('^' + input, 'i');
+  let regex = new RegExp('^' + input, 'i');
 
   callback(null, suburbs.filter(function(suburb) {
     return regex.test(suburb);
@@ -87,13 +88,13 @@ function expectSuggestions(expectedSuggestions) {
   suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
   expect(suggestions.length).toBe(expectedSuggestions.length);
 
-  for (var i = 0; i < expectedSuggestions.length; i++) {
+  for (let i = 0; i < expectedSuggestions.length; i++) {
     expect(suggestions[i].getDOMNode().textContent === expectedSuggestions[i]);
   }
 }
 
 function expectFocusedSuggestion(suggestion) {
-  var focusedSuggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion--focused');
+  let focusedSuggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion--focused');
 
   if (suggestion === null) {
     expect(focusedSuggestions.length).toBe(0);
@@ -104,12 +105,12 @@ function expectFocusedSuggestion(suggestion) {
 }
 
 function expectSections(expectedSections) {
-  var sections = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestions-section');
+  let sections = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestions-section');
   
   expect(sections.length).toBe(expectedSections.length);
 
-  for (var i = 0; i < sections.length; i++) {
-    var sectionName = TestUtils.scryRenderedDOMComponentsWithClass(sections[i], 'react-autosuggest__suggestions-section-name');
+  for (let i = 0; i < sections.length; i++) {
+    let sectionName = TestUtils.scryRenderedDOMComponentsWithClass(sections[i], 'react-autosuggest__suggestions-section-name');
 
     if (expectedSections[i] === null) {
       expect(sectionName.length).toBe(0);

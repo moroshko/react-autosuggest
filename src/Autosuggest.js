@@ -4,7 +4,7 @@ import React from 'react';
 import classnames from 'classnames';
 import sectionIterator from './sectionIterator';
 
-var guid = 0;
+let guid = 0;
 
 class Autosuggest extends React.Component {
   constructor(props) {
@@ -82,14 +82,18 @@ class Autosuggest extends React.Component {
     }
   }
 
+  getSuggestionText(sectionIndex, suggestionIndex) {
+    return React.findDOMNode(this.refs[this.getSuggestionKey(sectionIndex, suggestionIndex)]).textContent;
+  }
+
   focusOnSuggestion(suggestionPosition) {
-    var [sectionIndex, suggestionIndex] = suggestionPosition;
-    var newState = {
+    let [sectionIndex, suggestionIndex] = suggestionPosition;
+    let newState = {
       focusedSectionIndex: sectionIndex,
       focusedSuggestionIndex: suggestionIndex,
       value: suggestionIndex === null
                ? this.state.valueBeforeUpDown
-               : React.findDOMNode(this.refs[this.getSuggestionKey(sectionIndex, suggestionIndex)]).textContent
+               : this.getSuggestionText(sectionIndex, suggestionIndex)
     };
 
     // When users starts to interact with up/down keys, remember input's value.
@@ -101,7 +105,7 @@ class Autosuggest extends React.Component {
   }
 
   onInputChange(event) {
-    var newValue = event.target.value;
+    let newValue = event.target.value;
 
     this.setState({
       value: newValue,
@@ -112,7 +116,7 @@ class Autosuggest extends React.Component {
   }
 
   onInputKeyDown(event) {
-    var newState, newSectionIndex, newSuggestionIndex;
+    let newState, newSectionIndex, newSuggestionIndex;
 
     switch (event.keyCode) {
       case 13: // enter
@@ -175,9 +179,9 @@ class Autosuggest extends React.Component {
     });
   }
 
-  onSuggestionMouseDown(suggestion) {
+  onSuggestionMouseDown(sectionIndex, suggestionIndex) {
     this.setState({
-      value: suggestion,
+      value: this.getSuggestionText(sectionIndex, suggestionIndex),
       suggestions: null,
       focusedSectionIndex: null,
       focusedSuggestionIndex: null,
@@ -218,13 +222,13 @@ class Autosuggest extends React.Component {
 
   renderSuggestionsList(suggestions, sectionIndex) {
     return suggestions.map(function(suggestion, suggestionIndex) {
-      var classes = classnames({
+      let classes = classnames({
         'react-autosuggest__suggestion': true,
         'react-autosuggest__suggestion--focused':
           sectionIndex === this.state.focusedSectionIndex &&
           suggestionIndex === this.state.focusedSuggestionIndex
       });
-      var suggestionKey = this.getSuggestionKey(sectionIndex, suggestionIndex);
+      let suggestionKey = this.getSuggestionKey(sectionIndex, suggestionIndex);
 
       return (
         <div id={this.getSuggestionId(sectionIndex, suggestionIndex)}
@@ -234,7 +238,7 @@ class Autosuggest extends React.Component {
              ref={suggestionKey}
              onMouseEnter={this.onSuggestionMouseEnter.bind(this, sectionIndex, suggestionIndex)}
              onMouseLeave={this.onSuggestionMouseLeave.bind(this)}
-             onMouseDown={this.onSuggestionMouseDown.bind(this, suggestion)}>
+             onMouseDown={this.onSuggestionMouseDown.bind(this, sectionIndex, suggestionIndex)}>
           {this.renderSuggestionContent(suggestion)}
         </div>
       );
@@ -246,11 +250,11 @@ class Autosuggest extends React.Component {
       return null;
     }
 
-    var content;
+    let content;
 
     if (this.isMultipleSections(this.state.suggestions)) {
       content = this.state.suggestions.map(function(section, sectionIndex) {
-        var sectionName = section.sectionName ? (
+        let sectionName = section.sectionName ? (
           <div className="react-autosuggest__suggestions-section-name">
             {section.sectionName}
           </div>
@@ -278,7 +282,7 @@ class Autosuggest extends React.Component {
   }
 
   render() {
-    var ariaActivedescendant =
+    let ariaActivedescendant =
       this.getSuggestionId(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex);
 
     return (

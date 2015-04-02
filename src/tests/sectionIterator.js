@@ -2,7 +2,7 @@
 
 jest.dontMock('../sectionIterator.js');
 
-var sectionIterator = require('../sectionIterator.js');
+import sectionIterator from '../sectionIterator.js';
 
 describe('sectionIterator', function() {
   describe('no sections', function() {
