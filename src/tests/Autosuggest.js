@@ -112,7 +112,7 @@ function expectSuggestions(expectedSuggestions) {
   expect(suggestions.length).toBe(expectedSuggestions.length);
 
   for (let i = 0; i < expectedSuggestions.length; i++) {
-    expect(React.findDOMNode(suggestions[i]).textContent === expectedSuggestions[i]);
+    expect(React.findDOMNode(suggestions[i]).textContent).toBe(expectedSuggestions[i]);
   }
 }
 
@@ -198,68 +198,84 @@ describe('Autosuggest', function() {
   });
 
   describe('Basics', function() {
-    beforeEach(function() {
-      createAutosuggest(
-        <Autosuggest inputAttributes={{ id: 'my-autosuggest',
-                                        name: 'my-autosuggest-name',
-                                        placeholder: 'Enter location...',
-                                        className: 'my-sweet-autosuggest',
-                                        value: 'my value' }}
-                     suggestions={getSuburbStrings} />
-      );
+    describe('String suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbStrings}
+                       inputAttributes={{ id: 'my-autosuggest',
+                                          name: 'my-autosuggest-name',
+                                          placeholder: 'Enter location...',
+                                          className: 'my-sweet-autosuggest',
+                                          value: 'my value' }} />
+        );
+      });
+
+      it('should set input attributes', function() {
+        expect(input.id).toBe('my-autosuggest');
+        expect(input.name).toBe('my-autosuggest-name');
+        expect(input.getAttribute('placeholder')).toBe('Enter location...');
+        expect(input.className).toBe('my-sweet-autosuggest');
+      });
+
+      it('should set initial value', function() {
+        expectInputValue('my value');
+      });
+
+      it('should not show suggestions by default', function() {
+        expectSuggestions([]);
+      });
+
+      it('should show suggestions when matches exist', function() {
+        setInputValue('m');
+        expectSuggestions(['Mill Park', 'Mordialloc']);
+      });
+
+      it('should not focus on suggestion when suggestions are shown', function() {
+        setInputValue('m');
+        expectFocusedSuggestion(null);
+      });
+
+      it('should show suggestions when case insensitive matches exist', function() {
+        setInputValue('NUNA');
+        expectSuggestions(['Nunawading']);
+      });
+
+      it('should show not suggestions when no matches exist', function() {
+        setInputValue('a');
+        expectSuggestions([]);
+      });
+
+      it('should hide suggestions when ESC is clicked and suggestions are shown', function() {
+        setInputValue('m');
+        clickEscape();
+        expectSuggestions([]);
+      });
+
+      it('should clear the input when ESC is clicked and suggestions are not shown', function() {
+        setInputValue('m');
+        clickEscape();
+        clickEscape();
+        expectInputValue('');
+      });
     });
 
-    it('should set input attributes', function() {
-      expect(input.id).toBe('my-autosuggest');
-      expect(input.name).toBe('my-autosuggest-name');
-      expect(input.getAttribute('placeholder')).toBe('Enter location...');
-      expect(input.className).toBe('my-sweet-autosuggest');
-    });
+    describe('Object suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbObjects}
+                       suggestionRenderer={renderSuburbObject} />
+        );
+      });
 
-    it('should set initial value', function() {
-      expectInputValue('my value');
-    });
-
-    it('should not show suggestions by default', function() {
-      expectSuggestions([]);
-    });
-
-    it('should show suggestions when matches exist', function() {
-      setInputValue('m');
-      expectSuggestions(['Mill Park', 'Mordialloc']);
-    });
-
-    it('should not focus on suggestion when suggestions are shown', function() {
-      setInputValue('m');
-      expectFocusedSuggestion(null);
-    });
-
-    it('should show suggestions when case insensitive matches exist', function() {
-      setInputValue('NUNA');
-      expectSuggestions(['Nunawading']);
-    });
-
-    it('should show not suggestions when no matches exist', function() {
-      setInputValue('a');
-      expectSuggestions([]);
-    });
-
-    it('should hide suggestions when ESC is clicked and suggestions are shown', function() {
-      setInputValue('m');
-      clickEscape();
-      expectSuggestions([]);
-    });
-
-    it('should clear the input when ESC is clicked and suggestions are not shown', function() {
-      setInputValue('m');
-      clickEscape();
-      clickEscape();
-      expectInputValue('');
+      it('should show suggestions when matches exist', function() {
+        setInputValue('m');
+        expectSuggestions(['Mill Park VIC 3083', 'Mordialloc VIC 3195']);
+      });
     });
   });
 
   describe('Suggestion renderer', function() {
-    describe('String suggestion', function() {
+    describe('String suggestions', function() {
       beforeEach(function() {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbStrings}
@@ -274,7 +290,7 @@ describe('Autosuggest', function() {
       });
     });
 
-    describe('Object suggestion', function() {
+    describe('Object suggestions', function() {
       beforeEach(function() {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbObjects}
@@ -293,8 +309,7 @@ describe('Autosuggest', function() {
   describe('Keyboard interactions', function() {
     beforeEach(function() {
       createAutosuggest(
-        <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my-value' }}
-                     suggestions={getSuburbStrings} />
+        <Autosuggest suggestions={getSuburbStrings} />
       );
       setInputValue('m');
     });
@@ -374,8 +389,7 @@ describe('Autosuggest', function() {
   describe('Mouse interactions', function() {
     beforeEach(function() {
       createAutosuggest(
-        <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
-                     suggestions={getSuburbStrings} />
+        <Autosuggest suggestions={getSuburbStrings} />
       );
       setInputValue('m');
     });
