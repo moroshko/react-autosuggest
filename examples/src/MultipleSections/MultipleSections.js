@@ -81,7 +81,8 @@ class MultipleSections extends React.Component {
     return (
       <div>
         <Autosuggest inputAttributes={inputAttributes}
-                     suggestions={getLocations} />
+                     suggestions={getLocations}
+                     ref={ () => { document.getElementById('multiple-sections').focus(); } } />
         <SourceCodeLink file="examples/src/MultipleSections/MultipleSections.js" />
       </div>
     );

@@ -31,7 +31,8 @@ class BasicExample extends React.Component {
     return (
       <div>
         <Autosuggest inputAttributes={inputAttributes}
-                     suggestions={getLocations} />
+                     suggestions={getLocations}
+                     ref={ () => { document.getElementById('basic-example').focus(); } } />
         <SourceCodeLink file="examples/src/BasicExample/BasicExample.js" />
       </div>
     );

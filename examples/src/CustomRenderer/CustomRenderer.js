@@ -51,7 +51,8 @@ class CustomRenderer extends React.Component {
       <div>
         <Autosuggest inputAttributes={inputAttributes}
                      suggestions={getLocations}
-                     suggestionRenderer={renderLocation} />
+                     suggestionRenderer={renderLocation}
+                     ref={ () => { document.getElementById('custom-renderer').focus(); } } />
         <SourceCodeLink file="examples/src/CustomRenderer/CustomRenderer.js" />
       </div>
     );
