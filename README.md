@@ -82,7 +82,7 @@ function(input, callback) {
 <a name="suggestionRenderer"></a>
 ##### suggestionRenderer (optional)
 
-Function that renders a single suggestion.
+Function that renders a single suggestion. This function shall return `ReactElement` or a string.
 
 ```javascript
 function(suggestion, input) {
@@ -96,7 +96,7 @@ function(suggestion, input) {
 For example:
 
 ```javascript
-function renderLocation(suggestion, input) {
+function renderSuggestion(suggestion, input) {
   return (
     <span><strong>{suggestion.slice(0, input.length)}</strong>{suggestion.slice(input.length)}</span>
   );
@@ -104,7 +104,7 @@ function renderLocation(suggestion, input) {
 ```
 
 ```xml
-<Autosuggest suggestions={getLocations} suggestionRenderer={renderLocation} />
+<Autosuggest suggestions={getSuggestions} suggestionRenderer={renderSuggestion} />
 ```
 
 ##### inputAttributes (optional)
