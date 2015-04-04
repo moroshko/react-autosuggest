@@ -130,9 +130,6 @@ function expectSections(expectedSections) {
 
 function createAutosuggest(Autosuggest) {
   autosuggest = TestUtils.renderIntoDocument(Autosuggest);
-}
-
-function findInput() {
   input = React.findDOMNode(TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input'));
 }
 
@@ -180,7 +177,6 @@ describe('Autosuggest', function() {
   describe('Illegal params', function() {
     it('should throw an error when "suggestions" are objects but "suggestionRenderer()" isn\'t provided', function() {
       createAutosuggest(<Autosuggest suggestions={getIllegalSuburbs} />);
-      findInput();
       expect(setInputValue.bind(null, 'a')).toThrow('When <suggestion> is an object, you must implement the suggestionRenderer() function to specify how to render it.');
     });
   });
@@ -195,7 +191,6 @@ describe('Autosuggest', function() {
                                         value: 'my value' }}
                      suggestions={getSuburbs} />
       );
-      findInput();
     });
 
     it('should set input attributes', function() {
@@ -254,7 +249,6 @@ describe('Autosuggest', function() {
                      suggestions={getSuburbs}
                      suggestionRenderer={renderLocation} />
       );
-      findInput();
       setInputValue('m');
     });
 
@@ -270,7 +264,6 @@ describe('Autosuggest', function() {
         <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my-value' }}
                      suggestions={getSuburbs} />
       );
-      findInput();
       setInputValue('m');
     });
 
@@ -330,7 +323,6 @@ describe('Autosuggest', function() {
         <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
                      suggestions={getSuburbs} />
       );
-      findInput();
       setInputValue('m');
       clickEscape();
     });
@@ -354,7 +346,6 @@ describe('Autosuggest', function() {
         <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
                      suggestions={getSuburbs} />
       );
-      findInput();
       setInputValue('m');
     });
 
@@ -386,7 +377,6 @@ describe('Autosuggest', function() {
   describe('Accessibility attributes', function() {
     beforeEach(function() {
       createAutosuggest(<Autosuggest suggestions={getSuburbs} />);
-      findInput();
     });
 
     describe('when Autosuggest is rendered', function() {
@@ -454,7 +444,6 @@ describe('Autosuggest', function() {
   describe('Multiple sections', function() {
     beforeEach(function() {
       createAutosuggest(<Autosuggest suggestions={getMultipleSectionsSuburbs} />);
-      findInput();
       setInputValue('m');
     });
 
@@ -466,7 +455,6 @@ describe('Autosuggest', function() {
   describe('Misc', function() {
     beforeEach(function() {
       createAutosuggest(<Autosuggest suggestions={getSuburbs} />);
-      findInput();
     });
 
     it('should reset sectionIterator when getting cached suggestions', function() {
