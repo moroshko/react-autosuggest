@@ -8,16 +8,26 @@ import Autosuggest from '../Autosuggest.js';
 let TestUtils = React.addons.TestUtils;
 let Simulate = TestUtils.Simulate;
 let SimulateNative = TestUtils.SimulateNative;
-let suburbs = ['Cheltenham', 'Mill Park', 'Mordialloc', 'Nunawading'];
+let suburbObjects = [
+  { suburb: 'Cheltenham', postcode: '3192' },
+  { suburb: 'Mill Park', postcode: '3083' },
+  { suburb: 'Mordialloc', postcode: '3195' },
+  { suburb: 'Nunawading', postcode: '3131' }
+];
+let stringSuburbs = suburbObjects.map( suburbObj => suburbObj.suburb );
 let reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 let autosuggest, input, suggestions;
 
-function getSuburbs(input, callback) {
+function getSuburbStrings(input, callback) {
   let regex = new RegExp('^' + input, 'i');
 
-  callback(null, suburbs.filter(function(suburb) {
-    return regex.test(suburb);
-  }));
+  callback(null, stringSuburbs.filter( suburb => regex.test(suburb) ));
+}
+
+function getSuburbObjects(input, callback) {
+  let regex = new RegExp('^' + input, 'i');
+
+  callback(null, suburbObjects.filter( suburbObj => regex.test(suburbObj.suburb) ));
 }
 
 function getIllegalSuburbs(input, callback) {
@@ -39,9 +49,15 @@ function getMultipleSectionsSuburbs(input, callback) {
   }]);
 }
 
-function renderLocation(suggestion, input) {
+function renderSuburbString(suburb, input) {
   return (
-    <span><strong>{suggestion.slice(0, input.length)}</strong>{suggestion.slice(input.length)}</span>
+    <span><strong>{suburb.slice(0, input.length)}</strong>{suburb.slice(input.length)}</span>
+  );
+}
+
+function renderSuburbObject(suburbObj, input) {
+  return (
+    <span><strong>{suburbObj.suburb.slice(0, input.length)}</strong>{suburbObj.slice(input.length)} VIC {suburbObj.postcode}</span>
   );
 }
 
@@ -136,7 +152,7 @@ function createAutosuggest(Autosuggest) {
 describe('Autosuggest', function() {
   describe('isMultipleSections()', function() {
     beforeEach(function() {
-      createAutosuggest(<Autosuggest suggestions={getSuburbs} />);
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
     });
 
     it('should be multiple sections', function() {
@@ -156,7 +172,7 @@ describe('Autosuggest', function() {
 
   describe('suggestionsExist()', function() {
     beforeEach(function() {
-      createAutosuggest(<Autosuggest suggestions={getSuburbs} />);
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
     });
 
     it('should have suggestions', function() {
@@ -189,7 +205,7 @@ describe('Autosuggest', function() {
                                         placeholder: 'Enter location...',
                                         className: 'my-sweet-autosuggest',
                                         value: 'my value' }}
-                     suggestions={getSuburbs} />
+                     suggestions={getSuburbStrings} />
       );
     });
 
@@ -243,26 +259,42 @@ describe('Autosuggest', function() {
   });
 
   describe('Suggestion renderer', function() {
-    beforeEach(function() {
-      createAutosuggest(
-        <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
-                     suggestions={getSuburbs}
-                     suggestionRenderer={renderLocation} />
-      );
-      setInputValue('m');
+    describe('String suggestion', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbStrings}
+                       suggestionRenderer={renderSuburbString} />
+        );
+        setInputValue('m');
+      });
+
+      it('should use the specified suggestionRenderer function', function() {
+        suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+        expect(stripReactAttributes(React.findDOMNode(suggestions[0]).innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span></span>');
+      });
     });
 
-    it('should use the specified suggestionRenderer function', function() {
-      suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-      expect(stripReactAttributes(React.findDOMNode(suggestions[0]).innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span></span>');
-    });
+    // describe('Object suggestion', function() {
+    //   beforeEach(function() {
+    //     createAutosuggest(
+    //       <Autosuggest suggestions={getSuburbObjects}
+    //                    suggestionRenderer={renderSuburbObject} />
+    //     );
+    //     setInputValue('m');
+    //   });
+
+    //   it('should use the specified suggestionRenderer function', function() {
+    //     suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+    //     expect(stripReactAttributes(React.findDOMNode(suggestions[0]).innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span></span>');
+    //   });
+    // });
   });
 
   describe('Keyboard interactions', function() {
     beforeEach(function() {
       createAutosuggest(
         <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my-value' }}
-                     suggestions={getSuburbs} />
+                     suggestions={getSuburbStrings} />
       );
       setInputValue('m');
     });
@@ -321,7 +353,7 @@ describe('Autosuggest', function() {
     beforeEach(function() {
       createAutosuggest(
         <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
-                     suggestions={getSuburbs} />
+                     suggestions={getSuburbStrings} />
       );
       setInputValue('m');
       clickEscape();
@@ -344,7 +376,7 @@ describe('Autosuggest', function() {
     beforeEach(function() {
       createAutosuggest(
         <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
-                     suggestions={getSuburbs} />
+                     suggestions={getSuburbStrings} />
       );
       setInputValue('m');
     });
@@ -376,7 +408,7 @@ describe('Autosuggest', function() {
 
   describe('Accessibility attributes', function() {
     beforeEach(function() {
-      createAutosuggest(<Autosuggest suggestions={getSuburbs} />);
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
     });
 
     describe('when Autosuggest is rendered', function() {
@@ -454,7 +486,7 @@ describe('Autosuggest', function() {
 
   describe('Misc', function() {
     beforeEach(function() {
-      createAutosuggest(<Autosuggest suggestions={getSuburbs} />);
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
     });
 
     it('should reset sectionIterator when getting cached suggestions', function() {
