@@ -307,68 +307,82 @@ describe('Autosuggest', function() {
   });
 
   describe('Keyboard interactions', function() {
-    beforeEach(function() {
-      createAutosuggest(
-        <Autosuggest suggestions={getSuburbStrings} />
-      );
-      setInputValue('m');
+    describe('String suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
+        setInputValue('m');
+      });
+
+      it('should focus on first suggestion and change input value when Down is clicked', function() {
+        clickDown();
+        expectFocusedSuggestion('Mill Park');
+        expectInputValue('Mill Park');
+      });
+
+      it('should focus on next suggestion and change input value when Down is clicked again', function() {
+        clickDown();
+        clickDown();
+        expectFocusedSuggestion('Mordialloc');
+        expectInputValue('Mordialloc');
+      });
+
+      it('should remove focus from suggestions when last suggestion is focused and Down is clicked', function() {
+        clickDown();
+        clickDown();
+        clickDown();
+        expectFocusedSuggestion(null);
+        expectInputValue('m');
+      });
+
+      it('should hide suggestions and revert back input\'s value when ESC is clicked after Down', function() {
+        clickDown();
+        clickEscape();
+        expectSuggestions([]);
+        expectInputValue('m');
+      });
+
+      it('should focus on last suggestion and change input value when Up is clicked', function() {
+        clickUp();
+        expectFocusedSuggestion('Mordialloc');
+        expectInputValue('Mordialloc');
+      });
+
+      it('should focus on previous suggestion and change input value when Up is clicked again', function() {
+        clickUp();
+        clickUp();
+        expectFocusedSuggestion('Mill Park');
+        expectInputValue('Mill Park');
+      });
+
+      it('should remove focus from suggestions when first suggestion is focused and Up is clicked', function() {
+        clickUp();
+        clickUp();
+        clickUp();
+        expectFocusedSuggestion(null);
+        expectInputValue('m');
+      });
     });
 
-    it('should focus on first suggestion and change input value when Down is clicked', function() {
-      clickDown();
-      expectFocusedSuggestion('Mill Park');
-      expectInputValue('Mill Park');
-    });
+    describe('Object suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbObjects}
+                       suggestionRenderer={renderSuburbObject} />
+        );
+        setInputValue('m');
+      });
 
-    it('should focus on next suggestion and change input value when Down is clicked again', function() {
-      clickDown();
-      clickDown();
-      expectFocusedSuggestion('Mordialloc');
-      expectInputValue('Mordialloc');
-    });
-
-    it('should remove focus from suggestions when last suggestion is focused and Down is clicked', function() {
-      clickDown();
-      clickDown();
-      clickDown();
-      expectFocusedSuggestion(null);
-      expectInputValue('m');
-    });
-
-    it('should hide suggestions and revert back input\'s value when ESC is clicked after Down', function() {
-      clickDown();
-      clickEscape();
-      expectSuggestions([]);
-      expectInputValue('m');
-    });
-
-    it('should focus on last suggestion and change input value when Up is clicked', function() {
-      clickUp();
-      expectFocusedSuggestion('Mordialloc');
-      expectInputValue('Mordialloc');
-    });
-
-    it('should focus on previous suggestion and change input value when Up is clicked again', function() {
-      clickUp();
-      clickUp();
-      expectFocusedSuggestion('Mill Park');
-      expectInputValue('Mill Park');
-    });
-
-    it('should remove focus from suggestions when first suggestion is focused and Up is clicked', function() {
-      clickUp();
-      clickUp();
-      clickUp();
-      expectFocusedSuggestion(null);
-      expectInputValue('m');
+      it('should focus on first suggestion and change input value when Down is clicked', function() {
+        clickDown();
+        expectFocusedSuggestion('Mill Park VIC 3083');
+        expectInputValue('Mill Park VIC 3083');
+      });
     });
   });
 
   describe('Revealing the suggestions using keyboard', function() {
     beforeEach(function() {
-      createAutosuggest(
-        <Autosuggest suggestions={getSuburbStrings} />
-      );
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
       setInputValue('m');
       clickEscape();
     });
@@ -388,9 +402,7 @@ describe('Autosuggest', function() {
 
   describe('Mouse interactions', function() {
     beforeEach(function() {
-      createAutosuggest(
-        <Autosuggest suggestions={getSuburbStrings} />
-      );
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
       setInputValue('m');
     });
 
