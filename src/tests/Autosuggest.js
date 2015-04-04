@@ -57,7 +57,7 @@ function renderSuburbString(suburb, input) {
 
 function renderSuburbObject(suburbObj, input) {
   return (
-    <span><strong>{suburbObj.suburb.slice(0, input.length)}</strong>{suburbObj.slice(input.length)} VIC {suburbObj.postcode}</span>
+    <span><strong>{suburbObj.suburb.slice(0, input.length)}</strong>{suburbObj.suburb.slice(input.length)} VIC {suburbObj.postcode}</span>
   );
 }
 
@@ -274,20 +274,20 @@ describe('Autosuggest', function() {
       });
     });
 
-    // describe('Object suggestion', function() {
-    //   beforeEach(function() {
-    //     createAutosuggest(
-    //       <Autosuggest suggestions={getSuburbObjects}
-    //                    suggestionRenderer={renderSuburbObject} />
-    //     );
-    //     setInputValue('m');
-    //   });
+    describe('Object suggestion', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbObjects}
+                       suggestionRenderer={renderSuburbObject} />
+        );
+        setInputValue('m');
+      });
 
-    //   it('should use the specified suggestionRenderer function', function() {
-    //     suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-    //     expect(stripReactAttributes(React.findDOMNode(suggestions[0]).innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span></span>');
-    //   });
-    // });
+      it('should use the specified suggestionRenderer function', function() {
+        suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+        expect(stripReactAttributes(React.findDOMNode(suggestions[0]).innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span><span> VIC </span><span>3083</span></span>');
+      });
+    });
   });
 
   describe('Keyboard interactions', function() {
@@ -352,8 +352,7 @@ describe('Autosuggest', function() {
   describe('Revealing the suggestions using keyboard', function() {
     beforeEach(function() {
       createAutosuggest(
-        <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
-                     suggestions={getSuburbStrings} />
+        <Autosuggest suggestions={getSuburbStrings} />
       );
       setInputValue('m');
       clickEscape();

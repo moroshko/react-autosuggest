@@ -27,9 +27,7 @@ class Autosuggest extends React.Component {
 
   resetSectionIterator(suggestions) {
     if (this.isMultipleSections(suggestions)) {
-      sectionIterator.setData(suggestions.map(function(suggestion) {
-        return suggestion.suggestions.length;
-      }));
+      sectionIterator.setData(suggestions.map( suggestion => suggestion.suggestions.length ));
     } else {
       sectionIterator.setData(suggestions === null ? [] : suggestions.length);
     }
