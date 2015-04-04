@@ -35,7 +35,7 @@
   font-size: 12px;
   text-transform: uppercase;
   color: #777;
-  border-top: 1px solid #777;
+  border-top: 1px dashed #ccc;
 }
 .react-autosuggest__suggestion {
   cursor: pointer;
@@ -43,6 +43,12 @@
 }
 .react-autosuggest__suggestion--focused {
   background-color: #ddd;
+}
+.badges {
+  margin-bottom: 50px;
+}
+.badges a {
+  margin-right: 5px;
 }
 .examples {
   display: flex;
@@ -59,14 +65,15 @@
   cursor: pointer;
 }
 .examples-menu__item--active {
-  color: #3BA3D7;
+  color: #ff0000;
   cursor: default;
 }
 .footer {
   display: flex;
-  align-items: center;
-  position: absolute;
-  bottom: 10px;
+  flex-grow: 1;
+  align-items: flex-end;
+  margin-bottom: 30px;
+  line-height: 32px;
 }
 .footer img {
   margin-right: 5px;
@@ -77,10 +84,34 @@
 }
 .footer a {
   text-decoration: none;
-  color: #3BA3D7;
+  color: #3ba3d7;
+}
+.source-code-link {
+  float: right;
+  text-decoration: none;
+  color: #3ba3d7;
+  font-size: 12px;
+  margin-top: 3px;
+  margin-right: 5px;
+}
+html,
+body {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  margin: 0;
 }
 #app {
   display: flex;
   justify-content: center;
   font-family: 'Helvetica Neue', Helvetica, Arial;
+  width: 500px;
+  padding: 0 40px;
+  border-left: 1px dashed #777;
+  border-right: 1px dashed #777;
+}
+#app > div {
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
