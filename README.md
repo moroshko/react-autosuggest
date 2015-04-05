@@ -78,7 +78,7 @@ function(input, callback) {
 * Object, e.g.: `{ suburb: 'Mentone', postcode: '3194' }`. This object cannot have a `suggestions` key, and you must implement the [`suggestionRenderer`](#suggestionRenderer) function to specify how to render this object.
 
 <a name="suggestionRenderer"></a>
-##### suggestionRenderer (optional)
+##### suggestionRenderer (required when suggestions are objects)
 
 Function that renders a single suggestion. This function shall return `ReactElement` or a string.
 
