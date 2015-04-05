@@ -1,5 +1,4 @@
-[ ![Codeship Status for moroshko/react-autosuggest](https://codeship.com/projects/41810250-aa07-0132-fbf4-4e62e8945e03/status?branch=master)](https://codeship.com/projects/67868)
-
+[![Build Status][status-image]][status-url]
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 
@@ -148,6 +147,8 @@ Now, open `http://localhost:3000/examples/dist/index.html`
 
 [MIT](http://moroshko.mit-license.org)
 
+[status-image]: https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03.svg
+[status-url]: https://codeship.com/projects/67868
 [npm-image]: https://img.shields.io/npm/v/react-autosuggest.svg
 [npm-url]: https://npmjs.org/package/react-autosuggest
 [downloads-image]: https://img.shields.io/npm/dm/react-autosuggest.svg
