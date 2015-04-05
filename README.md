@@ -15,11 +15,11 @@
 
 ## Installation
 
-```bash
+```shell
 npm install react-autosuggest --save
 ```
 
-## Usage
+## Basic Usage
 
 ```javascript
 var Autosuggest = require('react-autosuggest');
@@ -30,9 +30,7 @@ function getSuburbs(input, callback) {
   var regex = new RegExp('^' + input, 'i');
 
   setTimeout(function() {
-    callback(null, suburbs.filter(function(suburb) {
-      return regex.test(suburb);
-    }));
+    callback(null, suburbs.filter( suburb => regex.test(suburb) ));
   }, 300);
 }
 ```
@@ -90,13 +88,13 @@ function(suggestion, input) {
 }
 ```
 
-* `suggestion` - The suggestion string (e.g. `'Mentone'`)
+* `suggestion` - The [\<suggestion>](#suggestion) (string or object)
 * `input` - The value of the input field (e.g. `'Men'`). If user interacts using the Up or Down keys, it will contain the value of the input field **prior** to those interactions.
 
 For example:
 
 ```javascript
-function renderSuggestion(suggestion, input) {
+function renderSuggestion(suggestion, input) { // In this example 'suggestion' is a string
   return (
     <span><strong>{suggestion.slice(0, input.length)}</strong>{suggestion.slice(input.length)}</span>
   );
@@ -140,7 +138,7 @@ Example: [`examples/src/Autosuggest.less`](https://github.com/moroshko/react-aut
 
 ## Development
 
-```bash
+```shell
 npm start
 ```
 
