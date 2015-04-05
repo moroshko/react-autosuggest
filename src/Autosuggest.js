@@ -1,12 +1,14 @@
 'use strict';
 
 import React from 'react';
+import debounce from 'debounce';
 import classnames from 'classnames';
 import sectionIterator from './sectionIterator';
 
+let { Component, PropTypes, findDOMNode } = React;
 let guid = 0;
 
-class Autosuggest extends React.Component {
+class Autosuggest extends Component {
   constructor(props) {
     super(props);
 
@@ -23,6 +25,7 @@ class Autosuggest extends React.Component {
                                     // interaction in order to revert back if ESC hit.
                                     // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
+    this.suggestionsFn = debounce(this.props.suggestions, 100);
   }
 
   resetSectionIterator(suggestions) {
@@ -65,7 +68,7 @@ class Autosuggest extends React.Component {
     } else if (this.cache[input]) {
       this.setSuggestionsState(this.cache[input]);
     } else {
-      this.props.suggestions(input, function(error, suggestions) {
+      this.suggestionsFn(input, function(error, suggestions) {
         if (error) {
           throw error;
         } else {
@@ -81,7 +84,7 @@ class Autosuggest extends React.Component {
   }
 
   getSuggestionText(sectionIndex, suggestionIndex) {
-    return React.findDOMNode(this.refs[this.getSuggestionKey(sectionIndex, suggestionIndex)]).textContent;
+    return findDOMNode(this.refs[this.getSuggestionKey(sectionIndex, suggestionIndex)]).textContent;
   }
 
   focusOnSuggestion(suggestionPosition) {
@@ -187,7 +190,7 @@ class Autosuggest extends React.Component {
     }, function() {
       // This code executes after the component is re-rendered
       setTimeout(function() {
-        React.findDOMNode(this.refs.input).focus();
+        findDOMNode(this.refs.input).focus();
       }.bind(this));
     });
   }
@@ -305,9 +308,9 @@ class Autosuggest extends React.Component {
 }
 
 Autosuggest.propTypes = {
-  inputAttributes: React.PropTypes.objectOf(React.PropTypes.string), // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
-  suggestions: React.PropTypes.func.isRequired,                      // Function to get the suggestions
-  suggestionRenderer: React.PropTypes.func                           // Function to render a single suggestion
+  inputAttributes: PropTypes.objectOf(PropTypes.string), // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+  suggestions: PropTypes.func.isRequired,                // Function to get the suggestions
+  suggestionRenderer: PropTypes.func                     // Function to render a single suggestion
 };
 
 Autosuggest.defaultProps = {
