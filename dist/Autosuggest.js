@@ -16,13 +16,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var React = _interopRequire(require("react"));
 
+var debounce = _interopRequire(require("debounce"));
+
 var classnames = _interopRequire(require("classnames"));
 
 var sectionIterator = _interopRequire(require("./sectionIterator"));
 
+var Component = React.Component;
+var PropTypes = React.PropTypes;
+var findDOMNode = React.findDOMNode;
+
 var guid = 0;
 
-var Autosuggest = (function (_React$Component) {
+var Autosuggest = (function (_Component) {
   function Autosuggest(props) {
     _classCallCheck(this, Autosuggest);
 
@@ -41,9 +47,10 @@ var Autosuggest = (function (_React$Component) {
       // interaction in order to revert back if ESC hit.
       // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
+    this.suggestionsFn = debounce(this.props.suggestions, 100);
   }
 
-  _inherits(Autosuggest, _React$Component);
+  _inherits(Autosuggest, _Component);
 
   _createClass(Autosuggest, {
     resetSectionIterator: {
@@ -91,7 +98,7 @@ var Autosuggest = (function (_React$Component) {
         } else if (this.cache[input]) {
           this.setSuggestionsState(this.cache[input]);
         } else {
-          this.props.suggestions(input, (function (error, suggestions) {
+          this.suggestionsFn(input, (function (error, suggestions) {
             if (error) {
               throw error;
             } else {
@@ -108,7 +115,7 @@ var Autosuggest = (function (_React$Component) {
     },
     getSuggestionText: {
       value: function getSuggestionText(sectionIndex, suggestionIndex) {
-        return React.findDOMNode(this.refs[this.getSuggestionKey(sectionIndex, suggestionIndex)]).textContent;
+        return findDOMNode(this.refs[this.getSuggestionKey(sectionIndex, suggestionIndex)]).textContent;
       }
     },
     focusOnSuggestion: {
@@ -229,7 +236,7 @@ var Autosuggest = (function (_React$Component) {
         }, function () {
           // This code executes after the component is re-rendered
           setTimeout((function () {
-            React.findDOMNode(this.refs.input).focus();
+            findDOMNode(this.refs.input).focus();
           }).bind(this));
         });
       }
@@ -349,12 +356,12 @@ var Autosuggest = (function (_React$Component) {
   });
 
   return Autosuggest;
-})(React.Component);
+})(Component);
 
 Autosuggest.propTypes = {
-  inputAttributes: React.PropTypes.objectOf(React.PropTypes.string), // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
-  suggestions: React.PropTypes.func.isRequired, // Function to get the suggestions
-  suggestionRenderer: React.PropTypes.func // Function to render a single suggestion
+  inputAttributes: PropTypes.objectOf(PropTypes.string), // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+  suggestions: PropTypes.func.isRequired, // Function to get the suggestions
+  suggestionRenderer: PropTypes.func // Function to render a single suggestion
 };
 
 Autosuggest.defaultProps = {
