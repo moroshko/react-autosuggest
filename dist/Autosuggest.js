@@ -145,6 +145,7 @@ var Autosuggest = (function (_Component) {
         }
 
         this.setState(newState);
+        this.props.onInputChange(newState.value);
       }
     },
     onInputChange: {
@@ -155,6 +156,8 @@ var Autosuggest = (function (_Component) {
           value: newValue,
           valueBeforeUpDown: null
         });
+
+        this.props.onInputChange(newValue);
 
         this.showSuggestions(newValue);
       }
@@ -187,6 +190,7 @@ var Autosuggest = (function (_Component) {
             }
 
             this.setState(newState);
+            this.props.onInputChange(newState.value);
             break;
 
           case 38:
@@ -235,8 +239,9 @@ var Autosuggest = (function (_Component) {
     },
     onSuggestionMouseDown: {
       value: function onSuggestionMouseDown(sectionIndex, suggestionIndex) {
+        var newValue = this.getSuggestionText(sectionIndex, suggestionIndex);
         this.setState({
-          value: this.getSuggestionText(sectionIndex, suggestionIndex),
+          value: newValue,
           suggestions: null,
           focusedSectionIndex: null,
           focusedSuggestionIndex: null,
@@ -247,6 +252,7 @@ var Autosuggest = (function (_Component) {
             findDOMNode(this.refs.input).focus();
           }).bind(this));
         });
+        this.props.onInputChange(newValue);
       }
     },
     getSuggestionId: {
@@ -368,12 +374,14 @@ var Autosuggest = (function (_Component) {
 
 Autosuggest.propTypes = {
   inputAttributes: PropTypes.objectOf(PropTypes.string), // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+  onInputChange: PropTypes.func, // Function that will fire when value of input field changes
   suggestions: PropTypes.func.isRequired, // Function to get the suggestions
   suggestionRenderer: PropTypes.func // Function to render a single suggestion
 };
 
 Autosuggest.defaultProps = {
-  inputAttributes: {}
+  inputAttributes: {},
+  onInputChange: function onInputChange() {}
 };
 
 module.exports = Autosuggest;

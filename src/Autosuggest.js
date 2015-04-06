@@ -110,6 +110,7 @@ class Autosuggest extends Component {
     }
 
     this.setState(newState);
+    this.props.onInputChange(newState.value);
   }
 
   onInputChange(event) {
@@ -119,6 +120,8 @@ class Autosuggest extends Component {
       value: newValue,
       valueBeforeUpDown: null
     });
+
+    this.props.onInputChange(newValue);
 
     this.showSuggestions(newValue);
   }
@@ -146,6 +149,7 @@ class Autosuggest extends Component {
         }
 
         this.setState(newState);
+        this.props.onInputChange(newState.value);
         break;
 
       case 38: // up
@@ -188,8 +192,9 @@ class Autosuggest extends Component {
   }
 
   onSuggestionMouseDown(sectionIndex, suggestionIndex) {
+    let newValue = this.getSuggestionText(sectionIndex, suggestionIndex);
     this.setState({
-      value: this.getSuggestionText(sectionIndex, suggestionIndex),
+      value: newValue,
       suggestions: null,
       focusedSectionIndex: null,
       focusedSuggestionIndex: null,
@@ -200,6 +205,7 @@ class Autosuggest extends Component {
         findDOMNode(this.refs.input).focus();
       }.bind(this));
     });
+    this.props.onInputChange(newValue);
   }
 
   getSuggestionId(sectionIndex, suggestionIndex) {
@@ -316,12 +322,14 @@ class Autosuggest extends Component {
 
 Autosuggest.propTypes = {
   inputAttributes: PropTypes.objectOf(PropTypes.string), // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+  onInputChange: PropTypes.func,                         // Function that will fire when value of input field changes
   suggestions: PropTypes.func.isRequired,                // Function to get the suggestions
   suggestionRenderer: PropTypes.func                     // Function to render a single suggestion
 };
 
 Autosuggest.defaultProps = {
-  inputAttributes: {}
+  inputAttributes: {},
+  onInputChange: function() {}
 };
 
 export default Autosuggest;

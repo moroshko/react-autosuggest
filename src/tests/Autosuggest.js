@@ -564,6 +564,51 @@ describe('Autosuggest', function() {
     });
   });
 
+  describe('onInputChange callback', function() {
+    it('should fire onInputChange when input value is changed', function() {
+      var supValue = "";
+      function onInputChange(value) {
+        supValue = value;
+      }
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} onInputChange={onInputChange} />);
+      setInputValue('m');
+      expect(supValue).toBe('m');
+    });
+
+    it('should fire onInputChange when input value is changed when Down is clicked', function() {
+      var supValue = "";
+      function onInputChange(value) {
+        supValue = value;
+      }
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} onInputChange={onInputChange} />);
+      setInputValue('m');
+      clickDown();
+      expect(supValue).toBe('Mill Park');
+    });
+
+    it('should fire onInputChange when input value is changed when Up is clicked', function() {
+      var supValue = "";
+      function onInputChange(value) {
+        supValue = value;
+      }
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} onInputChange={onInputChange} />);
+      setInputValue('m');
+      clickUp();
+      expect(supValue).toBe('Mordialloc');
+    });
+
+    it('should fire onInputChange when input value is changed when suggestion is clicked', function() {
+      var supValue = "";
+      function onInputChange(value) {
+        supValue = value;
+      }
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} onInputChange={onInputChange} />);
+      setInputValue('m');
+      mouseDownSuggestion(1);
+      expect(supValue).toBe('Mordialloc');
+    });
+  });
+
   describe('Misc', function() {
     beforeEach(function() {
       createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
