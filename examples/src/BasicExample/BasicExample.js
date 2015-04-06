@@ -6,8 +6,8 @@ import SourceCodeLink from '../SourceCodeLink/SourceCodeLink';
 import suburbs from 'json!../suburbs.json';
 
 function getLocations(input, callback) {
-  var suburbMatchRegex = new RegExp('^' + input, 'i');
-  var locations = suburbs.filter(function(suburbObj) {
+  let suburbMatchRegex = new RegExp('^' + input, 'i');
+  let locations = suburbs.filter(function(suburbObj) {
     return suburbObj.suburb.search(suburbMatchRegex) !== -1;
   }).slice(0, 7).map(function(suburbObj) {
     return suburbObj.suburb;
@@ -23,7 +23,7 @@ function getLocations(input, callback) {
 
 class BasicExample extends React.Component {
   render() {
-    var inputAttributes = {
+    let inputAttributes = {
       id: 'basic-example',
       placeholder: 'Where do you live?'
     };

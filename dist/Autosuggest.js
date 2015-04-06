@@ -26,7 +26,8 @@ var Component = React.Component;
 var PropTypes = React.PropTypes;
 var findDOMNode = React.findDOMNode;
 
-var guid = 0;
+var lastSuggestionsInputValue = null,
+    guid = 0;
 
 var Autosuggest = (function (_Component) {
   function Autosuggest(props) {
@@ -93,12 +94,19 @@ var Autosuggest = (function (_Component) {
     },
     showSuggestions: {
       value: function showSuggestions(input) {
+        lastSuggestionsInputValue = input;
+
         if (input.length === 0) {
           this.setSuggestionsState(null);
         } else if (this.cache[input]) {
           this.setSuggestionsState(this.cache[input]);
         } else {
           this.suggestionsFn(input, (function (error, suggestions) {
+            // If input value changed, suggestions are not relevant anymore.
+            if (lastSuggestionsInputValue !== input) {
+              return;
+            }
+
             if (error) {
               throw error;
             } else {

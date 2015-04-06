@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-var style = {
+let style = {
   position: 'absolute',
   top: 0,
   right: -41,

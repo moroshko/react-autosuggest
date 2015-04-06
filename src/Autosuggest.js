@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import sectionIterator from './sectionIterator';
 
 let { Component, PropTypes, findDOMNode } = React;
-let guid = 0;
+let lastSuggestionsInputValue = null, guid = 0;
 
 class Autosuggest extends Component {
   constructor(props) {
@@ -63,12 +63,19 @@ class Autosuggest extends Component {
   }
 
   showSuggestions(input) {
+    lastSuggestionsInputValue = input;
+
     if (input.length === 0) {
       this.setSuggestionsState(null);
     } else if (this.cache[input]) {
       this.setSuggestionsState(this.cache[input]);
     } else {
       this.suggestionsFn(input, function(error, suggestions) {
+        // If input value changed, suggestions are not relevant anymore.
+        if (lastSuggestionsInputValue !== input) {
+          return;
+        }
+
         if (error) {
           throw error;
         } else {

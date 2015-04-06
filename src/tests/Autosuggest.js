@@ -509,6 +509,61 @@ describe('Autosuggest', function() {
     });
   });
 
+  describe('Delayed requests', function() {
+    it('should set suggestions', function() {
+      function getDelayedSuburbStrings(input, callback) {
+        switch (input) {
+          case 'r':
+            setTimeout(function() { callback(null, ['Raglan', 'Riachella', 'Richmond']); }, 20);
+            break;
+          case 'ri':
+            setTimeout(function() { callback(null, ['Riachella', 'Richmond']); }, 50);
+            break;
+        }
+      }
+      createAutosuggest(<Autosuggest suggestions={getDelayedSuburbStrings} />);
+
+      setInputValue('r');
+      setInputValue('ri');
+      jest.runAllTimers();
+
+      expectSuggestions(['Riachella', 'Richmond']);
+    });
+
+    it('should ignore delayed suggestions', function() {
+      function getDelayedSuburbStrings(input, callback) {
+        switch (input) {
+          case 'r':
+            setTimeout(function() { callback(null, ['Raglan', 'Riachella', 'Richmond']); }, 50);
+            break;
+          case 'ri':
+            setTimeout(function() { callback(null, ['Riachella', 'Richmond']); }, 20);
+            break;
+        }
+      }
+      createAutosuggest(<Autosuggest suggestions={getDelayedSuburbStrings} />);
+
+      setInputValue('r');
+      setInputValue('ri');
+      jest.runAllTimers();
+
+      expectSuggestions(['Riachella', 'Richmond']);
+    });   
+
+    it('should not display delayed suggestions if input is empty', function() {
+      function getDelayedSuburbStrings(input, callback) {
+        setTimeout(function() { callback(null, ['Raglan', 'Riachella', 'Richmond']); }, 50);
+      }
+      createAutosuggest(<Autosuggest suggestions={getDelayedSuburbStrings} />);
+
+      setInputValue('r');
+      setInputValue('');
+      jest.runAllTimers();
+
+      expectSuggestions([]);
+    });
+  });
+
   describe('Misc', function() {
     beforeEach(function() {
       createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);

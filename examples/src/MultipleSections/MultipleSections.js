@@ -14,24 +14,24 @@ function suburbObjToString(suburbObj) {
 }
 
 function getLocations(input, callback) {
-  var firstSectionMatchRegex = new RegExp('^' + input, 'i');
-  var secondSectionMatchRegex = new RegExp('^(?!' + input + ')\\w+ ' + input, 'i');
-  var thirdSectionMatchRegex = new RegExp('^(?!' + input + ')\\w+ (?!' + input + ')\\w+ ' + input, 'i');
+  let firstSectionMatchRegex = new RegExp('^' + input, 'i');
+  let secondSectionMatchRegex = new RegExp('^(?!' + input + ')\\w+ ' + input, 'i');
+  let thirdSectionMatchRegex = new RegExp('^(?!' + input + ')\\w+ (?!' + input + ')\\w+ ' + input, 'i');
 
-  var firstSectionSuburbs = suburbs.filter(function(suburbObj) {
+  let firstSectionSuburbs = suburbs.filter(function(suburbObj) {
     return suburbObj.suburb.search(firstSectionMatchRegex) !== -1;
   });
 
-  var secondSectionSuburbs = suburbs.filter(function(suburbObj) {
+  let secondSectionSuburbs = suburbs.filter(function(suburbObj) {
     return suburbObj.suburb.search(secondSectionMatchRegex) !== -1;
   });
 
-  var thirdSectionSuburbs = suburbs.filter(function(suburbObj) {
+  let thirdSectionSuburbs = suburbs.filter(function(suburbObj) {
     return suburbObj.suburb.search(thirdSectionMatchRegex) !== -1;
   });
 
-  var locations = [];
-  var firstSectionCount, secondSectionCount, thirdSectionCount;
+  let locations = [];
+  let firstSectionCount, secondSectionCount, thirdSectionCount;
 
   if (thirdSectionSuburbs.length > 0) {
     thirdSectionCount = randomInt(1, Math.min(3, thirdSectionSuburbs.length));
@@ -73,7 +73,7 @@ function getLocations(input, callback) {
 
 class MultipleSections extends React.Component {
   render() {
-    var inputAttributes = {
+    let inputAttributes = {
       id: 'multiple-sections',
       placeholder: 'Where do you work?'
     };

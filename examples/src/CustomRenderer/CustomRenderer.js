@@ -6,10 +6,11 @@ import SourceCodeLink from '../SourceCodeLink/SourceCodeLink';
 import suburbs from 'json!../suburbs.json';
 
 function getLocations(input, callback) {
-  var suburbMatchRegex = new RegExp('^' + input, 'i');
-  var locations = suburbs.filter(function(suburbObj) {
+  let suburbMatchRegex = new RegExp('^' + input, 'i');
+  let locations = suburbs.filter(function(suburbObj) {
     return suburbObj.suburb.search(suburbMatchRegex) !== -1;
   }).slice(0, 7);
+  let requestDelay = 50 + Math.floor(300 * Math.random());
 
   // 'locations' will be an array of objects, e.g.:
   //   [{ suburb: 'Mentone', postcode: '3194' },
@@ -18,12 +19,12 @@ function getLocations(input, callback) {
 
   setTimeout(function() {
     callback(null, locations);
-  }, 300);
+  }, requestDelay);
 }
 
 function renderLocation(suggestionObj, input) {
-  var suburbMatchRegex = new RegExp('\\b' + input, 'i');
-  var firstMatchIndex = suggestionObj.suburb.search(suburbMatchRegex);
+  let suburbMatchRegex = new RegExp('\\b' + input, 'i');
+  let firstMatchIndex = suggestionObj.suburb.search(suburbMatchRegex);
 
   if (firstMatchIndex === -1) {
     return (
@@ -31,9 +32,9 @@ function renderLocation(suggestionObj, input) {
     );
   }
 
-  var beforeMatch = suggestionObj.suburb.slice(0, firstMatchIndex);
-  var match = suggestionObj.suburb.slice(firstMatchIndex, firstMatchIndex + input.length);
-  var afterMatch = suggestionObj.suburb.slice(firstMatchIndex + input.length);
+  let beforeMatch = suggestionObj.suburb.slice(0, firstMatchIndex);
+  let match = suggestionObj.suburb.slice(firstMatchIndex, firstMatchIndex + input.length);
+  let afterMatch = suggestionObj.suburb.slice(firstMatchIndex + input.length);
 
   return (
     <span>{beforeMatch}<strong>{match}</strong>{afterMatch} VIC {suggestionObj.postcode}</span>
@@ -42,7 +43,7 @@ function renderLocation(suggestionObj, input) {
 
 class CustomRenderer extends React.Component {
   render() {
-    var inputAttributes = {
+    let inputAttributes = {
       id: 'custom-renderer',
       placeholder: 'Where are you based?'
     };

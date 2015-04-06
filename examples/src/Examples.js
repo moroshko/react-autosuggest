@@ -30,7 +30,7 @@ class Examples extends React.Component {
     return (
       <div className="examples-menu">
         {this.examples.map(function(example) {
-          var classes = classnames({
+          let classes = classnames({
             'examples-menu__item': true,
             'examples-menu__item--active': example === this.state.activeExample
           });

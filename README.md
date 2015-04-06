@@ -21,12 +21,12 @@ npm install react-autosuggest --save
 ## Basic Usage
 
 ```javascript
-var Autosuggest = require('react-autosuggest');
+import Autosuggest from 'react-autosuggest';
 
-var suburbs = ['Cheltenham', 'Mill Park', 'Mordialloc', 'Nunawading'];
+let suburbs = ['Cheltenham', 'Mill Park', 'Mordialloc', 'Nunawading'];
 
 function getSuburbs(input, callback) {
-  var regex = new RegExp('^' + input, 'i');
+  let regex = new RegExp('^' + input, 'i');
 
   setTimeout(function() {
     callback(null, suburbs.filter( suburb => regex.test(suburb) ));
@@ -109,7 +109,7 @@ function renderSuggestion(suggestion, input) { // In this example 'suggestion' i
 Hash of attributes to pass to the input field. For example:
 
 ```javascript
-var inputAttributes = {
+let inputAttributes = {
   id: 'locations-autosuggest',
   name: 'locations-autosuggest',
   className: 'my-sweet-locations-autosuggest',
