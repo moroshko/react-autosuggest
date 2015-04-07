@@ -1,3 +1,5 @@
 'use strict';
 
-module.exports = fn => fn;
+module.exports = function(fn) {
+  return fn;
+};
