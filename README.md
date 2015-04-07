@@ -25,7 +25,7 @@ import Autosuggest from 'react-autosuggest';
 
 let suburbs = ['Cheltenham', 'Mill Park', 'Mordialloc', 'Nunawading'];
 
-function getSuburbs(input, callback) {
+function getSuggestions(input, callback) {
   let regex = new RegExp('^' + input, 'i');
 
   setTimeout(function() {
@@ -34,7 +34,7 @@ function getSuburbs(input, callback) {
 }
 ```
 ```xml
-<Autosuggest suggestions={getSuburbs} />
+<Autosuggest suggestions={getSuggestions} />
 ```
 
 ### Options
@@ -120,7 +120,7 @@ let inputAttributes = {
 
 ```xml
 <label htmlFor="locations-autosuggest">Where</label>
-<Autosuggest inputAttributes={inputAttributes} suggestions={getLocations} />
+<Autosuggest inputAttributes={inputAttributes} suggestions={getSuggestions} />
 ```
 
 ## Styling

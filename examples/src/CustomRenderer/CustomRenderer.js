@@ -5,40 +5,56 @@ import Autosuggest from '../../../src/Autosuggest';
 import SourceCodeLink from '../SourceCodeLink/SourceCodeLink';
 import suburbs from 'json!../suburbs.json';
 
-function getLocations(input, callback) {
-  let suburbMatchRegex = new RegExp('^' + input, 'i');
-  let locations = suburbs.filter(function(suburbObj) {
-    return suburbObj.suburb.search(suburbMatchRegex) !== -1;
-  }).slice(0, 7);
-  let requestDelay = 50 + Math.floor(300 * Math.random());
+function population(suburbObj) {
+  return suburbObj.suburb.split('').reduce((result, char) => result + char.charCodeAt(0), 0) +
+         +suburbObj.postcode.split('').reverse().join('');
+}
 
-  // 'locations' will be an array of objects, e.g.:
-  //   [{ suburb: 'Mentone', postcode: '3194' },
-  //    { suburb: 'Mill Park', postcode: '3082' },
-  //    { suburb: 'Mordialloc', postcode: '3195' }]
+function getSuggestions(input, callback) {
+  let requestDelay = 50 + Math.floor(300 * Math.random());
+  let suburbMatchRegex = new RegExp('\\b' + input, 'i');
+  let suggestions = suburbs
+    .filter( suburbObj => suburbMatchRegex.test(suburbObj.suburb + ' VIC ' + suburbObj.postcode) )
+    .slice(0, 7)
+    .map( suburbObj => {
+      suburbObj.population = population(suburbObj);
+      return suburbObj;
+    } )
+    .sort( (suburbObj1, suburbObj2) => suburbObj2.population - suburbObj1.population );
+
+  // 'suggestions' will be an array of objects, e.g.:
+  //   [{ suburb: 'Mordialloc', postcode: '3195', population: 6943 },
+  //    { suburb: 'Mentone', postcode: '3194', population: 5639 },
+  //    { suburb: 'Mill Park', postcode: '3082', population: 3631 }]
 
   setTimeout(function() {
-    callback(null, locations);
+    callback(null, suggestions);
   }, requestDelay);
 }
 
-function renderLocation(suggestionObj, input) {
+function renderSuggestion(suggestionObj, input) {
   let suburbMatchRegex = new RegExp('\\b' + input, 'i');
-  let firstMatchIndex = suggestionObj.suburb.search(suburbMatchRegex);
+  let suggestion = suggestionObj.suburb + ' VIC ' + suggestionObj.postcode;
+  let firstMatchIndex = suggestion.search(suburbMatchRegex);
 
   if (firstMatchIndex === -1) {
-    return (
-      <span>{suggestionObj.suburb} VIC {suggestionObj.postcode}</span>
-    );
+    return suggestion;
   }
 
-  let beforeMatch = suggestionObj.suburb.slice(0, firstMatchIndex);
-  let match = suggestionObj.suburb.slice(firstMatchIndex, firstMatchIndex + input.length);
-  let afterMatch = suggestionObj.suburb.slice(firstMatchIndex + input.length);
+  let beforeMatch = suggestion.slice(0, firstMatchIndex);
+  let match = suggestion.slice(firstMatchIndex, firstMatchIndex + input.length);
+  let afterMatch = suggestion.slice(firstMatchIndex + input.length);
 
   return (
-    <span>{beforeMatch}<strong>{match}</strong>{afterMatch} VIC {suggestionObj.postcode}</span>
+    <span>
+      {beforeMatch}<strong>{match}</strong>{afterMatch}<br />
+      <small>Population: {suggestionObj.population}</small>
+    </span>
   );
+}
+
+function getSuggestionValue(suggestionObj) {
+  return suggestionObj.suburb + ' VIC ' + suggestionObj.postcode;
 }
 
 class CustomRenderer extends React.Component {
@@ -51,8 +67,9 @@ class CustomRenderer extends React.Component {
     return (
       <div>
         <Autosuggest inputAttributes={inputAttributes}
-                     suggestions={getLocations}
-                     suggestionRenderer={renderLocation}
+                     suggestions={getSuggestions}
+                     suggestionRenderer={renderSuggestion}
+                     suggestionValue={getSuggestionValue}
                      ref={ () => { document.getElementById('custom-renderer').focus(); } } />
         <SourceCodeLink file="examples/src/CustomRenderer/CustomRenderer.js" />
       </div>

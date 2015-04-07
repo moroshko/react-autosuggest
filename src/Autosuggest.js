@@ -90,8 +90,24 @@ class Autosuggest extends Component {
     }
   }
 
-  getSuggestionText(sectionIndex, suggestionIndex) {
-    return findDOMNode(this.refs[this.getSuggestionKey(sectionIndex, suggestionIndex)]).textContent;
+  getSuggestionValue(sectionIndex, suggestionIndex) {
+    let suggestion;
+
+    if (this.isMultipleSections(this.state.suggestions)) {
+      suggestion = this.state.suggestions[sectionIndex].suggestions[suggestionIndex];
+    } else {
+      suggestion = this.state.suggestions[suggestionIndex];
+    }
+
+    if (typeof suggestion === 'object') {
+      if (this.props.suggestionValue) {
+        return this.props.suggestionValue(suggestion);
+      }
+
+      throw new Error('When <suggestion> is an object, you must implement the suggestionValue() function to specify how to set input\'s value when suggestion selected.');
+    } else {
+      return suggestion.toString();
+    }
   }
 
   focusOnSuggestion(suggestionPosition) {
@@ -101,7 +117,7 @@ class Autosuggest extends Component {
       focusedSuggestionIndex: suggestionIndex,
       value: suggestionIndex === null
                ? this.state.valueBeforeUpDown
-               : this.getSuggestionText(sectionIndex, suggestionIndex)
+               : this.getSuggestionValue(sectionIndex, suggestionIndex)
     };
 
     // When users starts to interact with up/down keys, remember input's value.
@@ -189,7 +205,7 @@ class Autosuggest extends Component {
 
   onSuggestionMouseDown(sectionIndex, suggestionIndex) {
     this.setState({
-      value: this.getSuggestionText(sectionIndex, suggestionIndex),
+      value: this.getSuggestionValue(sectionIndex, suggestionIndex),
       suggestions: null,
       focusedSectionIndex: null,
       focusedSuggestionIndex: null,
@@ -209,11 +225,6 @@ class Autosuggest extends Component {
 
     return 'react-autosuggest-' + this.id + '-suggestion-' +
            (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
-  }
-
-  getSuggestionKey(sectionIndex, suggestionIndex) {
-    return 'suggestion-' + (sectionIndex === null ? '' : sectionIndex) +
-           '-' + suggestionIndex;
   }
 
   renderSuggestionContent(suggestion) {
@@ -236,14 +247,14 @@ class Autosuggest extends Component {
           sectionIndex === this.state.focusedSectionIndex &&
           suggestionIndex === this.state.focusedSuggestionIndex
       });
-      let suggestionKey = this.getSuggestionKey(sectionIndex, suggestionIndex);
+      let suggestionKey = 'suggestion-' + (sectionIndex === null ? '' : sectionIndex) +
+                          '-' + suggestionIndex;
 
       return (
         <div id={this.getSuggestionId(sectionIndex, suggestionIndex)}
              className={classes}
              role="option"
              key={suggestionKey}
-             ref={suggestionKey}
              onMouseEnter={this.onSuggestionMouseEnter.bind(this, sectionIndex, suggestionIndex)}
              onMouseLeave={this.onSuggestionMouseLeave.bind(this)}
              onMouseDown={this.onSuggestionMouseDown.bind(this, sectionIndex, suggestionIndex)}>
@@ -317,7 +328,8 @@ class Autosuggest extends Component {
 Autosuggest.propTypes = {
   inputAttributes: PropTypes.objectOf(PropTypes.string), // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
   suggestions: PropTypes.func.isRequired,                // Function to get the suggestions
-  suggestionRenderer: PropTypes.func                     // Function to render a single suggestion
+  suggestionRenderer: PropTypes.func,                    // Function that renders a given suggestion (must be implemented when suggestions are objects)
+  suggestionValue: PropTypes.func                        // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
 };
 
 Autosuggest.defaultProps = {

@@ -13,30 +13,19 @@ function suburbObjToString(suburbObj) {
   return suburbObj.suburb;
 }
 
-function getLocations(input, callback) {
+function getSuggestions(input, callback) {
   let firstSectionMatchRegex = new RegExp('^' + input, 'i');
   let secondSectionMatchRegex = new RegExp('^(?!' + input + ')\\w+ ' + input, 'i');
   let thirdSectionMatchRegex = new RegExp('^(?!' + input + ')\\w+ (?!' + input + ')\\w+ ' + input, 'i');
-
-  let firstSectionSuburbs = suburbs.filter(function(suburbObj) {
-    return suburbObj.suburb.search(firstSectionMatchRegex) !== -1;
-  });
-
-  let secondSectionSuburbs = suburbs.filter(function(suburbObj) {
-    return suburbObj.suburb.search(secondSectionMatchRegex) !== -1;
-  });
-
-  let thirdSectionSuburbs = suburbs.filter(function(suburbObj) {
-    return suburbObj.suburb.search(thirdSectionMatchRegex) !== -1;
-  });
-
-  let locations = [];
-  let firstSectionCount, secondSectionCount, thirdSectionCount;
+  let firstSectionSuburbs = suburbs.filter( suburbObj => firstSectionMatchRegex.test(suburbObj.suburb) );
+  let secondSectionSuburbs = suburbs.filter( suburbObj => secondSectionMatchRegex.test(suburbObj.suburb) );
+  let thirdSectionSuburbs = suburbs.filter( suburbObj => thirdSectionMatchRegex.test(suburbObj.suburb) );
+  let suggestions = [], firstSectionCount, secondSectionCount, thirdSectionCount;
 
   if (thirdSectionSuburbs.length > 0) {
     thirdSectionCount = randomInt(1, Math.min(3, thirdSectionSuburbs.length));
 
-    locations.unshift({
+    suggestions.unshift({
       sectionName: 'Third word match',
       suggestions: thirdSectionSuburbs.slice(0, thirdSectionCount).map(suburbObjToString)
     });
@@ -45,7 +34,7 @@ function getLocations(input, callback) {
   if (secondSectionSuburbs.length > 0) {
     secondSectionCount = randomInt(1, Math.min(3, secondSectionSuburbs.length));
 
-    locations.unshift({
+    suggestions.unshift({
       sectionName: 'Second word match',
       suggestions: secondSectionSuburbs.slice(0, secondSectionCount).map(suburbObjToString)
     });
@@ -54,12 +43,12 @@ function getLocations(input, callback) {
   if (firstSectionSuburbs.length > 0) {
     firstSectionCount = Math.min(8 - secondSectionCount - thirdSectionCount, firstSectionSuburbs.length);
 
-    locations.unshift({
+    suggestions.unshift({
       suggestions: firstSectionSuburbs.slice(0, firstSectionCount).map(suburbObjToString)
     });
   }
 
-  // 'locations' will be an array of objects, e.g.:
+  // 'suggestions' will be an array of objects, e.g.:
   //   [{ suggestions: ['Mentone', 'Mill Park', 'Mordialloc'] },
   //    { sectionName: 'Second word match',
   //      suggestions: ['Altona Meadows', 'Bacchus Marsh'] },
@@ -67,7 +56,7 @@ function getLocations(input, callback) {
   //      suggestions: ['University Of Melbourne'] }]
 
   setTimeout(function() {
-    callback(null, locations);
+    callback(null, suggestions);
   }, 300);
 }
 
@@ -81,7 +70,7 @@ class MultipleSections extends React.Component {
     return (
       <div>
         <Autosuggest inputAttributes={inputAttributes}
-                     suggestions={getLocations}
+                     suggestions={getSuggestions}
                      ref={ () => { document.getElementById('multiple-sections').focus(); } } />
         <SourceCodeLink file="examples/src/MultipleSections/MultipleSections.js" />
       </div>
