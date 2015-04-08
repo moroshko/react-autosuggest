@@ -7,6 +7,7 @@ import sectionIterator from './sectionIterator';
 
 let { Component, PropTypes, findDOMNode } = React;
 let lastSuggestionsInputValue = null, guid = 0;
+let nop = function() {};
 
 class Autosuggest extends Component {
   constructor(props) {
@@ -26,6 +27,9 @@ class Autosuggest extends Component {
                                     // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
     this.suggestionsFn = debounce(this.props.suggestions, 100);
+    this.onChange = props.inputEventAttributes.onChange || nop;
+    this.onKeyDown = props.inputEventAttributes.onKeyDown || nop;
+    this.onBlur = props.inputEventAttributes.onBlur || nop;
   }
 
   resetSectionIterator(suggestions) {
@@ -110,7 +114,7 @@ class Autosuggest extends Component {
     }
 
     this.setState(newState);
-    this.props.onInputChange(newState.value);
+    this.onChange(newState.value);
   }
 
   onInputChange(event) {
@@ -121,7 +125,7 @@ class Autosuggest extends Component {
       valueBeforeUpDown: null
     });
 
-    this.props.onInputChange(newValue);
+    this.onChange(newValue);
 
     this.showSuggestions(newValue);
   }
@@ -149,7 +153,7 @@ class Autosuggest extends Component {
         }
 
         this.setState(newState);
-        this.props.onInputChange(newState.value);
+        this.onChange(newState.value);
         break;
 
       case 38: // up
@@ -171,10 +175,12 @@ class Autosuggest extends Component {
 
         break;
     }
+    this.onKeyDown();
   }
 
   onInputBlur() {
     this.setSuggestionsState(null);
+    this.onBlur();
   }
 
   onSuggestionMouseEnter(sectionIndex, suggestionIndex) {
@@ -205,7 +211,7 @@ class Autosuggest extends Component {
         findDOMNode(this.refs.input).focus();
       }.bind(this));
     });
-    this.props.onInputChange(newValue);
+    this.onChange(newValue);
   }
 
   getSuggestionId(sectionIndex, suggestionIndex) {
@@ -298,10 +304,16 @@ class Autosuggest extends Component {
   render() {
     let ariaActivedescendant =
       this.getSuggestionId(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex);
+    let inputEventAttributes = this.props.inputEventAttributes;
+    // The following event attributes have custom handling
+    delete inputEventAttributes.onChange;
+    delete inputEventAttributes.onKeyDown;
+    delete inputEventAttributes.onBlur;
 
     return (
       <div className="react-autosuggest">
         <input {...this.props.inputAttributes}
+               {...inputEventAttributes}
                type="text"
                value={this.state.value}
                autoComplete="off"
@@ -321,15 +333,15 @@ class Autosuggest extends Component {
 }
 
 Autosuggest.propTypes = {
-  inputAttributes: PropTypes.objectOf(PropTypes.string), // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
-  onInputChange: PropTypes.func,                         // Function that will fire when value of input field changes
-  suggestions: PropTypes.func.isRequired,                // Function to get the suggestions
-  suggestionRenderer: PropTypes.func                     // Function to render a single suggestion
+  inputAttributes: PropTypes.objectOf(PropTypes.string),    // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+  inputEventAttributes: PropTypes.objectOf(PropTypes.func), // Event attributes to pass to the input field (e.g. { onChange: onMyChange, onKeyUp: onMyKeyUp })
+  suggestions: PropTypes.func.isRequired,                   // Function to get the suggestions
+  suggestionRenderer: PropTypes.func                        // Function to render a single suggestion
 };
 
 Autosuggest.defaultProps = {
   inputAttributes: {},
-  onInputChange: function() {}
+  inputEventAttributes: {}
 };
 
 export default Autosuggest;

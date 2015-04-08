@@ -564,45 +564,45 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('onInputChange callback', function() {
-    it('should fire onInputChange when input value is changed', function() {
+  describe('onChange callback', function() {
+    it('should fire onChange when input value is changed', function() {
       var supValue = "";
-      function onInputChange(value) {
+      function onChange(value) {
         supValue = value;
       }
-      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} onInputChange={onInputChange} />);
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} inputEventAttributes={{ onChange: onChange }} />);
       setInputValue('m');
       expect(supValue).toBe('m');
     });
 
-    it('should fire onInputChange when input value is changed when Down is clicked', function() {
+    it('should fire onChange when input value is changed when Down is clicked', function() {
       var supValue = "";
-      function onInputChange(value) {
+      function onChange(value) {
         supValue = value;
       }
-      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} onInputChange={onInputChange} />);
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} inputEventAttributes={{ onChange: onChange }} />);
       setInputValue('m');
       clickDown();
       expect(supValue).toBe('Mill Park');
     });
 
-    it('should fire onInputChange when input value is changed when Up is clicked', function() {
+    it('should fire onChange when input value is changed when Up is clicked', function() {
       var supValue = "";
-      function onInputChange(value) {
+      function onChange(value) {
         supValue = value;
       }
-      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} onInputChange={onInputChange} />);
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} inputEventAttributes={{ onChange: onChange }} />);
       setInputValue('m');
       clickUp();
       expect(supValue).toBe('Mordialloc');
     });
 
-    it('should fire onInputChange when input value is changed when suggestion is clicked', function() {
+    it('should fire onChange when input value is changed when suggestion is clicked', function() {
       var supValue = "";
-      function onInputChange(value) {
+      function onChange(value) {
         supValue = value;
       }
-      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} onInputChange={onInputChange} />);
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} inputEventAttributes={{ onChange: onChange }} />);
       setInputValue('m');
       mouseDownSuggestion(1);
       expect(supValue).toBe('Mordialloc');

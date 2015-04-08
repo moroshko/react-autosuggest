@@ -28,6 +28,7 @@ var findDOMNode = React.findDOMNode;
 
 var lastSuggestionsInputValue = null,
     guid = 0;
+var nop = function nop() {};
 
 var Autosuggest = (function (_Component) {
   function Autosuggest(props) {
@@ -49,6 +50,9 @@ var Autosuggest = (function (_Component) {
       // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
     this.suggestionsFn = debounce(this.props.suggestions, 100);
+    this.onChange = props.inputEventAttributes.onChange || nop;
+    this.onKeyDown = props.inputEventAttributes.onKeyDown || nop;
+    this.onBlur = props.inputEventAttributes.onBlur || nop;
   }
 
   _inherits(Autosuggest, _Component);
@@ -145,7 +149,7 @@ var Autosuggest = (function (_Component) {
         }
 
         this.setState(newState);
-        this.props.onInputChange(newState.value);
+        this.onChange(newState.value);
       }
     },
     onInputChange: {
@@ -157,7 +161,7 @@ var Autosuggest = (function (_Component) {
           valueBeforeUpDown: null
         });
 
-        this.props.onInputChange(newValue);
+        this.onChange(newValue);
 
         this.showSuggestions(newValue);
       }
@@ -190,7 +194,7 @@ var Autosuggest = (function (_Component) {
             }
 
             this.setState(newState);
-            this.props.onInputChange(newState.value);
+            this.onChange(newState.value);
             break;
 
           case 38:
@@ -214,11 +218,13 @@ var Autosuggest = (function (_Component) {
 
             break;
         }
+        this.onKeyDown();
       }
     },
     onInputBlur: {
       value: function onInputBlur() {
         this.setSuggestionsState(null);
+        this.onBlur();
       }
     },
     onSuggestionMouseEnter: {
@@ -252,7 +258,7 @@ var Autosuggest = (function (_Component) {
             findDOMNode(this.refs.input).focus();
           }).bind(this));
         });
-        this.props.onInputChange(newValue);
+        this.onChange(newValue);
       }
     },
     getSuggestionId: {
@@ -346,11 +352,16 @@ var Autosuggest = (function (_Component) {
     render: {
       value: function render() {
         var ariaActivedescendant = this.getSuggestionId(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex);
+        var inputEventAttributes = this.props.inputEventAttributes;
+        // The following event attributes have custom handling
+        delete inputEventAttributes.onChange;
+        delete inputEventAttributes.onKeyDown;
+        delete inputEventAttributes.onBlur;
 
         return React.createElement(
           "div",
           { className: "react-autosuggest" },
-          React.createElement("input", _extends({}, this.props.inputAttributes, {
+          React.createElement("input", _extends({}, this.props.inputAttributes, inputEventAttributes, {
             type: "text",
             value: this.state.value,
             autoComplete: "off",
@@ -374,14 +385,14 @@ var Autosuggest = (function (_Component) {
 
 Autosuggest.propTypes = {
   inputAttributes: PropTypes.objectOf(PropTypes.string), // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
-  onInputChange: PropTypes.func, // Function that will fire when value of input field changes
+  inputEventAttributes: PropTypes.objectOf(PropTypes.func), // Event attributes to pass to the input field (e.g. { onChange: onMyChange, onKeyUp: onMyKeyUp })
   suggestions: PropTypes.func.isRequired, // Function to get the suggestions
   suggestionRenderer: PropTypes.func // Function to render a single suggestion
 };
 
 Autosuggest.defaultProps = {
   inputAttributes: {},
-  onInputChange: function onInputChange() {}
+  inputEventAttributes: {}
 };
 
 module.exports = Autosuggest;
