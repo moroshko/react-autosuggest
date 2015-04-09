@@ -30,7 +30,7 @@ function getSuburbObjects(input, callback) {
   callback(null, suburbObjects.filter( suburbObj => regex.test(suburbObj.suburb) ));
 }
 
-function getIllegalSuburbs(input, callback) {
+function getStaticSuburbs(input, callback) {
   callback(null, [
     { suburb: 'Mill Park', postcode: '3083' },
     { suburb: 'Nunawading', postcode: '3131' }
@@ -59,6 +59,10 @@ function renderSuburbObject(suburbObj, input) {
   return (
     <span><strong>{suburbObj.suburb.slice(0, input.length)}</strong>{suburbObj.suburb.slice(input.length)} VIC {suburbObj.postcode}</span>
   );
+}
+
+function getSuburbObjectValue(suburbObj) {
+  return suburbObj.suburb + ' VIC ' + suburbObj.postcode;
 }
 
 // See: http://stackoverflow.com/q/28979533/247243
@@ -190,10 +194,16 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('Illegal params', function() {
+  describe('Not configured properly', function() {
     it('should throw an error when "suggestions" are objects but "suggestionRenderer()" isn\'t provided', function() {
-      createAutosuggest(<Autosuggest suggestions={getIllegalSuburbs} />);
+      createAutosuggest(<Autosuggest suggestions={getStaticSuburbs} />);
       expect(setInputValue.bind(null, 'a')).toThrow('When <suggestion> is an object, you must implement the suggestionRenderer() function to specify how to render it.');
+    });
+
+    it('should throw an error when "suggestions" are objects but "suggestionValue()" isn\'t provided', function() {
+      createAutosuggest(<Autosuggest suggestions={getStaticSuburbs} suggestionRenderer={renderSuburbObject} />);
+      setInputValue('a');
+      expect(mouseDownSuggestion.bind(null, 0)).toThrow('When <suggestion> is an object, you must implement the suggestionValue() function to specify how to set input\'s value when suggestion selected.');
     });
   });
 
@@ -263,7 +273,8 @@ describe('Autosuggest', function() {
       beforeEach(function() {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbObjects}
-                       suggestionRenderer={renderSuburbObject} />
+                       suggestionRenderer={renderSuburbObject}
+                       suggestionValue={getSuburbObjectValue} />
         );
       });
 
@@ -294,7 +305,8 @@ describe('Autosuggest', function() {
       beforeEach(function() {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbObjects}
-                       suggestionRenderer={renderSuburbObject} />
+                       suggestionRenderer={renderSuburbObject}
+                       suggestionValue={getSuburbObjectValue} />
         );
         setInputValue('m');
       });
@@ -367,7 +379,8 @@ describe('Autosuggest', function() {
       beforeEach(function() {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbObjects}
-                       suggestionRenderer={renderSuburbObject} />
+                       suggestionRenderer={renderSuburbObject}
+                       suggestionValue={getSuburbObjectValue} />
         );
         setInputValue('m');
       });

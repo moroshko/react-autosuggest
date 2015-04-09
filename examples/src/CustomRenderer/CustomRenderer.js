@@ -48,7 +48,7 @@ function renderSuggestion(suggestionObj, input) {
   return (
     <span>
       {beforeMatch}<strong>{match}</strong>{afterMatch}<br />
-      <small>Population: {suggestionObj.population}</small>
+      <small style={{ color: '#777' }}>Population: {suggestionObj.population}</small>
     </span>
   );
 }

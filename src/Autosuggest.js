@@ -90,14 +90,16 @@ class Autosuggest extends Component {
     }
   }
 
-  getSuggestionValue(sectionIndex, suggestionIndex) {
-    let suggestion;
-
+  getSuggestion(sectionIndex, suggestionIndex) {
     if (this.isMultipleSections(this.state.suggestions)) {
-      suggestion = this.state.suggestions[sectionIndex].suggestions[suggestionIndex];
-    } else {
-      suggestion = this.state.suggestions[suggestionIndex];
+      return this.state.suggestions[sectionIndex].suggestions[suggestionIndex];
     }
+
+    return this.state.suggestions[suggestionIndex];
+  }
+
+  getSuggestionValue(sectionIndex, suggestionIndex) {
+    let suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
 
     if (typeof suggestion === 'object') {
       if (this.props.suggestionValue) {
