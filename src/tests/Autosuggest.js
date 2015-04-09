@@ -414,33 +414,51 @@ describe('Autosuggest', function() {
   });
 
   describe('Mouse interactions', function() {
-    beforeEach(function() {
-      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
-      setInputValue('m');
+    describe('String suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
+        setInputValue('m');
+      });
+
+      it('should set input field value when suggestion is clicked', function() {
+        mouseDownSuggestion(1);
+        expectInputValue('Mordialloc');
+      });
+
+      it('should focus on suggestion but not change input\'s value when mouse enters the suggestion', function() {
+        mouseOverFromInputToSuggestion(0);
+        expectFocusedSuggestion('Mill Park');
+        expectInputValue('m');
+      });
+
+      it('should not have focused suggestions when mouse leaves the suggestion', function() {
+        mouseOverFromInputToSuggestion(0);
+        mouseOverFromSuggestionToInput(0);
+        expectFocusedSuggestion(null);
+      });
+
+      it('should remember focused suggestion when mouse enters suggestion', function() {
+        mouseOverFromInputToSuggestion(0);
+        clickDown();
+        expectFocusedSuggestion('Mordialloc');
+        expectInputValue('Mordialloc');
+      });
     });
 
-    it('should set input field value when suggestion is clicked', function() {
-      mouseDownSuggestion(1);
-      expectInputValue('Mordialloc');
-    });
+    describe('Object suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbObjects}
+                       suggestionRenderer={renderSuburbObject}
+                       suggestionValue={getSuburbObjectValue} />
+        );
+        setInputValue('m');
+      });
 
-    it('should focus on suggestion but not change input\'s value when mouse enters the suggestion', function() {
-      mouseOverFromInputToSuggestion(0);
-      expectFocusedSuggestion('Mill Park');
-      expectInputValue('m');
-    });
-
-    it('should not have focused suggestions when mouse leaves the suggestion', function() {
-      mouseOverFromInputToSuggestion(0);
-      mouseOverFromSuggestionToInput(0);
-      expectFocusedSuggestion(null);
-    });
-
-    it('should remember focused suggestion when mouse enters suggestion', function() {
-      mouseOverFromInputToSuggestion(0);
-      clickDown();
-      expectFocusedSuggestion('Mordialloc');
-      expectInputValue('Mordialloc');
+      it('should set input field value when suggestion is clicked', function() {
+        mouseDownSuggestion(0);
+        expectInputValue('Mill Park VIC 3083');
+      });
     });
   });
 
