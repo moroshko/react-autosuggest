@@ -65,6 +65,10 @@ function getSuburbObjectValue(suburbObj) {
   return suburbObj.suburb + ' VIC ' + suburbObj.postcode;
 }
 
+function showWhen(input) {
+  return input.length >= 3;
+}
+
 // See: http://stackoverflow.com/q/28979533/247243
 function stripReactAttributes(html) {
   return html.replace(reactAttributesRegex, '');
@@ -285,7 +289,7 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('Suggestion renderer', function() {
+  describe('suggestionRenderer', function() {
     describe('String suggestions', function() {
       beforeEach(function() {
         createAutosuggest(
@@ -315,6 +319,28 @@ describe('Autosuggest', function() {
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
         expect(stripReactAttributes(React.findDOMNode(suggestions[0]).innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span><span> VIC </span><span>3083</span></span>');
       });
+    });
+  });
+
+  describe('showWhen', function() {
+    beforeEach(function() {
+      createAutosuggest(
+        <Autosuggest suggestions={getSuburbStrings}
+                     showWhen={showWhen} />
+      );
+    });
+
+    it('should not show suggestions when showWhen returns false', function() {
+      setInputValue('m');
+      expectSuggestions([]);
+
+      setInputValue('mo');
+      expectSuggestions([]);
+    });
+
+    it('should show suggestions when showWhen returns true', function() {
+      setInputValue('mor');
+      expectSuggestions(['Mordialloc']);
     });
   });
 

@@ -8,13 +8,15 @@ import classnames from 'classnames';
 import BasicExample from './BasicExample/BasicExample';
 import CustomRenderer from './CustomRenderer/CustomRenderer';
 import MultipleSections from './MultipleSections/MultipleSections';
+import TwoOrMoreCharacters from './TwoOrMoreCharacters/TwoOrMoreCharacters';
 
 class Examples extends React.Component {
   constructor() {
     this.examples = [
       'Basic example',
       'Custom renderer',
-      'Multiple sections'
+      'Multiple sections',
+      '2 or more characters'
     ];
 
     this.state = {
@@ -51,6 +53,7 @@ class Examples extends React.Component {
       case 'Basic example': return <BasicExample />;
       case 'Custom renderer': return <CustomRenderer />;
       case 'Multiple sections': return <MultipleSections />;
+      case '2 or more characters': return <TwoOrMoreCharacters />;
     }
   }
   render() {

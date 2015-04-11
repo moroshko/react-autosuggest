@@ -27,22 +27,27 @@ function getSuggestions(input, callback) {
   }, 300);
 }
 
-class BasicExample extends React.Component {
+function showWhen(input) {
+  return input.trim().length >= 2;
+}
+
+class TwoOrMoreCharacters extends React.Component {
   render() {
     let inputAttributes = {
-      id: 'basic-example',
-      placeholder: 'Where do you live?'
+      id: 'two-or-more-characters',
+      placeholder: 'Where are you now?'
     };
 
     return (
       <div>
         <Autosuggest suggestions={getSuggestions}
+                     showWhen={showWhen}
                      inputAttributes={inputAttributes}
-                     ref={ () => { document.getElementById('basic-example').focus(); } } />
-        <SourceCodeLink file="examples/src/BasicExample/BasicExample.js" />
+                     ref={ () => { document.getElementById('two-or-more-characters').focus(); } } />
+        <SourceCodeLink file="examples/src/TwoOrMoreCharacters/TwoOrMoreCharacters.js" />
       </div>
     );
   }
 }
 
-export default BasicExample;
+export default TwoOrMoreCharacters;

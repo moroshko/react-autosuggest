@@ -96,7 +96,7 @@ var Autosuggest = (function (_Component) {
       value: function showSuggestions(input) {
         lastSuggestionsInputValue = input;
 
-        if (input.length === 0) {
+        if (!this.props.showWhen(input)) {
           this.setSuggestionsState(null);
         } else if (this.cache[input]) {
           this.setSuggestionsState(this.cache[input]);
@@ -379,15 +379,19 @@ var Autosuggest = (function (_Component) {
   return Autosuggest;
 })(Component);
 
+module.exports = Autosuggest;
+
 Autosuggest.propTypes = {
-  inputAttributes: PropTypes.objectOf(PropTypes.string), // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
   suggestions: PropTypes.func.isRequired, // Function to get the suggestions
   suggestionRenderer: PropTypes.func, // Function that renders a given suggestion (must be implemented when suggestions are objects)
-  suggestionValue: PropTypes.func // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
+  suggestionValue: PropTypes.func, // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
+  showWhen: PropTypes.func, // Function that determines whether to show suggestions or not
+  inputAttributes: PropTypes.objectOf(PropTypes.string) // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
 };
 
 Autosuggest.defaultProps = {
+  showWhen: function (input) {
+    return input.trim().length > 0;
+  },
   inputAttributes: {}
 };
-
-module.exports = Autosuggest;
