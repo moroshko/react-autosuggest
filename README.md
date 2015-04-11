@@ -11,6 +11,7 @@
 * <a href="//moroshko.github.io/react-autosuggest" target="_blank">Basic example</a><br>
 * <a href="//moroshko.github.io/react-autosuggest#Custom renderer" target="_blank">Custom renderer</a><br>
 * <a href="//moroshko.github.io/react-autosuggest#Multiple sections" target="_blank">Multiple sections</a>
+* <a href="//moroshko.github.io/react-autosuggest#2 or more characters" target="_blank">2 or more characters</a>
 
 ## Installation
 
