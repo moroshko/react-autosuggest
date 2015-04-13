@@ -17,6 +17,7 @@ let suburbObjects = [
 let stringSuburbs = suburbObjects.map( suburbObj => suburbObj.suburb );
 let reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 let autosuggest, input, suggestions;
+let onSuggestionSelected = jest.genMockFunction();
 
 function getSuburbStrings(input, callback) {
   let regex = new RegExp('^' + input, 'i');
@@ -109,6 +110,10 @@ function clickDown() {
 
 function clickUp() {
   Simulate.keyDown(input, { keyCode: 38 });
+}
+
+function clickEnter() {
+  Simulate.keyDown(input, { keyCode: 13 });
 }
 
 function expectInputValue(expectedValue) {
@@ -341,6 +346,68 @@ describe('Autosuggest', function() {
     it('should show suggestions when showWhen returns true', function() {
       setInputValue('mor');
       expectSuggestions(['Mordialloc']);
+    });
+  });
+
+  describe('onSuggestionSelected', function() {
+    beforeEach(function() {
+      onSuggestionSelected.mockClear();
+    });
+
+    describe('String suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbStrings}
+                       onSuggestionSelected={onSuggestionSelected} />
+        );
+        setInputValue('m');
+      });
+
+      it('should call onSuggestionSelected when suggestion is selected using mouse', function() {
+        mouseDownSuggestion(1);
+        expect(onSuggestionSelected).toBeCalledWith('Mordialloc');
+      });
+
+      it('should not call onSuggestionSelected when mouse enters a suggestion', function() {
+        mouseOverFromInputToSuggestion(0);
+        expect(onSuggestionSelected).not.toBeCalled();
+      });      
+    });
+
+    describe('Object suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbObjects}
+                       suggestionRenderer={renderSuburbObject}
+                       suggestionValue={getSuburbObjectValue}
+                       onSuggestionSelected={onSuggestionSelected} />
+        );
+        setInputValue('m');
+      });
+
+      it('should call onSuggestionSelected when suggestion is selected using keyboard', function() {
+        clickDown();
+        clickEnter();
+        expect(onSuggestionSelected).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+      });
+
+      it('should not call onSuggestionSelected when navigating using keyboard', function() {
+        clickDown();
+        expect(onSuggestionSelected).not.toBeCalled();
+      });
+
+      it('should not call onSuggestionSelected if no suggestion is focussed', function() {
+        clickEnter();
+        expect(onSuggestionSelected).not.toBeCalled();
+      });
+
+      it('should not call onSuggestionSelected if no suggestion is focussed after Up/Down interaction', function() {
+        clickDown();
+        clickDown();
+        clickDown();
+        clickEnter();
+        expect(onSuggestionSelected).not.toBeCalled();
+      });
     });
   });
 

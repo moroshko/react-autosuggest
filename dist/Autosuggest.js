@@ -14,17 +14,19 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var React = _interopRequire(require("react"));
+var _react = require("react");
+
+var React = _interopRequire(_react);
+
+var Component = _react.Component;
+var PropTypes = _react.PropTypes;
+var findDOMNode = _react.findDOMNode;
 
 var debounce = _interopRequire(require("debounce"));
 
 var classnames = _interopRequire(require("classnames"));
 
 var sectionIterator = _interopRequire(require("./sectionIterator"));
-
-var Component = React.Component;
-var PropTypes = React.PropTypes;
-var findDOMNode = React.findDOMNode;
 
 var lastSuggestionsInputValue = null,
     guid = 0;
@@ -187,6 +189,10 @@ var Autosuggest = (function (_Component) {
         switch (event.keyCode) {
           case 13:
             // enter
+            if (this.state.valueBeforeUpDown !== null && this.state.focusedSuggestionIndex !== null) {
+              this.props.onSuggestionSelected(this.getSuggestion(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex));
+            }
+
             this.setSuggestionsState(null);
             break;
 
@@ -266,6 +272,8 @@ var Autosuggest = (function (_Component) {
             findDOMNode(this.refs.input).focus();
           }).bind(this));
         });
+
+        this.props.onSuggestionSelected(this.getSuggestion(sectionIndex, suggestionIndex));
       }
     },
     getSuggestionId: {
@@ -300,7 +308,7 @@ var Autosuggest = (function (_Component) {
           var suggestionKey = "suggestion-" + (sectionIndex === null ? "" : sectionIndex) + "-" + suggestionIndex;
 
           return React.createElement(
-            "div",
+            "li",
             { id: this.getSuggestionId(sectionIndex, suggestionIndex),
               className: classes,
               role: "option",
@@ -319,34 +327,40 @@ var Autosuggest = (function (_Component) {
           return null;
         }
 
-        var content = undefined;
-
         if (this.isMultipleSections(this.state.suggestions)) {
-          content = this.state.suggestions.map(function (section, sectionIndex) {
-            var sectionName = section.sectionName ? React.createElement(
-              "div",
-              { className: "react-autosuggest__suggestions-section-name" },
-              section.sectionName
-            ) : null;
+          return React.createElement(
+            "div",
+            { id: "react-autosuggest-" + this.id,
+              className: "react-autosuggest__suggestions",
+              role: "listbox" },
+            this.state.suggestions.map(function (section, sectionIndex) {
+              var sectionName = section.sectionName ? React.createElement(
+                "div",
+                { className: "react-autosuggest__suggestions-section-name" },
+                section.sectionName
+              ) : null;
 
-            return section.suggestions.length === 0 ? null : React.createElement(
-              "div",
-              { className: "react-autosuggest__suggestions-section",
-                key: "section-" + sectionIndex },
-              sectionName,
-              this.renderSuggestionsList(section.suggestions, sectionIndex)
-            );
-          }, this);
-        } else {
-          content = this.renderSuggestionsList(this.state.suggestions, null);
+              return section.suggestions.length === 0 ? null : React.createElement(
+                "div",
+                { className: "react-autosuggest__suggestions-section",
+                  key: "section-" + sectionIndex },
+                sectionName,
+                React.createElement(
+                  "ul",
+                  { className: "react-autosuggest__suggestions-section-suggestions" },
+                  this.renderSuggestionsList(section.suggestions, sectionIndex)
+                )
+              );
+            }, this)
+          );
         }
 
         return React.createElement(
-          "div",
+          "ul",
           { id: "react-autosuggest-" + this.id,
             className: "react-autosuggest__suggestions",
             role: "listbox" },
-          content
+          this.renderSuggestionsList(this.state.suggestions, null)
         );
       }
     },
@@ -386,6 +400,7 @@ Autosuggest.propTypes = {
   suggestionRenderer: PropTypes.func, // Function that renders a given suggestion (must be implemented when suggestions are objects)
   suggestionValue: PropTypes.func, // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
   showWhen: PropTypes.func, // Function that determines whether to show suggestions or not
+  onSuggestionSelected: PropTypes.func, // This function is called when suggestion is selected via mouse click or Enter
   inputAttributes: PropTypes.objectOf(PropTypes.string) // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
 };
 
@@ -393,5 +408,6 @@ Autosuggest.defaultProps = {
   showWhen: function (input) {
     return input.trim().length > 0;
   },
+  onSuggestionSelected: function () {},
   inputAttributes: {}
 };

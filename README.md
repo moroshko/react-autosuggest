@@ -44,6 +44,7 @@ function getSuggestions(input, callback) {
 * [`suggestionRenderer`](#suggestionRendererOption)
 * [`suggestionValue`](#suggestionValueOption)
 * [`showWhen`](#showWhenOption)
+* [`onSuggestionSelected`](#onSuggestionSelectedOption)
 * [`inputAttributes`](#inputAttributesOption)
 
 <a name="suggestionsOption"></a>
@@ -95,7 +96,7 @@ function(suggestion, input) {
 }
 ```
 
-* `suggestion` - The [\<suggestion>](#suggestion) (string or object)
+* `suggestion` - The [suggestion](#suggestion) to render (string or object)
 * `input` - The value of the input field (e.g.: `'Men'`). If user interacts using the Up or Down keys at the moment, it will be the value of the input field **prior** to those interactions.
 
 For example:
@@ -157,6 +158,24 @@ function showWhen(input) {
              showWhen={showWhen} />
 ```
 
+<a name="onSuggestionSelectedOption"></a>
+##### onSuggestionSelected (optional)
+
+This function will be called when suggestion is selected via mouse click or Enter. It has one parameter which is the selected [suggestion](#suggestion) (string or object).
+
+For example:
+
+```javascript
+function onSuggestionSelected(suggestion) { // In this example 'suggestion' is a string
+  console.log('Suggestion selected: [' + suggestion + ']');
+}
+```
+
+```xml
+<Autosuggest suggestions={getSuggestions}
+             onSuggestionSelected={onSuggestionSelected} />
+```
+
 <a name="inputAttributesOption"></a>
 ##### inputAttributes (optional)
 
@@ -182,13 +201,62 @@ let inputAttributes = {
 
 The `<Autosuggest />` component comes with no styles. You can use the following classes to style it:
 
-* `react-autosuggest` - Component's wrapper. It includes both the input field and the suggestions list.
-* `react-autosuggest__suggestions` - Suggestions list wrapper
-* `react-autosuggest__suggestions-section` - Suggestions section wrapper (exists only when displaying multiple sections)
-* `react-autosuggest__suggestions-section-name` - Suggestions section name wrapper (exists only when displaying multiple sections and `sectionName` is specified)
-* `react-autosuggest__suggestion` - Single suggestion wrapper
+* `react-autosuggest`
+* `react-autosuggest__suggestions`
+* `react-autosuggest__suggestion`
+* `react-autosuggest__suggestions-section`
+* `react-autosuggest__suggestions-section-name`
+* `react-autosuggest__suggestions-section-suggestions`
 
-Example: [`examples/src/Autosuggest.less`](https://github.com/moroshko/react-autosuggest/blob/master/examples/src/Autosuggest.less)
+An example can be found in [`examples/src/Autosuggest.less`](https://github.com/moroshko/react-autosuggest/blob/master/examples/src/Autosuggest.less)
+
+The following diagrams explain the classes above.
+
+#### No sections
+
+    +---| react-autosuggest |-------------------------+
+    |                                                 |
+    |  <input>                                        |
+    |                                                 |
+    |  +--| react-autosuggest__suggestions |-------+  |
+    |  |                                           |  |
+    |  |  +--| react-autosuggest__suggestion |--+  |  |
+    |  |  |                                     |  |  |
+    |  |  +-------------------------------------+  |  |
+    |  |                                           |  |
+    |  +-------------------------------------------+  |
+    |                                                 |
+    +-------------------------------------------------+
+    
+
+#### Multiple sections
+
+    
+    +---| react-autosuggest |----------------------------------------------------+
+    |                                                                            |
+    |  <input>                                                                   |
+    |                                                                            |
+    |  +--| react-autosuggest__suggestions |----------------------------------+  |
+    |  |                                                                      |  |
+    |  |  +--| react-autosuggest__suggestions-section |--------------------+  |  |
+    |  |  |                                                                |  |  |
+    |  |  |  +--| react-autosuggest__suggestions-section-name |---------+  |  |  |
+    |  |  |  |                                                          |  |  |  |
+    |  |  |  +----------------------------------------------------------+  |  |  |
+    |  |  |                                                                |  |  |
+    |  |  |  +--| react-autosuggest__suggestions-section-suggestions |--+  |  |  |
+    |  |  |  |                                                          |  |  |  |
+    |  |  |  |  +--| react-autosuggest__suggestion |-----------------+  |  |  |  |
+    |  |  |  |  |                                                    |  |  |  |  |
+    |  |  |  |  +----------------------------------------------------+  |  |  |  |
+    |  |  |  |                                                          |  |  |  |
+    |  |  |  +----------------------------------------------------------+  |  |  |
+    |  |  |                                                                |  |  |
+    |  |  +----------------------------------------------------------------+  |  |
+    |  |                                                                      |  |
+    |  +----------------------------------------------------------------------+  |
+    |                                                                            |
+    +----------------------------------------------------------------------------+
 
 ## Development
 

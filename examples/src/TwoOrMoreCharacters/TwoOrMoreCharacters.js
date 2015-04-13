@@ -31,6 +31,10 @@ function showWhen(input) {
   return input.trim().length >= 2;
 }
 
+function onSuggestionSelected(suggestion) {
+  console.log('Suggestion selected: [' + suggestion + ']');
+}
+
 class TwoOrMoreCharacters extends React.Component {
   render() {
     let inputAttributes = {
@@ -42,6 +46,7 @@ class TwoOrMoreCharacters extends React.Component {
       <div>
         <Autosuggest suggestions={getSuggestions}
                      showWhen={showWhen}
+                     onSuggestionSelected={onSuggestionSelected}
                      inputAttributes={inputAttributes}
                      ref={ () => { document.getElementById('two-or-more-characters').focus(); } } />
         <SourceCodeLink file="examples/src/TwoOrMoreCharacters/TwoOrMoreCharacters.js" />

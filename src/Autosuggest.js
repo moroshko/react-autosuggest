@@ -1,11 +1,10 @@
 'use strict';
 
-import React from 'react';
+import React, { Component, PropTypes, findDOMNode } from 'react';
 import debounce from 'debounce';
 import classnames from 'classnames';
 import sectionIterator from './sectionIterator';
 
-let { Component, PropTypes, findDOMNode } = React;
 let lastSuggestionsInputValue = null, guid = 0;
 
 export default class Autosuggest extends Component {
@@ -146,6 +145,12 @@ export default class Autosuggest extends Component {
 
     switch (event.keyCode) {
       case 13: // enter
+        if (this.state.valueBeforeUpDown !== null && this.state.focusedSuggestionIndex !== null) {
+          this.props.onSuggestionSelected(
+            this.getSuggestion(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex)
+          );
+        }
+
         this.setSuggestionsState(null);
         break;
 
@@ -218,6 +223,8 @@ export default class Autosuggest extends Component {
         findDOMNode(this.refs.input).focus();
       }.bind(this));
     });
+
+    this.props.onSuggestionSelected(this.getSuggestion(sectionIndex, suggestionIndex));
   }
 
   getSuggestionId(sectionIndex, suggestionIndex) {
@@ -253,7 +260,7 @@ export default class Autosuggest extends Component {
                           '-' + suggestionIndex;
 
       return (
-        <div id={this.getSuggestionId(sectionIndex, suggestionIndex)}
+        <li id={this.getSuggestionId(sectionIndex, suggestionIndex)}
              className={classes}
              role="option"
              key={suggestionKey}
@@ -261,7 +268,7 @@ export default class Autosuggest extends Component {
              onMouseLeave={this.onSuggestionMouseLeave.bind(this)}
              onMouseDown={this.onSuggestionMouseDown.bind(this, sectionIndex, suggestionIndex)}>
           {this.renderSuggestionContent(suggestion)}
-        </div>
+        </li>
       );
     }, this);
   }
@@ -271,34 +278,38 @@ export default class Autosuggest extends Component {
       return null;
     }
 
-    let content;
-
     if (this.isMultipleSections(this.state.suggestions)) {
-      content = this.state.suggestions.map(function(section, sectionIndex) {
-        let sectionName = section.sectionName ? (
-          <div className="react-autosuggest__suggestions-section-name">
-            {section.sectionName}
-          </div>
-        ) : null;
+      return (
+        <div id={'react-autosuggest-' + this.id}
+             className="react-autosuggest__suggestions"
+             role="listbox">
+          {this.state.suggestions.map(function(section, sectionIndex) {
+            let sectionName = section.sectionName ? (
+              <div className="react-autosuggest__suggestions-section-name">
+                {section.sectionName}
+              </div>
+            ) : null;
 
-        return section.suggestions.length === 0 ? null : (
-          <div className="react-autosuggest__suggestions-section"
-               key={'section-' + sectionIndex}>
-            {sectionName}
-            {this.renderSuggestionsList(section.suggestions, sectionIndex)}
-          </div>
-        );
-      }, this);
-    } else {
-      content = this.renderSuggestionsList(this.state.suggestions, null);
+            return section.suggestions.length === 0 ? null : (
+              <div className="react-autosuggest__suggestions-section"
+                   key={'section-' + sectionIndex}>
+                {sectionName}
+                <ul className="react-autosuggest__suggestions-section-suggestions">
+                  {this.renderSuggestionsList(section.suggestions, sectionIndex)}
+                </ul>
+              </div>
+            );
+          }, this)}
+        </div>
+      );
     }
 
     return (
-      <div id={'react-autosuggest-' + this.id}
-           className="react-autosuggest__suggestions"
-           role="listbox">
-        {content}
-      </div>
+      <ul id={'react-autosuggest-' + this.id}
+          className="react-autosuggest__suggestions"
+          role="listbox">
+        {this.renderSuggestionsList(this.state.suggestions, null)}
+      </ul>
     );
   }
 
@@ -332,10 +343,12 @@ Autosuggest.propTypes = {
   suggestionRenderer: PropTypes.func,                    // Function that renders a given suggestion (must be implemented when suggestions are objects)
   suggestionValue: PropTypes.func,                       // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
   showWhen: PropTypes.func,                              // Function that determines whether to show suggestions or not
+  onSuggestionSelected: PropTypes.func,                  // This function is called when suggestion is selected via mouse click or Enter
   inputAttributes: PropTypes.objectOf(PropTypes.string)  // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
 };
 
 Autosuggest.defaultProps = {
   showWhen: input => input.trim().length > 0,
+  onSuggestionSelected: () => {},
   inputAttributes: {}
 };
