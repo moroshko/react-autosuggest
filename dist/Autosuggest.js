@@ -125,9 +125,28 @@ var Autosuggest = (function (_Component) {
         }
       }
     },
-    getSuggestionText: {
-      value: function getSuggestionText(sectionIndex, suggestionIndex) {
-        return findDOMNode(this.refs[this.getSuggestionKey(sectionIndex, suggestionIndex)]).textContent;
+    getSuggestion: {
+      value: function getSuggestion(sectionIndex, suggestionIndex) {
+        if (this.isMultipleSections(this.state.suggestions)) {
+          return this.state.suggestions[sectionIndex].suggestions[suggestionIndex];
+        }
+
+        return this.state.suggestions[suggestionIndex];
+      }
+    },
+    getSuggestionValue: {
+      value: function getSuggestionValue(sectionIndex, suggestionIndex) {
+        var suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
+
+        if (typeof suggestion === "object") {
+          if (this.props.suggestionValue) {
+            return this.props.suggestionValue(suggestion);
+          }
+
+          throw new Error("When <suggestion> is an object, you must implement the suggestionValue() function to specify how to set input's value when suggestion selected.");
+        } else {
+          return suggestion.toString();
+        }
       }
     },
     focusOnSuggestion: {
@@ -140,7 +159,7 @@ var Autosuggest = (function (_Component) {
         var newState = {
           focusedSectionIndex: sectionIndex,
           focusedSuggestionIndex: suggestionIndex,
-          value: suggestionIndex === null ? this.state.valueBeforeUpDown : this.getSuggestionText(sectionIndex, suggestionIndex)
+          value: suggestionIndex === null ? this.state.valueBeforeUpDown : this.getSuggestionValue(sectionIndex, suggestionIndex)
         };
 
         // When users starts to interact with up/down keys, remember input's value.
@@ -245,7 +264,7 @@ var Autosuggest = (function (_Component) {
     },
     onSuggestionMouseDown: {
       value: function onSuggestionMouseDown(sectionIndex, suggestionIndex) {
-        var newValue = this.getSuggestionText(sectionIndex, suggestionIndex);
+        var newValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
         this.setState({
           value: newValue,
           suggestions: null,
@@ -270,11 +289,6 @@ var Autosuggest = (function (_Component) {
         return "react-autosuggest-" + this.id + "-suggestion-" + (sectionIndex === null ? "" : sectionIndex) + "-" + suggestionIndex;
       }
     },
-    getSuggestionKey: {
-      value: function getSuggestionKey(sectionIndex, suggestionIndex) {
-        return "suggestion-" + (sectionIndex === null ? "" : sectionIndex) + "-" + suggestionIndex;
-      }
-    },
     renderSuggestionContent: {
       value: function renderSuggestionContent(suggestion) {
         if (this.props.suggestionRenderer) {
@@ -295,7 +309,7 @@ var Autosuggest = (function (_Component) {
             "react-autosuggest__suggestion": true,
             "react-autosuggest__suggestion--focused": sectionIndex === this.state.focusedSectionIndex && suggestionIndex === this.state.focusedSuggestionIndex
           });
-          var suggestionKey = this.getSuggestionKey(sectionIndex, suggestionIndex);
+          var suggestionKey = "suggestion-" + (sectionIndex === null ? "" : sectionIndex) + "-" + suggestionIndex;
 
           return React.createElement(
             "div",
@@ -303,7 +317,6 @@ var Autosuggest = (function (_Component) {
               className: classes,
               role: "option",
               key: suggestionKey,
-              ref: suggestionKey,
               onMouseEnter: this.onSuggestionMouseEnter.bind(this, sectionIndex, suggestionIndex),
               onMouseLeave: this.onSuggestionMouseLeave.bind(this),
               onMouseDown: this.onSuggestionMouseDown.bind(this, sectionIndex, suggestionIndex) },
@@ -387,7 +400,8 @@ Autosuggest.propTypes = {
   inputAttributes: PropTypes.objectOf(PropTypes.string), // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
   inputEventAttributes: PropTypes.objectOf(PropTypes.func), // Event attributes to pass to the input field (e.g. { onChange: onMyChange, onKeyUp: onMyKeyUp })
   suggestions: PropTypes.func.isRequired, // Function to get the suggestions
-  suggestionRenderer: PropTypes.func // Function to render a single suggestion
+  suggestionRenderer: PropTypes.func, // Function that renders a given suggestion (must be implemented when suggestions are objects)
+  suggestionValue: PropTypes.func // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
 };
 
 Autosuggest.defaultProps = {

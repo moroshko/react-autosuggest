@@ -25,7 +25,7 @@ import Autosuggest from 'react-autosuggest';
 
 let suburbs = ['Cheltenham', 'Mill Park', 'Mordialloc', 'Nunawading'];
 
-function getSuburbs(input, callback) {
+function getSuggestions(input, callback) {
   let regex = new RegExp('^' + input, 'i');
 
   setTimeout(function() {
@@ -34,14 +34,14 @@ function getSuburbs(input, callback) {
 }
 ```
 ```xml
-<Autosuggest suggestions={getSuburbs} />
+<Autosuggest suggestions={getSuggestions} />
 ```
 
 ### Options
 
 ##### suggestions (required)
 
-Function to get the suggestions.
+Implement this function to tell `Autosuggest` which suggestions to display.
 
 ```javascript
 function(input, callback) {
@@ -49,7 +49,7 @@ function(input, callback) {
 }
 ```
 
-* `input` - The value of the input field
+* `input` - Will be the value of the input field
 * `callback` - Should be called once the suggestions are in hand, or error occurs.
 
   * Success example: `callback(null, `[\<suggestions>](#suggestions)`)`
@@ -74,12 +74,12 @@ function(input, callback) {
 `<suggestion>` can have one of the following two formats:
 
 * String, e.g.: `'Mentone'`
-* Object, e.g.: `{ suburb: 'Mentone', postcode: '3194' }`. This object cannot have a `suggestions` key, and you must implement the [`suggestionRenderer`](#suggestionRenderer) function to specify how to render this object.
+* Object, e.g.: `{ suburb: 'Mentone', postcode: '3194' }`. This object cannot have a `suggestions` key. **You must implement [`suggestionRenderer`](#suggestionRenderer) and [`suggestionValue`](#suggestionValue) in this case.**
 
 <a name="suggestionRenderer"></a>
 ##### suggestionRenderer (required when suggestions are objects)
 
-Function that renders a single suggestion. This function shall return `ReactElement` or a string.
+This function will be used to render the suggestion. It should return `ReactElement` or a string.
 
 ```javascript
 function(suggestion, input) {
@@ -88,7 +88,7 @@ function(suggestion, input) {
 ```
 
 * `suggestion` - The [\<suggestion>](#suggestion) (string or object)
-* `input` - The value of the input field (e.g. `'Men'`). If user interacts using the Up or Down keys, it will contain the value of the input field **prior** to those interactions.
+* `input` - The value of the input field (e.g.: `'Men'`). If user interacts using the Up or Down keys at the moment, it will be the value of the input field **prior** to those interactions.
 
 For example:
 
@@ -102,6 +102,31 @@ function renderSuggestion(suggestion, input) { // In this example 'suggestion' i
 
 ```xml
 <Autosuggest suggestions={getSuggestions} suggestionRenderer={renderSuggestion} />
+```
+
+<a name="suggestionValue"></a>
+##### suggestionValue (required when suggestions are objects)
+
+This function will be used to set the value of the input field when suggestion is selected. It is ignored when suggestions are strings.
+
+```javascript
+function(suggestionObj) {
+  ...
+}
+```
+
+For example:
+
+```javascript
+function getSuggestionValue(suggestionObj) {
+  return suggestionObj.suburb + ' VIC ' + suggestionObj.postcode;
+}
+```
+
+```xml
+<Autosuggest suggestions={getSuggestions}
+             suggestionRenderer={renderSuggestion}
+             suggestionValue={getSuggestionValue} />
 ```
 
 ##### inputAttributes (optional)
@@ -120,7 +145,7 @@ let inputAttributes = {
 
 ```xml
 <label htmlFor="locations-autosuggest">Where</label>
-<Autosuggest inputAttributes={inputAttributes} suggestions={getLocations} />
+<Autosuggest inputAttributes={inputAttributes} suggestions={getSuggestions} />
 ```
 
 ## Styling
@@ -147,7 +172,7 @@ Now, open `http://localhost:3000/examples/dist/index.html`
 
 [MIT](http://moroshko.mit-license.org)
 
-[status-image]: https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03.svg
+[status-image]: https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg
 [status-url]: https://codeship.com/projects/67868
 [npm-image]: https://img.shields.io/npm/v/react-autosuggest.svg
 [npm-url]: https://npmjs.org/package/react-autosuggest

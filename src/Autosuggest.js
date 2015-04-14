@@ -7,7 +7,6 @@ import sectionIterator from './sectionIterator';
 
 let { Component, PropTypes, findDOMNode } = React;
 let lastSuggestionsInputValue = null, guid = 0;
-let nop = function() {};
 
 class Autosuggest extends Component {
   constructor(props) {
@@ -27,9 +26,7 @@ class Autosuggest extends Component {
                                     // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
     this.suggestionsFn = debounce(this.props.suggestions, 100);
-    this.onChange = props.inputEventAttributes.onChange || nop;
-    this.onKeyDown = props.inputEventAttributes.onKeyDown || nop;
-    this.onBlur = props.inputEventAttributes.onBlur || nop;
+    this.onChange = props.inputAttributes.onChange || function() {};
   }
 
   resetSectionIterator(suggestions) {
@@ -94,8 +91,26 @@ class Autosuggest extends Component {
     }
   }
 
-  getSuggestionText(sectionIndex, suggestionIndex) {
-    return findDOMNode(this.refs[this.getSuggestionKey(sectionIndex, suggestionIndex)]).textContent;
+  getSuggestion(sectionIndex, suggestionIndex) {
+    if (this.isMultipleSections(this.state.suggestions)) {
+      return this.state.suggestions[sectionIndex].suggestions[suggestionIndex];
+    }
+
+    return this.state.suggestions[suggestionIndex];
+  }
+
+  getSuggestionValue(sectionIndex, suggestionIndex) {
+    let suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
+
+    if (typeof suggestion === 'object') {
+      if (this.props.suggestionValue) {
+        return this.props.suggestionValue(suggestion);
+      }
+
+      throw new Error('When <suggestion> is an object, you must implement the suggestionValue() function to specify how to set input\'s value when suggestion selected.');
+    } else {
+      return suggestion.toString();
+    }
   }
 
   focusOnSuggestion(suggestionPosition) {
@@ -105,7 +120,7 @@ class Autosuggest extends Component {
       focusedSuggestionIndex: suggestionIndex,
       value: suggestionIndex === null
                ? this.state.valueBeforeUpDown
-               : this.getSuggestionText(sectionIndex, suggestionIndex)
+               : this.getSuggestionValue(sectionIndex, suggestionIndex)
     };
 
     // When users starts to interact with up/down keys, remember input's value.
@@ -175,12 +190,10 @@ class Autosuggest extends Component {
 
         break;
     }
-    this.onKeyDown();
   }
 
   onInputBlur() {
     this.setSuggestionsState(null);
-    this.onBlur();
   }
 
   onSuggestionMouseEnter(sectionIndex, suggestionIndex) {
@@ -198,7 +211,7 @@ class Autosuggest extends Component {
   }
 
   onSuggestionMouseDown(sectionIndex, suggestionIndex) {
-    let newValue = this.getSuggestionText(sectionIndex, suggestionIndex);
+    let newValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
     this.setState({
       value: newValue,
       suggestions: null,
@@ -223,11 +236,6 @@ class Autosuggest extends Component {
            (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
   }
 
-  getSuggestionKey(sectionIndex, suggestionIndex) {
-    return 'suggestion-' + (sectionIndex === null ? '' : sectionIndex) +
-           '-' + suggestionIndex;
-  }
-
   renderSuggestionContent(suggestion) {
     if (this.props.suggestionRenderer) {
       return this.props.suggestionRenderer(suggestion, this.state.valueBeforeUpDown || this.state.value);
@@ -248,14 +256,14 @@ class Autosuggest extends Component {
           sectionIndex === this.state.focusedSectionIndex &&
           suggestionIndex === this.state.focusedSuggestionIndex
       });
-      let suggestionKey = this.getSuggestionKey(sectionIndex, suggestionIndex);
+      let suggestionKey = 'suggestion-' + (sectionIndex === null ? '' : sectionIndex) +
+                          '-' + suggestionIndex;
 
       return (
         <div id={this.getSuggestionId(sectionIndex, suggestionIndex)}
              className={classes}
              role="option"
              key={suggestionKey}
-             ref={suggestionKey}
              onMouseEnter={this.onSuggestionMouseEnter.bind(this, sectionIndex, suggestionIndex)}
              onMouseLeave={this.onSuggestionMouseLeave.bind(this)}
              onMouseDown={this.onSuggestionMouseDown.bind(this, sectionIndex, suggestionIndex)}>
@@ -305,10 +313,7 @@ class Autosuggest extends Component {
     let ariaActivedescendant =
       this.getSuggestionId(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex);
     let inputEventAttributes = this.props.inputEventAttributes;
-    // The following event attributes have custom handling
     delete inputEventAttributes.onChange;
-    delete inputEventAttributes.onKeyDown;
-    delete inputEventAttributes.onBlur;
 
     return (
       <div className="react-autosuggest">
@@ -333,15 +338,15 @@ class Autosuggest extends Component {
 }
 
 Autosuggest.propTypes = {
-  inputAttributes: PropTypes.objectOf(PropTypes.string),    // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+  inputAttributes: PropTypes.objectOf(PropTypes.string), // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
   inputEventAttributes: PropTypes.objectOf(PropTypes.func), // Event attributes to pass to the input field (e.g. { onChange: onMyChange, onKeyUp: onMyKeyUp })
-  suggestions: PropTypes.func.isRequired,                   // Function to get the suggestions
-  suggestionRenderer: PropTypes.func                        // Function to render a single suggestion
+  suggestions: PropTypes.func.isRequired,                // Function to get the suggestions
+  suggestionRenderer: PropTypes.func,                    // Function that renders a given suggestion (must be implemented when suggestions are objects)
+  suggestionValue: PropTypes.func                        // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
 };
 
 Autosuggest.defaultProps = {
-  inputAttributes: {},
-  inputEventAttributes: {}
+  inputAttributes: {}
 };
 
 export default Autosuggest;
