@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import utils from '../utils';
 import Autosuggest from '../../../src/Autosuggest';
 import SourceCodeLink from '../SourceCodeLink/SourceCodeLink';
 import suburbs from 'json!../suburbs.json';
@@ -12,9 +13,15 @@ function population(suburbObj) {
 
 function getSuggestions(input, callback) {
   let requestDelay = 50 + Math.floor(300 * Math.random());
-  let suburbMatchRegex = new RegExp('\\b' + input, 'i');
+  let escapedInput = utils.escapeRegexCharacters(input.trim());
+  let lowercasedInput = input.trim().toLowerCase();
+  let suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
   let suggestions = suburbs
     .filter( suburbObj => suburbMatchRegex.test(suburbObj.suburb + ' VIC ' + suburbObj.postcode) )
+    .sort( (suburbObj1, suburbObj2) =>
+      suburbObj1.suburb.toLowerCase().indexOf(lowercasedInput) -
+      suburbObj2.suburb.toLowerCase().indexOf(lowercasedInput)
+    )
     .slice(0, 7)
     .map( suburbObj => {
       suburbObj.population = population(suburbObj);
@@ -33,7 +40,8 @@ function getSuggestions(input, callback) {
 }
 
 function renderSuggestion(suggestionObj, input) {
-  let suburbMatchRegex = new RegExp('\\b' + input, 'i');
+  let escapedInput = utils.escapeRegexCharacters(input);
+  let suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
   let suggestion = suggestionObj.suburb + ' VIC ' + suggestionObj.postcode;
   let firstMatchIndex = suggestion.search(suburbMatchRegex);
 
@@ -66,10 +74,10 @@ class CustomRenderer extends React.Component {
 
     return (
       <div>
-        <Autosuggest inputAttributes={inputAttributes}
-                     suggestions={getSuggestions}
+        <Autosuggest suggestions={getSuggestions}
                      suggestionRenderer={renderSuggestion}
                      suggestionValue={getSuggestionValue}
+                     inputAttributes={inputAttributes}
                      ref={ () => { document.getElementById('custom-renderer').focus(); } } />
         <SourceCodeLink file="examples/src/CustomRenderer/CustomRenderer.js" />
       </div>

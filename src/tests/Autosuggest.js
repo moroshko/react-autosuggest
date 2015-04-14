@@ -17,6 +17,7 @@ let suburbObjects = [
 let stringSuburbs = suburbObjects.map( suburbObj => suburbObj.suburb );
 let reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 let autosuggest, input, suggestions;
+let onSuggestionSelected = jest.genMockFunction();
 
 function getSuburbStrings(input, callback) {
   let regex = new RegExp('^' + input, 'i');
@@ -65,6 +66,10 @@ function getSuburbObjectValue(suburbObj) {
   return suburbObj.suburb + ' VIC ' + suburbObj.postcode;
 }
 
+function showWhen(input) {
+  return input.length >= 3;
+}
+
 // See: http://stackoverflow.com/q/28979533/247243
 function stripReactAttributes(html) {
   return html.replace(reactAttributesRegex, '');
@@ -105,6 +110,10 @@ function clickDown() {
 
 function clickUp() {
   Simulate.keyDown(input, { keyCode: 38 });
+}
+
+function clickEnter() {
+  Simulate.keyDown(input, { keyCode: 13 });
 }
 
 function expectInputValue(expectedValue) {
@@ -285,7 +294,7 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('Suggestion renderer', function() {
+  describe('suggestionRenderer', function() {
     describe('String suggestions', function() {
       beforeEach(function() {
         createAutosuggest(
@@ -314,6 +323,90 @@ describe('Autosuggest', function() {
       it('should use the specified suggestionRenderer function', function() {
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
         expect(stripReactAttributes(React.findDOMNode(suggestions[0]).innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span><span> VIC </span><span>3083</span></span>');
+      });
+    });
+  });
+
+  describe('showWhen', function() {
+    beforeEach(function() {
+      createAutosuggest(
+        <Autosuggest suggestions={getSuburbStrings}
+                     showWhen={showWhen} />
+      );
+    });
+
+    it('should not show suggestions when showWhen returns false', function() {
+      setInputValue('m');
+      expectSuggestions([]);
+
+      setInputValue('mo');
+      expectSuggestions([]);
+    });
+
+    it('should show suggestions when showWhen returns true', function() {
+      setInputValue('mor');
+      expectSuggestions(['Mordialloc']);
+    });
+  });
+
+  describe('onSuggestionSelected', function() {
+    beforeEach(function() {
+      onSuggestionSelected.mockClear();
+    });
+
+    describe('String suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbStrings}
+                       onSuggestionSelected={onSuggestionSelected} />
+        );
+        setInputValue('m');
+      });
+
+      it('should call onSuggestionSelected when suggestion is selected using mouse', function() {
+        mouseDownSuggestion(1);
+        expect(onSuggestionSelected).toBeCalledWith('Mordialloc');
+      });
+
+      it('should not call onSuggestionSelected when mouse enters a suggestion', function() {
+        mouseOverFromInputToSuggestion(0);
+        expect(onSuggestionSelected).not.toBeCalled();
+      });      
+    });
+
+    describe('Object suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbObjects}
+                       suggestionRenderer={renderSuburbObject}
+                       suggestionValue={getSuburbObjectValue}
+                       onSuggestionSelected={onSuggestionSelected} />
+        );
+        setInputValue('m');
+      });
+
+      it('should call onSuggestionSelected when suggestion is selected using keyboard', function() {
+        clickDown();
+        clickEnter();
+        expect(onSuggestionSelected).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+      });
+
+      it('should not call onSuggestionSelected when navigating using keyboard', function() {
+        clickDown();
+        expect(onSuggestionSelected).not.toBeCalled();
+      });
+
+      it('should not call onSuggestionSelected if no suggestion is focussed', function() {
+        clickEnter();
+        expect(onSuggestionSelected).not.toBeCalled();
+      });
+
+      it('should not call onSuggestionSelected if no suggestion is focussed after Up/Down interaction', function() {
+        clickDown();
+        clickDown();
+        clickDown();
+        clickEnter();
+        expect(onSuggestionSelected).not.toBeCalled();
       });
     });
   });
@@ -601,7 +694,7 @@ describe('Autosuggest', function() {
       function onChange(value) {
         supValue = value;
       }
-      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} inputEventAttributes={{ onChange: onChange }} />);
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} onChange={onChange} />);
       setInputValue('m');
       expect(supValue).toBe('m');
     });
@@ -611,7 +704,7 @@ describe('Autosuggest', function() {
       function onChange(value) {
         supValue = value;
       }
-      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} inputEventAttributes={{ onChange: onChange }} />);
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} onChange={onChange} />);
       setInputValue('m');
       clickDown();
       expect(supValue).toBe('Mill Park');
@@ -622,7 +715,7 @@ describe('Autosuggest', function() {
       function onChange(value) {
         supValue = value;
       }
-      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} inputEventAttributes={{ onChange: onChange }} />);
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} onChange={onChange} />);
       setInputValue('m');
       clickUp();
       expect(supValue).toBe('Mordialloc');
@@ -633,7 +726,7 @@ describe('Autosuggest', function() {
       function onChange(value) {
         supValue = value;
       }
-      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} inputEventAttributes={{ onChange: onChange }} />);
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} onChange={onChange} />);
       setInputValue('m');
       mouseDownSuggestion(1);
       expect(supValue).toBe('Mordialloc');

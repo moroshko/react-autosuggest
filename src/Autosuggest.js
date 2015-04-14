@@ -1,14 +1,13 @@
 'use strict';
 
-import React from 'react';
+import React, { Component, PropTypes, findDOMNode } from 'react';
 import debounce from 'debounce';
 import classnames from 'classnames';
 import sectionIterator from './sectionIterator';
 
-let { Component, PropTypes, findDOMNode } = React;
 let lastSuggestionsInputValue = null, guid = 0;
 
-class Autosuggest extends Component {
+export default class Autosuggest extends Component {
   constructor(props) {
     super(props);
 
@@ -26,7 +25,7 @@ class Autosuggest extends Component {
                                     // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
     this.suggestionsFn = debounce(this.props.suggestions, 100);
-    this.onChange = props.inputAttributes.onChange || function() {};
+    this.onChange = props.onChange || function() {};
   }
 
   resetSectionIterator(suggestions) {
@@ -66,7 +65,7 @@ class Autosuggest extends Component {
   showSuggestions(input) {
     lastSuggestionsInputValue = input;
 
-    if (input.length === 0) {
+    if (!this.props.showWhen(input)) {
       this.setSuggestionsState(null);
     } else if (this.cache[input]) {
       this.setSuggestionsState(this.cache[input]);
@@ -150,6 +149,12 @@ class Autosuggest extends Component {
 
     switch (event.keyCode) {
       case 13: // enter
+        if (this.state.valueBeforeUpDown !== null && this.state.focusedSuggestionIndex !== null) {
+          this.props.onSuggestionSelected(
+            this.getSuggestion(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex)
+          );
+        }
+
         this.setSuggestionsState(null);
         break;
 
@@ -225,6 +230,7 @@ class Autosuggest extends Component {
       }.bind(this));
     });
     this.onChange(newValue);
+    this.props.onSuggestionSelected(this.getSuggestion(sectionIndex, suggestionIndex));
   }
 
   getSuggestionId(sectionIndex, suggestionIndex) {
@@ -260,7 +266,7 @@ class Autosuggest extends Component {
                           '-' + suggestionIndex;
 
       return (
-        <div id={this.getSuggestionId(sectionIndex, suggestionIndex)}
+        <li id={this.getSuggestionId(sectionIndex, suggestionIndex)}
              className={classes}
              role="option"
              key={suggestionKey}
@@ -268,7 +274,7 @@ class Autosuggest extends Component {
              onMouseLeave={this.onSuggestionMouseLeave.bind(this)}
              onMouseDown={this.onSuggestionMouseDown.bind(this, sectionIndex, suggestionIndex)}>
           {this.renderSuggestionContent(suggestion)}
-        </div>
+        </li>
       );
     }, this);
   }
@@ -278,47 +284,48 @@ class Autosuggest extends Component {
       return null;
     }
 
-    let content;
-
     if (this.isMultipleSections(this.state.suggestions)) {
-      content = this.state.suggestions.map(function(section, sectionIndex) {
-        let sectionName = section.sectionName ? (
-          <div className="react-autosuggest__suggestions-section-name">
-            {section.sectionName}
-          </div>
-        ) : null;
+      return (
+        <div id={'react-autosuggest-' + this.id}
+             className="react-autosuggest__suggestions"
+             role="listbox">
+          {this.state.suggestions.map(function(section, sectionIndex) {
+            let sectionName = section.sectionName ? (
+              <div className="react-autosuggest__suggestions-section-name">
+                {section.sectionName}
+              </div>
+            ) : null;
 
-        return section.suggestions.length === 0 ? null : (
-          <div className="react-autosuggest__suggestions-section"
-               key={'section-' + sectionIndex}>
-            {sectionName}
-            {this.renderSuggestionsList(section.suggestions, sectionIndex)}
-          </div>
-        );
-      }, this);
-    } else {
-      content = this.renderSuggestionsList(this.state.suggestions, null);
+            return section.suggestions.length === 0 ? null : (
+              <div className="react-autosuggest__suggestions-section"
+                   key={'section-' + sectionIndex}>
+                {sectionName}
+                <ul className="react-autosuggest__suggestions-section-suggestions">
+                  {this.renderSuggestionsList(section.suggestions, sectionIndex)}
+                </ul>
+              </div>
+            );
+          }, this)}
+        </div>
+      );
     }
 
     return (
-      <div id={'react-autosuggest-' + this.id}
-           className="react-autosuggest__suggestions"
-           role="listbox">
-        {content}
-      </div>
+      <ul id={'react-autosuggest-' + this.id}
+          className="react-autosuggest__suggestions"
+          role="listbox">
+        {this.renderSuggestionsList(this.state.suggestions, null)}
+      </ul>
     );
   }
 
   render() {
     let ariaActivedescendant =
       this.getSuggestionId(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex);
-    let inputEventAttributes = this.props.inputEventAttributes;
-    delete inputEventAttributes.onChange;
 
     return (
       <div className="react-autosuggest">
         <input {...this.props.inputAttributes}
-               {...inputEventAttributes}
                type="text"
                value={this.state.value}
                autoComplete="off"
@@ -338,15 +345,17 @@ class Autosuggest extends Component {
 }
 
 Autosuggest.propTypes = {
-  inputAttributes: PropTypes.objectOf(PropTypes.string), // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
-  inputEventAttributes: PropTypes.objectOf(PropTypes.func), // Event attributes to pass to the input field (e.g. { onChange: onMyChange, onKeyUp: onMyKeyUp })
   suggestions: PropTypes.func.isRequired,                // Function to get the suggestions
   suggestionRenderer: PropTypes.func,                    // Function that renders a given suggestion (must be implemented when suggestions are objects)
-  suggestionValue: PropTypes.func                        // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
+  suggestionValue: PropTypes.func,                       // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
+  showWhen: PropTypes.func,                              // Function that determines whether to show suggestions or not
+  onSuggestionSelected: PropTypes.func,                  // This function is called when suggestion is selected via mouse click or Enter
+  onChange: PropTypes.func,                              // This function is called when value of input is changed
+  inputAttributes: PropTypes.objectOf(PropTypes.string)  // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
 };
 
 Autosuggest.defaultProps = {
+  showWhen: input => input.trim().length > 0,
+  onSuggestionSelected: () => {},
   inputAttributes: {}
 };
-
-export default Autosuggest;

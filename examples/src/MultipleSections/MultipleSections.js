@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import utils from '../utils';
 import Autosuggest from '../../../src/Autosuggest';
 import SourceCodeLink from '../SourceCodeLink/SourceCodeLink';
 import suburbs from 'json!../suburbs.json';
@@ -14,9 +15,10 @@ function suburbObjToString(suburbObj) {
 }
 
 function getSuggestions(input, callback) {
-  let firstSectionMatchRegex = new RegExp('^' + input, 'i');
-  let secondSectionMatchRegex = new RegExp('^(?!' + input + ')\\w+ ' + input, 'i');
-  let thirdSectionMatchRegex = new RegExp('^(?!' + input + ')\\w+ (?!' + input + ')\\w+ ' + input, 'i');
+  let escapedInput = utils.escapeRegexCharacters(input.trim());
+  let firstSectionMatchRegex = new RegExp('^' + escapedInput, 'i');
+  let secondSectionMatchRegex = new RegExp('^(?!' + escapedInput + ')\\w+ ' + escapedInput, 'i');
+  let thirdSectionMatchRegex = new RegExp('^(?!' + escapedInput + ')\\w+ (?!' + escapedInput + ')\\w+ ' + escapedInput, 'i');
   let firstSectionSuburbs = suburbs.filter( suburbObj => firstSectionMatchRegex.test(suburbObj.suburb) );
   let secondSectionSuburbs = suburbs.filter( suburbObj => secondSectionMatchRegex.test(suburbObj.suburb) );
   let thirdSectionSuburbs = suburbs.filter( suburbObj => thirdSectionMatchRegex.test(suburbObj.suburb) );
@@ -69,8 +71,8 @@ class MultipleSections extends React.Component {
 
     return (
       <div>
-        <Autosuggest inputAttributes={inputAttributes}
-                     suggestions={getSuggestions}
+        <Autosuggest suggestions={getSuggestions}
+                     inputAttributes={inputAttributes}
                      ref={ () => { document.getElementById('multiple-sections').focus(); } } />
         <SourceCodeLink file="examples/src/MultipleSections/MultipleSections.js" />
       </div>

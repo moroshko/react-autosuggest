@@ -11,6 +11,7 @@
 * <a href="//moroshko.github.io/react-autosuggest" target="_blank">Basic example</a><br>
 * <a href="//moroshko.github.io/react-autosuggest#Custom renderer" target="_blank">Custom renderer</a><br>
 * <a href="//moroshko.github.io/react-autosuggest#Multiple sections" target="_blank">Multiple sections</a>
+* <a href="//moroshko.github.io/react-autosuggest#2 or more characters" target="_blank">2 or more characters</a>
 
 ## Installation
 
@@ -39,6 +40,14 @@ function getSuggestions(input, callback) {
 
 ### Options
 
+* [`suggestions`](#suggestionsOption)
+* [`suggestionRenderer`](#suggestionRendererOption)
+* [`suggestionValue`](#suggestionValueOption)
+* [`showWhen`](#showWhenOption)
+* [`onSuggestionSelected`](#onSuggestionSelectedOption)
+* [`inputAttributes`](#inputAttributesOption)
+
+<a name="suggestionsOption"></a>
 ##### suggestions (required)
 
 Implement this function to tell `Autosuggest` which suggestions to display.
@@ -74,9 +83,9 @@ function(input, callback) {
 `<suggestion>` can have one of the following two formats:
 
 * String, e.g.: `'Mentone'`
-* Object, e.g.: `{ suburb: 'Mentone', postcode: '3194' }`. This object cannot have a `suggestions` key. **You must implement [`suggestionRenderer`](#suggestionRenderer) and [`suggestionValue`](#suggestionValue) in this case.**
+* Object, e.g.: `{ suburb: 'Mentone', postcode: '3194' }`. This object cannot have a `suggestions` key. **You must implement [`suggestionRenderer`](#suggestionRendererOption) and [`suggestionValue`](#suggestionValueOption) in this case.**
 
-<a name="suggestionRenderer"></a>
+<a name="suggestionRendererOption"></a>
 ##### suggestionRenderer (required when suggestions are objects)
 
 This function will be used to render the suggestion. It should return `ReactElement` or a string.
@@ -87,7 +96,7 @@ function(suggestion, input) {
 }
 ```
 
-* `suggestion` - The [\<suggestion>](#suggestion) (string or object)
+* `suggestion` - The [suggestion](#suggestion) to render (string or object)
 * `input` - The value of the input field (e.g.: `'Men'`). If user interacts using the Up or Down keys at the moment, it will be the value of the input field **prior** to those interactions.
 
 For example:
@@ -101,19 +110,14 @@ function renderSuggestion(suggestion, input) { // In this example 'suggestion' i
 ```
 
 ```xml
-<Autosuggest suggestions={getSuggestions} suggestionRenderer={renderSuggestion} />
+<Autosuggest suggestions={getSuggestions}
+             suggestionRenderer={renderSuggestion} />
 ```
 
-<a name="suggestionValue"></a>
+<a name="suggestionValueOption"></a>
 ##### suggestionValue (required when suggestions are objects)
 
-This function will be used to set the value of the input field when suggestion is selected. It is ignored when suggestions are strings.
-
-```javascript
-function(suggestionObj) {
-  ...
-}
-```
+This function will be used to set the value of the input field when suggestion is selected. It has one parameter which is the suggestion object. This function is ignored when suggestions are strings.
 
 For example:
 
@@ -129,6 +133,50 @@ function getSuggestionValue(suggestionObj) {
              suggestionValue={getSuggestionValue} />
 ```
 
+<a name="showWhenOption"></a>
+##### showWhen (optional)
+
+This function will be used to determine whether to show suggestions or not. It has one parameter which is the value of the input field (e.g.: `'m '`). The default is:
+
+```javascript
+function(input) {
+  return input.trim().length > 0;
+}
+```
+
+
+For example, to show suggestions only if user typed 2 or more characters, do:
+
+```javascript
+function showWhen(input) {
+  return input.trim().length >= 2;
+}
+```
+
+```xml
+<Autosuggest suggestions={getSuggestions}
+             showWhen={showWhen} />
+```
+
+<a name="onSuggestionSelectedOption"></a>
+##### onSuggestionSelected (optional)
+
+This function will be called when suggestion is selected via mouse click or Enter. It has one parameter which is the selected [suggestion](#suggestion) (string or object).
+
+For example:
+
+```javascript
+function onSuggestionSelected(suggestion) { // In this example 'suggestion' is a string
+  console.log('Suggestion selected: [' + suggestion + ']');
+}
+```
+
+```xml
+<Autosuggest suggestions={getSuggestions}
+             onSuggestionSelected={onSuggestionSelected} />
+```
+
+<a name="inputAttributesOption"></a>
 ##### inputAttributes (optional)
 
 Hash of attributes to pass to the input field. For example:
@@ -145,20 +193,70 @@ let inputAttributes = {
 
 ```xml
 <label htmlFor="locations-autosuggest">Where</label>
-<Autosuggest inputAttributes={inputAttributes} suggestions={getSuggestions} />
+<Autosuggest suggestions={getSuggestions}
+             inputAttributes={inputAttributes} />
 ```
 
 ## Styling
 
 The `<Autosuggest />` component comes with no styles. You can use the following classes to style it:
 
-* `react-autosuggest` - Component's wrapper. It includes both the input field and the suggestions list.
-* `react-autosuggest__suggestions` - Suggestions list wrapper
-* `react-autosuggest__suggestions-section` - Suggestions section wrapper (exists only when displaying multiple sections)
-* `react-autosuggest__suggestions-section-name` - Suggestions section name wrapper (exists only when displaying multiple sections and `sectionName` is specified)
-* `react-autosuggest__suggestion` - Single suggestion wrapper
+* `react-autosuggest`
+* `react-autosuggest__suggestions`
+* `react-autosuggest__suggestion`
+* `react-autosuggest__suggestions-section`
+* `react-autosuggest__suggestions-section-name`
+* `react-autosuggest__suggestions-section-suggestions`
 
-Example: [`examples/src/Autosuggest.less`](https://github.com/moroshko/react-autosuggest/blob/master/examples/src/Autosuggest.less)
+An example can be found in [`examples/src/Autosuggest.less`](https://github.com/moroshko/react-autosuggest/blob/master/examples/src/Autosuggest.less)
+
+The following diagrams explain the classes above.
+
+#### No sections
+
+    +---| react-autosuggest |-------------------------+
+    |                                                 |
+    |  <input>                                        |
+    |                                                 |
+    |  +--| react-autosuggest__suggestions |-------+  |
+    |  |                                           |  |
+    |  |  +--| react-autosuggest__suggestion |--+  |  |
+    |  |  |                                     |  |  |
+    |  |  +-------------------------------------+  |  |
+    |  |                                           |  |
+    |  +-------------------------------------------+  |
+    |                                                 |
+    +-------------------------------------------------+
+    
+
+#### Multiple sections
+
+    
+    +---| react-autosuggest |----------------------------------------------------+
+    |                                                                            |
+    |  <input>                                                                   |
+    |                                                                            |
+    |  +--| react-autosuggest__suggestions |----------------------------------+  |
+    |  |                                                                      |  |
+    |  |  +--| react-autosuggest__suggestions-section |--------------------+  |  |
+    |  |  |                                                                |  |  |
+    |  |  |  +--| react-autosuggest__suggestions-section-name |---------+  |  |  |
+    |  |  |  |                                                          |  |  |  |
+    |  |  |  +----------------------------------------------------------+  |  |  |
+    |  |  |                                                                |  |  |
+    |  |  |  +--| react-autosuggest__suggestions-section-suggestions |--+  |  |  |
+    |  |  |  |                                                          |  |  |  |
+    |  |  |  |  +--| react-autosuggest__suggestion |-----------------+  |  |  |  |
+    |  |  |  |  |                                                    |  |  |  |  |
+    |  |  |  |  +----------------------------------------------------+  |  |  |  |
+    |  |  |  |                                                          |  |  |  |
+    |  |  |  +----------------------------------------------------------+  |  |  |
+    |  |  |                                                                |  |  |
+    |  |  +----------------------------------------------------------------+  |  |
+    |  |                                                                      |  |
+    |  +----------------------------------------------------------------------+  |
+    |                                                                            |
+    +----------------------------------------------------------------------------+
 
 ## Development
 
@@ -167,6 +265,12 @@ npm start
 ```
 
 Now, open `http://localhost:3000/examples/dist/index.html`
+
+## Running Tests
+
+```shell
+npm test
+```
 
 ## License
 
