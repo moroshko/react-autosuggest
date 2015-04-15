@@ -204,6 +204,7 @@ The `<Autosuggest />` component comes with no styles. You can use the following 
 * `react-autosuggest`
 * `react-autosuggest__suggestions`
 * `react-autosuggest__suggestion`
+* `react-autosuggest__suggestion--focused`
 * `react-autosuggest__suggestions-section`
 * `react-autosuggest__suggestions-section-name`
 * `react-autosuggest__suggestions-section-suggestions`
