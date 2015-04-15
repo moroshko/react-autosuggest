@@ -45,6 +45,7 @@ function getSuggestions(input, callback) {
 * [`suggestionValue`](#suggestionValueOption)
 * [`showWhen`](#showWhenOption)
 * [`onSuggestionSelected`](#onSuggestionSelectedOption)
+* [`onSuggestionFocused`](#onSuggestionFocusedOption)
 * [`inputAttributes`](#inputAttributesOption)
 
 <a name="suggestionsOption"></a>
@@ -70,7 +71,7 @@ function(input, callback) {
 * **To display a single section with no title:** `[`[\<suggestion>](#suggestion)`, `[\<suggestion>](#suggestion)`, ...]`
 * **To display one or more sections with optional titles:** Array of objects with an optional `sectionName` and a mandatory `suggestions` keys, e.g.:
 
-```javascript    
+```javascript
     [{
       suggestions: [<suggestion>, <suggestion>]   // This section won't have a title
     }, {
@@ -176,6 +177,24 @@ function onSuggestionSelected(suggestion) { // In this example 'suggestion' is a
              onSuggestionSelected={onSuggestionSelected} />
 ```
 
+<a name="onSuggestionFocusedOption"></a>
+##### onSuggestionFocused (optional)
+
+This function will be called when suggestion is focused via mouse hover or up/down keys. It has one parameter which is the focused [suggestion](#suggestion) (string or object).
+
+For example:
+
+```javascript
+function onSuggestionFocused(suggestion) { // In this example 'suggestion' is a string
+  console.log('Suggestion focused: [' + suggestion + ']');
+}
+```
+
+```xml
+<Autosuggest suggestions={getSuggestions}
+             onSuggestionFocused={onSuggestionFocused} />
+```
+
 <a name="inputAttributesOption"></a>
 ##### inputAttributes (optional)
 
@@ -227,11 +246,11 @@ The following diagrams explain the classes above.
     |  +-------------------------------------------+  |
     |                                                 |
     +-------------------------------------------------+
-    
+
 
 #### Multiple sections
 
-    
+
     +---| react-autosuggest |----------------------------------------------------+
     |                                                                            |
     |  <input>                                                                   |
