@@ -18,6 +18,7 @@ let stringSuburbs = suburbObjects.map( suburbObj => suburbObj.suburb );
 let reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 let autosuggest, input, suggestions;
 let onSuggestionSelected = jest.genMockFunction();
+let onSuggestionFocused = jest.genMockFunction();
 
 function getSuburbStrings(input, callback) {
   let regex = new RegExp('^' + input, 'i');
@@ -407,6 +408,55 @@ describe('Autosuggest', function() {
         clickDown();
         clickEnter();
         expect(onSuggestionSelected).not.toBeCalled();
+      });
+    });
+  });
+
+  describe('onSuggestionFocused', function() {
+    beforeEach(function() {
+      onSuggestionFocused.mockClear();
+    });
+
+    describe('String suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbStrings}
+                       onSuggestionFocused={onSuggestionFocused} />
+        );
+        setInputValue('m');
+      });
+
+      it('should call onSuggestionFocused when suggestion is focused using mouse', function() {
+        mouseOverFromInputToSuggestion(1);
+        expect(onSuggestionFocused).toBeCalledWith('Mordialloc');
+      });
+
+      it('should call onSuggestionFocused when suggestion is focused using keyboard', function() {
+        clickDown();
+        expect(onSuggestionFocused).toBeCalledWith('Mill Park');
+      });
+
+    });
+
+    describe('Object suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbObjects}
+                       suggestionRenderer={renderSuburbObject}
+                       suggestionValue={getSuburbObjectValue}
+                       onSuggestionFocused={onSuggestionFocused} />
+        );
+        setInputValue('m');
+      });
+
+      it('should call onSuggestionFocused when suggestion is focused using mouse', function() {
+        mouseOverFromInputToSuggestion(0);
+        expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+      });
+
+      it('should call onSuggestionFocused when suggestion is focused using keyboard', function() {
+        clickDown();
+        expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
       });
     });
   });
