@@ -190,7 +190,7 @@ var Autosuggest = (function (_Component) {
           case 13:
             // enter
             if (this.state.valueBeforeUpDown !== null && this.state.focusedSuggestionIndex !== null) {
-              this.props.onSuggestionSelected(this.getSuggestion(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex));
+              this.props.onSuggestionSelected(this.getSuggestion(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex), event);
             }
 
             this.setSuggestionsState(null);
@@ -259,7 +259,7 @@ var Autosuggest = (function (_Component) {
       }
     },
     onSuggestionMouseDown: {
-      value: function onSuggestionMouseDown(sectionIndex, suggestionIndex) {
+      value: function onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
         this.setState({
           value: this.getSuggestionValue(sectionIndex, suggestionIndex),
           suggestions: null,
@@ -273,7 +273,7 @@ var Autosuggest = (function (_Component) {
           }).bind(this));
         });
 
-        this.props.onSuggestionSelected(this.getSuggestion(sectionIndex, suggestionIndex));
+        this.props.onSuggestionSelected(this.getSuggestion(sectionIndex, suggestionIndex), event);
       }
     },
     getSuggestionId: {
@@ -301,6 +301,8 @@ var Autosuggest = (function (_Component) {
     renderSuggestionsList: {
       value: function renderSuggestionsList(suggestions, sectionIndex) {
         return suggestions.map(function (suggestion, suggestionIndex) {
+          var _this = this;
+
           var classes = classnames({
             "react-autosuggest__suggestion": true,
             "react-autosuggest__suggestion--focused": sectionIndex === this.state.focusedSectionIndex && suggestionIndex === this.state.focusedSuggestionIndex
@@ -313,9 +315,15 @@ var Autosuggest = (function (_Component) {
               className: classes,
               role: "option",
               key: suggestionKey,
-              onMouseEnter: this.onSuggestionMouseEnter.bind(this, sectionIndex, suggestionIndex),
-              onMouseLeave: this.onSuggestionMouseLeave.bind(this),
-              onMouseDown: this.onSuggestionMouseDown.bind(this, sectionIndex, suggestionIndex) },
+              onMouseEnter: function (event) {
+                return _this.onSuggestionMouseEnter(sectionIndex, suggestionIndex, event);
+              },
+              onMouseLeave: function (event) {
+                return _this.onSuggestionMouseLeave(event);
+              },
+              onMouseDown: function (event) {
+                return _this.onSuggestionMouseDown(sectionIndex, suggestionIndex, event);
+              } },
             this.renderSuggestionContent(suggestion)
           );
         }, this);
