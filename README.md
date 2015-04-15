@@ -45,6 +45,7 @@ function getSuggestions(input, callback) {
 * [`suggestionValue`](#suggestionValueOption)
 * [`showWhen`](#showWhenOption)
 * [`onSuggestionSelected`](#onSuggestionSelectedOption)
+* [`onSuggestionFocused`](#onSuggestionFocusedOption)
 * [`inputAttributes`](#inputAttributesOption)
 
 <a name="suggestionsOption"></a>
@@ -174,6 +175,24 @@ function onSuggestionSelected(suggestion) { // In this example 'suggestion' is a
 ```xml
 <Autosuggest suggestions={getSuggestions}
              onSuggestionSelected={onSuggestionSelected} />
+```
+
+<a name="onSuggestionFocusedOption"></a>
+##### onSuggestionFocused (optional)
+
+This function will be called when suggestion is focused via mouse hover or up/down keys. It has one parameter which is the focused [suggestion](#suggestion) (string or object).
+
+For example:
+
+```javascript
+function onSuggestionFocused(suggestion) { // In this example 'suggestion' is a string
+  console.log('Suggestion focused: [' + suggestion + ']');
+}
+```
+
+```xml
+<Autosuggest suggestions={getSuggestions}
+             onSuggestionFocused={onSuggestionFocused} />
 ```
 
 <a name="inputAttributesOption"></a>
