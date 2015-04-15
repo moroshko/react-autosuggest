@@ -18,6 +18,7 @@ let stringSuburbs = suburbObjects.map( suburbObj => suburbObj.suburb );
 let reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 let autosuggest, input, suggestions;
 let onSuggestionSelected = jest.genMockFunction();
+let onSuggestionFocused = jest.genMockFunction();
 
 function getSuburbStrings(input, callback) {
   let regex = new RegExp('^' + input, 'i');
@@ -142,7 +143,7 @@ function expectFocusedSuggestion(suggestion) {
 
 function expectSections(expectedSections) {
   let sections = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestions-section');
-  
+
   expect(sections.length).toBe(expectedSections.length);
 
   for (let i = 0; i < sections.length; i++) {
@@ -371,7 +372,7 @@ describe('Autosuggest', function() {
       it('should not call onSuggestionSelected when mouse enters a suggestion', function() {
         mouseOverFromInputToSuggestion(0);
         expect(onSuggestionSelected).not.toBeCalled();
-      });      
+      });
     });
 
     describe('Object suggestions', function() {
@@ -407,6 +408,55 @@ describe('Autosuggest', function() {
         clickDown();
         clickEnter();
         expect(onSuggestionSelected).not.toBeCalled();
+      });
+    });
+  });
+
+  describe('onSuggestionFocused', function() {
+    beforeEach(function() {
+      onSuggestionFocused.mockClear();
+    });
+
+    describe('String suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbStrings}
+                       onSuggestionFocused={onSuggestionFocused} />
+        );
+        setInputValue('m');
+      });
+
+      it('should call onSuggestionFocused when suggestion is focused using mouse', function() {
+        mouseOverFromInputToSuggestion(1);
+        expect(onSuggestionFocused).toBeCalledWith('Mordialloc');
+      });
+
+      it('should call onSuggestionFocused when suggestion is focused using keyboard', function() {
+        clickDown();
+        expect(onSuggestionFocused).toBeCalledWith('Mill Park');
+      });
+
+    });
+
+    describe('Object suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbObjects}
+                       suggestionRenderer={renderSuburbObject}
+                       suggestionValue={getSuburbObjectValue}
+                       onSuggestionFocused={onSuggestionFocused} />
+        );
+        setInputValue('m');
+      });
+
+      it('should call onSuggestionFocused when suggestion is focused using mouse', function() {
+        mouseOverFromInputToSuggestion(0);
+        expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+      });
+
+      it('should call onSuggestionFocused when suggestion is focused using keyboard', function() {
+        clickDown();
+        expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
       });
     });
   });
@@ -672,7 +722,7 @@ describe('Autosuggest', function() {
       jest.runAllTimers();
 
       expectSuggestions(['Riachella', 'Richmond']);
-    });   
+    });
 
     it('should not display delayed suggestions if input is empty', function() {
       function getDelayedSuburbStrings(input, callback) {
