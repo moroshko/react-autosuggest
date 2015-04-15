@@ -2,21 +2,40 @@
 
 jest.dontMock('../Autosuggest.js');
 
-var React = require('react/addons');
-var Simulate = React.addons.TestUtils.Simulate;
-var SimulateNative = React.addons.TestUtils.SimulateNative;
-var Autosuggest = require('../Autosuggest.js');
-var TestUtils = React.addons.TestUtils;
-var suburbs = ['Cheltenham', 'Mill Park', 'Mordialloc', 'Nunawading'];
-var reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
-var autosuggest, input, suggestions;
+import React from 'react/addons';
+import Autosuggest from '../Autosuggest.js';
 
-function getSuburbs(input, callback) {
-  var regex = new RegExp('^' + input, 'i');
+let TestUtils = React.addons.TestUtils;
+let Simulate = TestUtils.Simulate;
+let SimulateNative = TestUtils.SimulateNative;
+let suburbObjects = [
+  { suburb: 'Cheltenham', postcode: '3192' },
+  { suburb: 'Mill Park', postcode: '3083' },
+  { suburb: 'Mordialloc', postcode: '3195' },
+  { suburb: 'Nunawading', postcode: '3131' }
+];
+let stringSuburbs = suburbObjects.map( suburbObj => suburbObj.suburb );
+let reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
+let autosuggest, input, suggestions;
+let onSuggestionSelected = jest.genMockFunction();
 
-  callback(null, suburbs.filter(function(suburb) {
-    return regex.test(suburb);
-  }));
+function getSuburbStrings(input, callback) {
+  let regex = new RegExp('^' + input, 'i');
+
+  callback(null, stringSuburbs.filter( suburb => regex.test(suburb) ));
+}
+
+function getSuburbObjects(input, callback) {
+  let regex = new RegExp('^' + input, 'i');
+
+  callback(null, suburbObjects.filter( suburbObj => regex.test(suburbObj.suburb) ));
+}
+
+function getStaticSuburbs(input, callback) {
+  callback(null, [
+    { suburb: 'Mill Park', postcode: '3083' },
+    { suburb: 'Nunawading', postcode: '3131' }
+  ]);
 }
 
 function getMultipleSectionsSuburbs(input, callback) {
@@ -31,27 +50,24 @@ function getMultipleSectionsSuburbs(input, callback) {
   }]);
 }
 
-function getObjectSuggestions(input, callback) {
-  callback(null, [
-    {
-      name: "sug1",
-      data: 5
-    },
-    {
-      name: "sug2",
-      data: 4
-    },
-  ]);
-}
-
-function getMixedSuggestions(input, callback) {
-  callback(null, ["sug1", 2, "sug3"]);
-}
-
-function renderLocation(suggestion, input) {
+function renderSuburbString(suburb, input) {
   return (
-    <span><strong>{suggestion.slice(0, input.length)}</strong>{suggestion.slice(input.length)}</span>
+    <span><strong>{suburb.slice(0, input.length)}</strong>{suburb.slice(input.length)}</span>
   );
+}
+
+function renderSuburbObject(suburbObj, input) {
+  return (
+    <span><strong>{suburbObj.suburb.slice(0, input.length)}</strong>{suburbObj.suburb.slice(input.length)} VIC {suburbObj.postcode}</span>
+  );
+}
+
+function getSuburbObjectValue(suburbObj) {
+  return suburbObj.suburb + ' VIC ' + suburbObj.postcode;
+}
+
+function showWhen(input) {
+  return input.length >= 3;
 }
 
 // See: http://stackoverflow.com/q/28979533/247243
@@ -65,7 +81,7 @@ function setInputValue(value) {
 
 function mouseDownSuggestion(suggestionIndex) {
   suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-  Simulate.mouseDown(suggestions[suggestionIndex].getDOMNode());
+  Simulate.mouseDown(React.findDOMNode(suggestions[suggestionIndex]));
 }
 
 // See: https://github.com/facebook/react/issues/1297
@@ -76,12 +92,12 @@ function mouseOver(from, to) {
 
 function mouseOverFromInputToSuggestion(suggestionIndex) {
   suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-  mouseOver(input, suggestions[suggestionIndex].getDOMNode());
+  mouseOver(input, React.findDOMNode(suggestions[suggestionIndex]));
 }
 
 function mouseOverFromSuggestionToInput(suggestionIndex) {
   suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-  mouseOver(suggestions[suggestionIndex].getDOMNode(), input);
+  mouseOver(React.findDOMNode(suggestions[suggestionIndex]), input);
 }
 
 function clickEscape() {
@@ -96,6 +112,10 @@ function clickUp() {
   Simulate.keyDown(input, { keyCode: 38 });
 }
 
+function clickEnter() {
+  Simulate.keyDown(input, { keyCode: 13 });
+}
+
 function expectInputValue(expectedValue) {
   expect(input.value).toBe(expectedValue);
 }
@@ -104,245 +124,371 @@ function expectSuggestions(expectedSuggestions) {
   suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
   expect(suggestions.length).toBe(expectedSuggestions.length);
 
-  for (var i = 0; i < expectedSuggestions.length; i++) {
-    expect(suggestions[i].getDOMNode().textContent === expectedSuggestions[i]);
+  for (let i = 0; i < expectedSuggestions.length; i++) {
+    expect(React.findDOMNode(suggestions[i]).textContent).toBe(expectedSuggestions[i]);
   }
 }
 
 function expectFocusedSuggestion(suggestion) {
-  var focusedSuggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion--focused');
+  let focusedSuggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion--focused');
 
   if (suggestion === null) {
     expect(focusedSuggestions.length).toBe(0);
   } else {
     expect(focusedSuggestions.length).toBe(1);
-    expect(focusedSuggestions[0].getDOMNode().textContent).toBe(suggestion);
+    expect(React.findDOMNode(focusedSuggestions[0]).textContent).toBe(suggestion);
   }
 }
 
 function expectSections(expectedSections) {
-  var sections = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestions-section');
+  let sections = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestions-section');
 
   expect(sections.length).toBe(expectedSections.length);
 
-  for (var i = 0; i < sections.length; i++) {
-    var sectionName = TestUtils.scryRenderedDOMComponentsWithClass(sections[i], 'react-autosuggest__suggestions-section-name');
+  for (let i = 0; i < sections.length; i++) {
+    let sectionName = TestUtils.scryRenderedDOMComponentsWithClass(sections[i], 'react-autosuggest__suggestions-section-name');
 
     if (expectedSections[i] === null) {
       expect(sectionName.length).toBe(0);
     } else {
       expect(sectionName.length).toBe(1);
-      expect(sectionName[0].getDOMNode().textContent).toBe(expectedSections[i]);
+      expect(React.findDOMNode(sectionName[0]).textContent).toBe(expectedSections[i]);
     }
   }
 }
 
 function createAutosuggest(Autosuggest) {
   autosuggest = TestUtils.renderIntoDocument(Autosuggest);
+  input = React.findDOMNode(TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input'));
 }
 
 describe('Autosuggest', function() {
-  describe('Basics', function() {
+  describe('isMultipleSections()', function() {
     beforeEach(function() {
-      createAutosuggest(
-        <Autosuggest inputAttributes={{ id: 'my-autosuggest',
-                                        name: 'my-autosuggest-name',
-                                        placeholder: 'Enter location...',
-                                        className: 'my-sweet-autosuggest',
-                                        value: 'my value' }}
-                     suggestions={getSuburbs} />
-      );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
     });
 
-    it('should set input attributes', function() {
-      expect(input.id).toBe('my-autosuggest');
-      expect(input.name).toBe('my-autosuggest-name');
-      expect(input.getAttribute('placeholder')).toBe('Enter location...');
-      expect(input.className).toBe('my-sweet-autosuggest');
+    it('should be multiple sections', function() {
+      expect(autosuggest.isMultipleSections([ { suggestions: [] }])).toBe(true);
+      expect(autosuggest.isMultipleSections([ { suggestions: ['a', 'b'] }])).toBe(true);
+      expect(autosuggest.isMultipleSections([ { sectionName: 'First', suggestions: ['a', 'b'] }])).toBe(true);
     });
 
-    it('should set initial value', function() {
-      expectInputValue('my value');
-    });
-
-    it('should not show suggestions by default', function() {
-      expectSuggestions([]);
-    });
-
-    it('should show suggestions when matches exist', function() {
-      setInputValue('m');
-      expectSuggestions(['Mill Park', 'Mordialloc']);
-    });
-
-    it('should not focus on suggestion when suggestions are shown', function() {
-      setInputValue('m');
-      expectFocusedSuggestion(null);
-    });
-
-    it('should show suggestions when case insensitive matches exist', function() {
-      setInputValue('NUNA');
-      expectSuggestions(['Nunawading']);
-    });
-
-    it('should show not suggestions when no matches exist', function() {
-      setInputValue('a');
-      expectSuggestions([]);
-    });
-
-    it('should hide suggestions when ESC is clicked and suggestions are shown', function() {
-      setInputValue('m');
-      clickEscape();
-      expectSuggestions([]);
-    });
-
-    it('should clear the input when ESC is clicked and suggestions are not shown', function() {
-      setInputValue('m');
-      clickEscape();
-      clickEscape();
-      expectInputValue('');
+    it('should not be multiple sections', function() {
+      expect(autosuggest.isMultipleSections(null)).toBe(false);
+      expect(autosuggest.isMultipleSections([])).toBe(false);
+      expect(autosuggest.isMultipleSections(['a', 'b'])).toBe(false);
+      expect(autosuggest.isMultipleSections([ { sectionName: 'First' }])).toBe(false);
+      expect(autosuggest.isMultipleSections([ { suburb: 'Mentone', postcode: 3192 }])).toBe(false);
     });
   });
 
-  describe('Suggestion renderer', function() {
+  describe('suggestionsExist()', function() {
+    beforeEach(function() {
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
+    });
 
-    describe('when suggestionRenderer provided', function(){
+    it('should have suggestions', function() {
+      expect(autosuggest.suggestionsExist([ { suggestions: ['a'] }])).toBe(true);
+      expect(autosuggest.suggestionsExist([ { suburb: 'Mentone', postcode: 3192 }])).toBe(true);
+      expect(autosuggest.suggestionsExist([ { sectionName: 'First', suggestions: ['a', 'b'] }])).toBe(true);
+      expect(autosuggest.suggestionsExist([ { sectionName: 'First', suggestions: [] }, { sectionName: 'Second', suggestions: ['a'] }])).toBe(true);
+    });
 
-      it('should use the specified suggestionRenderer function', function() {
+    it('should not have suggestions', function() {
+      expect(autosuggest.suggestionsExist(null)).toBe(false);
+      expect(autosuggest.suggestionsExist([])).toBe(false);
+      expect(autosuggest.suggestionsExist([ { suggestions: [] }])).toBe(false);
+      expect(autosuggest.suggestionsExist([ { sectionName: 'First', suggestions: [] }, { sectionName: 'Second', suggestions: [] }])).toBe(false);
+    });
+  });
+
+  describe('Not configured properly', function() {
+    it('should throw an error when "suggestions" are objects but "suggestionRenderer()" isn\'t provided', function() {
+      createAutosuggest(<Autosuggest suggestions={getStaticSuburbs} />);
+      expect(setInputValue.bind(null, 'a')).toThrow('When <suggestion> is an object, you must implement the suggestionRenderer() function to specify how to render it.');
+    });
+
+    it('should throw an error when "suggestions" are objects but "suggestionValue()" isn\'t provided', function() {
+      createAutosuggest(<Autosuggest suggestions={getStaticSuburbs} suggestionRenderer={renderSuburbObject} />);
+      setInputValue('a');
+      expect(mouseDownSuggestion.bind(null, 0)).toThrow('When <suggestion> is an object, you must implement the suggestionValue() function to specify how to set input\'s value when suggestion selected.');
+    });
+  });
+
+  describe('Basics', function() {
+    describe('String suggestions', function() {
+      beforeEach(function() {
         createAutosuggest(
-          <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
-                       suggestions={getSuburbs}
-                       suggestionRenderer={renderLocation} />
+          <Autosuggest suggestions={getSuburbStrings}
+                       inputAttributes={{ id: 'my-autosuggest',
+                                          name: 'my-autosuggest-name',
+                                          placeholder: 'Enter location...',
+                                          className: 'my-sweet-autosuggest',
+                                          value: 'my value' }} />
         );
-        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
-        setInputValue('m');
-
-        suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(stripReactAttributes(suggestions[0].getDOMNode().innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span></span>');
       });
 
-      it('should pass regular objects to the suggestionRenderer function', function() {
-        var renderer = jest.genMockFunction();
-        createAutosuggest(
-          <Autosuggest suggestions={getObjectSuggestions}
-                       suggestionRenderer={renderer} />
-        );
-        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
-        setInputValue('m');
+      it('should set input attributes', function() {
+        expect(input.id).toBe('my-autosuggest');
+        expect(input.name).toBe('my-autosuggest-name');
+        expect(input.getAttribute('placeholder')).toBe('Enter location...');
+        expect(input.className).toBe('my-sweet-autosuggest');
+      });
 
-        expect(renderer.mock.calls.length).toEqual(2);
-        expect(renderer.mock.calls[0][0]['name']).toEqual('sug1');
-        expect(renderer.mock.calls[1][0]['name']).toEqual('sug2');
+      it('should set initial value', function() {
+        expectInputValue('my value');
+      });
+
+      it('should not show suggestions by default', function() {
+        expectSuggestions([]);
+      });
+
+      it('should show suggestions when matches exist', function() {
+        setInputValue('m');
+        expectSuggestions(['Mill Park', 'Mordialloc']);
+      });
+
+      it('should not focus on suggestion when suggestions are shown', function() {
+        setInputValue('m');
+        expectFocusedSuggestion(null);
+      });
+
+      it('should show suggestions when case insensitive matches exist', function() {
+        setInputValue('NUNA');
+        expectSuggestions(['Nunawading']);
+      });
+
+      it('should show not suggestions when no matches exist', function() {
+        setInputValue('a');
+        expectSuggestions([]);
+      });
+
+      it('should hide suggestions when ESC is clicked and suggestions are shown', function() {
+        setInputValue('m');
+        clickEscape();
+        expectSuggestions([]);
+      });
+
+      it('should clear the input when ESC is clicked and suggestions are not shown', function() {
+        setInputValue('m');
+        clickEscape();
+        clickEscape();
+        expectInputValue('');
       });
     });
 
-    describe('when suggestionRenderer not provided', function(){
-
-      it('should render suggestion as is if it is not an object, i.e. string or number', function() {
+    describe('Object suggestions', function() {
+      beforeEach(function() {
         createAutosuggest(
-          <Autosuggest suggestions={getMixedSuggestions} />
+          <Autosuggest suggestions={getSuburbObjects}
+                       suggestionRenderer={renderSuburbObject}
+                       suggestionValue={getSuburbObjectValue} />
         );
-        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
-        setInputValue('m');
-
-        suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(suggestions.length).toEqual(3);
-        expect(suggestions[0].props.children).toEqual('sug1');
-        expect(suggestions[1].props.children).toEqual(2);
-        expect(suggestions[2].props.children).toEqual('sug3');
       });
 
-      it('should render suggestion as object\'s displayKey when suggestion is object ', function() {
-        createAutosuggest(
-          <Autosuggest suggestions={getObjectSuggestions}
-                       displayKey={'name'} />
-        );
-        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      it('should show suggestions when matches exist', function() {
         setInputValue('m');
+        expectSuggestions(['Mill Park VIC 3083', 'Mordialloc VIC 3195']);
+      });
+    });
+  });
 
-        suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(suggestions.length).toEqual(2);
-        expect(suggestions[0].props.children).toEqual('sug1');
-        expect(suggestions[1].props.children).toEqual('sug2');
+  describe('suggestionRenderer', function() {
+    describe('String suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbStrings}
+                       suggestionRenderer={renderSuburbString} />
+        );
+        setInputValue('m');
       });
 
-      it('should throw error if suggestion is object and does not contain displayKey', function() {
+      it('should use the specified suggestionRenderer function', function() {
+        suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+        expect(stripReactAttributes(React.findDOMNode(suggestions[0]).innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span></span>');
+      });
+    });
+
+    describe('Object suggestions', function() {
+      beforeEach(function() {
         createAutosuggest(
-          <Autosuggest suggestions={getObjectSuggestions} />
+          <Autosuggest suggestions={getSuburbObjects}
+                       suggestionRenderer={renderSuburbObject}
+                       suggestionValue={getSuburbObjectValue} />
         );
-        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
-        expect(setInputValue.bind(null, 'm')).toThrow('Invalid suggestion');
+        setInputValue('m');
+      });
+
+      it('should use the specified suggestionRenderer function', function() {
+        suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+        expect(stripReactAttributes(React.findDOMNode(suggestions[0]).innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span><span> VIC </span><span>3083</span></span>');
+      });
+    });
+  });
+
+  describe('showWhen', function() {
+    beforeEach(function() {
+      createAutosuggest(
+        <Autosuggest suggestions={getSuburbStrings}
+                     showWhen={showWhen} />
+      );
+    });
+
+    it('should not show suggestions when showWhen returns false', function() {
+      setInputValue('m');
+      expectSuggestions([]);
+
+      setInputValue('mo');
+      expectSuggestions([]);
+    });
+
+    it('should show suggestions when showWhen returns true', function() {
+      setInputValue('mor');
+      expectSuggestions(['Mordialloc']);
+    });
+  });
+
+  describe('onSuggestionSelected', function() {
+    beforeEach(function() {
+      onSuggestionSelected.mockClear();
+    });
+
+    describe('String suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbStrings}
+                       onSuggestionSelected={onSuggestionSelected} />
+        );
+        setInputValue('m');
+      });
+
+      it('should call onSuggestionSelected when suggestion is selected using mouse', function() {
+        mouseDownSuggestion(1);
+        expect(onSuggestionSelected).toBeCalledWith('Mordialloc');
+      });
+
+      it('should not call onSuggestionSelected when mouse enters a suggestion', function() {
+        mouseOverFromInputToSuggestion(0);
+        expect(onSuggestionSelected).not.toBeCalled();
+      });
+    });
+
+    describe('Object suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbObjects}
+                       suggestionRenderer={renderSuburbObject}
+                       suggestionValue={getSuburbObjectValue}
+                       onSuggestionSelected={onSuggestionSelected} />
+        );
+        setInputValue('m');
+      });
+
+      it('should call onSuggestionSelected when suggestion is selected using keyboard', function() {
+        clickDown();
+        clickEnter();
+        expect(onSuggestionSelected).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+      });
+
+      it('should not call onSuggestionSelected when navigating using keyboard', function() {
+        clickDown();
+        expect(onSuggestionSelected).not.toBeCalled();
+      });
+
+      it('should not call onSuggestionSelected if no suggestion is focussed', function() {
+        clickEnter();
+        expect(onSuggestionSelected).not.toBeCalled();
+      });
+
+      it('should not call onSuggestionSelected if no suggestion is focussed after Up/Down interaction', function() {
+        clickDown();
+        clickDown();
+        clickDown();
+        clickEnter();
+        expect(onSuggestionSelected).not.toBeCalled();
       });
     });
   });
 
   describe('Keyboard interactions', function() {
-    beforeEach(function() {
-      createAutosuggest(
-        <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my-value' }}
-                     suggestions={getSuburbs} />
-      );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
-      setInputValue('m');
+    describe('String suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
+        setInputValue('m');
+      });
+
+      it('should focus on first suggestion and change input value when Down is clicked', function() {
+        clickDown();
+        expectFocusedSuggestion('Mill Park');
+        expectInputValue('Mill Park');
+      });
+
+      it('should focus on next suggestion and change input value when Down is clicked again', function() {
+        clickDown();
+        clickDown();
+        expectFocusedSuggestion('Mordialloc');
+        expectInputValue('Mordialloc');
+      });
+
+      it('should remove focus from suggestions when last suggestion is focused and Down is clicked', function() {
+        clickDown();
+        clickDown();
+        clickDown();
+        expectFocusedSuggestion(null);
+        expectInputValue('m');
+      });
+
+      it('should hide suggestions and revert back input\'s value when ESC is clicked after Down', function() {
+        clickDown();
+        clickEscape();
+        expectSuggestions([]);
+        expectInputValue('m');
+      });
+
+      it('should focus on last suggestion and change input value when Up is clicked', function() {
+        clickUp();
+        expectFocusedSuggestion('Mordialloc');
+        expectInputValue('Mordialloc');
+      });
+
+      it('should focus on previous suggestion and change input value when Up is clicked again', function() {
+        clickUp();
+        clickUp();
+        expectFocusedSuggestion('Mill Park');
+        expectInputValue('Mill Park');
+      });
+
+      it('should remove focus from suggestions when first suggestion is focused and Up is clicked', function() {
+        clickUp();
+        clickUp();
+        clickUp();
+        expectFocusedSuggestion(null);
+        expectInputValue('m');
+      });
     });
 
-    it('should focus on first suggestion and change input value when Down is clicked', function() {
-      clickDown();
-      expectFocusedSuggestion('Mill Park');
-      expectInputValue('Mill Park');
-    });
+    describe('Object suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbObjects}
+                       suggestionRenderer={renderSuburbObject}
+                       suggestionValue={getSuburbObjectValue} />
+        );
+        setInputValue('m');
+      });
 
-    it('should focus on next suggestion and change input value when Down is clicked again', function() {
-      clickDown();
-      clickDown();
-      expectFocusedSuggestion('Mordialloc');
-      expectInputValue('Mordialloc');
-    });
-
-    it('should remove focus from suggestions when last suggestion is focused and Down is clicked', function() {
-      clickDown();
-      clickDown();
-      clickDown();
-      expectFocusedSuggestion(null);
-      expectInputValue('m');
-    });
-
-    it('should hide suggestions and revert back input\'s value when ESC is clicked after Down', function() {
-      clickDown();
-      clickEscape();
-      expectSuggestions([]);
-      expectInputValue('m');
-    });
-
-    it('should focus on last suggestion and change input value when Up is clicked', function() {
-      clickUp();
-      expectFocusedSuggestion('Mordialloc');
-      expectInputValue('Mordialloc');
-    });
-
-    it('should focus on previous suggestion and change input value when Up is clicked again', function() {
-      clickUp();
-      clickUp();
-      expectFocusedSuggestion('Mill Park');
-      expectInputValue('Mill Park');
-    });
-
-    it('should remove focus from suggestions when first suggestion is focused and Up is clicked', function() {
-      clickUp();
-      clickUp();
-      clickUp();
-      expectFocusedSuggestion(null);
-      expectInputValue('m');
+      it('should focus on first suggestion and change input value when Down is clicked', function() {
+        clickDown();
+        expectFocusedSuggestion('Mill Park VIC 3083');
+        expectInputValue('Mill Park VIC 3083');
+      });
     });
   });
 
   describe('Revealing the suggestions using keyboard', function() {
     beforeEach(function() {
-      createAutosuggest(
-        <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
-                     suggestions={getSuburbs} />
-      );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
       setInputValue('m');
       clickEscape();
     });
@@ -361,71 +507,57 @@ describe('Autosuggest', function() {
   });
 
   describe('Mouse interactions', function() {
-
-    describe('when suggestion is object', function() {
+    describe('String suggestions', function() {
+      beforeEach(function() {
+        createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
+        setInputValue('m');
+      });
 
       it('should set input field value when suggestion is clicked', function() {
-        createAutosuggest(
-          <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
-                       suggestions={getObjectSuggestions}
-                       displayKey={'name'} />
-        );
-        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
-        setInputValue('m');
         mouseDownSuggestion(1);
-        expectInputValue('sug2');
+        expectInputValue('Mordialloc');
       });
 
-      it('should throw error if suggestion object does not contain displayKey', function() {
+      it('should focus on suggestion but not change input\'s value when mouse enters the suggestion', function() {
+        mouseOverFromInputToSuggestion(0);
+        expectFocusedSuggestion('Mill Park');
+        expectInputValue('m');
+      });
+
+      it('should not have focused suggestions when mouse leaves the suggestion', function() {
+        mouseOverFromInputToSuggestion(0);
+        mouseOverFromSuggestionToInput(0);
+        expectFocusedSuggestion(null);
+      });
+
+      it('should remember focused suggestion when mouse enters suggestion', function() {
+        mouseOverFromInputToSuggestion(0);
+        clickDown();
+        expectFocusedSuggestion('Mordialloc');
+        expectInputValue('Mordialloc');
+      });
+    });
+
+    describe('Object suggestions', function() {
+      beforeEach(function() {
         createAutosuggest(
-          <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
-                       suggestions={getObjectSuggestions} />
+          <Autosuggest suggestions={getSuburbObjects}
+                       suggestionRenderer={renderSuburbObject}
+                       suggestionValue={getSuburbObjectValue} />
         );
-        input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
-        expect(setInputValue.bind(null,'m')).toThrow('Invalid suggestion');
+        setInputValue('m');
       });
-    });
 
-    beforeEach(function() {
-      createAutosuggest(
-        <Autosuggest inputAttributes={{ id: 'my-autosuggest', value: 'my value' }}
-                     suggestions={getSuburbs} />
-      );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
-      setInputValue('m');
-    });
-
-    it('should set input field value when suggestion is clicked', function() {
-      mouseDownSuggestion(1);
-      expectInputValue('Mordialloc');
-    });
-
-    it('should focus on suggestion but not change input\'s value when mouse enters the suggestion', function() {
-      mouseOverFromInputToSuggestion(0);
-      expectFocusedSuggestion('Mill Park');
-      expectInputValue('m');
-    });
-
-    it('should not have focused suggestions when mouse leaves the suggestion', function() {
-      mouseOverFromInputToSuggestion(0);
-      mouseOverFromSuggestionToInput(0);
-      expectFocusedSuggestion(null);
-    });
-
-    it('should remember focused suggestion when mouse enters suggestion', function() {
-      mouseOverFromInputToSuggestion(0);
-      clickDown();
-      expectFocusedSuggestion('Mordialloc');
-      expectInputValue('Mordialloc');
+      it('should set input field value when suggestion is clicked', function() {
+        mouseDownSuggestion(0);
+        expectInputValue('Mill Park VIC 3083');
+      });
     });
   });
 
   describe('Accessibility attributes', function() {
     beforeEach(function() {
-      createAutosuggest(
-        <Autosuggest suggestions={getSuburbs} />
-      );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
     });
 
     describe('when Autosuggest is rendered', function() {
@@ -463,29 +595,29 @@ describe('Autosuggest', function() {
       it('input\'s aria-activedescendant should be the id of the focused suggestion when using keyboard', function() {
         clickDown();
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(input.getAttribute('aria-activedescendant')).toBe(suggestions[0].getDOMNode().id);
+        expect(input.getAttribute('aria-activedescendant')).toBe(React.findDOMNode(suggestions[0]).id);
       });
 
       it('input\'s aria-activedescendant should be the id of the focused suggestion when using mouse', function() {
         mouseOverFromInputToSuggestion(0);
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(input.getAttribute('aria-activedescendant')).toBe(suggestions[0].getDOMNode().id);
+        expect(input.getAttribute('aria-activedescendant')).toBe(React.findDOMNode(suggestions[0]).id);
       });
 
       it('suggestion\'s role should be option', function() {
         clickDown();
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(suggestions[0].getDOMNode().getAttribute('role')).toBe('option');
+        expect(React.findDOMNode(suggestions[0]).getAttribute('role')).toBe('option');
       });
 
       it('input\'s aria-owns should be equal to suggestions list\'s id', function() {
         suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
-        expect(input.getAttribute('aria-owns')).toBe(suggestionsList.getDOMNode().id);
+        expect(input.getAttribute('aria-owns')).toBe(React.findDOMNode(suggestionsList).id);
       });
 
       it('suggestions list\'s role should be listbox', function() {
         suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
-        expect(suggestionsList.getDOMNode().getAttribute('role')).toBe('listbox');
+        expect(React.findDOMNode(suggestionsList).getAttribute('role')).toBe('listbox');
       });
     });
   });
@@ -523,10 +655,7 @@ describe('Autosuggest', function() {
 
   describe('Multiple sections', function() {
     beforeEach(function() {
-      createAutosuggest(
-        <Autosuggest suggestions={getMultipleSectionsSuburbs} />
-      );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      createAutosuggest(<Autosuggest suggestions={getMultipleSectionsSuburbs} />);
       setInputValue('m');
     });
 
@@ -535,12 +664,64 @@ describe('Autosuggest', function() {
     });
   });
 
+  describe('Delayed requests', function() {
+    it('should set suggestions', function() {
+      function getDelayedSuburbStrings(input, callback) {
+        switch (input) {
+          case 'r':
+            setTimeout(function() { callback(null, ['Raglan', 'Riachella', 'Richmond']); }, 20);
+            break;
+          case 'ri':
+            setTimeout(function() { callback(null, ['Riachella', 'Richmond']); }, 50);
+            break;
+        }
+      }
+      createAutosuggest(<Autosuggest suggestions={getDelayedSuburbStrings} />);
+
+      setInputValue('r');
+      setInputValue('ri');
+      jest.runAllTimers();
+
+      expectSuggestions(['Riachella', 'Richmond']);
+    });
+
+    it('should ignore delayed suggestions', function() {
+      function getDelayedSuburbStrings(input, callback) {
+        switch (input) {
+          case 'r':
+            setTimeout(function() { callback(null, ['Raglan', 'Riachella', 'Richmond']); }, 50);
+            break;
+          case 'ri':
+            setTimeout(function() { callback(null, ['Riachella', 'Richmond']); }, 20);
+            break;
+        }
+      }
+      createAutosuggest(<Autosuggest suggestions={getDelayedSuburbStrings} />);
+
+      setInputValue('r');
+      setInputValue('ri');
+      jest.runAllTimers();
+
+      expectSuggestions(['Riachella', 'Richmond']);
+    });
+
+    it('should not display delayed suggestions if input is empty', function() {
+      function getDelayedSuburbStrings(input, callback) {
+        setTimeout(function() { callback(null, ['Raglan', 'Riachella', 'Richmond']); }, 50);
+      }
+      createAutosuggest(<Autosuggest suggestions={getDelayedSuburbStrings} />);
+
+      setInputValue('r');
+      setInputValue('');
+      jest.runAllTimers();
+
+      expectSuggestions([]);
+    });
+  });
+
   describe('Misc', function() {
     beforeEach(function() {
-      createAutosuggest(
-        <Autosuggest suggestions={getSuburbs} />
-      );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
     });
 
     it('should reset sectionIterator when getting cached suggestions', function() {

@@ -1,9 +1,11 @@
+@import './variables';
+
 .examples {
   display: flex;
+  justify-content: space-between;
 
   &-menu {
-    margin-right: 30px;
-    padding: 10px 50px 20px 0;
+    padding-top: 10px;
     font-size: 18px;
     border-radius: 4px;
 
@@ -13,7 +15,7 @@
       cursor: pointer;
 
       &--active {
-        color: #3BA3D7;
+        color: @red;
         cursor: default;
       }
     }

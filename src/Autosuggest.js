@@ -1,30 +1,21 @@
 'use strict';
 
-var React = require('react');
-var { PropTypes } = React;
-var classnames = require('classnames');
-var sectionIterator = require('./sectionIterator');
-var guid = 0;
+import React, { Component, PropTypes, findDOMNode } from 'react';
+import debounce from 'debounce';
+import classnames from 'classnames';
+import sectionIterator from './sectionIterator';
 
-var Autosuggest = React.createClass({
-  propTypes: {
-    inputAttributes: PropTypes.objectOf(React.PropTypes.string), // Input's attributes (e.g. id, className)
-    suggestions: PropTypes.func.isRequired,                      // Function to get the suggestions
-    suggestionRenderer: PropTypes.func,                          // Function to render a single suggestion
-    displayKey: PropTypes.string                                 // String that represents the key inside suggestion objects used to display the suggestion
-  },
-  getDefaultProps: function() {
-    return {
-      inputAttributes: {}
-    };
-  },
-  getInitialState: function() {
+let lastSuggestionsInputValue = null, guid = 0;
+
+export default class Autosuggest extends Component {
+  constructor(props) {
+    super(props);
+
     guid += 1;
     this.id = guid;
     this.cache = {};
-
-    return {
-      value: this.props.inputAttributes.value || '',
+    this.state = {
+      value: props.inputAttributes.value || '',
       suggestions: null,
       focusedSectionIndex: null,    // Used when multiple sections are displayed
       focusedSuggestionIndex: null, // Index within a section
@@ -33,24 +24,24 @@ var Autosuggest = React.createClass({
                                     // interaction in order to revert back if ESC hit.
                                     // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
-  },
-  resetSectionIterator: function(suggestions) {
-    if (this.multipleSections) {
-      sectionIterator.setData(suggestions.map(function(suggestion) {
-        return suggestion.suggestions.length;
-      }));
+    this.suggestionsFn = debounce(this.props.suggestions, 100);
+  }
+
+  resetSectionIterator(suggestions) {
+    if (this.isMultipleSections(suggestions)) {
+      sectionIterator.setData(suggestions.map( suggestion => suggestion.suggestions.length ));
     } else {
       sectionIterator.setData(suggestions === null ? [] : suggestions.length);
     }
-  },
-  isMultipleSections: function(suggestions) {
+  }
+
+  isMultipleSections(suggestions) {
     return suggestions !== null &&
            suggestions.length > 0 &&
-           typeof suggestions[0] === 'object' &&
-           suggestions[0]['suggestions'] != null;
-  },
-  setSuggestionsState: function(suggestions) {
-    this.multipleSections = this.isMultipleSections(suggestions);
+           typeof suggestions[0].suggestions !== 'undefined';
+  }
+
+  setSuggestionsState(suggestions) {
     this.resetSectionIterator(suggestions);
     this.setState({
       suggestions: suggestions,
@@ -58,23 +49,32 @@ var Autosuggest = React.createClass({
       focusedSuggestionIndex: null,
       valueBeforeUpDown: null
     });
-  },
-  suggestionsExist: function(suggestions) {
+  }
+
+  suggestionsExist(suggestions) {
     if (this.isMultipleSections(suggestions)) {
       return suggestions.some(function(section) {
         return section.suggestions.length > 0;
       });
     }
 
-    return suggestions.length > 0;
-  },
-  showSuggestions: function(input) {
-    if (input.length === 0) {
+    return suggestions !== null && suggestions.length > 0;
+  }
+
+  showSuggestions(input) {
+    lastSuggestionsInputValue = input;
+
+    if (!this.props.showWhen(input)) {
       this.setSuggestionsState(null);
     } else if (this.cache[input]) {
       this.setSuggestionsState(this.cache[input]);
     } else {
-      this.props.suggestions(input, function(error, suggestions) {
+      this.suggestionsFn(input, function(error, suggestions) {
+        // If input value changed, suggestions are not relevant anymore.
+        if (lastSuggestionsInputValue !== input) {
+          return;
+        }
+
         if (error) {
           throw error;
         } else {
@@ -87,18 +87,38 @@ var Autosuggest = React.createClass({
         }
       }.bind(this));
     }
-  },
-  getSuggestion: function(sectionIndex, suggestionIndex) {
-    return this.multipleSections
-      ? this.state.suggestions[sectionIndex].suggestions[suggestionIndex]
-      : this.state.suggestions[suggestionIndex];
-  },
-  focusOnSuggestion: function(suggestionPosition) {
-    var [sectionIndex, suggestionIndex] = suggestionPosition;
-    var newState = {
+  }
+
+  getSuggestion(sectionIndex, suggestionIndex) {
+    if (this.isMultipleSections(this.state.suggestions)) {
+      return this.state.suggestions[sectionIndex].suggestions[suggestionIndex];
+    }
+
+    return this.state.suggestions[suggestionIndex];
+  }
+
+  getSuggestionValue(sectionIndex, suggestionIndex) {
+    let suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
+
+    if (typeof suggestion === 'object') {
+      if (this.props.suggestionValue) {
+        return this.props.suggestionValue(suggestion);
+      }
+
+      throw new Error('When <suggestion> is an object, you must implement the suggestionValue() function to specify how to set input\'s value when suggestion selected.');
+    } else {
+      return suggestion.toString();
+    }
+  }
+
+  focusOnSuggestion(suggestionPosition) {
+    let [sectionIndex, suggestionIndex] = suggestionPosition;
+    let newState = {
       focusedSectionIndex: sectionIndex,
       focusedSuggestionIndex: suggestionIndex,
-      value: suggestionIndex === null ? this.state.valueBeforeUpDown : this.getSuggestion(sectionIndex, suggestionIndex)
+      value: suggestionIndex === null
+               ? this.state.valueBeforeUpDown
+               : this.getSuggestionValue(sectionIndex, suggestionIndex)
     };
 
     // When users starts to interact with up/down keys, remember input's value.
@@ -107,9 +127,10 @@ var Autosuggest = React.createClass({
     }
 
     this.setState(newState);
-  },
-  onInputChange: function(event) {
-    var newValue = event.target.value;
+  }
+
+  onInputChange(event) {
+    let newValue = event.target.value;
 
     this.setState({
       value: newValue,
@@ -117,19 +138,20 @@ var Autosuggest = React.createClass({
     });
 
     this.showSuggestions(newValue);
-  },
-  onInputKeyDown: function(event) {
-    var newState, newSectionIndex, newSuggestionIndex;
+  }
+
+  onInputKeyDown(event) {
+    let newState, newSectionIndex, newSuggestionIndex;
 
     switch (event.keyCode) {
       case 13: // enter
-        this.setState({
-          suggestions: null,
-          focusedSectionIndex: null,
-          focusedSuggestionIndex: null,
-          valueBeforeUpDown: null
-        });
+        if (this.state.valueBeforeUpDown !== null && this.state.focusedSuggestionIndex !== null) {
+          this.props.onSuggestionSelected(
+            this.getSuggestion(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex)
+          );
+        }
 
+        this.setSuggestionsState(null);
         break;
 
       case 27: // escape
@@ -147,7 +169,6 @@ var Autosuggest = React.createClass({
         }
 
         this.setState(newState);
-
         break;
 
       case 38: // up
@@ -158,7 +179,6 @@ var Autosuggest = React.createClass({
         }
 
         event.preventDefault(); // Prevent the cursor from jumping to input's start
-
         break;
 
       case 40: // down
@@ -170,34 +190,29 @@ var Autosuggest = React.createClass({
 
         break;
     }
-  },
-  onInputBlur: function() {
-    this.setState({
-      suggestions: null,
-      focusedSectionIndex: null,
-      focusedSuggestionIndex: null,
-      valueBeforeUpDown: null
-    });
-  },
-  onSuggestionMouseEnter: function(sectionIndex, suggestionIndex) {
+  }
+
+  onInputBlur() {
+    this.setSuggestionsState(null);
+  }
+
+  onSuggestionMouseEnter(sectionIndex, suggestionIndex) {
     this.setState({
       focusedSectionIndex: sectionIndex,
       focusedSuggestionIndex: suggestionIndex
     });
-  },
-  onSuggestionMouseLeave: function() {
+  }
+
+  onSuggestionMouseLeave() {
     this.setState({
       focusedSectionIndex: null,
       focusedSuggestionIndex: null
     });
-  },
-  onSuggestionMouseDown: function(suggestion) {
-    suggestion = typeof suggestion !== 'object' ? suggestion : suggestion[this.props.displayKey];
-    if(!suggestion) {
-      throw new Error("Invalid suggestion");
-    }
+  }
+
+  onSuggestionMouseDown(sectionIndex, suggestionIndex) {
     this.setState({
-      value: suggestion,
+      value: this.getSuggestionValue(sectionIndex, suggestionIndex),
       suggestions: null,
       focusedSectionIndex: null,
       focusedSuggestionIndex: null,
@@ -205,88 +220,101 @@ var Autosuggest = React.createClass({
     }, function() {
       // This code executes after the component is re-rendered
       setTimeout(function() {
-        React.findDOMNode(this.refs.input).focus();
+        findDOMNode(this.refs.input).focus();
       }.bind(this));
     });
-  },
-  getSuggestionId: function(sectionIndex, suggestionIndex) {
+
+    this.props.onSuggestionSelected(this.getSuggestion(sectionIndex, suggestionIndex));
+  }
+
+  getSuggestionId(sectionIndex, suggestionIndex) {
     if (suggestionIndex === null) {
       return null;
     }
 
     return 'react-autosuggest-' + this.id + '-suggestion-' +
            (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
-  },
-  renderSuggestionsList: function(suggestions, sectionIndex) {
+  }
+
+  renderSuggestionContent(suggestion) {
+    if (this.props.suggestionRenderer) {
+      return this.props.suggestionRenderer(suggestion, this.state.valueBeforeUpDown || this.state.value);
+    }
+
+    if (typeof suggestion === 'object') {
+      throw new Error('When <suggestion> is an object, you must implement the suggestionRenderer() function to specify how to render it.');
+    } else {
+      return suggestion.toString();
+    }
+  }
+
+  renderSuggestionsList(suggestions, sectionIndex) {
     return suggestions.map(function(suggestion, suggestionIndex) {
-      var classes = classnames({
+      let classes = classnames({
         'react-autosuggest__suggestion': true,
         'react-autosuggest__suggestion--focused':
           sectionIndex === this.state.focusedSectionIndex &&
           suggestionIndex === this.state.focusedSuggestionIndex
       });
-
-      var suggestionContent = this.props.suggestionRenderer
-        ? this.props.suggestionRenderer(suggestion, this.state.valueBeforeUpDown || this.state.value)
-        : typeof suggestion !== 'object'
-        ? suggestion
-        : suggestion[this.props.displayKey] != null
-        ? suggestion[this.props.displayKey]
-        : null;
-        if(suggestionContent === null){
-          throw new Error('Invalid suggestion');
-        }
+      let suggestionKey = 'suggestion-' + (sectionIndex === null ? '' : sectionIndex) +
+                          '-' + suggestionIndex;
 
       return (
-        <div id={this.getSuggestionId(sectionIndex, suggestionIndex)}
+        <li id={this.getSuggestionId(sectionIndex, suggestionIndex)}
              className={classes}
              role="option"
-             key={'suggestion-' + (suggestionIndex === null ? '' : suggestionIndex) + '-' + suggestionIndex}
+             key={suggestionKey}
              onMouseEnter={this.onSuggestionMouseEnter.bind(this, sectionIndex, suggestionIndex)}
-             onMouseLeave={this.onSuggestionMouseLeave}
-             onMouseDown={this.onSuggestionMouseDown.bind(this, suggestion)}>
-          {suggestionContent}
-        </div>
+             onMouseLeave={this.onSuggestionMouseLeave.bind(this)}
+             onMouseDown={this.onSuggestionMouseDown.bind(this, sectionIndex, suggestionIndex)}>
+          {this.renderSuggestionContent(suggestion)}
+        </li>
       );
     }, this);
-  },
-  renderSuggestions: function() {
+  }
+
+  renderSuggestions() {
     if (this.state.value === '' || this.state.suggestions === null) {
       return null;
     }
 
-    var content;
+    if (this.isMultipleSections(this.state.suggestions)) {
+      return (
+        <div id={'react-autosuggest-' + this.id}
+             className="react-autosuggest__suggestions"
+             role="listbox">
+          {this.state.suggestions.map(function(section, sectionIndex) {
+            let sectionName = section.sectionName ? (
+              <div className="react-autosuggest__suggestions-section-name">
+                {section.sectionName}
+              </div>
+            ) : null;
 
-    if (this.multipleSections) {
-      content = this.state.suggestions.map(function(section, sectionIndex) {
-        var sectionName = section.sectionName ? (
-          <div className="react-autosuggest__suggestions-section-name">
-            {section.sectionName}
-          </div>
-        ) : null;
-
-        return section.suggestions.length === 0 ? null : (
-          <div className="react-autosuggest__suggestions-section"
-               key={'section-' + sectionIndex}>
-            {sectionName}
-            {this.renderSuggestionsList(section.suggestions, sectionIndex)}
-          </div>
-        );
-      }, this);
-    } else {
-      content = this.renderSuggestionsList(this.state.suggestions, null);
+            return section.suggestions.length === 0 ? null : (
+              <div className="react-autosuggest__suggestions-section"
+                   key={'section-' + sectionIndex}>
+                {sectionName}
+                <ul className="react-autosuggest__suggestions-section-suggestions">
+                  {this.renderSuggestionsList(section.suggestions, sectionIndex)}
+                </ul>
+              </div>
+            );
+          }, this)}
+        </div>
+      );
     }
 
     return (
-      <div id={'react-autosuggest-' + this.id}
-           className="react-autosuggest__suggestions"
-           role="listbox">
-        {content}
-      </div>
+      <ul id={'react-autosuggest-' + this.id}
+          className="react-autosuggest__suggestions"
+          role="listbox">
+        {this.renderSuggestionsList(this.state.suggestions, null)}
+      </ul>
     );
-  },
-  render: function() {
-    var ariaActivedescendant =
+  }
+
+  render() {
+    let ariaActivedescendant =
       this.getSuggestionId(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex);
 
     return (
@@ -301,13 +329,26 @@ var Autosuggest = React.createClass({
                aria-expanded={this.state.suggestions !== null}
                aria-activedescendant={ariaActivedescendant}
                ref="input"
-               onChange={this.onInputChange}
-               onKeyDown={this.onInputKeyDown}
-               onBlur={this.onInputBlur} />
+               onChange={this.onInputChange.bind(this)}
+               onKeyDown={this.onInputKeyDown.bind(this)}
+               onBlur={this.onInputBlur.bind(this)} />
         {this.renderSuggestions()}
       </div>
     );
   }
-});
+}
 
-module.exports = Autosuggest;
+Autosuggest.propTypes = {
+  suggestions: PropTypes.func.isRequired,                // Function to get the suggestions
+  suggestionRenderer: PropTypes.func,                    // Function that renders a given suggestion (must be implemented when suggestions are objects)
+  suggestionValue: PropTypes.func,                       // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
+  showWhen: PropTypes.func,                              // Function that determines whether to show suggestions or not
+  onSuggestionSelected: PropTypes.func,                  // This function is called when suggestion is selected via mouse click or Enter
+  inputAttributes: PropTypes.objectOf(PropTypes.string)  // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+};
+
+Autosuggest.defaultProps = {
+  showWhen: input => input.trim().length > 0,
+  onSuggestionSelected: () => {},
+  inputAttributes: {}
+};

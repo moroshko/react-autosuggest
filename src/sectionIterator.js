@@ -1,6 +1,6 @@
 'use strict';
 
-var data, multipleSections;
+let data, multipleSections;
 
 function setData(newData) {
   data = newData;
@@ -36,7 +36,7 @@ function prevNonEmptySectionIndex(sectionIndex) {
 }
 
 function next(position) {
-  var [sectionIndex, itemIndex] = position;
+  let [sectionIndex, itemIndex] = position;
 
   if (multipleSections) {
     if (itemIndex === null || itemIndex === data[sectionIndex] - 1) {
@@ -64,7 +64,7 @@ function next(position) {
 }
 
 function prev(position) {
-  var [sectionIndex, itemIndex] = position;
+  let [sectionIndex, itemIndex] = position;
 
   if (multipleSections) {
     if (itemIndex === null || itemIndex === 0) {
