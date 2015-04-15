@@ -161,12 +161,12 @@ function showWhen(input) {
 <a name="onSuggestionSelectedOption"></a>
 ##### onSuggestionSelected (optional)
 
-This function will be called when suggestion is selected via mouse click or Enter. It has one parameter which is the selected [suggestion](#suggestion) (string or object).
+This function will be called when suggestion is selected via mouse click or Enter. It has one parameter which is the selected [suggestion](#suggestion) (string or object) and the event.
 
 For example:
 
 ```javascript
-function onSuggestionSelected(suggestion) { // In this example 'suggestion' is a string
+function onSuggestionSelected(suggestion, event) { // In this example 'suggestion' is a string
   console.log('Suggestion selected: [' + suggestion + ']');
 }
 ```
