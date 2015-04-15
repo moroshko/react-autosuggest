@@ -147,7 +147,8 @@ export default class Autosuggest extends Component {
       case 13: // enter
         if (this.state.valueBeforeUpDown !== null && this.state.focusedSuggestionIndex !== null) {
           this.props.onSuggestionSelected(
-            this.getSuggestion(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex)
+            this.getSuggestion(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex),
+            event
           );
         }
 
@@ -210,7 +211,7 @@ export default class Autosuggest extends Component {
     });
   }
 
-  onSuggestionMouseDown(sectionIndex, suggestionIndex) {
+  onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
     this.setState({
       value: this.getSuggestionValue(sectionIndex, suggestionIndex),
       suggestions: null,
@@ -224,7 +225,7 @@ export default class Autosuggest extends Component {
       }.bind(this));
     });
 
-    this.props.onSuggestionSelected(this.getSuggestion(sectionIndex, suggestionIndex));
+    this.props.onSuggestionSelected(this.getSuggestion(sectionIndex, suggestionIndex), event);
   }
 
   getSuggestionId(sectionIndex, suggestionIndex) {
@@ -264,9 +265,9 @@ export default class Autosuggest extends Component {
              className={classes}
              role="option"
              key={suggestionKey}
-             onMouseEnter={this.onSuggestionMouseEnter.bind(this, sectionIndex, suggestionIndex)}
-             onMouseLeave={this.onSuggestionMouseLeave.bind(this)}
-             onMouseDown={this.onSuggestionMouseDown.bind(this, sectionIndex, suggestionIndex)}>
+             onMouseEnter={(event) => this.onSuggestionMouseEnter(sectionIndex, suggestionIndex, event)}
+             onMouseLeave={(event) => this.onSuggestionMouseLeave(event)}
+             onMouseDown={(event) => this.onSuggestionMouseDown(sectionIndex, suggestionIndex, event)}>
           {this.renderSuggestionContent(suggestion)}
         </li>
       );
