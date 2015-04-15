@@ -622,37 +622,6 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('isMultipleSections', function(){
-
-    it('returns true if suggestions are multiple section objects', function() {
-      createAutosuggest(
-        <Autosuggest suggestions={getMultipleSectionsSuburbs} />
-      );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
-      setInputValue('m');
-      expect(autosuggest.isMultipleSections(autosuggest.state.suggestions)).toBe(true);
-    });
-
-    it('returns false if suggestions are strings or numbers', function() {
-      createAutosuggest(
-        <Autosuggest suggestions={getMixedSuggestions} />
-      );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
-      setInputValue('m');
-      expect(autosuggest.isMultipleSections(autosuggest.state.suggestions)).toBe(false);
-    });
-
-    it('returns false if suggestions are regular objects', function() {
-      createAutosuggest(
-        <Autosuggest suggestions={getObjectSuggestions}
-                     displayKey={'name'} />
-      );
-      input = TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input').getDOMNode();
-      setInputValue('m');
-      expect(autosuggest.isMultipleSections(autosuggest.state.suggestions)).toBe(false);
-    });
-  });
-
   describe('Multiple sections', function() {
     beforeEach(function() {
       createAutosuggest(<Autosuggest suggestions={getMultipleSectionsSuburbs} />);
