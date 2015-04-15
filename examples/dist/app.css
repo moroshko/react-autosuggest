@@ -20,6 +20,9 @@
   position: absolute;
   top: 51px;
   width: 280px;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
   border: 1px solid #aaaaaa;
   background-color: #fff;
   font-size: 18px;
@@ -37,6 +40,11 @@
   color: #777;
   border-top: 1px dashed #ccc;
 }
+.react-autosuggest__suggestions-section-suggestions {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
 .react-autosuggest__suggestion {
   cursor: pointer;
   padding: 10px 20px;
@@ -52,10 +60,10 @@
 }
 .examples {
   display: flex;
+  justify-content: space-between;
 }
 .examples-menu {
-  margin-right: 30px;
-  padding: 10px 50px 20px 0;
+  padding-top: 10px;
   font-size: 18px;
   border-radius: 4px;
 }
@@ -113,5 +121,6 @@ body {
 #app > div {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   position: relative;
 }

@@ -51,6 +51,7 @@ var Autosuggest = (function (_Component) {
       // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
     this.suggestionsFn = debounce(this.props.suggestions, 100);
+    this.onChange = props.onChange || function () {};
   }
 
   _inherits(Autosuggest, _Component);
@@ -166,6 +167,7 @@ var Autosuggest = (function (_Component) {
         }
 
         this.setState(newState);
+        this.onChange(newState.value);
       }
     },
     onInputChange: {
@@ -176,6 +178,8 @@ var Autosuggest = (function (_Component) {
           value: newValue,
           valueBeforeUpDown: null
         });
+
+        this.onChange(newValue);
 
         this.showSuggestions(newValue);
       }
@@ -212,6 +216,7 @@ var Autosuggest = (function (_Component) {
             }
 
             this.setState(newState);
+            this.onChange(newState.value);
             break;
 
           case 38:
@@ -260,8 +265,9 @@ var Autosuggest = (function (_Component) {
     },
     onSuggestionMouseDown: {
       value: function onSuggestionMouseDown(sectionIndex, suggestionIndex) {
+        var newValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
         this.setState({
-          value: this.getSuggestionValue(sectionIndex, suggestionIndex),
+          value: newValue,
           suggestions: null,
           focusedSectionIndex: null,
           focusedSuggestionIndex: null,
@@ -272,7 +278,7 @@ var Autosuggest = (function (_Component) {
             findDOMNode(this.refs.input).focus();
           }).bind(this));
         });
-
+        this.onChange(newValue);
         this.props.onSuggestionSelected(this.getSuggestion(sectionIndex, suggestionIndex));
       }
     },
@@ -401,6 +407,7 @@ Autosuggest.propTypes = {
   suggestionValue: PropTypes.func, // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
   showWhen: PropTypes.func, // Function that determines whether to show suggestions or not
   onSuggestionSelected: PropTypes.func, // This function is called when suggestion is selected via mouse click or Enter
+  onChange: PropTypes.func, // This function is called when value of input is changed
   inputAttributes: PropTypes.objectOf(PropTypes.string) // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
 };
 
