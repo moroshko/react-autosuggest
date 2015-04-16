@@ -57,6 +57,7 @@ function getSuggestions(input, callback) {
 * [`showWhen`](#showWhenOption)
 * [`onSuggestionSelected`](#onSuggestionSelectedOption)
 * [`onSuggestionFocused`](#onSuggestionFocusedOption)
+* [`onSuggestionUnfocused`](#onSuggestionUnfocusedOption)
 * [`inputAttributes`](#inputAttributesOption)
 
 <a name="suggestionsOption"></a>
@@ -198,7 +199,7 @@ This function will be called when suggestion is focused via mouse hover or up/do
 
 For example:
 
-```javascript
+```js
 function onSuggestionFocused(suggestion) { // In this example 'suggestion' is a string
   console.log('Suggestion focused: [' + suggestion + ']');
 }
@@ -207,6 +208,24 @@ function onSuggestionFocused(suggestion) { // In this example 'suggestion' is a 
 ```xml
 <Autosuggest suggestions={getSuggestions}
              onSuggestionFocused={onSuggestionFocused} />
+```
+
+<a name="onSuggestionUnfocusedOption"></a>
+##### onSuggestionUnfocused (optional)
+
+This function will be called when suggestion is unfocused via mouse hover or up/down keys. It has one parameter which is the unfocused [suggestion](#suggestion) (string or object).
+
+For example:
+
+```js
+function onSuggestionUnfocused(suggestion) { // In this example 'suggestion' is a string
+  console.log('Suggestion unfocused: [' + suggestion + ']');
+}
+```
+
+```xml
+<Autosuggest suggestions={getSuggestions}
+             onSuggestionUnfocused={onSuggestionUnfocused} />
 ```
 
 <a name="inputAttributesOption"></a>
