@@ -5,7 +5,7 @@ import debounce from 'debounce';
 import classnames from 'classnames';
 import sectionIterator from './sectionIterator';
 
-let lastSuggestionsInputValue = null, guid = 0;
+let lastSuggestionsInputValue = null, lastFocusedSuggestion = null, guid = 0;
 
 export default class Autosuggest extends Component {
   constructor(props) {
@@ -111,6 +111,7 @@ export default class Autosuggest extends Component {
 
   focusOnSuggestion(suggestionPosition) {
     let [sectionIndex, suggestionIndex] = suggestionPosition;
+    let suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
     let newState = {
       focusedSectionIndex: sectionIndex,
       focusedSuggestionIndex: suggestionIndex,
@@ -124,8 +125,11 @@ export default class Autosuggest extends Component {
       newState.valueBeforeUpDown = this.state.value;
     }
 
-    this.props.onSuggestionFocused(this.getSuggestion(sectionIndex, suggestionIndex));
     this.setState(newState);
+
+    this.props.onSuggestionUnfocused(lastFocusedSuggestion);
+    lastFocusedSuggestion = suggestion;
+    this.props.onSuggestionFocused(suggestion);
   }
 
   onInputChange(event) {
@@ -197,11 +201,14 @@ export default class Autosuggest extends Component {
   }
 
   onSuggestionMouseEnter(sectionIndex, suggestionIndex) {
-    this.props.onSuggestionFocused(this.getSuggestion(sectionIndex, suggestionIndex));
+    let suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
     this.setState({
       focusedSectionIndex: sectionIndex,
       focusedSuggestionIndex: suggestionIndex
     });
+
+    lastFocusedSuggestion = suggestion;
+    this.props.onSuggestionFocused(suggestion);
   }
 
   onSuggestionMouseLeave() {
@@ -209,6 +216,8 @@ export default class Autosuggest extends Component {
       focusedSectionIndex: null,
       focusedSuggestionIndex: null
     });
+
+    this.props.onSuggestionUnfocused(lastFocusedSuggestion);
   }
 
   onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
@@ -344,6 +353,7 @@ Autosuggest.propTypes = {
   showWhen: PropTypes.func,                              // Function that determines whether to show suggestions or not
   onSuggestionSelected: PropTypes.func,                  // This function is called when suggestion is selected via mouse click or Enter
   onSuggestionFocused: PropTypes.func,                   // This function is called when suggestion is focused via mouse hover or up/down keys
+  onSuggestionUnfocused: PropTypes.func,                 // This function is called when suggestion is unfocused via mouse hover or up/down keys
   inputAttributes: PropTypes.objectOf(PropTypes.string)  // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
 };
 
@@ -351,5 +361,6 @@ Autosuggest.defaultProps = {
   showWhen: input => input.trim().length > 0,
   onSuggestionSelected: () => {},
   onSuggestionFocused: () => {},
+  onSuggestionUnfocused: () => {},
   inputAttributes: {}
 };

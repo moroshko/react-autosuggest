@@ -20,6 +20,7 @@ let reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 let autosuggest, input, suggestions;
 let onSuggestionSelected = jest.genMockFunction();
 let onSuggestionFocused = jest.genMockFunction();
+let onSuggestionUnfocused = jest.genMockFunction();
 
 function getSuburbStrings(input, callback) {
   let regex = new RegExp('^' + input, 'i');
@@ -100,6 +101,14 @@ function mouseOverFromInputToSuggestion(suggestionIndex) {
 function mouseOverFromSuggestionToInput(suggestionIndex) {
   suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
   mouseOver(React.findDOMNode(suggestions[suggestionIndex]), input);
+}
+
+function mouseOverBetweenSuggestions(suggestionIndex1, suggestionIndex2) {
+  let suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+  let suggestion1 = React.findDOMNode(suggestions[suggestionIndex1]);
+  let suggestion2 = React.findDOMNode(suggestions[suggestionIndex2]);
+
+  mouseOver(suggestion1, suggestion2);
 }
 
 function clickEscape() {
@@ -413,16 +422,18 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('onSuggestionFocused', function() {
+  describe('onSuggestionFocused and onSuggestionUnfocused', function() {
     beforeEach(function() {
       onSuggestionFocused.mockClear();
+      onSuggestionUnfocused.mockClear();
     });
 
     describe('String suggestions', function() {
       beforeEach(function() {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbStrings}
-                       onSuggestionFocused={onSuggestionFocused} />
+                       onSuggestionFocused={onSuggestionFocused}
+                       onSuggestionUnfocused={onSuggestionUnfocused} />
         );
         setInputValue('m');
       });
@@ -432,11 +443,28 @@ describe('Autosuggest', function() {
         expect(onSuggestionFocused).toBeCalledWith('Mordialloc');
       });
 
+      it('should call onSuggestionUnfocused when suggestion is unfocused using mouse', function() {
+        mouseOverFromInputToSuggestion(0);
+        expect(onSuggestionFocused).toBeCalledWith('Mill Park');
+        onSuggestionFocused.mockClear();
+        mouseOverBetweenSuggestions(0, 1);
+        expect(onSuggestionUnfocused).toBeCalledWith('Mill Park');
+        expect(onSuggestionFocused).toBeCalledWith('Mordialloc');
+      });
+
       it('should call onSuggestionFocused when suggestion is focused using keyboard', function() {
         clickDown();
         expect(onSuggestionFocused).toBeCalledWith('Mill Park');
       });
 
+      it('should call onSuggestionUnfocused when suggestion is unfocused using keyboard', function() {
+        clickDown();
+        expect(onSuggestionFocused).toBeCalledWith('Mill Park');
+        onSuggestionFocused.mockClear();
+        clickDown();
+        expect(onSuggestionUnfocused).toBeCalledWith('Mill Park');
+        expect(onSuggestionFocused).toBeCalledWith('Mordialloc');
+      });
     });
 
     describe('Object suggestions', function() {
@@ -445,7 +473,8 @@ describe('Autosuggest', function() {
           <Autosuggest suggestions={getSuburbObjects}
                        suggestionRenderer={renderSuburbObject}
                        suggestionValue={getSuburbObjectValue}
-                       onSuggestionFocused={onSuggestionFocused} />
+                       onSuggestionFocused={onSuggestionFocused}
+                       onSuggestionUnfocused={onSuggestionUnfocused} />
         );
         setInputValue('m');
       });
@@ -455,9 +484,27 @@ describe('Autosuggest', function() {
         expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
       });
 
+      it('should call onSuggestionUnfocused when suggestion is unfocused using mouse', function() {
+        mouseOverFromInputToSuggestion(0);
+        expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+        onSuggestionFocused.mockClear();
+        mouseOverBetweenSuggestions(0, 1);
+        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+        expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mordialloc', postcode: '3195' });
+      });
+
       it('should call onSuggestionFocused when suggestion is focused using keyboard', function() {
         clickDown();
         expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+      });
+
+      it('should call onSuggestionUnfocused when suggestion is unfocused using keyboard', function() {
+        clickDown();
+        expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+        onSuggestionFocused.mockClear();
+        clickDown();
+        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+        expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mordialloc', postcode: '3195' });
       });
     });
   });
