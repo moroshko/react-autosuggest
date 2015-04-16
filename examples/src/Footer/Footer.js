@@ -2,9 +2,9 @@
 
 require('./Footer.less');
 
-import React from 'react';
+import React, { Component } from 'react';
 
-class Footer extends React.Component {
+export default class Footer extends Component {
   render() {
     return (
       <div className="footer">
@@ -16,5 +16,3 @@ class Footer extends React.Component {
     );
   }
 }
-
-export default Footer;

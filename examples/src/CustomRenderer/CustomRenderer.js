@@ -1,6 +1,6 @@
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 import utils from '../utils';
 import Autosuggest from '../../../src/Autosuggest';
 import SourceCodeLink from '../SourceCodeLink/SourceCodeLink';
@@ -34,9 +34,7 @@ function getSuggestions(input, callback) {
   //    { suburb: 'Mentone', postcode: '3194', population: 5639 },
   //    { suburb: 'Mill Park', postcode: '3082', population: 3631 }]
 
-  setTimeout(function() {
-    callback(null, suggestions);
-  }, requestDelay);
+  setTimeout(() => callback(null, suggestions), requestDelay);
 }
 
 function renderSuggestion(suggestionObj, input) {
@@ -65,7 +63,7 @@ function getSuggestionValue(suggestionObj) {
   return suggestionObj.suburb + ' VIC ' + suggestionObj.postcode;
 }
 
-class CustomRenderer extends React.Component {
+export default class CustomRenderer extends Component {
   render() {
     let inputAttributes = {
       id: 'custom-renderer',
@@ -84,5 +82,3 @@ class CustomRenderer extends React.Component {
     );
   }
 }
-
-export default CustomRenderer;

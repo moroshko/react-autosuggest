@@ -1,6 +1,6 @@
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 import utils from '../utils';
 import Autosuggest from '../../../src/Autosuggest';
 import SourceCodeLink from '../SourceCodeLink/SourceCodeLink';
@@ -22,12 +22,10 @@ function getSuggestions(input, callback) {
   // 'suggestions' will be an array of strings, e.g.:
   //   ['Mentone', 'Mill Park', 'Mordialloc']
 
-  setTimeout(function() {
-    callback(null, suggestions);
-  }, 300);
+  setTimeout(() => callback(null, suggestions), 300);
 }
 
-class BasicExample extends React.Component {
+export default class BasicExample extends Component {
   render() {
     let inputAttributes = {
       id: 'basic-example',
@@ -44,5 +42,3 @@ class BasicExample extends React.Component {
     );
   }
 }
-
-export default BasicExample;

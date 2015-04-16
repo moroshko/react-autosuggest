@@ -1,6 +1,6 @@
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 import utils from '../utils';
 import Autosuggest from '../../../src/Autosuggest';
 import SourceCodeLink from '../SourceCodeLink/SourceCodeLink';
@@ -57,12 +57,10 @@ function getSuggestions(input, callback) {
   //    { sectionName: 'Third word match',
   //      suggestions: ['University Of Melbourne'] }]
 
-  setTimeout(function() {
-    callback(null, suggestions);
-  }, 300);
+  setTimeout(() => callback(null, suggestions), 300);
 }
 
-class MultipleSections extends React.Component {
+export default class MultipleSections extends Component {
   render() {
     let inputAttributes = {
       id: 'multiple-sections',
@@ -73,11 +71,9 @@ class MultipleSections extends React.Component {
       <div>
         <Autosuggest suggestions={getSuggestions}
                      inputAttributes={inputAttributes}
-                     ref={ () => { document.getElementById('multiple-sections').focus(); } } />
+                     ref={ () => document.getElementById('multiple-sections').focus() } />
         <SourceCodeLink file="examples/src/MultipleSections/MultipleSections.js" />
       </div>
     );
   }
 }
-
-export default MultipleSections;

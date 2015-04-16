@@ -2,9 +2,9 @@
 
 require('./SourceCodeLink.less');
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
-class SourceCodeLink extends React.Component {
+export default class SourceCodeLink extends Component {
   render() {
     return (
       <a className="source-code-link"
@@ -17,7 +17,5 @@ class SourceCodeLink extends React.Component {
 }
 
 SourceCodeLink.propTypes = {
-  file: React.PropTypes.string.isRequired
+  file: PropTypes.string.isRequired
 };
-
-export default SourceCodeLink;

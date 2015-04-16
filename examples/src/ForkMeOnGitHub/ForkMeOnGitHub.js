@@ -1,6 +1,6 @@
 'use strict';
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
 let style = {
   position: 'absolute',
@@ -9,7 +9,7 @@ let style = {
   border: 0
 };
 
-class ForkMeOnGitHub extends React.Component {
+export default class ForkMeOnGitHub extends Component {
   render() {
     return (
       <a href={'//github.com/' + this.props.user + '/' + this.props.repo} target="_blank">
@@ -20,8 +20,6 @@ class ForkMeOnGitHub extends React.Component {
 }
 
 ForkMeOnGitHub.propTypes = {
-  user: React.PropTypes.string.isRequired,
-  repo: React.PropTypes.string.isRequired
+  user: PropTypes.string.isRequired,
+  repo: PropTypes.string.isRequired
 };
-
-export default ForkMeOnGitHub;

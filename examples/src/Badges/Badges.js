@@ -2,9 +2,9 @@
 
 require('./Badges.less');
 
-import React from 'react';
+import React, { Component } from 'react';
 
-class Badges extends React.Component {
+export default class Badges extends Component {
   render() {
     return (
       <div className="badges">
@@ -21,5 +21,3 @@ class Badges extends React.Component {
     );
   }
 }
-
-export default Badges;
