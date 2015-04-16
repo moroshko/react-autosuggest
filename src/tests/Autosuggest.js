@@ -445,11 +445,8 @@ describe('Autosuggest', function() {
 
       it('should call onSuggestionUnfocused when suggestion is unfocused using mouse', function() {
         mouseOverFromInputToSuggestion(0);
-        expect(onSuggestionFocused).toBeCalledWith('Mill Park');
-        onSuggestionFocused.mockClear();
         mouseOverBetweenSuggestions(0, 1);
         expect(onSuggestionUnfocused).toBeCalledWith('Mill Park');
-        expect(onSuggestionFocused).toBeCalledWith('Mordialloc');
       });
 
       it('should call onSuggestionFocused when suggestion is focused using keyboard', function() {
@@ -457,13 +454,16 @@ describe('Autosuggest', function() {
         expect(onSuggestionFocused).toBeCalledWith('Mill Park');
       });
 
-      it('should call onSuggestionUnfocused when suggestion is unfocused using keyboard', function() {
+      it('should call onSuggestionUnfocused when suggestion is unfocused using up/down keys', function() {
         clickDown();
-        expect(onSuggestionFocused).toBeCalledWith('Mill Park');
-        onSuggestionFocused.mockClear();
         clickDown();
         expect(onSuggestionUnfocused).toBeCalledWith('Mill Park');
-        expect(onSuggestionFocused).toBeCalledWith('Mordialloc');
+      });
+
+      it('should call onSuggestionUnfocused when suggestion is unfocused using ESC key', function() {
+        clickDown();
+        clickEscape();
+        expect(onSuggestionUnfocused).toBeCalledWith('Mill Park');
       });
     });
 
@@ -486,11 +486,8 @@ describe('Autosuggest', function() {
 
       it('should call onSuggestionUnfocused when suggestion is unfocused using mouse', function() {
         mouseOverFromInputToSuggestion(0);
-        expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
-        onSuggestionFocused.mockClear();
         mouseOverBetweenSuggestions(0, 1);
         expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
-        expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mordialloc', postcode: '3195' });
       });
 
       it('should call onSuggestionFocused when suggestion is focused using keyboard', function() {
@@ -498,13 +495,16 @@ describe('Autosuggest', function() {
         expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
       });
 
-      it('should call onSuggestionUnfocused when suggestion is unfocused using keyboard', function() {
+      it('should call onSuggestionUnfocused when suggestion is unfocused using up/down keys', function() {
         clickDown();
-        expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
-        onSuggestionFocused.mockClear();
         clickDown();
         expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
-        expect(onSuggestionFocused).toBeCalledWith({ suburb: 'Mordialloc', postcode: '3195' });
+      });
+
+      it('should call onSuggestionUnfocused when suggestion is unfocused using ESC key', function() {
+        clickDown();
+        clickEscape();
+        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
       });
     });
   });
