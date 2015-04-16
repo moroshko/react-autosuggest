@@ -3,6 +3,7 @@
 jest.dontMock('../Autosuggest.js');
 
 import React from 'react/addons';
+import SyntheticEvent from 'react/lib/SyntheticEvent'
 import Autosuggest from '../Autosuggest.js';
 
 let TestUtils = React.addons.TestUtils;
@@ -366,7 +367,7 @@ describe('Autosuggest', function() {
 
       it('should call onSuggestionSelected when suggestion is selected using mouse', function() {
         mouseDownSuggestion(1);
-        expect(onSuggestionSelected).toBeCalledWith('Mordialloc');
+        expect(onSuggestionSelected).toBeCalledWith('Mordialloc', jasmine.any(SyntheticEvent));
       });
 
       it('should not call onSuggestionSelected when mouse enters a suggestion', function() {
@@ -389,7 +390,7 @@ describe('Autosuggest', function() {
       it('should call onSuggestionSelected when suggestion is selected using keyboard', function() {
         clickDown();
         clickEnter();
-        expect(onSuggestionSelected).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+        expect(onSuggestionSelected).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' }, jasmine.any(SyntheticEvent));
       });
 
       it('should not call onSuggestionSelected when navigating using keyboard', function() {

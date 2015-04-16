@@ -2,13 +2,13 @@
 
 require('./app.less');
 
-import React from 'react';
+import React, { Component } from 'react';
 import Badges from './Badges/Badges';
 import Examples from './Examples';
 import Footer from './Footer/Footer';
 import ForkMeOnGitHub from './ForkMeOnGitHub/ForkMeOnGitHub';
 
-class App extends React.Component {
+class App extends Component {
   render() {
     return (
       <div>

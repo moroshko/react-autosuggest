@@ -1,6 +1,6 @@
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 import utils from '../utils';
 import Autosuggest from '../../../src/Autosuggest';
 import SourceCodeLink from '../SourceCodeLink/SourceCodeLink';
@@ -22,20 +22,18 @@ function getSuggestions(input, callback) {
   // 'suggestions' will be an array of strings, e.g.:
   //   ['Mentone', 'Mill Park', 'Mordialloc']
 
-  setTimeout(function() {
-    callback(null, suggestions);
-  }, 300);
+  setTimeout(() => callback(null, suggestions), 300);
 }
 
 function showWhen(input) {
   return input.trim().length >= 2;
 }
 
-function onSuggestionSelected(suggestion) {
-  console.log('Suggestion selected: [' + suggestion + ']');
+function onSuggestionSelected(suggestion, event) {
+  console.log('Suggestion selected: [' + suggestion + ']. Event: ', event);
 }
 
-class TwoOrMoreCharacters extends React.Component {
+export default class TwoOrMoreCharacters extends Component {
   render() {
     let inputAttributes = {
       id: 'two-or-more-characters',
@@ -48,11 +46,9 @@ class TwoOrMoreCharacters extends React.Component {
                      showWhen={showWhen}
                      onSuggestionSelected={onSuggestionSelected}
                      inputAttributes={inputAttributes}
-                     ref={ () => { document.getElementById('two-or-more-characters').focus(); } } />
+                     ref={ () => document.getElementById('two-or-more-characters').focus() } />
         <SourceCodeLink file="examples/src/TwoOrMoreCharacters/TwoOrMoreCharacters.js" />
       </div>
     );
   }
 }
-
-export default TwoOrMoreCharacters;

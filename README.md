@@ -4,7 +4,7 @@
 
 # React Autosuggest
 
-[WAI-ARIA compliant](http://www.w3.org/TR/wai-aria-practices/#autocomplete) React autosuggest component.
+[WAI-ARIA compliant][wai-aria] React autosuggest component.
 
 ## Live Examples
 
@@ -12,6 +12,18 @@
 * <a href="//moroshko.github.io/react-autosuggest#Custom renderer" target="_blank">Custom renderer</a><br>
 * <a href="//moroshko.github.io/react-autosuggest#Multiple sections" target="_blank">Multiple sections</a>
 * <a href="//moroshko.github.io/react-autosuggest#2 or more characters" target="_blank">2 or more characters</a>
+
+## Features
+
+* [x] [Accessible][wai-aria] (you can use both mouse and keyboard)
+* [x] In-memory caching (we retrive suggestions for a given input only once)
+* [x] Support for delayed requests (if request comes back after user types another letter, it will be ignored)
+* [x] You can either display a [plain list of suggestions][basic-example], or have [multiple sections][multiple-sections]
+* [x] Full control over [rendering a suggestion](#suggestionRendererOption) (you can display extra data, images, whatever you want)
+* [x] Full control over [styling](#styling) (we just provide the mechanics and classes for you)
+* [x] Full control over [when to show the suggestions](#showWhenOption) (e.g. when user types 2 or more characters)
+* [x] Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder)
+* [x] Hooks: [onSuggestionSelected](#onSuggestionSelectedOption)
 
 ## Installation
 
@@ -21,17 +33,16 @@ npm install react-autosuggest --save
 
 ## Basic Usage
 
-```javascript
+```js
 import Autosuggest from 'react-autosuggest';
 
 let suburbs = ['Cheltenham', 'Mill Park', 'Mordialloc', 'Nunawading'];
 
 function getSuggestions(input, callback) {
   let regex = new RegExp('^' + input, 'i');
+  let suggestions = suburbs.filter(suburb => regex.test(suburb));
 
-  setTimeout(function() {
-    callback(null, suburbs.filter( suburb => regex.test(suburb) ));
-  }, 300);
+  setTimeout(() => callback(null, suggestions)), 300); // Emulate API call
 }
 ```
 ```xml
@@ -51,9 +62,9 @@ function getSuggestions(input, callback) {
 <a name="suggestionsOption"></a>
 ##### suggestions (required)
 
-Implement this function to tell `Autosuggest` which suggestions to display.
+Implement this function to tell `<Autosuggest />` which suggestions to display.
 
-```javascript
+```js
 function(input, callback) {
   ...
 }
@@ -71,13 +82,13 @@ function(input, callback) {
 * **To display a single section with no title:** `[`[\<suggestion>](#suggestion)`, `[\<suggestion>](#suggestion)`, ...]`
 * **To display one or more sections with optional titles:** Array of objects with an optional `sectionName` and a mandatory `suggestions` keys, e.g.:
 
-```javascript
-    [{
-      suggestions: [<suggestion>, <suggestion>]   // This section won't have a title
-    }, {
-      sectionName: 'Second section',
-      suggestions: [<suggestion>, <suggestion>, <suggestion>]
-    }]
+```js
+[{
+  suggestions: [<suggestion>, <suggestion>]   // This section won't have a title
+}, {
+  sectionName: 'Second section',
+  suggestions: [<suggestion>, <suggestion>, <suggestion>]
+}]
 ```
 
 <a name="suggestion"></a>
@@ -91,20 +102,20 @@ function(input, callback) {
 
 This function will be used to render the suggestion. It should return `ReactElement` or a string.
 
-```javascript
+```js
 function(suggestion, input) {
   ...
 }
 ```
 
-* `suggestion` - The [suggestion](#suggestion) to render (string or object)
+* [`suggestion`](#suggestion) - The suggestion to render
 * `input` - The value of the input field (e.g.: `'Men'`). If user interacts using the Up or Down keys at the moment, it will be the value of the input field **prior** to those interactions.
 
 For example:
 
-```javascript
-function renderSuggestion(suggestion, input) { // In this example 'suggestion' is a string
-  return (
+```js
+function renderSuggestion(suggestion, input) { // In this example, 'suggestion' is a string
+  return (                                     // and it returns a ReactElement
     <span><strong>{suggestion.slice(0, input.length)}</strong>{suggestion.slice(input.length)}</span>
   );
 }
@@ -122,7 +133,7 @@ This function will be used to set the value of the input field when suggestion i
 
 For example:
 
-```javascript
+```js
 function getSuggestionValue(suggestionObj) {
   return suggestionObj.suburb + ' VIC ' + suggestionObj.postcode;
 }
@@ -139,36 +150,39 @@ function getSuggestionValue(suggestionObj) {
 
 This function will be used to determine whether to show suggestions or not. It has one parameter which is the value of the input field (e.g.: `'m '`). The default is:
 
-```javascript
+```js
 function(input) {
   return input.trim().length > 0;
 }
 ```
 
-
-For example, to show suggestions only if user typed 2 or more characters, do:
-
-```javascript
-function showWhen(input) {
-  return input.trim().length >= 2;
-}
-```
+For example, this is how you could show suggestions only when user typed 2 or more characters:
 
 ```xml
 <Autosuggest suggestions={getSuggestions}
-             showWhen={showWhen} />
+             showWhen={input => input.trim().length >= 2} />
 ```
 
 <a name="onSuggestionSelectedOption"></a>
 ##### onSuggestionSelected (optional)
 
-This function will be called when suggestion is selected via mouse click or Enter. It has one parameter which is the selected [suggestion](#suggestion) (string or object).
+This function will be called when suggestion is selected via mouse click or Enter.
+
+```js
+function(suggestion, event) {
+  ...
+}
+```
+
+* [`suggestion`](#suggestion) - The selected suggestion
+* [`event`][event] - It can be used to call `event.preventDefault()` if the `<Autosuggest />` is inside a form and you don't want to submit the form once user selected a suggestion using Enter.
 
 For example:
 
-```javascript
-function onSuggestionSelected(suggestion) { // In this example 'suggestion' is a string
-  console.log('Suggestion selected: [' + suggestion + ']');
+```js
+function onSuggestionSelected(suggestion, event) {
+  event.preventDefault();
+  // Do other fancy stuff
 }
 ```
 
@@ -198,9 +212,9 @@ function onSuggestionFocused(suggestion) { // In this example 'suggestion' is a 
 <a name="inputAttributesOption"></a>
 ##### inputAttributes (optional)
 
-Hash of attributes to pass to the input field. For example:
+Hash of attributes to pass to the input field. For exampleple:
 
-```javascript
+```js
 let inputAttributes = {
   id: 'locations-autosuggest',
   name: 'locations-autosuggest',
@@ -216,13 +230,15 @@ let inputAttributes = {
              inputAttributes={inputAttributes} />
 ```
 
+<a name="styling"></a>
 ## Styling
 
-The `<Autosuggest />` component comes with no styles. You can use the following classes to style it:
+`<Autosuggest />` comes with no styles. You can use the following classes to style it:
 
 * `react-autosuggest`
 * `react-autosuggest__suggestions`
 * `react-autosuggest__suggestion`
+* `react-autosuggest__suggestion--focused`
 * `react-autosuggest__suggestions-section`
 * `react-autosuggest__suggestions-section-name`
 * `react-autosuggest__suggestions-section-suggestions`
@@ -301,3 +317,7 @@ npm test
 [npm-url]: https://npmjs.org/package/react-autosuggest
 [downloads-image]: https://img.shields.io/npm/dm/react-autosuggest.svg
 [downloads-url]: https://npmjs.org/package/react-autosuggest
+[wai-aria]: http://www.w3.org/TR/wai-aria-practices/#autocomplete
+[event]: https://facebook.github.io/react/docs/events.html#syntheticevent
+[basic-example]: http://moroshko.github.io/react-autosuggest
+[multiple-sections]: http://moroshko.github.io/react-autosuggest/#Multiple%20sections

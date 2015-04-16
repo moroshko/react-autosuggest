@@ -3,14 +3,14 @@
 require('./Examples.less');
 require('./Autosuggest.less');
 
-import React from 'react';
+import React, { Component } from 'react';
 import classnames from 'classnames';
 import BasicExample from './BasicExample/BasicExample';
 import CustomRenderer from './CustomRenderer/CustomRenderer';
 import MultipleSections from './MultipleSections/MultipleSections';
 import TwoOrMoreCharacters from './TwoOrMoreCharacters/TwoOrMoreCharacters';
 
-class Examples extends React.Component {
+export default class Examples extends Component {
   constructor() {
     this.examples = [
       'Basic example',
@@ -31,7 +31,7 @@ class Examples extends React.Component {
   renderMenu() {
     return (
       <div className="examples-menu">
-        {this.examples.map(function(example) {
+        {this.examples.map(example => {
           let classes = classnames({
             'examples-menu__item': true,
             'examples-menu__item--active': example === this.state.activeExample
@@ -44,7 +44,7 @@ class Examples extends React.Component {
               {example}
             </div>
           );
-        }, this)}
+        })}
       </div>
     );
   }
@@ -65,5 +65,3 @@ class Examples extends React.Component {
     );
   }
 }
-
-export default Examples;

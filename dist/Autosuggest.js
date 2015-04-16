@@ -35,7 +35,7 @@ var Autosuggest = (function (_Component) {
   function Autosuggest(props) {
     _classCallCheck(this, Autosuggest);
 
-    _get(Object.getPrototypeOf(Autosuggest.prototype), "constructor", this).call(this, props);
+    _get(Object.getPrototypeOf(Autosuggest.prototype), "constructor", this).call(this);
 
     guid += 1;
     this.id = guid;
@@ -50,7 +50,7 @@ var Autosuggest = (function (_Component) {
       // interaction in order to revert back if ESC hit.
       // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
-    this.suggestionsFn = debounce(this.props.suggestions, 100);
+    this.suggestionsFn = debounce(props.suggestions, 100);
   }
 
   _inherits(Autosuggest, _Component);
@@ -96,6 +96,8 @@ var Autosuggest = (function (_Component) {
     },
     showSuggestions: {
       value: function showSuggestions(input) {
+        var _this = this;
+
         lastSuggestionsInputValue = input;
 
         if (!this.props.showWhen(input)) {
@@ -103,7 +105,7 @@ var Autosuggest = (function (_Component) {
         } else if (this.cache[input]) {
           this.setSuggestionsState(this.cache[input]);
         } else {
-          this.suggestionsFn(input, (function (error, suggestions) {
+          this.suggestionsFn(input, function (error, suggestions) {
             // If input value changed, suggestions are not relevant anymore.
             if (lastSuggestionsInputValue !== input) {
               return;
@@ -112,14 +114,14 @@ var Autosuggest = (function (_Component) {
             if (error) {
               throw error;
             } else {
-              if (!this.suggestionsExist(suggestions)) {
+              if (!_this.suggestionsExist(suggestions)) {
                 suggestions = null;
               }
 
-              this.cache[input] = suggestions;
-              this.setSuggestionsState(suggestions);
+              _this.cache[input] = suggestions;
+              _this.setSuggestionsState(suggestions);
             }
-          }).bind(this));
+          });
         }
       }
     },
@@ -190,7 +192,7 @@ var Autosuggest = (function (_Component) {
           case 13:
             // enter
             if (this.state.valueBeforeUpDown !== null && this.state.focusedSuggestionIndex !== null) {
-              this.props.onSuggestionSelected(this.getSuggestion(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex));
+              this.props.onSuggestionSelected(this.getSuggestion(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex), event);
             }
 
             this.setSuggestionsState(null);
@@ -259,7 +261,7 @@ var Autosuggest = (function (_Component) {
       }
     },
     onSuggestionMouseDown: {
-      value: function onSuggestionMouseDown(sectionIndex, suggestionIndex) {
+      value: function onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
         this.setState({
           value: this.getSuggestionValue(sectionIndex, suggestionIndex),
           suggestions: null,
@@ -267,13 +269,15 @@ var Autosuggest = (function (_Component) {
           focusedSuggestionIndex: null,
           valueBeforeUpDown: null
         }, function () {
+          var _this = this;
+
           // This code executes after the component is re-rendered
-          setTimeout((function () {
-            findDOMNode(this.refs.input).focus();
-          }).bind(this));
+          setTimeout(function () {
+            return findDOMNode(_this.refs.input).focus();
+          });
         });
 
-        this.props.onSuggestionSelected(this.getSuggestion(sectionIndex, suggestionIndex));
+        this.props.onSuggestionSelected(this.getSuggestion(sectionIndex, suggestionIndex), event);
       }
     },
     getSuggestionId: {
@@ -300,29 +304,39 @@ var Autosuggest = (function (_Component) {
     },
     renderSuggestionsList: {
       value: function renderSuggestionsList(suggestions, sectionIndex) {
+        var _this = this;
+
         return suggestions.map(function (suggestion, suggestionIndex) {
           var classes = classnames({
             "react-autosuggest__suggestion": true,
-            "react-autosuggest__suggestion--focused": sectionIndex === this.state.focusedSectionIndex && suggestionIndex === this.state.focusedSuggestionIndex
+            "react-autosuggest__suggestion--focused": sectionIndex === _this.state.focusedSectionIndex && suggestionIndex === _this.state.focusedSuggestionIndex
           });
           var suggestionKey = "suggestion-" + (sectionIndex === null ? "" : sectionIndex) + "-" + suggestionIndex;
 
           return React.createElement(
             "li",
-            { id: this.getSuggestionId(sectionIndex, suggestionIndex),
+            { id: _this.getSuggestionId(sectionIndex, suggestionIndex),
               className: classes,
               role: "option",
               key: suggestionKey,
-              onMouseEnter: this.onSuggestionMouseEnter.bind(this, sectionIndex, suggestionIndex),
-              onMouseLeave: this.onSuggestionMouseLeave.bind(this),
-              onMouseDown: this.onSuggestionMouseDown.bind(this, sectionIndex, suggestionIndex) },
-            this.renderSuggestionContent(suggestion)
+              onMouseEnter: function () {
+                return _this.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
+              },
+              onMouseLeave: function () {
+                return _this.onSuggestionMouseLeave();
+              },
+              onMouseDown: function (event) {
+                return _this.onSuggestionMouseDown(sectionIndex, suggestionIndex, event);
+              } },
+            _this.renderSuggestionContent(suggestion)
           );
-        }, this);
+        });
       }
     },
     renderSuggestions: {
       value: function renderSuggestions() {
+        var _this = this;
+
         if (this.state.value === "" || this.state.suggestions === null) {
           return null;
         }
@@ -348,10 +362,10 @@ var Autosuggest = (function (_Component) {
                 React.createElement(
                   "ul",
                   { className: "react-autosuggest__suggestions-section-suggestions" },
-                  this.renderSuggestionsList(section.suggestions, sectionIndex)
+                  _this.renderSuggestionsList(section.suggestions, sectionIndex)
                 )
               );
-            }, this)
+            })
           );
         }
 
