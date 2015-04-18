@@ -11,19 +11,19 @@
 * <a href="//moroshko.github.io/react-autosuggest" target="_blank">Basic example</a><br>
 * <a href="//moroshko.github.io/react-autosuggest#Custom renderer" target="_blank">Custom renderer</a><br>
 * <a href="//moroshko.github.io/react-autosuggest#Multiple sections" target="_blank">Multiple sections</a>
-* <a href="//moroshko.github.io/react-autosuggest#2 or more characters" target="_blank">2 or more characters</a>
+* <a href="//moroshko.github.io/react-autosuggest#Events playground" target="_blank">Events playground</a>
 
 ## Features
 
-* [x] [Accessible][wai-aria] (you can use both mouse and keyboard)
-* [x] In-memory caching (we retrive suggestions for a given input only once)
-* [x] Support for delayed requests (if request comes back after user types another letter, it will be ignored)
-* [x] You can either display a [plain list of suggestions][basic-example], or have [multiple sections][multiple-sections]
-* [x] Full control over [rendering a suggestion](#suggestionRendererOption) (you can display extra data, images, whatever you want)
-* [x] Full control over [styling](#styling) (we just provide the mechanics and classes for you)
-* [x] Full control over [when to show the suggestions](#showWhenOption) (e.g. when user types 2 or more characters)
-* [x] Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder)
-* [x] Hooks: [onSuggestionSelected](#onSuggestionSelectedOption)
+* [Accessible][wai-aria] (you can use both mouse and keyboard)
+* In-memory caching (we retrive suggestions for a given input only once)
+* Support for delayed requests (if request comes back after user types another letter, it will be ignored)
+* You can either display a [plain list of suggestions][basic-example], or have [multiple sections][multiple-sections]
+* Full control over [rendering a suggestion](#suggestionRendererOption) (you can display extra data, images, whatever you want)
+* Full control over [styling](#styling) (we just provide the mechanics and classes for you)
+* Full control over [when to show the suggestions](#showWhenOption) (e.g. when user types 2 or more characters)
+* Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder)
+* Various events for maximum flexibility: [onSuggestionSelected](#onSuggestionSelectedOption) (more coming soon...)
 
 ## Installation
 

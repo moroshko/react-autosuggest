@@ -8,33 +8,44 @@ import classnames from 'classnames';
 import BasicExample from './BasicExample/BasicExample';
 import CustomRenderer from './CustomRenderer/CustomRenderer';
 import MultipleSections from './MultipleSections/MultipleSections';
-import TwoOrMoreCharacters from './TwoOrMoreCharacters/TwoOrMoreCharacters';
+import EventsPlayground from './EventsPlayground/EventsPlayground';
+import EventsLog from './EventsLog/EventsLog';
 
 export default class Examples extends Component {
   constructor() {
+    super();
+
     this.examples = [
       'Basic example',
       'Custom renderer',
       'Multiple sections',
-      '2 or more characters'
+      'Events playground'
     ];
 
+    this.eventsPlaceholder = {
+      type: 'placeholder',
+      text: 'Once you interact with the Autosuggest, events will appear here.'
+    };
+
     this.state = {
-      activeExample: decodeURI(location.hash).split('#')[1] || this.examples[0]
+      activeExample: decodeURI(location.hash).split('#')[1] || this.examples[0],
+      events: [this.eventsPlaceholder]
     };
   }
+
   changeExample(example) {
     this.setState({
       activeExample: example
     });
   }
+
   renderMenu() {
     return (
-      <div className="examples-menu">
+      <div className="examples__menu">
         {this.examples.map(example => {
           let classes = classnames({
-            'examples-menu__item': true,
-            'examples-menu__item--active': example === this.state.activeExample
+            'examples__menu-item': true,
+            'examples__menu-item--active': example === this.state.activeExample
           });
 
           return (
@@ -48,19 +59,55 @@ export default class Examples extends Component {
       </div>
     );
   }
+
+  clearEvents() {
+    this.setState({
+      events: [this.eventsPlaceholder]
+    });
+  }
+
+  eventsExist() {
+    return this.state.events[0].type !== 'placeholder';
+  }
+
+  renderEventsLog() {
+    if (this.state.activeExample === 'Events playground') {
+      return (
+        <div className="examples__events-log-wrapper">
+          { this.eventsExist() && <button onClick={this.clearEvents.bind(this)}>Clear</button> }
+          <EventsLog events={this.state.events} />
+        </div>
+      );
+    }
+
+    return null;
+  }
+
+  onEventAdded(event) {
+    this.setState({
+      events: this.eventsExist() ? this.state.events.concat([event]) : [event]
+    });
+  }
+
   renderExample() {
     switch (this.state.activeExample) {
       case 'Basic example': return <BasicExample />;
       case 'Custom renderer': return <CustomRenderer />;
       case 'Multiple sections': return <MultipleSections />;
-      case '2 or more characters': return <TwoOrMoreCharacters />;
+      case 'Events playground': return <EventsPlayground onEventAdded={this.onEventAdded.bind(this)} />;
     }
   }
+
   render() {
     return (
       <div className="examples">
-        {this.renderMenu()}
-        {this.renderExample()}
+        <div className="examples__column">
+          {this.renderMenu()}
+          {this.renderEventsLog()}
+        </div>
+        <div className="examples__column">
+          {this.renderExample()}
+        </div>
       </div>
     );
   }

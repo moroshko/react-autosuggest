@@ -1,0 +1,24 @@
+.examples__events-log {
+  flex-grow: 1;
+  width: 300px;
+  margin: 20px 0;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+  font-size: 12px;
+  overflow: auto;
+
+  &__event {
+    margin-bottom: 10px;
+
+    &--placeholder {
+      color: #aaa;
+    }
+
+    &--suggestion-selected {
+      .examples__events-log__event-description {
+        color: #1CB30C;
+        font-weight: bold;
+      }
+    }
+  }
+}

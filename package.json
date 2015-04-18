@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "1.10.0",
+  "version": "1.10.2",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/Autosuggest.js",
   "repository": {
@@ -14,8 +14,8 @@
   "homepage": "https://github.com/moroshko/react-autosuggest",
   "scripts": {
     "start": "node server",
-    "test": "jest",
-    "dist": "npm test && babel src/Autosuggest.js -o dist/Autosuggest.js && babel src/sectionIterator.js -o dist/sectionIterator.js",
+    "test": "BABEL_JEST_STAGE=0 jest",
+    "dist": "npm test && babel src/Autosuggest.js -o dist/Autosuggest.js --stage 0 && babel src/sectionIterator.js -o dist/sectionIterator.js --stage 0",
     "build": "webpack --config webpack.dev.config.js",
     "deploy": "gh-pages-deploy"
   },
@@ -40,11 +40,10 @@
     "react": "^0.13.1"
   },
   "devDependencies": {
-    "babel": "^4.7.16",
-    "babel-core": "^4.7.16",
-    "babel-eslint": "^2.0.2",
-    "babel-jest": "^4.0.0",
-    "babel-loader": "^4.3.0",
+    "babel": "^5.1.10",
+    "babel-eslint": "^3.0.1",
+    "babel-jest": "^5.0.1",
+    "babel-loader": "^5.0.0",
     "css-loader": "^0.10.1",
     "eslint": "^0.18.0",
     "eslint-loader": "^0.9.0",
@@ -54,9 +53,9 @@
     "json-loader": "^0.5.1",
     "less": "^2.5.0",
     "less-loader": "^2.2.0",
-    "react-hot-loader": "^1.2.4",
-    "style-loader": "^0.10.1",
-    "webpack": "^1.8.4",
+    "react-hot-loader": "^1.2.5",
+    "style-loader": "^0.10.2",
+    "webpack": "^1.8.5",
     "webpack-dev-server": "^1.8.0"
   },
   "keywords": [
