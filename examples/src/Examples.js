@@ -12,6 +12,8 @@ import TwoOrMoreCharacters from './TwoOrMoreCharacters/TwoOrMoreCharacters';
 
 export default class Examples extends Component {
   constructor() {
+    super();
+
     this.examples = [
       'Basic example',
       'Custom renderer',

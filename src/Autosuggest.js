@@ -8,6 +8,21 @@ import sectionIterator from './sectionIterator';
 let lastSuggestionsInputValue = null, guid = 0;
 
 export default class Autosuggest extends Component {
+  static propTypes = {
+    suggestions: PropTypes.func.isRequired,               // Function to get the suggestions
+    suggestionRenderer: PropTypes.func,                   // Function that renders a given suggestion (must be implemented when suggestions are objects)
+    suggestionValue: PropTypes.func,                      // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
+    showWhen: PropTypes.func,                             // Function that determines whether to show suggestions or not
+    onSuggestionSelected: PropTypes.func,                 // This function is called when suggestion is selected via mouse click or Enter
+    inputAttributes: PropTypes.objectOf(PropTypes.string) // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+  }
+
+  static defaultProps = {
+    showWhen: input => input.trim().length > 0,
+    onSuggestionSelected: () => {},
+    inputAttributes: {}
+  }
+
   constructor(props) {
     super();
 
@@ -334,18 +349,3 @@ export default class Autosuggest extends Component {
     );
   }
 }
-
-Autosuggest.propTypes = {
-  suggestions: PropTypes.func.isRequired,               // Function to get the suggestions
-  suggestionRenderer: PropTypes.func,                   // Function that renders a given suggestion (must be implemented when suggestions are objects)
-  suggestionValue: PropTypes.func,                      // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
-  showWhen: PropTypes.func,                             // Function that determines whether to show suggestions or not
-  onSuggestionSelected: PropTypes.func,                 // This function is called when suggestion is selected via mouse click or Enter
-  inputAttributes: PropTypes.objectOf(PropTypes.string) // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
-};
-
-Autosuggest.defaultProps = {
-  showWhen: input => input.trim().length > 0,
-  onSuggestionSelected: () => {},
-  inputAttributes: {}
-};

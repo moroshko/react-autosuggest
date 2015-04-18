@@ -1,13 +1,13 @@
-"use strict";
+'use strict';
 
-var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
+var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } };
 
 var data = undefined,
     multipleSections = undefined;
 
 function setData(newData) {
   data = newData;
-  multipleSections = typeof data === "object";
+  multipleSections = typeof data === 'object';
 }
 
 function nextNonEmptySectionIndex(sectionIndex) {
@@ -70,10 +70,10 @@ function next(position) {
 }
 
 function prev(position) {
-  var _position = _slicedToArray(position, 2);
+  var _position2 = _slicedToArray(position, 2);
 
-  var sectionIndex = _position[0];
-  var itemIndex = _position[1];
+  var sectionIndex = _position2[0];
+  var itemIndex = _position2[1];
 
   if (multipleSections) {
     if (itemIndex === null || itemIndex === 0) {

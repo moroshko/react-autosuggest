@@ -10,6 +10,11 @@ let style = {
 };
 
 export default class ForkMeOnGitHub extends Component {
+  static propTypes = {
+    user: PropTypes.string.isRequired,
+    repo: PropTypes.string.isRequired
+  }
+
   render() {
     return (
       <a href={'//github.com/' + this.props.user + '/' + this.props.repo} target="_blank">
@@ -18,8 +23,3 @@ export default class ForkMeOnGitHub extends Component {
     );
   }
 }
-
-ForkMeOnGitHub.propTypes = {
-  user: PropTypes.string.isRequired,
-  repo: PropTypes.string.isRequired
-};
