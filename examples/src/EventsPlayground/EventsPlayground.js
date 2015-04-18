@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import utils from '../utils';
 import Autosuggest from '../../../src/Autosuggest';
 import SourceCodeLink from '../SourceCodeLink/SourceCodeLink';
@@ -25,29 +25,32 @@ function getSuggestions(input, callback) {
   setTimeout(() => callback(null, suggestions), 300);
 }
 
-function showWhen(input) {
-  return input.trim().length >= 2;
-}
+export default class EventsPlayground extends Component {
+  static propTypes = {
+    onEventAdded: PropTypes.func.isRequired
+  }
 
-function onSuggestionSelected(suggestion, event) {
-  console.log('Suggestion selected: [' + suggestion + ']. Event: ', event);
-}
+  onSuggestionSelected(suggestion, event) {
+    this.props.onEventAdded({
+      type: 'suggestion-selected',
+      suggestion: suggestion,
+      event: event
+    });
+  }
 
-export default class TwoOrMoreCharacters extends Component {
   render() {
     let inputAttributes = {
-      id: 'two-or-more-characters',
+      id: 'events-playground',
       placeholder: 'Where are you now?'
     };
 
     return (
       <div>
         <Autosuggest suggestions={getSuggestions}
-                     showWhen={showWhen}
-                     onSuggestionSelected={onSuggestionSelected}
+                     onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      inputAttributes={inputAttributes}
-                     ref={ () => document.getElementById('two-or-more-characters').focus() } />
-        <SourceCodeLink file="examples/src/TwoOrMoreCharacters/TwoOrMoreCharacters.js" />
+                     ref={ () => document.getElementById('events-playground').focus() } />
+        <SourceCodeLink file="examples/src/EventsPlayground/EventsPlayground.js" />
       </div>
     );
   }

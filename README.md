@@ -11,7 +11,7 @@
 * <a href="//moroshko.github.io/react-autosuggest" target="_blank">Basic example</a><br>
 * <a href="//moroshko.github.io/react-autosuggest#Custom renderer" target="_blank">Custom renderer</a><br>
 * <a href="//moroshko.github.io/react-autosuggest#Multiple sections" target="_blank">Multiple sections</a>
-* <a href="//moroshko.github.io/react-autosuggest#2 or more characters" target="_blank">2 or more characters</a>
+* <a href="//moroshko.github.io/react-autosuggest#Events playground" target="_blank">Events playground</a>
 
 ## Features
 
@@ -23,7 +23,7 @@
 * Full control over [styling](#styling) (we just provide the mechanics and classes for you)
 * Full control over [when to show the suggestions](#showWhenOption) (e.g. when user types 2 or more characters)
 * Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder)
-* Hooks: [onSuggestionSelected](#onSuggestionSelectedOption)
+* Various events for maximum flexibility: [onSuggestionSelected](#onSuggestionSelectedOption) (more coming soon...)
 
 ## Installation
 
