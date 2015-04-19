@@ -37,7 +37,7 @@
   "dependencies": {
     "classnames": "^1.2.0",
     "debounce": "^1.0.0",
-    "react": "^0.13.1"
+    "react": "^0.13.2"
   },
   "devDependencies": {
     "babel": "^5.1.10",
