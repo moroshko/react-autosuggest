@@ -159,6 +159,15 @@ export default class Autosuggest extends Component {
     }
   }
 
+  onSuggestionSelected(sectionIndex, suggestionIndex, event) {
+    this.onSuggestionUnfocused();
+    this.props.onSuggestionSelected(
+      this.getSuggestion(sectionIndex, suggestionIndex),
+      event
+    );
+    lastFocusedSuggestion = null;
+  }
+
   onInputChange(event) {
     let newValue = event.target.value;
 
@@ -176,8 +185,9 @@ export default class Autosuggest extends Component {
     switch (event.keyCode) {
       case 13: // enter
         if (this.state.valueBeforeUpDown !== null && this.state.focusedSuggestionIndex !== null) {
-          this.props.onSuggestionSelected(
-            this.getSuggestion(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex),
+          this.onSuggestionSelected(
+            this.state.focusedSectionIndex,
+            this.state.focusedSuggestionIndex,
             event
           );
         }
@@ -263,7 +273,7 @@ export default class Autosuggest extends Component {
       setTimeout( () => findDOMNode(this.refs.input).focus() );
     });
 
-    this.props.onSuggestionSelected(this.getSuggestion(sectionIndex, suggestionIndex), event);
+    this.onSuggestionSelected(sectionIndex, suggestionIndex, event);
   }
 
   getSuggestionId(sectionIndex, suggestionIndex) {
