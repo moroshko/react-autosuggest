@@ -146,9 +146,17 @@ export default class Autosuggest extends Component {
 
     this.setState(newState);
 
-    this.props.onSuggestionUnfocused(lastFocusedSuggestion);
+    this.onSuggestionUnfocused();
+    if(suggestion != null) {
+      this.props.onSuggestionFocused(suggestion);
+    }
     lastFocusedSuggestion = suggestion;
-    this.props.onSuggestionFocused(suggestion);
+  }
+
+  onSuggestionUnfocused() {
+    if (lastFocusedSuggestion != null) {
+      this.props.onSuggestionUnfocused(lastFocusedSuggestion);
+    }
   }
 
   onInputChange(event) {
@@ -192,7 +200,7 @@ export default class Autosuggest extends Component {
         }
 
         this.setState(newState);
-        this.props.onSuggestionUnfocused(lastFocusedSuggestion);
+        this.onSuggestionUnfocused();
         lastFocusedSuggestion = null;
         break;
 
@@ -219,6 +227,8 @@ export default class Autosuggest extends Component {
 
   onInputBlur() {
     this.setSuggestionsState(null);
+    this.onSuggestionUnfocused();
+    lastFocusedSuggestion = null;
   }
 
   onSuggestionMouseEnter(sectionIndex, suggestionIndex) {
@@ -228,8 +238,8 @@ export default class Autosuggest extends Component {
       focusedSuggestionIndex: suggestionIndex
     });
 
-    lastFocusedSuggestion = suggestion;
     this.props.onSuggestionFocused(suggestion);
+    lastFocusedSuggestion = suggestion;
   }
 
   onSuggestionMouseLeave() {
@@ -238,7 +248,7 @@ export default class Autosuggest extends Component {
       focusedSuggestionIndex: null
     });
 
-    this.props.onSuggestionUnfocused(lastFocusedSuggestion);
+    this.onSuggestionUnfocused();
   }
 
   onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
