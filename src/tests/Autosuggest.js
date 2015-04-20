@@ -429,11 +429,9 @@ describe('Autosuggest', function() {
   describe('onSuggestionFocused', function() {
     beforeEach(function() {
       onSuggestionFocused.mockClear();
-      onSuggestionUnfocused.mockClear();
       createAutosuggest(
         <Autosuggest suggestions={getSuburbStrings}
-                     onSuggestionFocused={onSuggestionFocused}
-                     onSuggestionUnfocused={onSuggestionUnfocused} />
+                     onSuggestionFocused={onSuggestionFocused} />
       );
       setInputValue('m');
     });
@@ -443,7 +441,6 @@ describe('Autosuggest', function() {
       it('should call onSuggestionFocused when suggestion focused using mouse', function() {
         mouseOverFromInputToSuggestion(1);
         expect(onSuggestionFocused).toBeCalledWith('Mordialloc');
-        expect(onSuggestionUnfocused).not.toBeCalled();
       });
     });
 
@@ -473,13 +470,11 @@ describe('Autosuggest', function() {
 
   describe('onSuggestionUnfocused', function() {
     beforeEach(function() {
-      onSuggestionFocused.mockClear();
       onSuggestionUnfocused.mockClear();
       createAutosuggest(
         <Autosuggest suggestions={getSuburbObjects}
                      suggestionRenderer={renderSuburbObject}
                      suggestionValue={getSuburbObjectValue}
-                     onSuggestionFocused={onSuggestionFocused}
                      onSuggestionUnfocused={onSuggestionUnfocused} />
       );
       setInputValue('m');
@@ -491,17 +486,6 @@ describe('Autosuggest', function() {
         mouseOverFromInputToSuggestion(0);
         mouseOverBetweenSuggestions(0, 1);
         expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
-      });
-
-      it('should call onSuggestionUnfocused when clicking outside and suggestion is focused', function() {
-        mouseOverFromInputToSuggestion(0);
-        clickOutside();
-        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
-      });
-
-      it('should not call onSuggestionUnfocused when clicking outside and no suggestion focused', function() {
-        clickOutside();
-        expect(onSuggestionUnfocused).not.toBeCalled();
       });
     });
 
@@ -521,6 +505,21 @@ describe('Autosuggest', function() {
 
       it('should not call onSuggestionUnfocused when ESC key pressed and no suggestion focused', function() {
         clickEscape();
+        expect(onSuggestionUnfocused).not.toBeCalled();
+      });
+
+      it('should call onSuggestionUnfocused when clicking outside and suggestion is focused', function() {
+        clickDown();
+        clickOutside();
+        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+      });
+
+      it('should not call onSuggestionUnfocused when clicking outside and no suggestion focused', function() {
+        clickDown();
+        clickDown();
+        clickDown();
+        onSuggestionUnfocused.mockClear();
+        clickOutside();
         expect(onSuggestionUnfocused).not.toBeCalled();
       });
     });
