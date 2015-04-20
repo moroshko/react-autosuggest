@@ -147,7 +147,7 @@ export default class Autosuggest extends Component {
     this.setState(newState);
 
     this.onSuggestionUnfocused();
-    if(suggestion != null) {
+    if(suggestionIndex !== null) {
       this.props.onSuggestionFocused(suggestion);
     }
     lastFocusedSuggestion = suggestion;
