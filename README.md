@@ -23,7 +23,7 @@
 * Full control over [styling](#styling) (we just provide the mechanics and classes for you)
 * Full control over [when to show the suggestions](#showWhenOption) (e.g. when user types 2 or more characters)
 * Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder)
-* Various events for maximum flexibility: [onSuggestionSelected](#onSuggestionSelectedOption) (more coming soon...)
+* Various events for maximum flexibility: [onSuggestionSelected](#onSuggestionSelectedOption), [onSuggestionFocused](#onSuggestionFocusedOption), [onSuggestionUnfocused](#onSuggestionUnfocusedOption)
 
 ## Installation
 
