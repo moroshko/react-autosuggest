@@ -157,6 +157,7 @@ export default class Autosuggest extends Component {
     if (lastFocusedSuggestion != null) {
       this.props.onSuggestionUnfocused(lastFocusedSuggestion);
     }
+    lastFocusedSuggestion = null;
   }
 
   onSuggestionSelected(sectionIndex, suggestionIndex, event) {
@@ -238,7 +239,6 @@ export default class Autosuggest extends Component {
   onInputBlur() {
     this.setSuggestionsState(null);
     this.onSuggestionUnfocused();
-    lastFocusedSuggestion = null;
   }
 
   onSuggestionMouseEnter(sectionIndex, suggestionIndex) {
