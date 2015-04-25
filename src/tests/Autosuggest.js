@@ -437,7 +437,6 @@ describe('Autosuggest', function() {
     });
 
     describe('Mouse interactions', function() {
-
       it('should call onSuggestionFocused when suggestion focused using mouse', function() {
         mouseOverFromInputToSuggestion(1);
         expect(onSuggestionFocused).toBeCalledWith('Mordialloc');
@@ -445,7 +444,6 @@ describe('Autosuggest', function() {
     });
 
     describe('Keyboard interactions', function() {
-
       it('should call onSuggestionFocused when suggestion focused using Up/Down keys', function() {
         clickDown();
         expect(onSuggestionFocused).toBeCalledWith('Mill Park');
@@ -481,7 +479,6 @@ describe('Autosuggest', function() {
     });
 
     describe('Mouse interactions', function() {
-
       it('should call onSuggestionUnfocused when suggestion unfocused using mouse', function() {
         mouseOverFromInputToSuggestion(0);
         mouseOverBetweenSuggestions(0, 1);
@@ -496,7 +493,6 @@ describe('Autosuggest', function() {
     });
 
     describe('Keyboard interactions', function() {
-
       it('should call onSuggestionUnfocused when suggestion unfocused using Up/Down keys', function() {
         clickDown();
         clickDown();
