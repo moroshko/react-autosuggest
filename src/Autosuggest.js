@@ -130,7 +130,6 @@ export default class Autosuggest extends Component {
 
   focusOnSuggestion(suggestionPosition) {
     let [sectionIndex, suggestionIndex] = suggestionPosition;
-    let suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
     let newState = {
       focusedSectionIndex: sectionIndex,
       focusedSuggestionIndex: suggestionIndex,
@@ -147,6 +146,11 @@ export default class Autosuggest extends Component {
     this.setState(newState);
 
     this.onSuggestionUnfocused();
+    this.onSuggestionFocused(sectionIndex, suggestionIndex);
+  }
+
+  onSuggestionFocused(sectionIndex, suggestionIndex) {
+    let suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
     if(suggestionIndex !== null) {
       this.props.onSuggestionFocused(suggestion);
     }
@@ -241,14 +245,12 @@ export default class Autosuggest extends Component {
   }
 
   onSuggestionMouseEnter(sectionIndex, suggestionIndex) {
-    let suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
     this.setState({
       focusedSectionIndex: sectionIndex,
       focusedSuggestionIndex: suggestionIndex
     });
 
-    this.props.onSuggestionFocused(suggestion);
-    lastFocusedSuggestion = suggestion;
+    this.onSuggestionFocused(sectionIndex, suggestionIndex);
   }
 
   onSuggestionMouseLeave() {
