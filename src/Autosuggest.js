@@ -212,7 +212,6 @@ export default class Autosuggest extends Component {
 
         this.setState(newState);
         this.onSuggestionUnfocused();
-        lastFocusedSuggestion = null;
         break;
 
       case 38: // up
