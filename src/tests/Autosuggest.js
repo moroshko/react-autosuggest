@@ -449,6 +449,14 @@ describe('Autosuggest', function() {
         expect(onSuggestionFocused).toBeCalledWith('Mill Park');
       });
 
+      it('should not call onSuggestionFocused when Up/Down keys are pressed after ESC is pressed', function() {
+        clickDown();
+        clickEscape();
+        onSuggestionFocused.mockClear();
+        clickDown();
+        expect(onSuggestionFocused).not.toBeCalled();
+      });
+
       it('should not call onSuggestionFocused when first suggestion is focused and Up key is clicked', function() {
         clickDown();
         onSuggestionFocused.mockClear();
@@ -497,6 +505,14 @@ describe('Autosuggest', function() {
         clickDown();
         clickDown();
         expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+      });
+
+      it('should not call onSuggestionUnfocused when Up/Down keys are pressed after ESC is pressed', function() {
+        clickDown();
+        clickEscape();
+        onSuggestionUnfocused.mockClear();
+        clickDown();
+        expect(onSuggestionUnfocused).not.toBeCalled();
       });
 
       it('should call onSuggestionUnfocused when ESC key pressed and suggestion is focused', function() {
