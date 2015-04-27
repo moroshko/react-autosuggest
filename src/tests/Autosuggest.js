@@ -472,6 +472,16 @@ describe('Autosuggest', function() {
         expect(onSuggestionFocused).not.toBeCalled();
       });
     });
+
+    describe('Combined interactions', function() {
+      it('should not call onSuggestionFocused twice if focusing same suggestion with keyboard and then with mouse', function() {
+        clickDown();
+        expect(onSuggestionFocused).toBeCalledWith('Mill Park');
+        onSuggestionFocused.mockClear();
+        mouseOverFromInputToSuggestion(0);
+        expect(onSuggestionFocused).not.toBeCalled();
+      });
+    });
   });
 
   describe('onSuggestionUnfocused', function() {

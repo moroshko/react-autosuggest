@@ -151,7 +151,7 @@ export default class Autosuggest extends Component {
 
   onSuggestionFocused(sectionIndex, suggestionIndex) {
     let suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
-    if(suggestionIndex !== null) {
+    if(suggestionIndex !== null && suggestion !== lastFocusedSuggestion) {
       this.props.onSuggestionFocused(suggestion);
     }
     lastFocusedSuggestion = suggestion;
