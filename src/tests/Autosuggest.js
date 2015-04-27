@@ -542,10 +542,15 @@ describe('Autosuggest', function() {
         expect(onSuggestionUnfocused).not.toBeCalled();
       });
 
-      it('should call onSuggestionUnfocused when suggestion selected with Enter key', function() {
+      it('should call onSuggestionUnfocused when Enter is pressed and suggestion is focused', function() {
         clickDown();
         clickEnter();
         expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+      });
+
+      it('should not call onSuggestionUnfocused when Enter is pressed and no suggestion focused', function() {
+        clickEnter();
+        expect(onSuggestionUnfocused).not.toBeCalled();
       });
     });
   });
