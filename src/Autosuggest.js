@@ -170,7 +170,6 @@ export default class Autosuggest extends Component {
       this.getSuggestion(sectionIndex, suggestionIndex),
       event
     );
-    lastFocusedSuggestion = null;
   }
 
   onInputChange(event) {
