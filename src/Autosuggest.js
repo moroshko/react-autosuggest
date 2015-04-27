@@ -181,6 +181,7 @@ export default class Autosuggest extends Component {
     });
 
     this.showSuggestions(newValue);
+    this.onSuggestionUnfocused();
   }
 
   onInputKeyDown(event) {

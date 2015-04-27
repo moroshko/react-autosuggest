@@ -562,6 +562,21 @@ describe('Autosuggest', function() {
         clickEnter();
         expect(onSuggestionUnfocused).not.toBeCalled();
       });
+
+      it('should call onSuggestionUnfocused when input value is changed and suggestion is focused', function() {
+        clickDown();
+        setInputValue(input.value.slice(0, -1));
+        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+      });
+
+      it('should not call onSuggestionUnfocused when input value is changed and no suggestion focused', function() {
+        clickDown();
+        clickDown();
+        clickDown();
+        onSuggestionUnfocused.mockClear();
+        setInputValue(input.value.slice(0, -1));
+        expect(onSuggestionUnfocused).not.toBeCalled();
+      });
     });
   });
 
