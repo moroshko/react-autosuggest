@@ -503,6 +503,7 @@ describe('Autosuggest', function() {
     describe('Keyboard interactions', function() {
       it('should call onSuggestionUnfocused when suggestion unfocused using Up/Down keys', function() {
         clickDown();
+        expect(onSuggestionUnfocused).not.toBeCalled();
         clickDown();
         expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
       });
