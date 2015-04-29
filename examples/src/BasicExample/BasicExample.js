@@ -26,6 +26,10 @@ function getSuggestions(input, callback) {
 }
 
 export default class BasicExample extends Component {
+  handleInputChange(e) {
+    console.log(e.target.value);
+  }
+
   render() {
     let inputAttributes = {
       id: 'basic-example',
@@ -36,6 +40,7 @@ export default class BasicExample extends Component {
       <div>
         <Autosuggest suggestions={getSuggestions}
                      inputAttributes={inputAttributes}
+                     onInputChange={this.handleInputChange}
                      ref={ () => { document.getElementById('basic-example').focus(); } } />
         <SourceCodeLink file="examples/src/BasicExample/BasicExample.js" />
       </div>
