@@ -14,6 +14,9 @@ export default class Autosuggest extends Component {
     suggestionValue: PropTypes.func,                      // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
     showWhen: PropTypes.func,                             // Function that determines whether to show suggestions or not
     onSuggestionSelected: PropTypes.func,                 // This function is called when suggestion is selected via mouse click or Enter
+
+    onInputChange: PropTypes.func,                        // Function to allow external access to input onChange events
+
     inputAttributes: PropTypes.objectOf(PropTypes.string) // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
   }
 
@@ -149,6 +152,10 @@ export default class Autosuggest extends Component {
       value: newValue,
       valueBeforeUpDown: null
     });
+
+    if (this.props.onInputChange) {
+      this.props.onInputChange(event);
+    }
 
     this.showSuggestions(newValue);
   }
