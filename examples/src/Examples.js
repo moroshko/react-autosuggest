@@ -11,7 +11,6 @@ import MultipleSections from './MultipleSections/MultipleSections';
 import EventsPlayground from './EventsPlayground/EventsPlayground';
 import EventsLog from './EventsLog/EventsLog';
 
-
 export default class Examples extends Component {
   constructor() {
     super();
@@ -86,21 +85,31 @@ export default class Examples extends Component {
     return null;
   }
 
+  isEventQueueEmpty() {
+    return this.eventQueue.length === 0;
+  }
+
   processEvents() {
-    if (this.eventQueue.length > 0) {
-      let event = this.eventQueue[0];
-      this.setState({
-        events: this.eventsExist() ? this.state.events.concat([event]) : [event]
-      }, () => {
-        this.eventQueue.shift();
-        this.processEvents();
-      });
+    if (this.isEventQueueEmpty()) {
+      return;
     }
+
+    const event = this.eventQueue[0];
+
+    this.setState({
+      events: this.eventsExist() ? this.state.events.concat([event]) : [event]
+    }, () => {
+      this.eventQueue.shift();
+      this.processEvents();
+    });
   }
 
   onEventAdded(event) {
+    const eventQueueWasEmpty = this.isEventQueueEmpty();
+
     this.eventQueue.push(event);
-    if(this.eventQueue.length === 1) {
+
+    if (eventQueueWasEmpty) {
       this.processEvents();
     }
   }

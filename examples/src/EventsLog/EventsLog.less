@@ -1,7 +1,7 @@
+@import '../variables';
+
 .examples__events-log {
-  flex-grow: 1;
   width: 300px;
-  max-height: 300px;
   margin: 20px 0;
   padding-top: 20px;
   border-top: 1px solid #ddd;
@@ -15,10 +15,19 @@
       color: #aaa;
     }
 
-    &--suggestion-selected,&--suggestion-focused,&--suggestion-unfocused {
-      .examples__events-log__event-description {
+    &-description {
+      font-weight: bold;
+
+      .examples__events-log__event--suggestion-selected & {
         color: #1CB30C;
-        font-weight: bold;
+      }
+
+      .examples__events-log__event--suggestion-focused & {
+        color: @blue;
+      }
+
+      .examples__events-log__event--suggestion-unfocused & {
+        color: #777;
       }
     }
   }
