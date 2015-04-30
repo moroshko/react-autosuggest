@@ -38,6 +38,20 @@ export default class EventsPlayground extends Component {
     });
   }
 
+  onSuggestionFocused(suggestion) {
+    this.props.onEventAdded({
+      type: 'suggestion-focused',
+      suggestion: suggestion
+    });
+  }
+
+  onSuggestionUnfocused(suggestion) {
+    this.props.onEventAdded({
+      type: 'suggestion-unfocused',
+      suggestion: suggestion
+    });
+  }
+
   render() {
     let inputAttributes = {
       id: 'events-playground',
@@ -48,6 +62,8 @@ export default class EventsPlayground extends Component {
       <div>
         <Autosuggest suggestions={getSuggestions}
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
+                     onSuggestionFocused={this.onSuggestionFocused.bind(this)}
+                     onSuggestionUnfocused={this.onSuggestionUnfocused.bind(this)}
                      inputAttributes={inputAttributes}
                      ref={ () => document.getElementById('events-playground').focus() } />
         <SourceCodeLink file="examples/src/EventsPlayground/EventsPlayground.js" />

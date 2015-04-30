@@ -23,7 +23,7 @@
 * Full control over [styling](#styling) (we just provide the mechanics and classes for you)
 * Full control over [when to show the suggestions](#showWhenOption) (e.g. when user types 2 or more characters)
 * Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder)
-* Various events for maximum flexibility: [onSuggestionSelected](#onSuggestionSelectedOption) (more coming soon...)
+* Various events for maximum flexibility: [onSuggestionSelected](#onSuggestionSelectedOption), [onSuggestionFocused](#onSuggestionFocusedOption), [onSuggestionUnfocused](#onSuggestionUnfocusedOption)
 
 ## Installation
 
@@ -56,6 +56,8 @@ function getSuggestions(input, callback) {
 * [`suggestionValue`](#suggestionValueOption)
 * [`showWhen`](#showWhenOption)
 * [`onSuggestionSelected`](#onSuggestionSelectedOption)
+* [`onSuggestionFocused`](#onSuggestionFocusedOption)
+* [`onSuggestionUnfocused`](#onSuggestionUnfocusedOption)
 * [`inputAttributes`](#inputAttributesOption)
 
 <a name="suggestionsOption"></a>
@@ -81,7 +83,7 @@ function(input, callback) {
 * **To display a single section with no title:** `[`[\<suggestion>](#suggestion)`, `[\<suggestion>](#suggestion)`, ...]`
 * **To display one or more sections with optional titles:** Array of objects with an optional `sectionName` and a mandatory `suggestions` keys, e.g.:
 
-```js    
+```js
 [{
   suggestions: [<suggestion>, <suggestion>]   // This section won't have a title
 }, {
@@ -190,6 +192,58 @@ function onSuggestionSelected(suggestion, event) {
              onSuggestionSelected={onSuggestionSelected} />
 ```
 
+<a name="onSuggestionFocusedOption"></a>
+##### onSuggestionFocused (optional)
+
+This function will be called when suggestion is focused via mouse hover or Up/Down keys.
+
+```js
+function(suggestion) {
+  ...
+}
+```
+
+* [suggestion](#suggestion) - The focused suggestion
+
+For example:
+
+```js
+function onSuggestionFocused(suggestion) { // In this example 'suggestion' is a string
+  console.log('Suggestion focused: [' + suggestion + ']');
+}
+```
+
+```xml
+<Autosuggest suggestions={getSuggestions}
+             onSuggestionFocused={onSuggestionFocused} />
+```
+
+<a name="onSuggestionUnfocusedOption"></a>
+##### onSuggestionUnfocused (optional)
+
+This function will be called when suggestion is unfocused via mouse hover, Up/Down keys, ESC key, when clicking outside `<Autosuggest />` input, or when a suggestion is selected.
+
+```js
+function(suggestion) {
+  ...
+}
+```
+
+* [suggestion](#suggestion) - The unfocused suggestion
+
+For example:
+
+```js
+function onSuggestionUnfocused(suggestion) { // In this example 'suggestion' is a string
+  console.log('Suggestion unfocused: [' + suggestion + ']');
+}
+```
+
+```xml
+<Autosuggest suggestions={getSuggestions}
+             onSuggestionUnfocused={onSuggestionUnfocused} />
+```
+
 <a name="inputAttributesOption"></a>
 ##### inputAttributes (optional)
 
@@ -243,11 +297,11 @@ The following diagrams explain the classes above.
     |  +-------------------------------------------+  |
     |                                                 |
     +-------------------------------------------------+
-    
+
 
 #### Multiple sections
 
-    
+
     +---| react-autosuggest |----------------------------------------------------+
     |                                                                            |
     |  <input>                                                                   |

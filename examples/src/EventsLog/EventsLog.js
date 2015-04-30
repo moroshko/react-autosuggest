@@ -22,6 +22,22 @@ export default class EventsLog extends Component {
             {event.suggestion}
           </span>
         );
+
+      case 'suggestion-focused':
+        return (
+          <span>
+            <span className="examples__events-log__event-description">Suggestion focused: </span>
+            {event.suggestion}
+          </span>
+        );
+
+      case 'suggestion-unfocused':
+        return (
+          <span>
+            <span className="examples__events-log__event-description">Suggestion unfocused: </span>
+            {event.suggestion}
+          </span>
+        );
     }
   }
 

@@ -11,6 +11,7 @@ import MultipleSections from './MultipleSections/MultipleSections';
 import EventsPlayground from './EventsPlayground/EventsPlayground';
 import EventsLog from './EventsLog/EventsLog';
 
+
 export default class Examples extends Component {
   constructor() {
     super();
@@ -26,6 +27,8 @@ export default class Examples extends Component {
       type: 'placeholder',
       text: 'Once you interact with the Autosuggest, events will appear here.'
     };
+
+    this.eventQueue = [];
 
     this.state = {
       activeExample: decodeURI(location.hash).split('#')[1] || this.examples[0],
@@ -83,10 +86,23 @@ export default class Examples extends Component {
     return null;
   }
 
+  processEvents() {
+    if (this.eventQueue.length > 0) {
+      let event = this.eventQueue[0];
+      this.setState({
+        events: this.eventsExist() ? this.state.events.concat([event]) : [event]
+      }, () => {
+        this.eventQueue.shift();
+        this.processEvents();
+      });
+    }
+  }
+
   onEventAdded(event) {
-    this.setState({
-      events: this.eventsExist() ? this.state.events.concat([event]) : [event]
-    });
+    this.eventQueue.push(event);
+    if(this.eventQueue.length === 1) {
+      this.processEvents();
+    }
   }
 
   renderExample() {
