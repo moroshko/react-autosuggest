@@ -6,30 +6,30 @@ import React from 'react/addons';
 import SyntheticEvent from 'react/lib/SyntheticEvent'
 import Autosuggest from '../Autosuggest.js';
 
-let TestUtils = React.addons.TestUtils;
-let Simulate = TestUtils.Simulate;
-let SimulateNative = TestUtils.SimulateNative;
-let suburbObjects = [
+const TestUtils = React.addons.TestUtils;
+const Simulate = TestUtils.Simulate;
+const SimulateNative = TestUtils.SimulateNative;
+const suburbObjects = [
   { suburb: 'Cheltenham', postcode: '3192' },
   { suburb: 'Mill Park', postcode: '3083' },
   { suburb: 'Mordialloc', postcode: '3195' },
   { suburb: 'Nunawading', postcode: '3131' }
 ];
-let stringSuburbs = suburbObjects.map( suburbObj => suburbObj.suburb );
-let reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
+const stringSuburbs = suburbObjects.map( suburbObj => suburbObj.suburb );
+const reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 let autosuggest, input, suggestions;
-let onSuggestionSelected = jest.genMockFunction();
-let onSuggestionFocused = jest.genMockFunction();
-let onSuggestionUnfocused = jest.genMockFunction();
+const onSuggestionSelected = jest.genMockFunction();
+const onSuggestionFocused = jest.genMockFunction();
+const onSuggestionUnfocused = jest.genMockFunction();
 
 function getSuburbStrings(input, callback) {
-  let regex = new RegExp('^' + input, 'i');
+  const regex = new RegExp('^' + input, 'i');
 
   callback(null, stringSuburbs.filter( suburb => regex.test(suburb) ));
 }
 
 function getSuburbObjects(input, callback) {
-  let regex = new RegExp('^' + input, 'i');
+  const regex = new RegExp('^' + input, 'i');
 
   callback(null, suburbObjects.filter( suburbObj => regex.test(suburbObj.suburb) ));
 }
@@ -104,9 +104,9 @@ function mouseOverFromSuggestionToInput(suggestionIndex) {
 }
 
 function mouseOverBetweenSuggestions(suggestionIndex1, suggestionIndex2) {
-  let suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-  let suggestion1 = React.findDOMNode(suggestions[suggestionIndex1]);
-  let suggestion2 = React.findDOMNode(suggestions[suggestionIndex2]);
+  const suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
+  const suggestion1 = React.findDOMNode(suggestions[suggestionIndex1]);
+  const suggestion2 = React.findDOMNode(suggestions[suggestionIndex2]);
 
   mouseOver(suggestion1, suggestion2);
 }
@@ -145,7 +145,7 @@ function expectSuggestions(expectedSuggestions) {
 }
 
 function expectFocusedSuggestion(suggestion) {
-  let focusedSuggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion--focused');
+  const focusedSuggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion--focused');
 
   if (suggestion === null) {
     expect(focusedSuggestions.length).toBe(0);
@@ -156,12 +156,12 @@ function expectFocusedSuggestion(suggestion) {
 }
 
 function expectSections(expectedSections) {
-  let sections = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestions-section');
+  const sections = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestions-section');
 
   expect(sections.length).toBe(expectedSections.length);
 
   for (let i = 0; i < sections.length; i++) {
-    let sectionName = TestUtils.scryRenderedDOMComponentsWithClass(sections[i], 'react-autosuggest__suggestions-section-name');
+    const sectionName = TestUtils.scryRenderedDOMComponentsWithClass(sections[i], 'react-autosuggest__suggestions-section-name');
 
     if (expectedSections[i] === null) {
       expect(sectionName.length).toBe(0);
@@ -379,6 +379,7 @@ describe('Autosuggest', function() {
       });
 
       it('should call onSuggestionSelected when suggestion is selected using mouse', function() {
+        mouseOverFromInputToSuggestion(1);
         mouseDownSuggestion(1);
         expect(onSuggestionSelected).toBeCalledWith('Mordialloc', jasmine.any(SyntheticEvent));
       });

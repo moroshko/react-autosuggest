@@ -5,7 +5,7 @@ import debounce from 'debounce';
 import classnames from 'classnames';
 import sectionIterator from './sectionIterator';
 
-let lastSuggestionsInputValue = null, lastFocusedSuggestion = null, guid = 0;
+let lastSuggestionsInputValue = null, guid = 0;
 
 export default class Autosuggest extends Component {
   static propTypes = {
@@ -14,8 +14,8 @@ export default class Autosuggest extends Component {
     suggestionValue: PropTypes.func,                      // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
     showWhen: PropTypes.func,                             // Function that determines whether to show suggestions or not
     onSuggestionSelected: PropTypes.func,                 // This function is called when suggestion is selected via mouse click or Enter
-    onSuggestionFocused: PropTypes.func,                  // This function is called when suggestion is focused via mouse hover or up/down keys
-    onSuggestionUnfocused: PropTypes.func,                // This function is called when suggestion is unfocused via mouse hover or up/down keys
+    onSuggestionFocused: PropTypes.func,                  // This function is called when suggestion is focused via mouse hover or Up/Down keys
+    onSuggestionUnfocused: PropTypes.func,                // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
     inputAttributes: PropTypes.objectOf(PropTypes.string) // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
   }
 
@@ -106,6 +106,10 @@ export default class Autosuggest extends Component {
     }
   }
 
+  suggestionIsFocused() {
+    return this.state.focusedSuggestionIndex !== null;
+  }
+
   getSuggestion(sectionIndex, suggestionIndex) {
     if (this.isMultipleSections(this.state.suggestions)) {
       return this.state.suggestions[sectionIndex].suggestions[suggestionIndex];
@@ -114,8 +118,17 @@ export default class Autosuggest extends Component {
     return this.state.suggestions[suggestionIndex];
   }
 
+  getFocusedSuggestion() {
+    if (this.suggestionIsFocused()) {
+      return this.getSuggestion(this.state.focusedSectionIndex,
+                                this.state.focusedSuggestionIndex);
+    }
+
+    return null;
+  }
+
   getSuggestionValue(sectionIndex, suggestionIndex) {
-    let suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
+    const suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
 
     if (typeof suggestion === 'object') {
       if (this.props.suggestionValue) {
@@ -128,9 +141,23 @@ export default class Autosuggest extends Component {
     }
   }
 
+  onSuggestionUnfocused() {
+    const focusedSuggestion = this.getFocusedSuggestion();
+
+    if (focusedSuggestion !== null) {
+      this.props.onSuggestionUnfocused(focusedSuggestion);
+    }
+  }
+
+  onSuggestionFocused(sectionIndex, suggestionIndex) {
+    const suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
+
+    this.props.onSuggestionFocused(suggestion);
+  }
+
   focusOnSuggestion(suggestionPosition) {
-    let [sectionIndex, suggestionIndex] = suggestionPosition;
-    let newState = {
+    const [sectionIndex, suggestionIndex] = suggestionPosition;
+    const newState = {
       focusedSectionIndex: sectionIndex,
       focusedSuggestionIndex: suggestionIndex,
       value: suggestionIndex === null
@@ -138,42 +165,31 @@ export default class Autosuggest extends Component {
                : this.getSuggestionValue(sectionIndex, suggestionIndex)
     };
 
-    // When users starts to interact with up/down keys, remember input's value.
+    // When users starts to interact with Up/Down keys, remember input's value.
     if (this.state.valueBeforeUpDown === null) {
       newState.valueBeforeUpDown = this.state.value;
     }
 
+    this.onSuggestionUnfocused();
+
+    if (suggestionIndex !== null) {
+      this.onSuggestionFocused(sectionIndex, suggestionIndex);
+    }
+
     this.setState(newState);
-
-    this.onSuggestionUnfocused();
-    this.onSuggestionFocused(sectionIndex, suggestionIndex);
   }
 
-  onSuggestionFocused(sectionIndex, suggestionIndex) {
-    let suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
-    if(suggestionIndex !== null && suggestion !== lastFocusedSuggestion) {
-      this.props.onSuggestionFocused(suggestion);
-    }
-    lastFocusedSuggestion = suggestion;
-  }
+  onSuggestionSelected(event) {
+    const focusedSuggestion = this.getFocusedSuggestion();
 
-  onSuggestionUnfocused() {
-    if (lastFocusedSuggestion != null) {
-      this.props.onSuggestionUnfocused(lastFocusedSuggestion);
-    }
-    lastFocusedSuggestion = null;
-  }
-
-  onSuggestionSelected(sectionIndex, suggestionIndex, event) {
-    this.onSuggestionUnfocused();
-    this.props.onSuggestionSelected(
-      this.getSuggestion(sectionIndex, suggestionIndex),
-      event
-    );
+    this.props.onSuggestionUnfocused(focusedSuggestion);
+    this.props.onSuggestionSelected(focusedSuggestion, event);
   }
 
   onInputChange(event) {
-    let newValue = event.target.value;
+    const newValue = event.target.value;
+
+    this.onSuggestionUnfocused();
 
     this.setState({
       value: newValue,
@@ -181,26 +197,21 @@ export default class Autosuggest extends Component {
     });
 
     this.showSuggestions(newValue);
-    this.onSuggestionUnfocused();
   }
 
   onInputKeyDown(event) {
     let newState, newSectionIndex, newSuggestionIndex;
 
     switch (event.keyCode) {
-      case 13: // enter
-        if (this.state.valueBeforeUpDown !== null && this.state.focusedSuggestionIndex !== null) {
-          this.onSuggestionSelected(
-            this.state.focusedSectionIndex,
-            this.state.focusedSuggestionIndex,
-            event
-          );
+      case 13: // Enter
+        if (this.state.valueBeforeUpDown !== null && this.suggestionIsFocused()) {
+          this.onSuggestionSelected(event);
         }
 
         this.setSuggestionsState(null);
         break;
 
-      case 27: // escape
+      case 27: // ESC
         newState = {
           suggestions: null,
           focusedSectionIndex: null,
@@ -214,11 +225,11 @@ export default class Autosuggest extends Component {
           newState.value = '';
         }
 
-        this.setState(newState);
         this.onSuggestionUnfocused();
+        this.setState(newState);
         break;
 
-      case 38: // up
+      case 38: // Up
         if (this.state.suggestions === null) {
           this.showSuggestions(this.state.value);
         } else {
@@ -228,7 +239,7 @@ export default class Autosuggest extends Component {
         event.preventDefault(); // Prevent the cursor from jumping to input's start
         break;
 
-      case 40: // down
+      case 40: // Down
         if (this.state.suggestions === null) {
           this.showSuggestions(this.state.value);
         } else {
@@ -240,41 +251,42 @@ export default class Autosuggest extends Component {
   }
 
   onInputBlur() {
-    this.setSuggestionsState(null);
     this.onSuggestionUnfocused();
+    this.setSuggestionsState(null);
   }
 
   onSuggestionMouseEnter(sectionIndex, suggestionIndex) {
+    if (suggestionIndex !== this.state.focusedSuggestionIndex ||
+        sectionIndex !== this.state.focusedSectionIndex) {
+      this.onSuggestionFocused(sectionIndex, suggestionIndex);
+    }
+
     this.setState({
       focusedSectionIndex: sectionIndex,
       focusedSuggestionIndex: suggestionIndex
     });
-
-    this.onSuggestionFocused(sectionIndex, suggestionIndex);
   }
 
   onSuggestionMouseLeave() {
+    this.onSuggestionUnfocused();
     this.setState({
       focusedSectionIndex: null,
       focusedSuggestionIndex: null
     });
-
-    this.onSuggestionUnfocused();
   }
 
   onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
+    this.onSuggestionSelected(event);
     this.setState({
       value: this.getSuggestionValue(sectionIndex, suggestionIndex),
       suggestions: null,
       focusedSectionIndex: null,
       focusedSuggestionIndex: null,
       valueBeforeUpDown: null
-    }, function() {
+    }, () => {
       // This code executes after the component is re-rendered
       setTimeout( () => findDOMNode(this.refs.input).focus() );
     });
-
-    this.onSuggestionSelected(sectionIndex, suggestionIndex, event);
   }
 
   getSuggestionId(sectionIndex, suggestionIndex) {
@@ -300,14 +312,15 @@ export default class Autosuggest extends Component {
 
   renderSuggestionsList(suggestions, sectionIndex) {
     return suggestions.map((suggestion, suggestionIndex) => {
-      let classes = classnames({
+      const classes = classnames({
         'react-autosuggest__suggestion': true,
         'react-autosuggest__suggestion--focused':
           sectionIndex === this.state.focusedSectionIndex &&
           suggestionIndex === this.state.focusedSuggestionIndex
       });
-      let suggestionKey = 'suggestion-' + (sectionIndex === null ? '' : sectionIndex) +
-                          '-' + suggestionIndex;
+      const suggestionKey =
+        'suggestion-' + (sectionIndex === null ? '' : sectionIndex) +
+        '-' + suggestionIndex;
 
       return (
         <li id={this.getSuggestionId(sectionIndex, suggestionIndex)}
@@ -334,7 +347,7 @@ export default class Autosuggest extends Component {
              className="react-autosuggest__suggestions"
              role="listbox">
           {this.state.suggestions.map((section, sectionIndex) => {
-            let sectionName = section.sectionName ? (
+            const sectionName = section.sectionName ? (
               <div className="react-autosuggest__suggestions-section-name">
                 {section.sectionName}
               </div>
@@ -364,7 +377,7 @@ export default class Autosuggest extends Component {
   }
 
   render() {
-    let ariaActivedescendant =
+    const ariaActivedescendant =
       this.getSuggestionId(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex);
 
     return (
