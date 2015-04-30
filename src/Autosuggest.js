@@ -258,6 +258,7 @@ export default class Autosuggest extends Component {
   onSuggestionMouseEnter(sectionIndex, suggestionIndex) {
     if (suggestionIndex !== this.state.focusedSuggestionIndex ||
         sectionIndex !== this.state.focusedSectionIndex) {
+      this.onSuggestionUnfocused();
       this.onSuggestionFocused(sectionIndex, suggestionIndex);
     }
 

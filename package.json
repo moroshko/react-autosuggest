@@ -35,28 +35,28 @@
     "noprompt": true
   },
   "dependencies": {
-    "classnames": "^1.2.0",
+    "classnames": "^1.2.2",
     "debounce": "^1.0.0",
     "react": "^0.13.2"
   },
   "devDependencies": {
-    "babel": "^5.1.10",
+    "babel": "^5.1.13",
     "babel-eslint": "^3.0.1",
     "babel-jest": "^5.0.1",
     "babel-loader": "^5.0.0",
-    "css-loader": "^0.10.1",
-    "eslint": "^0.19.0",
-    "eslint-loader": "^0.10.0",
-    "extract-text-webpack-plugin": "^0.5.0",
+    "css-loader": "^0.12.0",
+    "eslint": "^0.20.0",
+    "eslint-loader": "^0.11.1",
+    "extract-text-webpack-plugin": "^0.7.0",
     "gh-pages-deploy": "^0.3.0",
     "jest-cli": "^0.4.0",
     "json-loader": "^0.5.1",
     "less": "^2.5.0",
     "less-loader": "^2.2.0",
     "react-hot-loader": "^1.2.5",
-    "style-loader": "^0.10.2",
-    "webpack": "^1.8.5",
-    "webpack-dev-server": "^1.8.0"
+    "style-loader": "^0.12.1",
+    "webpack": "^1.8.11",
+    "webpack-dev-server": "^1.8.2"
   },
   "keywords": [
     "autosuggest",

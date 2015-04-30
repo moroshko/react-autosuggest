@@ -509,6 +509,20 @@ describe('Autosuggest', function() {
         mouseDownSuggestion(0);
         expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
       });
+
+      it('should call onSuggestionUnfocused when suggestion is focused and mouse is entering another suggestion', function() {
+        clickDown();
+        clickDown();
+        onSuggestionUnfocused.mockClear();
+        mouseOverFromInputToSuggestion(0);
+        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mordialloc', postcode: '3195' });
+      });
+
+      it('should not call onSuggestionUnfocused when suggestion is focused and mouse is entering the same suggestion', function() {
+        clickDown();
+        mouseOverFromInputToSuggestion(0);
+        expect(onSuggestionUnfocused).not.toBeCalled();
+      });
     });
 
     describe('Keyboard interactions', function() {
