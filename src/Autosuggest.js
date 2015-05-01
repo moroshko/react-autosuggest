@@ -5,7 +5,7 @@ import debounce from 'debounce';
 import classnames from 'classnames';
 import sectionIterator from './sectionIterator';
 
-let lastSuggestionsInputValue = null, guid = 0;
+let guid = 0;
 
 export default class Autosuggest extends Component {
   static propTypes = {
@@ -44,6 +44,9 @@ export default class Autosuggest extends Component {
                                     // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
     this.suggestionsFn = debounce(props.suggestions, 100);
+    this.lastSuggestionsInputValue = null; // Helps to deal with delayed requests
+    this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
+                                // twice when mouse is moving between suggestions
   }
 
   resetSectionIterator(suggestions) {
@@ -79,7 +82,7 @@ export default class Autosuggest extends Component {
   }
 
   showSuggestions(input) {
-    lastSuggestionsInputValue = input;
+    this.lastSuggestionsInputValue = input;
 
     if (!this.props.showWhen(input)) {
       this.setSuggestionsState(null);
@@ -88,7 +91,7 @@ export default class Autosuggest extends Component {
     } else {
       this.suggestionsFn(input, (error, suggestions) => {
         // If input value changed, suggestions are not relevant anymore.
-        if (lastSuggestionsInputValue !== input) {
+        if (this.lastSuggestionsInputValue !== input) {
           return;
         }
 
@@ -144,18 +147,22 @@ export default class Autosuggest extends Component {
   onSuggestionUnfocused() {
     const focusedSuggestion = this.getFocusedSuggestion();
 
-    if (focusedSuggestion !== null) {
+    if (focusedSuggestion !== null && !this.justUnfocused) {
       this.props.onSuggestionUnfocused(focusedSuggestion);
+      this.justUnfocused = true;
     }
   }
 
   onSuggestionFocused(sectionIndex, suggestionIndex) {
+    this.onSuggestionUnfocused();
+
     const suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
 
     this.props.onSuggestionFocused(suggestion);
+    this.justUnfocused = false;
   }
 
-  focusOnSuggestion(suggestionPosition) {
+  focusOnSuggestionUsingKeyboard(suggestionPosition) {
     const [sectionIndex, suggestionIndex] = suggestionPosition;
     const newState = {
       focusedSectionIndex: sectionIndex,
@@ -170,9 +177,9 @@ export default class Autosuggest extends Component {
       newState.valueBeforeUpDown = this.state.value;
     }
 
-    this.onSuggestionUnfocused();
-
-    if (suggestionIndex !== null) {
+    if (suggestionIndex === null) {
+      this.onSuggestionUnfocused();
+    } else {
       this.onSuggestionFocused(sectionIndex, suggestionIndex);
     }
 
@@ -233,7 +240,10 @@ export default class Autosuggest extends Component {
         if (this.state.suggestions === null) {
           this.showSuggestions(this.state.value);
         } else {
-          this.focusOnSuggestion(sectionIterator.prev([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
+          this.focusOnSuggestionUsingKeyboard(
+            sectionIterator.prev([this.state.focusedSectionIndex,
+                                  this.state.focusedSuggestionIndex])
+          );
         }
 
         event.preventDefault(); // Prevent the cursor from jumping to input's start
@@ -243,7 +253,10 @@ export default class Autosuggest extends Component {
         if (this.state.suggestions === null) {
           this.showSuggestions(this.state.value);
         } else {
-          this.focusOnSuggestion(sectionIterator.next([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
+          this.focusOnSuggestionUsingKeyboard(
+            sectionIterator.next([this.state.focusedSectionIndex,
+                                  this.state.focusedSuggestionIndex])
+          );
         }
 
         break;
@@ -255,10 +268,13 @@ export default class Autosuggest extends Component {
     this.setSuggestionsState(null);
   }
 
+  isSuggestionFocused(sectionIndex, suggestionIndex) {
+    return sectionIndex === this.state.focusedSectionIndex &&
+           suggestionIndex === this.state.focusedSuggestionIndex;
+  }
+
   onSuggestionMouseEnter(sectionIndex, suggestionIndex) {
-    if (suggestionIndex !== this.state.focusedSuggestionIndex ||
-        sectionIndex !== this.state.focusedSectionIndex) {
-      this.onSuggestionUnfocused();
+    if (!this.isSuggestionFocused(sectionIndex, suggestionIndex)) {
       this.onSuggestionFocused(sectionIndex, suggestionIndex);
     }
 
@@ -268,8 +284,11 @@ export default class Autosuggest extends Component {
     });
   }
 
-  onSuggestionMouseLeave() {
-    this.onSuggestionUnfocused();
+  onSuggestionMouseLeave(sectionIndex, suggestionIndex) {
+    if (this.isSuggestionFocused(sectionIndex, suggestionIndex)) {
+      this.onSuggestionUnfocused();
+    }
+
     this.setState({
       focusedSectionIndex: null,
       focusedSuggestionIndex: null
@@ -329,7 +348,7 @@ export default class Autosuggest extends Component {
             role="option"
             key={suggestionKey}
             onMouseEnter={() => this.onSuggestionMouseEnter(sectionIndex, suggestionIndex)}
-            onMouseLeave={() => this.onSuggestionMouseLeave()}
+            onMouseLeave={() => this.onSuggestionMouseLeave(sectionIndex, suggestionIndex)}
             onMouseDown={event => this.onSuggestionMouseDown(sectionIndex, suggestionIndex, event)}>
           {this.renderSuggestionContent(suggestion)}
         </li>

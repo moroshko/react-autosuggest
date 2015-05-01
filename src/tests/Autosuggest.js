@@ -438,39 +438,45 @@ describe('Autosuggest', function() {
     });
 
     describe('Mouse interactions', function() {
-      it('should call onSuggestionFocused when suggestion focused using mouse', function() {
-        mouseOverFromInputToSuggestion(1);
-        expect(onSuggestionFocused).toBeCalledWith('Mordialloc');
+      describe('should call onSuggestionFocused when', function() {
+        it('mouse is entering a suggestion', function() {
+          mouseOverFromInputToSuggestion(1);
+          expect(onSuggestionFocused).toBeCalledWith('Mordialloc');
+        });
       });
     });
 
     describe('Keyboard interactions', function() {
-      it('should call onSuggestionFocused when suggestion focused using Up/Down keys', function() {
-        clickDown();
-        expect(onSuggestionFocused).toBeCalledWith('Mill Park');
+      describe('should call onSuggestionFocused when', function() {
+        it('suggestion focused using Up/Down keys', function() {
+          clickDown();
+          expect(onSuggestionFocused).toBeCalledWith('Mill Park');
+        });
       });
 
-      it('should not call onSuggestionFocused when Up/Down keys are pressed after ESC is pressed', function() {
-        clickDown();
-        clickEscape();
-        onSuggestionFocused.mockClear();
-        clickDown();
-        expect(onSuggestionFocused).not.toBeCalled();
-      });
+      describe('should not call onSuggestionFocused when', function() {
+        it('Up/Down keys are pressed after ESC is pressed', function() {
+          clickDown();
+          clickEscape();
+          onSuggestionFocused.mockClear();
+          clickDown();
+          expect(onSuggestionFocused).not.toBeCalled();
+        });
 
-      it('should not call onSuggestionFocused when first suggestion is focused and Up key is clicked', function() {
-        clickDown();
-        onSuggestionFocused.mockClear();
-        clickUp();
-        expect(onSuggestionFocused).not.toBeCalled();
-      });
+        it('first suggestion is focused and Up key is pressed', function() {
+          clickDown();
+          onSuggestionFocused.mockClear();
+          clickUp();
+          expect(onSuggestionFocused).not.toBeCalled();
+        });
 
-      it('should not call onSuggestionFocused when last suggestion is focused and Down key is clicked', function() {
-        clickDown();
-        clickDown();
-        onSuggestionFocused.mockClear();
-        clickDown();
-        expect(onSuggestionFocused).not.toBeCalled();
+        it('last suggestion is focused and Down key is pressed', function() {
+          clickDown();
+          clickDown();
+          onSuggestionFocused.mockClear();
+          clickDown();
+          expect(onSuggestionFocused).not.toBeCalled();
+        });
       });
     });
 
@@ -498,99 +504,136 @@ describe('Autosuggest', function() {
     });
 
     describe('Mouse interactions', function() {
-      it('should call onSuggestionUnfocused when suggestion unfocused using mouse', function() {
-        mouseOverFromInputToSuggestion(0);
-        mouseOverBetweenSuggestions(0, 1);
-        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+      describe('should call onSuggestionUnfocused when', function() {
+        it('mouse is moving between suggestions', function() {
+          mouseOverFromInputToSuggestion(0);
+          mouseOverBetweenSuggestions(0, 1);
+          expect(onSuggestionUnfocused.mock.calls.length).toEqual(1);
+          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+        });
+
+        it('mouse is leaving a focused suggestion', function() {
+          mouseOverFromInputToSuggestion(0);
+          mouseOverFromSuggestionToInput(0);
+          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+        });
+
+        it('suggestion is clicked', function() {
+          mouseOverFromInputToSuggestion(0);
+          mouseDownSuggestion(0);
+          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+        });
+
+        it('suggestion is focused and mouse is entering another suggestion', function() {
+          clickDown();
+          clickDown();
+          onSuggestionUnfocused.mockClear();
+          mouseOverFromInputToSuggestion(0);
+          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mordialloc', postcode: '3195' });
+        });
+
+        it('clicking outside and suggestion is focused', function() {
+          clickDown();
+          clickOutside();
+          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+        });
       });
 
-      it('should call onSuggestionUnfocused when suggestion selected with mouse', function() {
-        mouseOverFromInputToSuggestion(0);
-        mouseDownSuggestion(0);
-        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
-      });
+      describe('should not call onSuggestionUnfocused when', function() {
+        it('suggestion is focused and mouse is entering the same suggestion', function() {
+          clickDown();
+          mouseOverFromInputToSuggestion(0);
+          expect(onSuggestionUnfocused).not.toBeCalled();
+        });
 
-      it('should call onSuggestionUnfocused when suggestion is focused and mouse is entering another suggestion', function() {
-        clickDown();
-        clickDown();
-        onSuggestionUnfocused.mockClear();
-        mouseOverFromInputToSuggestion(0);
-        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mordialloc', postcode: '3195' });
-      });
-
-      it('should not call onSuggestionUnfocused when suggestion is focused and mouse is entering the same suggestion', function() {
-        clickDown();
-        mouseOverFromInputToSuggestion(0);
-        expect(onSuggestionUnfocused).not.toBeCalled();
+        it('suggestion is focused and mouse is leaving another suggestion', function() {
+          mouseOverFromInputToSuggestion(0);
+          clickDown();
+          onSuggestionUnfocused.mockClear();
+          mouseOverFromSuggestionToInput(0);
+          expect(onSuggestionUnfocused).not.toBeCalled();
+        });
       });
     });
 
     describe('Keyboard interactions', function() {
-      it('should call onSuggestionUnfocused when suggestion unfocused using Up/Down keys', function() {
-        clickDown();
-        expect(onSuggestionUnfocused).not.toBeCalled();
-        clickDown();
-        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+      describe('should call onSuggestionUnfocused when', function() {
+        it('moving between suggestions using Up/Down keys', function() {
+          clickDown();
+          expect(onSuggestionUnfocused).not.toBeCalled();
+          clickDown();
+          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+        });
+
+        it('first suggestion is focused and Up key is pressed', function() {
+          clickDown();
+          clickUp();
+          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+        });
+
+        it('last suggestion is focused and Down key is pressed', function() {
+          clickDown();
+          clickDown();
+          onSuggestionUnfocused.mockClear();
+          clickDown();
+          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mordialloc', postcode: '3195' });
+        });
+
+        it('ESC key pressed and suggestion is focused', function() {
+          clickDown();
+          clickEscape();
+          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+        });
+
+        it('Enter is pressed and suggestion is focused', function() {
+          clickDown();
+          clickEnter();
+          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+        });
+
+        it('input value is changed and suggestion is focused', function() {
+          clickDown();
+          setInputValue(input.value.slice(0, -1)); // Simulates Backspace
+          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+        });
       });
 
-      it('should not call onSuggestionUnfocused when Up/Down keys are pressed after ESC is pressed', function() {
-        clickDown();
-        clickEscape();
-        onSuggestionUnfocused.mockClear();
-        clickDown();
-        expect(onSuggestionUnfocused).not.toBeCalled();
-      });
+      describe('should not call onSuggestionUnfocused when', function() {
+        it('Up/Down keys are pressed after ESC is pressed', function() {
+          clickDown();
+          clickEscape();
+          onSuggestionUnfocused.mockClear();
+          clickDown();
+          expect(onSuggestionUnfocused).not.toBeCalled();
+        });
 
-      it('should call onSuggestionUnfocused when ESC key pressed and suggestion is focused', function() {
-        clickDown();
-        clickEscape();
-        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
-      });
+        it('ESC key pressed and no suggestion focused', function() {
+          clickEscape();
+          expect(onSuggestionUnfocused).not.toBeCalled();
+        });
 
-      it('should not call onSuggestionUnfocused when ESC key pressed and no suggestion focused', function() {
-        clickEscape();
-        expect(onSuggestionUnfocused).not.toBeCalled();
-      });
+        it('clicking outside and no suggestion focused', function() {
+          clickDown();
+          clickDown();
+          clickDown();
+          onSuggestionUnfocused.mockClear();
+          clickOutside();
+          expect(onSuggestionUnfocused).not.toBeCalled();
+        });
 
-      it('should call onSuggestionUnfocused when clicking outside and suggestion is focused', function() {
-        clickDown();
-        clickOutside();
-        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
-      });
+        it('Enter is pressed and no suggestion focused', function() {
+          clickEnter();
+          expect(onSuggestionUnfocused).not.toBeCalled();
+        });
 
-      it('should not call onSuggestionUnfocused when clicking outside and no suggestion focused', function() {
-        clickDown();
-        clickDown();
-        clickDown();
-        onSuggestionUnfocused.mockClear();
-        clickOutside();
-        expect(onSuggestionUnfocused).not.toBeCalled();
-      });
-
-      it('should call onSuggestionUnfocused when Enter is pressed and suggestion is focused', function() {
-        clickDown();
-        clickEnter();
-        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
-      });
-
-      it('should not call onSuggestionUnfocused when Enter is pressed and no suggestion focused', function() {
-        clickEnter();
-        expect(onSuggestionUnfocused).not.toBeCalled();
-      });
-
-      it('should call onSuggestionUnfocused when input value is changed and suggestion is focused', function() {
-        clickDown();
-        setInputValue(input.value.slice(0, -1));
-        expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
-      });
-
-      it('should not call onSuggestionUnfocused when input value is changed and no suggestion focused', function() {
-        clickDown();
-        clickDown();
-        clickDown();
-        onSuggestionUnfocused.mockClear();
-        setInputValue(input.value.slice(0, -1));
-        expect(onSuggestionUnfocused).not.toBeCalled();
+        it('input value is changed and no suggestion focused', function() {
+          clickDown();
+          clickDown();
+          clickDown();
+          onSuggestionUnfocused.mockClear();
+          setInputValue(input.value.slice(0, -1));
+          expect(onSuggestionUnfocused).not.toBeCalled();
+        });
       });
     });
   });
