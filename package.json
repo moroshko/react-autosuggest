@@ -16,8 +16,7 @@
     "start": "node server",
     "test": "BABEL_JEST_STAGE=0 jest",
     "dist": "npm test && babel src/Autosuggest.js -o dist/Autosuggest.js --stage 0 && babel src/sectionIterator.js -o dist/sectionIterator.js --stage 0",
-    "build": "webpack --config webpack.dev.config.js",
-    "deploy": "gh-pages-deploy"
+    "build": "webpack --config webpack.dev.config.js"
   },
   "jest": {
     "rootDir": ".",
@@ -26,13 +25,6 @@
     "unmockedModulePathPatterns": [
       "react"
     ]
-  },
-  "gh-pages-deploy": {
-    "staticpath": "examples/dist",
-    "prep": [
-      "build"
-    ],
-    "noprompt": true
   },
   "dependencies": {
     "classnames": "^1.2.2",
@@ -48,7 +40,6 @@
     "eslint": "^0.20.0",
     "eslint-loader": "^0.11.1",
     "extract-text-webpack-plugin": "^0.7.0",
-    "gh-pages-deploy": "^0.3.0",
     "jest-cli": "^0.4.0",
     "json-loader": "^0.5.1",
     "less": "^2.5.0",
