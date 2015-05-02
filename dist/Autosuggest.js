@@ -111,12 +111,14 @@ var Autosuggest = (function (_Component) {
     value: function showSuggestions(input) {
       var _this2 = this;
 
+      var cacheKey = input.toLowerCase();
+
       this.lastSuggestionsInputValue = input;
 
       if (!this.props.showWhen(input)) {
         this.setSuggestionsState(null);
-      } else if (this.cache[input]) {
-        this.setSuggestionsState(this.cache[input]);
+      } else if (this.cache[cacheKey]) {
+        this.setSuggestionsState(this.cache[cacheKey]);
       } else {
         this.suggestionsFn(input, function (error, suggestions) {
           // If input value changed, suggestions are not relevant anymore.
@@ -131,7 +133,7 @@ var Autosuggest = (function (_Component) {
               suggestions = null;
             }
 
-            _this2.cache[input] = suggestions;
+            _this2.cache[cacheKey] = suggestions;
             _this2.setSuggestionsState(suggestions);
           }
         });

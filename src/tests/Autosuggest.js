@@ -22,6 +22,7 @@ const onSuggestionSelected = jest.genMockFunction();
 const onSuggestionFocused = jest.genMockFunction();
 const onSuggestionUnfocused = jest.genMockFunction();
 const onChange = jest.genMockFunction();
+const getSuburbs = jest.genMockFunction().mockImplementation(getSuburbStrings);
 
 function getSuburbStrings(input, callback) {
   const regex = new RegExp('^' + input, 'i');
@@ -970,17 +971,27 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('Misc', function() {
+  describe('Caching', function() {
     beforeEach(function() {
-      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
+      createAutosuggest(<Autosuggest suggestions={getSuburbs} />);
+      setInputValue('m');
+      getSuburbs.mockClear();
     });
 
-    it('should reset sectionIterator when getting cached suggestions', function() {
-      setInputValue('m');
-      setInputValue('mz');
-      setInputValue('m');
-      clickDown();
-      expectFocusedSuggestion('Mill Park');
+    describe('should not call suggestions function if', function() {
+      it('suggestions function was called before with the same input', function() {
+        setInputValue('mi');
+        getSuburbs.mockClear();
+        setInputValue('m');
+        expect(getSuburbs).not.toBeCalled();
+      });
+
+      it('suggestions function was called before with the same case insensitive input', function() {
+        setInputValue('mi');
+        getSuburbs.mockClear();
+        setInputValue('M');
+        expect(getSuburbs).not.toBeCalled();
+      });
     });
   });
 });

@@ -83,12 +83,14 @@ export default class Autosuggest extends Component {
   }
 
   showSuggestions(input) {
+    const cacheKey = input.toLowerCase();
+
     this.lastSuggestionsInputValue = input;
 
     if (!this.props.showWhen(input)) {
       this.setSuggestionsState(null);
-    } else if (this.cache[input]) {
-      this.setSuggestionsState(this.cache[input]);
+    } else if (this.cache[cacheKey]) {
+      this.setSuggestionsState(this.cache[cacheKey]);
     } else {
       this.suggestionsFn(input, (error, suggestions) => {
         // If input value changed, suggestions are not relevant anymore.
@@ -103,7 +105,7 @@ export default class Autosuggest extends Component {
             suggestions = null;
           }
 
-          this.cache[input] = suggestions;
+          this.cache[cacheKey] = suggestions;
           this.setSuggestionsState(suggestions);
         }
       });
@@ -316,7 +318,7 @@ export default class Autosuggest extends Component {
       valueBeforeUpDown: null
     }, () => {
       // This code executes after the component is re-rendered
-      setTimeout( () => findDOMNode(this.refs.input).focus() );
+      setTimeout(() => findDOMNode(this.refs.input).focus());
     });
   }
 
