@@ -3,7 +3,7 @@
 require('./Examples.less');
 require('./Autosuggest.less');
 
-import React, { Component } from 'react';
+import React, { Component, findDOMNode } from 'react';
 import classnames from 'classnames';
 import BasicExample from './BasicExample/BasicExample';
 import CustomRenderer from './CustomRenderer/CustomRenderer';
@@ -45,7 +45,7 @@ export default class Examples extends Component {
     return (
       <div className="examples__menu">
         {this.examples.map(example => {
-          let classes = classnames({
+          const classes = classnames({
             'examples__menu-item': true,
             'examples__menu-item--active': example === this.state.activeExample
           });
@@ -77,7 +77,7 @@ export default class Examples extends Component {
       return (
         <div className="examples__events-log-wrapper">
           { this.eventsExist() && <button onClick={this.clearEvents.bind(this)}>Clear</button> }
-          <EventsLog events={this.state.events} />
+          <EventsLog ref="eventsLog" events={this.state.events} />
         </div>
       );
     }
@@ -101,6 +101,8 @@ export default class Examples extends Component {
     }, () => {
       this.eventQueue.shift();
       this.processEvents();
+      // Scroll to the bottom
+      findDOMNode(this.refs.eventsLog.refs.eventsLogWrapper).scrollTop = Number.MAX_SAFE_INTEGER;
     });
   }
 

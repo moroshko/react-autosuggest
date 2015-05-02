@@ -7,10 +7,10 @@ import SourceCodeLink from '../SourceCodeLink/SourceCodeLink';
 import suburbs from 'json!../suburbs.json';
 
 function getSuggestions(input, callback) {
-  let escapedInput = utils.escapeRegexCharacters(input.trim());
-  let lowercasedInput = input.trim().toLowerCase();
-  let suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
-  let suggestions = suburbs
+  const escapedInput = utils.escapeRegexCharacters(input.trim());
+  const lowercasedInput = input.trim().toLowerCase();
+  const suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
+  const suggestions = suburbs
     .filter( suburbObj => suburbMatchRegex.test(suburbObj.suburb) )
     .sort( (suburbObj1, suburbObj2) =>
       suburbObj1.suburb.toLowerCase().indexOf(lowercasedInput) -
@@ -52,10 +52,18 @@ export default class EventsPlayground extends Component {
     });
   }
 
+  onInputChanged(value) {
+    this.props.onEventAdded({
+      type: 'input-changed',
+      value: value
+    });
+  }
+
   render() {
-    let inputAttributes = {
+    const inputAttributes = {
       id: 'events-playground',
-      placeholder: 'Where are you now?'
+      placeholder: 'Where are you now?',
+      onChange: this.onInputChanged.bind(this)
     };
 
     return (

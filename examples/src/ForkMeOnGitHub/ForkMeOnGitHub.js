@@ -2,7 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
-let style = {
+const style = {
   position: 'absolute',
   top: 0,
   right: -41,

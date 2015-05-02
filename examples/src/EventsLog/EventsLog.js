@@ -38,15 +38,23 @@ export default class EventsLog extends Component {
             {event.suggestion}
           </span>
         );
+
+      case 'input-changed':
+        return (
+          <span>
+            <span className="examples__events-log__event-description">Input changed: </span>
+            {event.value}
+          </span>
+        );
     }
   }
 
   render() {
     return (
-      <div className="examples__events-log">
+      <div className="examples__events-log" ref="eventsLogWrapper">
         {this.props.events.map((event, index) => {
-          let classes = 'examples__events-log__event ' +
-                        'examples__events-log__event--' + event.type;
+          const classes = 'examples__events-log__event ' +
+                          'examples__events-log__event--' + event.type;
 
           return (
             <div className={classes} key={index}>

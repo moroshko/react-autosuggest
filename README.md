@@ -15,15 +15,15 @@
 
 ## Features
 
-* [Accessible][wai-aria] (you can use both mouse and keyboard)
-* In-memory caching (we retrive suggestions for a given input only once)
+* Fully [accessible][wai-aria] (mouse and keyboard controls included)
+* In-memory caching (we retrieve suggestions for a given input only once)
 * Support for delayed requests (if request comes back after user types another letter, it will be ignored)
 * You can either display a [plain list of suggestions][basic-example], or have [multiple sections][multiple-sections]
-* Full control over [rendering a suggestion](#suggestionRendererOption) (you can display extra data, images, whatever you want)
+* Full control over [suggestion rendering](#suggestionRendererOption) (you can display extra data, images, whatever you want)
 * Full control over [styling](#styling) (we just provide the mechanics and classes for you)
 * Full control over [when to show the suggestions](#showWhenOption) (e.g. when user types 2 or more characters)
-* Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder)
 * Various hooks: [onSuggestionSelected](#onSuggestionSelectedOption), [onSuggestionFocused](#onSuggestionFocusedOption), [onSuggestionUnfocused](#onSuggestionUnfocusedOption)
+* Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder, onChange)
 
 ## Installation
 
@@ -36,11 +36,11 @@ npm install react-autosuggest --save
 ```js
 import Autosuggest from 'react-autosuggest';
 
-let suburbs = ['Cheltenham', 'Mill Park', 'Mordialloc', 'Nunawading'];
+const suburbs = ['Cheltenham', 'Mill Park', 'Mordialloc', 'Nunawading'];
 
 function getSuggestions(input, callback) {
-  let regex = new RegExp('^' + input, 'i');
-  let suggestions = suburbs.filter(suburb => regex.test(suburb));
+  const regex = new RegExp('^' + input, 'i');
+  const suggestions = suburbs.filter(suburb => regex.test(suburb));
 
   setTimeout(() => callback(null, suggestions)), 300); // Emulate API call
 }
@@ -247,15 +247,16 @@ function onSuggestionUnfocused(suggestion) { // In this example 'suggestion' is 
 <a name="inputAttributesOption"></a>
 ##### inputAttributes (optional)
 
-Hash of attributes to pass to the input field. For exampleple:
+Hash of attributes to pass to the input field. For example:
 
 ```js
-let inputAttributes = {
+const inputAttributes = {
   id: 'locations-autosuggest',
   name: 'locations-autosuggest',
   className: 'my-sweet-locations-autosuggest',
   placeholder: 'Enter locations...',
-  value: 'Mordialloc'   // Initial value
+  value: 'Mordialloc',   // Initial value
+  onChange: value => console.log('Input value changed to: ' + value)
 };
 ```
 

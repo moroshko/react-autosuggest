@@ -9,14 +9,14 @@ let guid = 0;
 
 export default class Autosuggest extends Component {
   static propTypes = {
-    suggestions: PropTypes.func.isRequired,               // Function to get the suggestions
-    suggestionRenderer: PropTypes.func,                   // Function that renders a given suggestion (must be implemented when suggestions are objects)
-    suggestionValue: PropTypes.func,                      // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
-    showWhen: PropTypes.func,                             // Function that determines whether to show suggestions or not
-    onSuggestionSelected: PropTypes.func,                 // This function is called when suggestion is selected via mouse click or Enter
-    onSuggestionFocused: PropTypes.func,                  // This function is called when suggestion is focused via mouse hover or Up/Down keys
-    onSuggestionUnfocused: PropTypes.func,                // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
-    inputAttributes: PropTypes.objectOf(PropTypes.string) // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+    suggestions: PropTypes.func.isRequired, // Function to get the suggestions
+    suggestionRenderer: PropTypes.func,     // Function that renders a given suggestion (must be implemented when suggestions are objects)
+    suggestionValue: PropTypes.func,        // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
+    showWhen: PropTypes.func,               // Function that determines whether to show suggestions or not
+    onSuggestionSelected: PropTypes.func,   // This function is called when suggestion is selected via mouse click or Enter
+    onSuggestionFocused: PropTypes.func,    // This function is called when suggestion is focused via mouse hover or Up/Down keys
+    onSuggestionUnfocused: PropTypes.func,  // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
+    inputAttributes: PropTypes.object       // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
   }
 
   static defaultProps = {
@@ -44,6 +44,7 @@ export default class Autosuggest extends Component {
                                     // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
     this.suggestionsFn = debounce(props.suggestions, 100);
+    this.onChange = props.inputAttributes.onChange || (() => {});
     this.lastSuggestionsInputValue = null; // Helps to deal with delayed requests
     this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
                                 // twice when mouse is moving between suggestions
@@ -183,6 +184,7 @@ export default class Autosuggest extends Component {
       this.onSuggestionFocused(sectionIndex, suggestionIndex);
     }
 
+    this.onChange(newState.value);
     this.setState(newState);
   }
 
@@ -197,6 +199,7 @@ export default class Autosuggest extends Component {
     const newValue = event.target.value;
 
     this.onSuggestionUnfocused();
+    this.onChange(newValue);
 
     this.setState({
       value: newValue,
@@ -207,7 +210,7 @@ export default class Autosuggest extends Component {
   }
 
   onInputKeyDown(event) {
-    let newState, newSectionIndex, newSuggestionIndex;
+    let newState;
 
     switch (event.keyCode) {
       case 13: // Enter
@@ -233,6 +236,11 @@ export default class Autosuggest extends Component {
         }
 
         this.onSuggestionUnfocused();
+
+        if (typeof newState.value === 'string' && newState.value !== this.state.value) {
+          this.onChange(newState.value);
+        }
+
         this.setState(newState);
         break;
 
@@ -296,9 +304,12 @@ export default class Autosuggest extends Component {
   }
 
   onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
+    const suggestionValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
+
     this.onSuggestionSelected(event);
+    this.onChange(suggestionValue);
     this.setState({
-      value: this.getSuggestionValue(sectionIndex, suggestionIndex),
+      value: suggestionValue,
       suggestions: null,
       focusedSectionIndex: null,
       focusedSuggestionIndex: null,

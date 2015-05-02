@@ -91,7 +91,7 @@ function prev(position) {
   return [null, itemIndex - 1];
 }
 
-module.exports = {
+export default {
   setData: setData,
   next: next,
   prev: prev

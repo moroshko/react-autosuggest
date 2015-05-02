@@ -15,14 +15,15 @@ function suburbObjToString(suburbObj) {
 }
 
 function getSuggestions(input, callback) {
-  let escapedInput = utils.escapeRegexCharacters(input.trim());
-  let firstSectionMatchRegex = new RegExp('^' + escapedInput, 'i');
-  let secondSectionMatchRegex = new RegExp('^(?!' + escapedInput + ')\\w+ ' + escapedInput, 'i');
-  let thirdSectionMatchRegex = new RegExp('^(?!' + escapedInput + ')\\w+ (?!' + escapedInput + ')\\w+ ' + escapedInput, 'i');
-  let firstSectionSuburbs = suburbs.filter( suburbObj => firstSectionMatchRegex.test(suburbObj.suburb) );
-  let secondSectionSuburbs = suburbs.filter( suburbObj => secondSectionMatchRegex.test(suburbObj.suburb) );
-  let thirdSectionSuburbs = suburbs.filter( suburbObj => thirdSectionMatchRegex.test(suburbObj.suburb) );
-  let suggestions = [], firstSectionCount, secondSectionCount, thirdSectionCount;
+  const escapedInput = utils.escapeRegexCharacters(input.trim());
+  const firstSectionMatchRegex = new RegExp('^' + escapedInput, 'i');
+  const secondSectionMatchRegex = new RegExp('^(?!' + escapedInput + ')\\w+ ' + escapedInput, 'i');
+  const thirdSectionMatchRegex = new RegExp('^(?!' + escapedInput + ')\\w+ (?!' + escapedInput + ')\\w+ ' + escapedInput, 'i');
+  const firstSectionSuburbs = suburbs.filter( suburbObj => firstSectionMatchRegex.test(suburbObj.suburb) );
+  const secondSectionSuburbs = suburbs.filter( suburbObj => secondSectionMatchRegex.test(suburbObj.suburb) );
+  const thirdSectionSuburbs = suburbs.filter( suburbObj => thirdSectionMatchRegex.test(suburbObj.suburb) );
+  const suggestions = [];
+  let firstSectionCount, secondSectionCount, thirdSectionCount;
 
   if (thirdSectionSuburbs.length > 0) {
     thirdSectionCount = randomInt(1, Math.min(3, thirdSectionSuburbs.length));
@@ -62,7 +63,7 @@ function getSuggestions(input, callback) {
 
 export default class MultipleSections extends Component {
   render() {
-    let inputAttributes = {
+    const inputAttributes = {
       id: 'multiple-sections',
       placeholder: 'Where do you work?'
     };

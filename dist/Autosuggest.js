@@ -60,6 +60,7 @@ var Autosuggest = (function (_Component) {
       // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
     this.suggestionsFn = _debounce2['default'](props.suggestions, 100);
+    this.onChange = props.inputAttributes.onChange || function () {};
     this.lastSuggestionsInputValue = null; // Helps to deal with delayed requests
     this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
     // twice when mouse is moving between suggestions
@@ -219,6 +220,7 @@ var Autosuggest = (function (_Component) {
         this.onSuggestionFocused(sectionIndex, suggestionIndex);
       }
 
+      this.onChange(newState.value);
       this.setState(newState);
     }
   }, {
@@ -235,6 +237,7 @@ var Autosuggest = (function (_Component) {
       var newValue = event.target.value;
 
       this.onSuggestionUnfocused();
+      this.onChange(newValue);
 
       this.setState({
         value: newValue,
@@ -246,9 +249,7 @@ var Autosuggest = (function (_Component) {
   }, {
     key: 'onInputKeyDown',
     value: function onInputKeyDown(event) {
-      var newState = undefined,
-          newSectionIndex = undefined,
-          newSuggestionIndex = undefined;
+      var newState = undefined;
 
       switch (event.keyCode) {
         case 13:
@@ -276,6 +277,11 @@ var Autosuggest = (function (_Component) {
           }
 
           this.onSuggestionUnfocused();
+
+          if (typeof newState.value === 'string' && newState.value !== this.state.value) {
+            this.onChange(newState.value);
+          }
+
           this.setState(newState);
           break;
 
@@ -341,9 +347,12 @@ var Autosuggest = (function (_Component) {
     value: function onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
       var _this3 = this;
 
+      var suggestionValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
+
       this.onSuggestionSelected(event);
+      this.onChange(suggestionValue);
       this.setState({
-        value: this.getSuggestionValue(sectionIndex, suggestionIndex),
+        value: suggestionValue,
         suggestions: null,
         focusedSectionIndex: null,
         focusedSuggestionIndex: null,
@@ -487,7 +496,7 @@ var Autosuggest = (function (_Component) {
       onSuggestionSelected: _React$Component$PropTypes$findDOMNode.PropTypes.func, // This function is called when suggestion is selected via mouse click or Enter
       onSuggestionFocused: _React$Component$PropTypes$findDOMNode.PropTypes.func, // This function is called when suggestion is focused via mouse hover or Up/Down keys
       onSuggestionUnfocused: _React$Component$PropTypes$findDOMNode.PropTypes.func, // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
-      inputAttributes: _React$Component$PropTypes$findDOMNode.PropTypes.objectOf(_React$Component$PropTypes$findDOMNode.PropTypes.string) // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+      inputAttributes: _React$Component$PropTypes$findDOMNode.PropTypes.object // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
     },
     enumerable: true
   }, {

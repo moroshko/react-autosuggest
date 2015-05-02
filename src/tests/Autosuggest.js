@@ -21,6 +21,7 @@ let autosuggest, input, suggestions;
 const onSuggestionSelected = jest.genMockFunction();
 const onSuggestionFocused = jest.genMockFunction();
 const onSuggestionUnfocused = jest.genMockFunction();
+const onChange = jest.genMockFunction();
 
 function getSuburbStrings(input, callback) {
   const regex = new RegExp('^' + input, 'i');
@@ -634,6 +635,60 @@ describe('Autosuggest', function() {
           setInputValue(input.value.slice(0, -1));
           expect(onSuggestionUnfocused).not.toBeCalled();
         });
+      });
+    });
+  });
+
+  describe('inputAttributes.onChange', function() {
+    beforeEach(function() {
+      onChange.mockClear();
+      createAutosuggest(
+        <Autosuggest suggestions={getSuburbStrings}
+                     inputAttributes={{ onChange: onChange }} />
+      );
+      setInputValue('m');
+    });
+
+    describe('should call onChange when', function() {
+      it('user types characters', function() {
+        expect(onChange).toBeCalledWith('m');
+      });
+
+      it('Down key is pressed', function() {
+        onChange.mockClear();
+        clickDown();
+        expect(onChange).toBeCalledWith('Mill Park');
+      });
+
+      it('Up key is pressed', function() {
+        onChange.mockClear();
+        clickUp();
+        expect(onChange).toBeCalledWith('Mordialloc');
+      });
+
+      it('ESC key is pressed to clear the input', function() {
+        clickEscape();
+        onChange.mockClear();
+        clickEscape();
+        expect(onChange).toBeCalledWith('');
+      });
+
+      it('suggestion is clicked', function() {
+      });
+    });
+
+    describe('should not call onChange when', function() {
+      it('ESC key is pressed to hide suggestions', function() {
+        onChange.mockClear();
+        clickEscape();
+        expect(onChange).not.toBeCalled();
+      });
+
+      it('ESC key is pressed and input is empty', function() {
+        setInputValue('');
+        onChange.mockClear();
+        clickEscape();
+        expect(onChange).not.toBeCalled();
       });
     });
   });

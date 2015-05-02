@@ -12,11 +12,11 @@ function population(suburbObj) {
 }
 
 function getSuggestions(input, callback) {
-  let requestDelay = 50 + Math.floor(300 * Math.random());
-  let escapedInput = utils.escapeRegexCharacters(input.trim());
-  let lowercasedInput = input.trim().toLowerCase();
-  let suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
-  let suggestions = suburbs
+  const requestDelay = 50 + Math.floor(300 * Math.random());
+  const escapedInput = utils.escapeRegexCharacters(input.trim());
+  const lowercasedInput = input.trim().toLowerCase();
+  const suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
+  const suggestions = suburbs
     .filter( suburbObj => suburbMatchRegex.test(suburbObj.suburb + ' VIC ' + suburbObj.postcode) )
     .sort( (suburbObj1, suburbObj2) =>
       suburbObj1.suburb.toLowerCase().indexOf(lowercasedInput) -
@@ -38,18 +38,18 @@ function getSuggestions(input, callback) {
 }
 
 function renderSuggestion(suggestionObj, input) {
-  let escapedInput = utils.escapeRegexCharacters(input);
-  let suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
-  let suggestion = suggestionObj.suburb + ' VIC ' + suggestionObj.postcode;
-  let firstMatchIndex = suggestion.search(suburbMatchRegex);
+  const escapedInput = utils.escapeRegexCharacters(input);
+  const suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
+  const suggestion = suggestionObj.suburb + ' VIC ' + suggestionObj.postcode;
+  const firstMatchIndex = suggestion.search(suburbMatchRegex);
 
   if (firstMatchIndex === -1) {
     return suggestion;
   }
 
-  let beforeMatch = suggestion.slice(0, firstMatchIndex);
-  let match = suggestion.slice(firstMatchIndex, firstMatchIndex + input.length);
-  let afterMatch = suggestion.slice(firstMatchIndex + input.length);
+  const beforeMatch = suggestion.slice(0, firstMatchIndex);
+  const match = suggestion.slice(firstMatchIndex, firstMatchIndex + input.length);
+  const afterMatch = suggestion.slice(firstMatchIndex + input.length);
 
   return (
     <span>
@@ -65,7 +65,7 @@ function getSuggestionValue(suggestionObj) {
 
 export default class CustomRenderer extends Component {
   render() {
-    let inputAttributes = {
+    const inputAttributes = {
       id: 'custom-renderer',
       placeholder: 'Where are you based?'
     };

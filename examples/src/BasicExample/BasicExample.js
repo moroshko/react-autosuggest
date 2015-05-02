@@ -7,10 +7,10 @@ import SourceCodeLink from '../SourceCodeLink/SourceCodeLink';
 import suburbs from 'json!../suburbs.json';
 
 function getSuggestions(input, callback) {
-  let escapedInput = utils.escapeRegexCharacters(input.trim());
-  let lowercasedInput = input.trim().toLowerCase();
-  let suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
-  let suggestions = suburbs
+  const escapedInput = utils.escapeRegexCharacters(input.trim());
+  const lowercasedInput = input.trim().toLowerCase();
+  const suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
+  const suggestions = suburbs
     .filter( suburbObj => suburbMatchRegex.test(suburbObj.suburb) )
     .sort( (suburbObj1, suburbObj2) =>
       suburbObj1.suburb.toLowerCase().indexOf(lowercasedInput) -
@@ -27,7 +27,7 @@ function getSuggestions(input, callback) {
 
 export default class BasicExample extends Component {
   render() {
-    let inputAttributes = {
+    const inputAttributes = {
       id: 'basic-example',
       placeholder: 'Where do you live?'
     };
