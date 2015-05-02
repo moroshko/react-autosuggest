@@ -320,7 +320,10 @@ export default class Autosuggest extends Component {
 
   renderSuggestionContent(suggestion) {
     if (this.props.suggestionRenderer) {
-      return this.props.suggestionRenderer(suggestion, this.state.valueBeforeUpDown || this.state.value);
+      return this.props.suggestionRenderer(
+        suggestion,
+        this.state.valueBeforeUpDown || this.state.value
+      );
     }
 
     if (typeof suggestion === 'object') {

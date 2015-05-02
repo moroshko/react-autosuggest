@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "1.10.2",
+  "version": "1.11.0",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/Autosuggest.js",
   "repository": {
@@ -40,7 +40,7 @@
     "react": "^0.13.2"
   },
   "devDependencies": {
-    "babel": "^5.2.2",
+    "babel": "^5.2.6",
     "babel-eslint": "^3.0.1",
     "babel-jest": "^5.0.1",
     "babel-loader": "^5.0.0",
@@ -53,7 +53,7 @@
     "json-loader": "^0.5.1",
     "less": "^2.5.0",
     "less-loader": "^2.2.0",
-    "react-hot-loader": "^1.2.5",
+    "react-hot-loader": "^1.2.6",
     "style-loader": "^0.12.1",
     "webpack": "^1.8.11",
     "webpack-dev-server": "^1.8.2"
