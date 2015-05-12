@@ -49,7 +49,7 @@ export default class Autosuggest extends Component {
     this.lastSuggestionsInputValue = null; // Helps to deal with delayed requests
     this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
                                 // twice when mouse is moving between suggestions
-    this.justClickedSuggestion = false; // Helps not to call inputAttributes.onBlur
+    this.justClickedOnSuggestion = false; // Helps not to call inputAttributes.onBlur
                                         // when suggestion is clicked
   }
 
@@ -279,7 +279,7 @@ export default class Autosuggest extends Component {
   onInputBlur() {
     this.onSuggestionUnfocused();
 
-    if (!this.justClickedSuggestion) {
+    if (!this.justClickedOnSuggestion) {
       this.onBlur();
     }
 
@@ -316,7 +316,7 @@ export default class Autosuggest extends Component {
   onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
     const suggestionValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
 
-    this.justClickedSuggestion = true;
+    this.justClickedOnSuggestion = true;
 
     this.onSuggestionSelected(event);
     this.onChange(suggestionValue);
@@ -330,7 +330,7 @@ export default class Autosuggest extends Component {
       // This code executes after the component is re-rendered
       setTimeout(() => {
         findDOMNode(this.refs.input).focus();
-        this.justClickedSuggestion = false;
+        this.justClickedOnSuggestion = false;
       });
     });
   }

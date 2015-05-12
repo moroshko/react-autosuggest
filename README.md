@@ -256,7 +256,8 @@ const inputAttributes = {
   className: 'my-sweet-locations-autosuggest',
   placeholder: 'Enter locations...',
   value: 'Mordialloc',   // Initial value
-  onChange: value => console.log('Input value changed to: ' + value)
+  onChange: value => console.log(`Input value changed to: ${value}`),
+  onBlur: () => console.log('Input blurred')
 };
 ```
 
