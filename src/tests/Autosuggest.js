@@ -22,6 +22,7 @@ const onSuggestionSelected = jest.genMockFunction();
 const onSuggestionFocused = jest.genMockFunction();
 const onSuggestionUnfocused = jest.genMockFunction();
 const onChange = jest.genMockFunction();
+const onBlur = jest.genMockFunction();
 const getSuburbs = jest.genMockFunction().mockImplementation(getSuburbStrings);
 
 function getSuburbStrings(input, callback) {
@@ -179,19 +180,19 @@ function createAutosuggest(Autosuggest) {
   input = React.findDOMNode(TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input'));
 }
 
-describe('Autosuggest', function() {
-  describe('isMultipleSections()', function() {
-    beforeEach(function() {
+describe('Autosuggest', () => {
+  describe('isMultipleSections()', () => {
+    beforeEach(() => {
       createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
     });
 
-    it('should be multiple sections', function() {
+    it('should be multiple sections', () => {
       expect(autosuggest.isMultipleSections([ { suggestions: [] }])).toBe(true);
       expect(autosuggest.isMultipleSections([ { suggestions: ['a', 'b'] }])).toBe(true);
       expect(autosuggest.isMultipleSections([ { sectionName: 'First', suggestions: ['a', 'b'] }])).toBe(true);
     });
 
-    it('should not be multiple sections', function() {
+    it('should not be multiple sections', () => {
       expect(autosuggest.isMultipleSections(null)).toBe(false);
       expect(autosuggest.isMultipleSections([])).toBe(false);
       expect(autosuggest.isMultipleSections(['a', 'b'])).toBe(false);
@@ -200,19 +201,19 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('suggestionsExist()', function() {
-    beforeEach(function() {
+  describe('suggestionsExist()', () => {
+    beforeEach(() => {
       createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
     });
 
-    it('should have suggestions', function() {
+    it('should have suggestions', () => {
       expect(autosuggest.suggestionsExist([ { suggestions: ['a'] }])).toBe(true);
       expect(autosuggest.suggestionsExist([ { suburb: 'Mentone', postcode: 3192 }])).toBe(true);
       expect(autosuggest.suggestionsExist([ { sectionName: 'First', suggestions: ['a', 'b'] }])).toBe(true);
       expect(autosuggest.suggestionsExist([ { sectionName: 'First', suggestions: [] }, { sectionName: 'Second', suggestions: ['a'] }])).toBe(true);
     });
 
-    it('should not have suggestions', function() {
+    it('should not have suggestions', () => {
       expect(autosuggest.suggestionsExist(null)).toBe(false);
       expect(autosuggest.suggestionsExist([])).toBe(false);
       expect(autosuggest.suggestionsExist([ { suggestions: [] }])).toBe(false);
@@ -220,22 +221,22 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('Not configured properly', function() {
-    it('should throw an error when "suggestions" are objects but "suggestionRenderer()" isn\'t provided', function() {
+  describe('Not configured properly', () => {
+    it('should throw an error when "suggestions" are objects but "suggestionRenderer()" isn\'t provided', () => {
       createAutosuggest(<Autosuggest suggestions={getStaticSuburbs} />);
       expect(setInputValue.bind(null, 'a')).toThrow('When <suggestion> is an object, you must implement the suggestionRenderer() function to specify how to render it.');
     });
 
-    it('should throw an error when "suggestions" are objects but "suggestionValue()" isn\'t provided', function() {
+    it('should throw an error when "suggestions" are objects but "suggestionValue()" isn\'t provided', () => {
       createAutosuggest(<Autosuggest suggestions={getStaticSuburbs} suggestionRenderer={renderSuburbObject} />);
       setInputValue('a');
       expect(mouseDownSuggestion.bind(null, 0)).toThrow('When <suggestion> is an object, you must implement the suggestionValue() function to specify how to set input\'s value when suggestion selected.');
     });
   });
 
-  describe('Basics', function() {
-    describe('String suggestions', function() {
-      beforeEach(function() {
+  describe('Basics', () => {
+    describe('String suggestions', () => {
+      beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbStrings}
                        inputAttributes={{ id: 'my-autosuggest',
@@ -246,48 +247,48 @@ describe('Autosuggest', function() {
         );
       });
 
-      it('should set input attributes', function() {
+      it('should set input attributes', () => {
         expect(input.id).toBe('my-autosuggest');
         expect(input.name).toBe('my-autosuggest-name');
         expect(input.getAttribute('placeholder')).toBe('Enter location...');
         expect(input.className).toBe('my-sweet-autosuggest');
       });
 
-      it('should set initial value', function() {
+      it('should set initial value', () => {
         expectInputValue('my value');
       });
 
-      it('should not show suggestions by default', function() {
+      it('should not show suggestions by default', () => {
         expectSuggestions([]);
       });
 
-      it('should show suggestions when matches exist', function() {
+      it('should show suggestions when matches exist', () => {
         setInputValue('m');
         expectSuggestions(['Mill Park', 'Mordialloc']);
       });
 
-      it('should not focus on suggestion when suggestions are shown', function() {
+      it('should not focus on suggestion when suggestions are shown', () => {
         setInputValue('m');
         expectFocusedSuggestion(null);
       });
 
-      it('should show suggestions when case insensitive matches exist', function() {
+      it('should show suggestions when case insensitive matches exist', () => {
         setInputValue('NUNA');
         expectSuggestions(['Nunawading']);
       });
 
-      it('should show not suggestions when no matches exist', function() {
+      it('should show not suggestions when no matches exist', () => {
         setInputValue('a');
         expectSuggestions([]);
       });
 
-      it('should hide suggestions when ESC is clicked and suggestions are shown', function() {
+      it('should hide suggestions when ESC is clicked and suggestions are shown', () => {
         setInputValue('m');
         clickEscape();
         expectSuggestions([]);
       });
 
-      it('should clear the input when ESC is clicked and suggestions are not shown', function() {
+      it('should clear the input when ESC is clicked and suggestions are not shown', () => {
         setInputValue('m');
         clickEscape();
         clickEscape();
@@ -295,8 +296,8 @@ describe('Autosuggest', function() {
       });
     });
 
-    describe('Object suggestions', function() {
-      beforeEach(function() {
+    describe('Object suggestions', () => {
+      beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbObjects}
                        suggestionRenderer={renderSuburbObject}
@@ -304,16 +305,16 @@ describe('Autosuggest', function() {
         );
       });
 
-      it('should show suggestions when matches exist', function() {
+      it('should show suggestions when matches exist', () => {
         setInputValue('m');
         expectSuggestions(['Mill Park VIC 3083', 'Mordialloc VIC 3195']);
       });
     });
   });
 
-  describe('suggestionRenderer', function() {
-    describe('String suggestions', function() {
-      beforeEach(function() {
+  describe('suggestionRenderer', () => {
+    describe('String suggestions', () => {
+      beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbStrings}
                        suggestionRenderer={renderSuburbString} />
@@ -321,14 +322,14 @@ describe('Autosuggest', function() {
         setInputValue('m');
       });
 
-      it('should use the specified suggestionRenderer function', function() {
+      it('should use the specified suggestionRenderer function', () => {
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
         expect(stripReactAttributes(React.findDOMNode(suggestions[0]).innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span></span>');
       });
     });
 
-    describe('Object suggestions', function() {
-      beforeEach(function() {
+    describe('Object suggestions', () => {
+      beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbObjects}
                        suggestionRenderer={renderSuburbObject}
@@ -337,22 +338,22 @@ describe('Autosuggest', function() {
         setInputValue('m');
       });
 
-      it('should use the specified suggestionRenderer function', function() {
+      it('should use the specified suggestionRenderer function', () => {
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
         expect(stripReactAttributes(React.findDOMNode(suggestions[0]).innerHTML)).toBe('<span><strong>M</strong><span>ill Park</span><span> VIC </span><span>3083</span></span>');
       });
     });
   });
 
-  describe('showWhen', function() {
-    beforeEach(function() {
+  describe('showWhen', () => {
+    beforeEach(() => {
       createAutosuggest(
         <Autosuggest suggestions={getSuburbStrings}
                      showWhen={showWhen} />
       );
     });
 
-    it('should not show suggestions when showWhen returns false', function() {
+    it('should not show suggestions when showWhen returns false', () => {
       setInputValue('m');
       expectSuggestions([]);
 
@@ -360,19 +361,19 @@ describe('Autosuggest', function() {
       expectSuggestions([]);
     });
 
-    it('should show suggestions when showWhen returns true', function() {
+    it('should show suggestions when showWhen returns true', () => {
       setInputValue('mor');
       expectSuggestions(['Mordialloc']);
     });
   });
 
-  describe('onSuggestionSelected', function() {
-    beforeEach(function() {
+  describe('onSuggestionSelected', () => {
+    beforeEach(() => {
       onSuggestionSelected.mockClear();
     });
 
-    describe('String suggestions', function() {
-      beforeEach(function() {
+    describe('String suggestions', () => {
+      beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbStrings}
                        onSuggestionSelected={onSuggestionSelected} />
@@ -380,20 +381,20 @@ describe('Autosuggest', function() {
         setInputValue('m');
       });
 
-      it('should call onSuggestionSelected when suggestion is selected using mouse', function() {
+      it('should call onSuggestionSelected when suggestion is selected using mouse', () => {
         mouseOverFromInputToSuggestion(1);
         mouseDownSuggestion(1);
         expect(onSuggestionSelected).toBeCalledWith('Mordialloc', jasmine.any(SyntheticEvent));
       });
 
-      it('should not call onSuggestionSelected when mouse enters a suggestion', function() {
+      it('should not call onSuggestionSelected when mouse enters a suggestion', () => {
         mouseOverFromInputToSuggestion(0);
         expect(onSuggestionSelected).not.toBeCalled();
       });
     });
 
-    describe('Object suggestions', function() {
-      beforeEach(function() {
+    describe('Object suggestions', () => {
+      beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbObjects}
                        suggestionRenderer={renderSuburbObject}
@@ -403,23 +404,23 @@ describe('Autosuggest', function() {
         setInputValue('m');
       });
 
-      it('should call onSuggestionSelected when suggestion is selected using keyboard', function() {
+      it('should call onSuggestionSelected when suggestion is selected using keyboard', () => {
         clickDown();
         clickEnter();
         expect(onSuggestionSelected).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' }, jasmine.any(SyntheticEvent));
       });
 
-      it('should not call onSuggestionSelected when navigating using keyboard', function() {
+      it('should not call onSuggestionSelected when navigating using keyboard', () => {
         clickDown();
         expect(onSuggestionSelected).not.toBeCalled();
       });
 
-      it('should not call onSuggestionSelected if no suggestion is focussed', function() {
+      it('should not call onSuggestionSelected if no suggestion is focussed', () => {
         clickEnter();
         expect(onSuggestionSelected).not.toBeCalled();
       });
 
-      it('should not call onSuggestionSelected if no suggestion is focussed after Up/Down interaction', function() {
+      it('should not call onSuggestionSelected if no suggestion is focussed after Up/Down interaction', () => {
         clickDown();
         clickDown();
         clickDown();
@@ -429,8 +430,8 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('onSuggestionFocused', function() {
-    beforeEach(function() {
+  describe('onSuggestionFocused', () => {
+    beforeEach(() => {
       onSuggestionFocused.mockClear();
       createAutosuggest(
         <Autosuggest suggestions={getSuburbStrings}
@@ -439,25 +440,25 @@ describe('Autosuggest', function() {
       setInputValue('m');
     });
 
-    describe('Mouse interactions', function() {
-      describe('should call onSuggestionFocused when', function() {
-        it('mouse is entering a suggestion', function() {
+    describe('Mouse interactions', () => {
+      describe('should call onSuggestionFocused when', () => {
+        it('mouse is entering a suggestion', () => {
           mouseOverFromInputToSuggestion(1);
           expect(onSuggestionFocused).toBeCalledWith('Mordialloc');
         });
       });
     });
 
-    describe('Keyboard interactions', function() {
-      describe('should call onSuggestionFocused when', function() {
-        it('suggestion focused using Up/Down keys', function() {
+    describe('Keyboard interactions', () => {
+      describe('should call onSuggestionFocused when', () => {
+        it('suggestion focused using Up/Down keys', () => {
           clickDown();
           expect(onSuggestionFocused).toBeCalledWith('Mill Park');
         });
       });
 
-      describe('should not call onSuggestionFocused when', function() {
-        it('Up/Down keys are pressed after ESC is pressed', function() {
+      describe('should not call onSuggestionFocused when', () => {
+        it('Up/Down keys are pressed after ESC is pressed', () => {
           clickDown();
           clickEscape();
           onSuggestionFocused.mockClear();
@@ -465,14 +466,14 @@ describe('Autosuggest', function() {
           expect(onSuggestionFocused).not.toBeCalled();
         });
 
-        it('first suggestion is focused and Up key is pressed', function() {
+        it('first suggestion is focused and Up key is pressed', () => {
           clickDown();
           onSuggestionFocused.mockClear();
           clickUp();
           expect(onSuggestionFocused).not.toBeCalled();
         });
 
-        it('last suggestion is focused and Down key is pressed', function() {
+        it('last suggestion is focused and Down key is pressed', () => {
           clickDown();
           clickDown();
           onSuggestionFocused.mockClear();
@@ -482,8 +483,8 @@ describe('Autosuggest', function() {
       });
     });
 
-    describe('Combined interactions', function() {
-      it('should not call onSuggestionFocused twice if focusing same suggestion with keyboard and then with mouse', function() {
+    describe('Combined interactions', () => {
+      it('should not call onSuggestionFocused twice if focusing same suggestion with keyboard and then with mouse', () => {
         clickDown();
         expect(onSuggestionFocused).toBeCalledWith('Mill Park');
         onSuggestionFocused.mockClear();
@@ -493,8 +494,8 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('onSuggestionUnfocused', function() {
-    beforeEach(function() {
+  describe('onSuggestionUnfocused', () => {
+    beforeEach(() => {
       onSuggestionUnfocused.mockClear();
       createAutosuggest(
         <Autosuggest suggestions={getSuburbObjects}
@@ -505,28 +506,28 @@ describe('Autosuggest', function() {
       setInputValue('m');
     });
 
-    describe('Mouse interactions', function() {
-      describe('should call onSuggestionUnfocused when', function() {
-        it('mouse is moving between suggestions', function() {
+    describe('Mouse interactions', () => {
+      describe('should call onSuggestionUnfocused when', () => {
+        it('mouse is moving between suggestions', () => {
           mouseOverFromInputToSuggestion(0);
           mouseOverBetweenSuggestions(0, 1);
           expect(onSuggestionUnfocused.mock.calls.length).toEqual(1);
           expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
 
-        it('mouse is leaving a focused suggestion', function() {
+        it('mouse is leaving a focused suggestion', () => {
           mouseOverFromInputToSuggestion(0);
           mouseOverFromSuggestionToInput(0);
           expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
 
-        it('suggestion is clicked', function() {
+        it('suggestion is clicked', () => {
           mouseOverFromInputToSuggestion(0);
           mouseDownSuggestion(0);
           expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
 
-        it('suggestion is focused and mouse is entering another suggestion', function() {
+        it('suggestion is focused and mouse is entering another suggestion', () => {
           clickDown();
           clickDown();
           onSuggestionUnfocused.mockClear();
@@ -534,21 +535,21 @@ describe('Autosuggest', function() {
           expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mordialloc', postcode: '3195' });
         });
 
-        it('clicking outside and suggestion is focused', function() {
+        it('clicking outside and suggestion is focused', () => {
           clickDown();
           clickOutside();
           expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
       });
 
-      describe('should not call onSuggestionUnfocused when', function() {
-        it('suggestion is focused and mouse is entering the same suggestion', function() {
+      describe('should not call onSuggestionUnfocused when', () => {
+        it('suggestion is focused and mouse is entering the same suggestion', () => {
           clickDown();
           mouseOverFromInputToSuggestion(0);
           expect(onSuggestionUnfocused).not.toBeCalled();
         });
 
-        it('suggestion is focused and mouse is leaving another suggestion', function() {
+        it('suggestion is focused and mouse is leaving another suggestion', () => {
           mouseOverFromInputToSuggestion(0);
           clickDown();
           onSuggestionUnfocused.mockClear();
@@ -558,22 +559,22 @@ describe('Autosuggest', function() {
       });
     });
 
-    describe('Keyboard interactions', function() {
-      describe('should call onSuggestionUnfocused when', function() {
-        it('moving between suggestions using Up/Down keys', function() {
+    describe('Keyboard interactions', () => {
+      describe('should call onSuggestionUnfocused when', () => {
+        it('moving between suggestions using Up/Down keys', () => {
           clickDown();
           expect(onSuggestionUnfocused).not.toBeCalled();
           clickDown();
           expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
 
-        it('first suggestion is focused and Up key is pressed', function() {
+        it('first suggestion is focused and Up key is pressed', () => {
           clickDown();
           clickUp();
           expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
 
-        it('last suggestion is focused and Down key is pressed', function() {
+        it('last suggestion is focused and Down key is pressed', () => {
           clickDown();
           clickDown();
           onSuggestionUnfocused.mockClear();
@@ -581,27 +582,27 @@ describe('Autosuggest', function() {
           expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mordialloc', postcode: '3195' });
         });
 
-        it('ESC key pressed and suggestion is focused', function() {
+        it('ESC key pressed and suggestion is focused', () => {
           clickDown();
           clickEscape();
           expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
 
-        it('Enter is pressed and suggestion is focused', function() {
+        it('Enter is pressed and suggestion is focused', () => {
           clickDown();
           clickEnter();
           expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
 
-        it('input value is changed and suggestion is focused', function() {
+        it('input value is changed and suggestion is focused', () => {
           clickDown();
           setInputValue(input.value.slice(0, -1)); // Simulates Backspace
           expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
       });
 
-      describe('should not call onSuggestionUnfocused when', function() {
-        it('Up/Down keys are pressed after ESC is pressed', function() {
+      describe('should not call onSuggestionUnfocused when', () => {
+        it('Up/Down keys are pressed after ESC is pressed', () => {
           clickDown();
           clickEscape();
           onSuggestionUnfocused.mockClear();
@@ -609,12 +610,12 @@ describe('Autosuggest', function() {
           expect(onSuggestionUnfocused).not.toBeCalled();
         });
 
-        it('ESC key pressed and no suggestion focused', function() {
+        it('ESC key pressed and no suggestion focused', () => {
           clickEscape();
           expect(onSuggestionUnfocused).not.toBeCalled();
         });
 
-        it('clicking outside and no suggestion focused', function() {
+        it('clicking outside and no suggestion focused', () => {
           clickDown();
           clickDown();
           clickDown();
@@ -623,12 +624,12 @@ describe('Autosuggest', function() {
           expect(onSuggestionUnfocused).not.toBeCalled();
         });
 
-        it('Enter is pressed and no suggestion focused', function() {
+        it('Enter is pressed and no suggestion focused', () => {
           clickEnter();
           expect(onSuggestionUnfocused).not.toBeCalled();
         });
 
-        it('input value is changed and no suggestion focused', function() {
+        it('input value is changed and no suggestion focused', () => {
           clickDown();
           clickDown();
           clickDown();
@@ -640,8 +641,8 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('inputAttributes.onChange', function() {
-    beforeEach(function() {
+  describe('inputAttributes.onChange', () => {
+    beforeEach(() => {
       onChange.mockClear();
       createAutosuggest(
         <Autosuggest suggestions={getSuburbStrings}
@@ -650,42 +651,42 @@ describe('Autosuggest', function() {
       setInputValue('m');
     });
 
-    describe('should call onChange when', function() {
-      it('user types characters', function() {
+    describe('should call onChange when', () => {
+      it('user types characters', () => {
         expect(onChange).toBeCalledWith('m');
       });
 
-      it('Down key is pressed', function() {
+      it('Down key is pressed', () => {
         onChange.mockClear();
         clickDown();
         expect(onChange).toBeCalledWith('Mill Park');
       });
 
-      it('Up key is pressed', function() {
+      it('Up key is pressed', () => {
         onChange.mockClear();
         clickUp();
         expect(onChange).toBeCalledWith('Mordialloc');
       });
 
-      it('ESC key is pressed to clear the input', function() {
+      it('ESC key is pressed to clear the input', () => {
         clickEscape();
         onChange.mockClear();
         clickEscape();
         expect(onChange).toBeCalledWith('');
       });
 
-      it('suggestion is clicked', function() {
+      it('suggestion is clicked', () => {
       });
     });
 
-    describe('should not call onChange when', function() {
-      it('ESC key is pressed to hide suggestions', function() {
+    describe('should not call onChange when', () => {
+      it('ESC key is pressed to hide suggestions', () => {
         onChange.mockClear();
         clickEscape();
         expect(onChange).not.toBeCalled();
       });
 
-      it('ESC key is pressed and input is empty', function() {
+      it('ESC key is pressed and input is empty', () => {
         setInputValue('');
         onChange.mockClear();
         clickEscape();
@@ -694,27 +695,59 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('Keyboard interactions', function() {
-    describe('String suggestions', function() {
-      beforeEach(function() {
+  describe('inputAttributes.onBlur', () => {
+    beforeEach(() => {
+      onBlur.mockClear();
+      createAutosuggest(
+        <Autosuggest suggestions={getSuburbStrings}
+                     inputAttributes={{ onBlur: onBlur }} />
+      );
+    });
+
+    describe('should call onBlur when', () => {
+      it('input is blurred', () => {
+        clickOutside();
+        expect(onBlur).toBeCalled();
+      });
+    });
+
+    describe('should not call onBlur when', () => {
+      it('suggestion is clicked', () => {
+        setInputValue('m');
+        mouseDownSuggestion(0);
+        expect(onBlur).not.toBeCalled();
+      });
+
+      it('suggestion is selected by pressing Enter', () => {
+        setInputValue('m');
+        clickDown();
+        clickEnter();
+        expect(onBlur).not.toBeCalled();
+      });
+    });
+  });
+
+  describe('Keyboard interactions', () => {
+    describe('String suggestions', () => {
+      beforeEach(() => {
         createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
         setInputValue('m');
       });
 
-      it('should focus on first suggestion and change input value when Down is clicked', function() {
+      it('should focus on first suggestion and change input value when Down is clicked', () => {
         clickDown();
         expectFocusedSuggestion('Mill Park');
         expectInputValue('Mill Park');
       });
 
-      it('should focus on next suggestion and change input value when Down is clicked again', function() {
+      it('should focus on next suggestion and change input value when Down is clicked again', () => {
         clickDown();
         clickDown();
         expectFocusedSuggestion('Mordialloc');
         expectInputValue('Mordialloc');
       });
 
-      it('should remove focus from suggestions when last suggestion is focused and Down is clicked', function() {
+      it('should remove focus from suggestions when last suggestion is focused and Down is clicked', () => {
         clickDown();
         clickDown();
         clickDown();
@@ -722,27 +755,27 @@ describe('Autosuggest', function() {
         expectInputValue('m');
       });
 
-      it('should hide suggestions and revert back input\'s value when ESC is clicked after Down', function() {
+      it('should hide suggestions and revert back input\'s value when ESC is clicked after Down', () => {
         clickDown();
         clickEscape();
         expectSuggestions([]);
         expectInputValue('m');
       });
 
-      it('should focus on last suggestion and change input value when Up is clicked', function() {
+      it('should focus on last suggestion and change input value when Up is clicked', () => {
         clickUp();
         expectFocusedSuggestion('Mordialloc');
         expectInputValue('Mordialloc');
       });
 
-      it('should focus on previous suggestion and change input value when Up is clicked again', function() {
+      it('should focus on previous suggestion and change input value when Up is clicked again', () => {
         clickUp();
         clickUp();
         expectFocusedSuggestion('Mill Park');
         expectInputValue('Mill Park');
       });
 
-      it('should remove focus from suggestions when first suggestion is focused and Up is clicked', function() {
+      it('should remove focus from suggestions when first suggestion is focused and Up is clicked', () => {
         clickUp();
         clickUp();
         clickUp();
@@ -751,8 +784,8 @@ describe('Autosuggest', function() {
       });
     });
 
-    describe('Object suggestions', function() {
-      beforeEach(function() {
+    describe('Object suggestions', () => {
+      beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbObjects}
                        suggestionRenderer={renderSuburbObject}
@@ -761,7 +794,7 @@ describe('Autosuggest', function() {
         setInputValue('m');
       });
 
-      it('should focus on first suggestion and change input value when Down is clicked', function() {
+      it('should focus on first suggestion and change input value when Down is clicked', () => {
         clickDown();
         expectFocusedSuggestion('Mill Park VIC 3083');
         expectInputValue('Mill Park VIC 3083');
@@ -769,51 +802,51 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('Revealing the suggestions using keyboard', function() {
-    beforeEach(function() {
+  describe('Revealing the suggestions using keyboard', () => {
+    beforeEach(() => {
       createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
       setInputValue('m');
       clickEscape();
     });
 
-    it('should show suggestions when Down is clicked', function() {
+    it('should show suggestions when Down is clicked', () => {
       clickDown();
       expectSuggestions(['Mill Park', 'Mordialloc']);
       expectFocusedSuggestion(null);
     });
 
-    it('should show suggestions when Up is clicked', function() {
+    it('should show suggestions when Up is clicked', () => {
       clickUp();
       expectSuggestions(['Mill Park', 'Mordialloc']);
       expectFocusedSuggestion(null);
     });
   });
 
-  describe('Mouse interactions', function() {
-    describe('String suggestions', function() {
-      beforeEach(function() {
+  describe('Mouse interactions', () => {
+    describe('String suggestions', () => {
+      beforeEach(() => {
         createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
         setInputValue('m');
       });
 
-      it('should set input field value when suggestion is clicked', function() {
+      it('should set input field value when suggestion is clicked', () => {
         mouseDownSuggestion(1);
         expectInputValue('Mordialloc');
       });
 
-      it('should focus on suggestion but not change input\'s value when mouse enters the suggestion', function() {
+      it('should focus on suggestion but not change input\'s value when mouse enters the suggestion', () => {
         mouseOverFromInputToSuggestion(0);
         expectFocusedSuggestion('Mill Park');
         expectInputValue('m');
       });
 
-      it('should not have focused suggestions when mouse leaves the suggestion', function() {
+      it('should not have focused suggestions when mouse leaves the suggestion', () => {
         mouseOverFromInputToSuggestion(0);
         mouseOverFromSuggestionToInput(0);
         expectFocusedSuggestion(null);
       });
 
-      it('should remember focused suggestion when mouse enters suggestion', function() {
+      it('should remember focused suggestion when mouse enters suggestion', () => {
         mouseOverFromInputToSuggestion(0);
         clickDown();
         expectFocusedSuggestion('Mordialloc');
@@ -821,8 +854,8 @@ describe('Autosuggest', function() {
       });
     });
 
-    describe('Object suggestions', function() {
-      beforeEach(function() {
+    describe('Object suggestions', () => {
+      beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbObjects}
                        suggestionRenderer={renderSuburbObject}
@@ -831,100 +864,100 @@ describe('Autosuggest', function() {
         setInputValue('m');
       });
 
-      it('should set input field value when suggestion is clicked', function() {
+      it('should set input field value when suggestion is clicked', () => {
         mouseDownSuggestion(0);
         expectInputValue('Mill Park VIC 3083');
       });
     });
   });
 
-  describe('Accessibility attributes', function() {
-    beforeEach(function() {
+  describe('Accessibility attributes', () => {
+    beforeEach(() => {
       createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
     });
 
-    describe('when Autosuggest is rendered', function() {
-      it('input\'s role should be combobox', function() {
+    describe('when Autosuggest is rendered', () => {
+      it('input\'s role should be combobox', () => {
         expect(input.getAttribute('role')).toBe('combobox');
       });
 
-      it('input\'s aria-autocomplete should be list', function() {
+      it('input\'s aria-autocomplete should be list', () => {
         expect(input.getAttribute('aria-autocomplete')).toBe('list');
       });
 
-      it('input\'s aria-expanded should be false', function() {
+      it('input\'s aria-expanded should be false', () => {
         expect(input.getAttribute('aria-expanded')).toBe('false');
       });
 
-      it('input\'s aria-activedescendant should not present', function() {
+      it('input\'s aria-activedescendant should not present', () => {
         expect(input.getAttribute('aria-activedescendant')).toBeNull();
       });
     });
 
-    describe('when suggestions appear', function() {
-      beforeEach(function() {
+    describe('when suggestions appear', () => {
+      beforeEach(() => {
         setInputValue('m');
       });
 
-      it('input\'s aria-expanded should be true', function() {
+      it('input\'s aria-expanded should be true', () => {
         expect(input.getAttribute('aria-expanded')).toBe('true');
       });
 
-      it('input\'s aria-expanded should become false when input is cleared', function() {
+      it('input\'s aria-expanded should become false when input is cleared', () => {
         setInputValue('');
         expect(input.getAttribute('aria-expanded')).toBe('false');
       });
 
-      it('input\'s aria-activedescendant should be the id of the focused suggestion when using keyboard', function() {
+      it('input\'s aria-activedescendant should be the id of the focused suggestion when using keyboard', () => {
         clickDown();
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
         expect(input.getAttribute('aria-activedescendant')).toBe(React.findDOMNode(suggestions[0]).id);
       });
 
-      it('input\'s aria-activedescendant should be the id of the focused suggestion when using mouse', function() {
+      it('input\'s aria-activedescendant should be the id of the focused suggestion when using mouse', () => {
         mouseOverFromInputToSuggestion(0);
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
         expect(input.getAttribute('aria-activedescendant')).toBe(React.findDOMNode(suggestions[0]).id);
       });
 
-      it('suggestion\'s role should be option', function() {
+      it('suggestion\'s role should be option', () => {
         clickDown();
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
         expect(React.findDOMNode(suggestions[0]).getAttribute('role')).toBe('option');
       });
 
-      it('input\'s aria-owns should be equal to suggestions list\'s id', function() {
+      it('input\'s aria-owns should be equal to suggestions list\'s id', () => {
         suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
         expect(input.getAttribute('aria-owns')).toBe(React.findDOMNode(suggestionsList).id);
       });
 
-      it('suggestions list\'s role should be listbox', function() {
+      it('suggestions list\'s role should be listbox', () => {
         suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
         expect(React.findDOMNode(suggestionsList).getAttribute('role')).toBe('listbox');
       });
     });
   });
 
-  describe('Multiple sections', function() {
-    beforeEach(function() {
+  describe('Multiple sections', () => {
+    beforeEach(() => {
       createAutosuggest(<Autosuggest suggestions={getMultipleSectionsSuburbs} />);
       setInputValue('m');
     });
 
-    it('should render section names', function() {
+    it('should render section names', () => {
       expectSections([null, 'Second section', 'Third section']);
     });
   });
 
-  describe('Delayed requests', function() {
-    it('should set suggestions', function() {
+  describe('Delayed requests', () => {
+    it('should set suggestions', () => {
       function getDelayedSuburbStrings(input, callback) {
         switch (input) {
           case 'r':
-            setTimeout(function() { callback(null, ['Raglan', 'Riachella', 'Richmond']); }, 20);
+            setTimeout(() => { callback(null, ['Raglan', 'Riachella', 'Richmond']); }, 20);
             break;
           case 'ri':
-            setTimeout(function() { callback(null, ['Riachella', 'Richmond']); }, 50);
+            setTimeout(() => { callback(null, ['Riachella', 'Richmond']); }, 50);
             break;
         }
       }
@@ -937,14 +970,14 @@ describe('Autosuggest', function() {
       expectSuggestions(['Riachella', 'Richmond']);
     });
 
-    it('should ignore delayed suggestions', function() {
+    it('should ignore delayed suggestions', () => {
       function getDelayedSuburbStrings(input, callback) {
         switch (input) {
           case 'r':
-            setTimeout(function() { callback(null, ['Raglan', 'Riachella', 'Richmond']); }, 50);
+            setTimeout(() => { callback(null, ['Raglan', 'Riachella', 'Richmond']); }, 50);
             break;
           case 'ri':
-            setTimeout(function() { callback(null, ['Riachella', 'Richmond']); }, 20);
+            setTimeout(() => { callback(null, ['Riachella', 'Richmond']); }, 20);
             break;
         }
       }
@@ -957,9 +990,9 @@ describe('Autosuggest', function() {
       expectSuggestions(['Riachella', 'Richmond']);
     });
 
-    it('should not display delayed suggestions if input is empty', function() {
+    it('should not display delayed suggestions if input is empty', () => {
       function getDelayedSuburbStrings(input, callback) {
-        setTimeout(function() { callback(null, ['Raglan', 'Riachella', 'Richmond']); }, 50);
+        setTimeout(() => { callback(null, ['Raglan', 'Riachella', 'Richmond']); }, 50);
       }
       createAutosuggest(<Autosuggest suggestions={getDelayedSuburbStrings} />);
 
@@ -971,22 +1004,22 @@ describe('Autosuggest', function() {
     });
   });
 
-  describe('Caching', function() {
-    beforeEach(function() {
+  describe('Caching', () => {
+    beforeEach(() => {
       createAutosuggest(<Autosuggest suggestions={getSuburbs} />);
       setInputValue('m');
       getSuburbs.mockClear();
     });
 
-    describe('should not call suggestions function if', function() {
-      it('suggestions function was called before with the same input', function() {
+    describe('should not call suggestions function if', () => {
+      it('suggestions function was called before with the same input', () => {
         setInputValue('mi');
         getSuburbs.mockClear();
         setInputValue('m');
         expect(getSuburbs).not.toBeCalled();
       });
 
-      it('suggestions function was called before with the same case insensitive input', function() {
+      it('suggestions function was called before with the same case insensitive input', () => {
         setInputValue('mi');
         getSuburbs.mockClear();
         setInputValue('M');

@@ -4,25 +4,25 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
-var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } };
-
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { desc = parent = getter = undefined; _again = false; var object = _x,
     property = _x2,
     receiver = _x3; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-var _inherits = function (subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _React$Component$PropTypes$findDOMNode = require('react');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _React$Component$PropTypes$findDOMNode2 = _interopRequireDefault(_React$Component$PropTypes$findDOMNode);
+function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
 
 var _debounce = require('debounce');
 
@@ -61,9 +61,12 @@ var Autosuggest = (function (_Component) {
     };
     this.suggestionsFn = _debounce2['default'](props.suggestions, 100);
     this.onChange = props.inputAttributes.onChange || function () {};
+    this.onBlur = props.inputAttributes.onBlur || function () {};
     this.lastSuggestionsInputValue = null; // Helps to deal with delayed requests
     this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
     // twice when mouse is moving between suggestions
+    this.justClickedSuggestion = false; // Helps not to call inputAttributes.onBlur
+    // when suggestion is clicked
   }
 
   _inherits(Autosuggest, _Component);
@@ -313,6 +316,11 @@ var Autosuggest = (function (_Component) {
     key: 'onInputBlur',
     value: function onInputBlur() {
       this.onSuggestionUnfocused();
+
+      if (!this.justClickedSuggestion) {
+        this.onBlur();
+      }
+
       this.setSuggestionsState(null);
     }
   }, {
@@ -351,6 +359,8 @@ var Autosuggest = (function (_Component) {
 
       var suggestionValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
 
+      this.justClickedSuggestion = true;
+
       this.onSuggestionSelected(event);
       this.onChange(suggestionValue);
       this.setState({
@@ -362,7 +372,8 @@ var Autosuggest = (function (_Component) {
       }, function () {
         // This code executes after the component is re-rendered
         setTimeout(function () {
-          return _React$Component$PropTypes$findDOMNode.findDOMNode(_this3.refs.input).focus();
+          _react.findDOMNode(_this3.refs.input).focus();
+          _this3.justClickedSuggestion = false;
         });
       });
     }
@@ -400,7 +411,7 @@ var Autosuggest = (function (_Component) {
         });
         var suggestionKey = 'suggestion-' + (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
 
-        return _React$Component$PropTypes$findDOMNode2['default'].createElement(
+        return _react2['default'].createElement(
           'li',
           { id: _this4.getSuggestionId(sectionIndex, suggestionIndex),
             className: classes,
@@ -429,24 +440,24 @@ var Autosuggest = (function (_Component) {
       }
 
       if (this.isMultipleSections(this.state.suggestions)) {
-        return _React$Component$PropTypes$findDOMNode2['default'].createElement(
+        return _react2['default'].createElement(
           'div',
           { id: 'react-autosuggest-' + this.id,
             className: 'react-autosuggest__suggestions',
             role: 'listbox' },
           this.state.suggestions.map(function (section, sectionIndex) {
-            var sectionName = section.sectionName ? _React$Component$PropTypes$findDOMNode2['default'].createElement(
+            var sectionName = section.sectionName ? _react2['default'].createElement(
               'div',
               { className: 'react-autosuggest__suggestions-section-name' },
               section.sectionName
             ) : null;
 
-            return section.suggestions.length === 0 ? null : _React$Component$PropTypes$findDOMNode2['default'].createElement(
+            return section.suggestions.length === 0 ? null : _react2['default'].createElement(
               'div',
               { className: 'react-autosuggest__suggestions-section',
                 key: 'section-' + sectionIndex },
               sectionName,
-              _React$Component$PropTypes$findDOMNode2['default'].createElement(
+              _react2['default'].createElement(
                 'ul',
                 { className: 'react-autosuggest__suggestions-section-suggestions' },
                 _this5.renderSuggestionsList(section.suggestions, sectionIndex)
@@ -456,7 +467,7 @@ var Autosuggest = (function (_Component) {
         );
       }
 
-      return _React$Component$PropTypes$findDOMNode2['default'].createElement(
+      return _react2['default'].createElement(
         'ul',
         { id: 'react-autosuggest-' + this.id,
           className: 'react-autosuggest__suggestions',
@@ -469,10 +480,10 @@ var Autosuggest = (function (_Component) {
     value: function render() {
       var ariaActivedescendant = this.getSuggestionId(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex);
 
-      return _React$Component$PropTypes$findDOMNode2['default'].createElement(
+      return _react2['default'].createElement(
         'div',
         { className: 'react-autosuggest' },
-        _React$Component$PropTypes$findDOMNode2['default'].createElement('input', _extends({}, this.props.inputAttributes, {
+        _react2['default'].createElement('input', _extends({}, this.props.inputAttributes, {
           type: 'text',
           value: this.state.value,
           autoComplete: 'off',
@@ -491,14 +502,14 @@ var Autosuggest = (function (_Component) {
   }], [{
     key: 'propTypes',
     value: {
-      suggestions: _React$Component$PropTypes$findDOMNode.PropTypes.func.isRequired, // Function to get the suggestions
-      suggestionRenderer: _React$Component$PropTypes$findDOMNode.PropTypes.func, // Function that renders a given suggestion (must be implemented when suggestions are objects)
-      suggestionValue: _React$Component$PropTypes$findDOMNode.PropTypes.func, // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
-      showWhen: _React$Component$PropTypes$findDOMNode.PropTypes.func, // Function that determines whether to show suggestions or not
-      onSuggestionSelected: _React$Component$PropTypes$findDOMNode.PropTypes.func, // This function is called when suggestion is selected via mouse click or Enter
-      onSuggestionFocused: _React$Component$PropTypes$findDOMNode.PropTypes.func, // This function is called when suggestion is focused via mouse hover or Up/Down keys
-      onSuggestionUnfocused: _React$Component$PropTypes$findDOMNode.PropTypes.func, // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
-      inputAttributes: _React$Component$PropTypes$findDOMNode.PropTypes.object // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+      suggestions: _react.PropTypes.func.isRequired, // Function to get the suggestions
+      suggestionRenderer: _react.PropTypes.func, // Function that renders a given suggestion (must be implemented when suggestions are objects)
+      suggestionValue: _react.PropTypes.func, // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
+      showWhen: _react.PropTypes.func, // Function that determines whether to show suggestions or not
+      onSuggestionSelected: _react.PropTypes.func, // This function is called when suggestion is selected via mouse click or Enter
+      onSuggestionFocused: _react.PropTypes.func, // This function is called when suggestion is focused via mouse hover or Up/Down keys
+      onSuggestionUnfocused: _react.PropTypes.func, // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
+      inputAttributes: _react.PropTypes.object // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
     },
     enumerable: true
   }, {
@@ -516,7 +527,7 @@ var Autosuggest = (function (_Component) {
   }]);
 
   return Autosuggest;
-})(_React$Component$PropTypes$findDOMNode.Component);
+})(_react.Component);
 
 exports['default'] = Autosuggest;
 module.exports = exports['default'];

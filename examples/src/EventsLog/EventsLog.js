@@ -43,7 +43,14 @@ export default class EventsLog extends Component {
         return (
           <span>
             <span className="examples__events-log__event-description">Input changed: </span>
-            {event.value}
+            {event.value || '(empty)'}
+          </span>
+        );
+
+      case 'input-blurred':
+        return (
+          <span>
+            <span className="examples__events-log__event-description">Input blurred</span>
           </span>
         );
     }

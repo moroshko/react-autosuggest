@@ -59,11 +59,22 @@ export default class EventsPlayground extends Component {
     });
   }
 
+  onInputBlurred(value) {
+    this.props.onEventAdded({
+      type: 'input-blurred'
+    });
+  }
+
+  componentDidMount() {
+    document.getElementById('events-playground').focus();
+  }
+
   render() {
     const inputAttributes = {
       id: 'events-playground',
       placeholder: 'Where are you now?',
-      onChange: this.onInputChanged.bind(this)
+      onChange: this.onInputChanged.bind(this),
+      onBlur: this.onInputBlurred.bind(this)
     };
 
     return (
@@ -72,8 +83,7 @@ export default class EventsPlayground extends Component {
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      onSuggestionFocused={this.onSuggestionFocused.bind(this)}
                      onSuggestionUnfocused={this.onSuggestionUnfocused.bind(this)}
-                     inputAttributes={inputAttributes}
-                     ref={ () => document.getElementById('events-playground').focus() } />
+                     inputAttributes={inputAttributes} />
         <SourceCodeLink file="examples/src/EventsPlayground/EventsPlayground.js" />
       </div>
     );
