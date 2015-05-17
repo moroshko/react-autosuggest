@@ -14,17 +14,9 @@
   "homepage": "https://github.com/moroshko/react-autosuggest",
   "scripts": {
     "start": "node server",
-    "test": "BABEL_JEST_STAGE=0 jest",
+    "test": "mocha src/tests/index.js --compilers js:babel/register",
     "dist": "npm test && babel src/Autosuggest.js -o dist/Autosuggest.js --stage 0 && babel src/sectionIterator.js -o dist/sectionIterator.js --stage 0",
     "build": "webpack --config webpack.dev.config.js"
-  },
-  "jest": {
-    "rootDir": ".",
-    "testDirectoryName": "tests",
-    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
-    "unmockedModulePathPatterns": [
-      "react"
-    ]
   },
   "dependencies": {
     "classnames": "^2.1.1",
@@ -34,17 +26,20 @@
   "devDependencies": {
     "babel": "^5.2.17",
     "babel-eslint": "^3.1.1",
-    "babel-jest": "^5.2.0",
     "babel-loader": "^5.0.0",
+    "chai": "^2.3.0",
     "css-loader": "^0.12.0",
     "eslint": "^0.21.0",
     "eslint-loader": "^0.11.2",
     "extract-text-webpack-plugin": "^0.8.0",
-    "jest-cli": "^0.4.3",
+    "jsdom": "^3.1.2",
     "json-loader": "^0.5.1",
     "less": "^2.5.0",
     "less-loader": "^2.2.0",
+    "mocha": "^2.2.5",
+    "proxyquire": "^1.4.0",
     "react-hot-loader": "^1.2.7",
+    "sinon": "^1.14.1",
     "style-loader": "^0.12.2",
     "webpack": "^1.9.4",
     "webpack-dev-server": "^1.8.2"
