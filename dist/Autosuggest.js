@@ -46,8 +46,13 @@ var Autosuggest = (function (_Component) {
 
     _get(Object.getPrototypeOf(Autosuggest.prototype), 'constructor', this).call(this);
 
-    guid += 1;
-    this.id = guid;
+    if (props.inputAttributes.id) {
+       this.id = props.inputAttributes.id;
+     } else {
+       guid += 1;
+       this.id = guid;
+     }
+    
     this.cache = {};
     this.state = {
       value: props.inputAttributes.value || '',

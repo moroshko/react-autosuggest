@@ -30,8 +30,13 @@ export default class Autosuggest extends Component {
   constructor(props) {
     super();
 
-    guid += 1;
-    this.id = guid;
+    if (props.inputAttributes.id) {
+      this.id = props.inputAttributes.id;
+    } else {
+      guid += 1;
+      this.id = guid;
+    }
+
     this.cache = {};
     this.state = {
       value: props.inputAttributes.value || '',
