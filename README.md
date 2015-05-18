@@ -39,6 +39,7 @@ To generate it yourself:
 ```shell
 npm install react-autosuggest
 npm install -g browserify
+pm install --save-dev browserify-global-shim
 cd react-autosuggest
 browserify browserify-bundle.js -o Autosuggest.bundle.js
 ```
