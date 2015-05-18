@@ -9,7 +9,7 @@ const style = {
   border: 0
 };
 
-export default class ForkMeOnGitHub extends Component {
+export default class ForkMeOnGitHub extends Component { // eslint-disable-line no-shadow
   static propTypes = {
     user: PropTypes.string.isRequired,
     repo: PropTypes.string.isRequired

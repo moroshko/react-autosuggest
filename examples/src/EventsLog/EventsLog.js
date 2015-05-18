@@ -3,9 +3,8 @@
 require('./EventsLog.less');
 
 import React, { Component, PropTypes } from 'react';
-import classnames from 'classnames';
 
-export default class EventsLog extends Component {
+export default class EventsLog extends Component { // eslint-disable-line no-shadow
   static propTypes = {
     events: PropTypes.array.isRequired
   }

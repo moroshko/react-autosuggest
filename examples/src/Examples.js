@@ -11,7 +11,7 @@ import MultipleSections from './MultipleSections/MultipleSections';
 import EventsPlayground from './EventsPlayground/EventsPlayground';
 import EventsLog from './EventsLog/EventsLog';
 
-export default class Examples extends Component {
+export default class Examples extends Component { // eslint-disable-line no-shadow
   constructor() {
     super();
 

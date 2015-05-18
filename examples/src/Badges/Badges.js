@@ -4,7 +4,7 @@ require('./Badges.less');
 
 import React, { Component } from 'react';
 
-export default class Badges extends Component {
+export default class Badges extends Component { // eslint-disable-line no-shadow
   render() {
     return (
       <div className="badges">

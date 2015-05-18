@@ -7,7 +7,7 @@ import sectionIterator from './sectionIterator';
 
 let guid = 0;
 
-export default class Autosuggest extends Component {
+export default class Autosuggest extends Component { // eslint-disable-line no-shadow
   static propTypes = {
     suggestions: PropTypes.func.isRequired, // Function to get the suggestions
     suggestionRenderer: PropTypes.func,     // Function that renders a given suggestion (must be implemented when suggestions are objects)

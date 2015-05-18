@@ -14,9 +14,10 @@
   "homepage": "https://github.com/moroshko/react-autosuggest",
   "scripts": {
     "start": "node server",
+    "lint": "eslint src/sectionIterator.js src/Autosuggest.js examples/src",
     "test": "mocha src/tests/index.js --compilers js:babel/register",
-    "dist": "npm test && babel src/Autosuggest.js -o dist/Autosuggest.js --stage 0 && babel src/sectionIterator.js -o dist/sectionIterator.js --stage 0",
-    "build": "webpack --config webpack.dev.config.js"
+    "dist": "babel src/sectionIterator.js -o dist/sectionIterator.js && babel src/Autosuggest.js -o dist/Autosuggest.js",
+    "build": "npm run lint && npm test && npm run dist"
   },
   "dependencies": {
     "classnames": "^2.1.1",
@@ -24,13 +25,14 @@
     "react": "^0.13.3"
   },
   "devDependencies": {
-    "babel": "^5.2.17",
-    "babel-eslint": "^3.1.1",
-    "babel-loader": "^5.0.0",
+    "babel": "^5.4.3",
+    "babel-eslint": "^3.1.5",
+    "babel-loader": "^5.1.2",
     "chai": "^2.3.0",
-    "css-loader": "^0.12.0",
-    "eslint": "^0.21.0",
+    "css-loader": "^0.12.1",
+    "eslint": "^0.21.1",
     "eslint-loader": "^0.11.2",
+    "eslint-plugin-react": "^2.3.0",
     "extract-text-webpack-plugin": "^0.8.0",
     "jsdom": "^3.1.2",
     "json-loader": "^0.5.1",
@@ -40,8 +42,9 @@
     "proxyquire": "^1.4.0",
     "react-hot-loader": "^1.2.7",
     "sinon": "^1.14.1",
+    "sinon-chai": "^2.7.0",
     "style-loader": "^0.12.2",
-    "webpack": "^1.9.4",
+    "webpack": "^1.9.7",
     "webpack-dev-server": "^1.8.2"
   },
   "keywords": [

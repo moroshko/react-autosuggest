@@ -15,15 +15,16 @@
 
 ## Features
 
-* Fully [accessible][wai-aria] (mouse and keyboard controls included)
-* In-memory caching (we retrieve suggestions for a given input only once)
-* Support for delayed requests (if request comes back after user types another letter, it will be ignored)
-* You can either display a [plain list of suggestions][basic-example], or have [multiple sections][multiple-sections]
+* [WAI-ARIA accessible][wai-aria] (including ARIA attributes and keyboard interactions)
+* Supports [multiple sections][multiple-sections] as well as [plain list of suggestions][basic-example]
+* Supports delayed requests (if request comes back after user types another letter, it will be ignored)
 * Full control over [suggestion rendering](#suggestionRendererOption) (you can display extra data, images, whatever you want)
 * Full control over [styling](#styling) (we just provide the mechanics and classes for you)
 * Full control over [when to show the suggestions](#showWhenOption) (e.g. when user types 2 or more characters)
 * Various hooks: [onSuggestionSelected](#onSuggestionSelectedOption), [onSuggestionFocused](#onSuggestionFocusedOption), [onSuggestionUnfocused](#onSuggestionUnfocusedOption)
 * Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder, onChange, onBlur)
+* In-memory caching (we retrieve suggestions for a given input only once)
+* Thoroughly tested (over 100 tests)
 
 ## Installation
 

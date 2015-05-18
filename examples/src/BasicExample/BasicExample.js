@@ -25,7 +25,7 @@ function getSuggestions(input, callback) {
   setTimeout(() => callback(null, suggestions), 300);
 }
 
-export default class BasicExample extends Component {
+export default class BasicExample extends Component { // eslint-disable-line no-shadow
   render() {
     const inputAttributes = {
       id: 'basic-example',

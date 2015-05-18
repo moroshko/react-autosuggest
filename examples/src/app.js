@@ -8,7 +8,7 @@ import Examples from './Examples';
 import Footer from './Footer/Footer';
 import ForkMeOnGitHub from './ForkMeOnGitHub/ForkMeOnGitHub';
 
-class App extends Component {
+class App extends Component { // eslint-disable-line no-shadow
   render() {
     return (
       <div>

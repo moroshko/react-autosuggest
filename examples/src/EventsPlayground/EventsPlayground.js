@@ -25,9 +25,13 @@ function getSuggestions(input, callback) {
   setTimeout(() => callback(null, suggestions), 300);
 }
 
-export default class EventsPlayground extends Component {
+export default class EventsPlayground extends Component { // eslint-disable-line no-shadow
   static propTypes = {
     onEventAdded: PropTypes.func.isRequired
+  }
+
+  componentDidMount() {
+    document.getElementById('events-playground').focus();
   }
 
   onSuggestionSelected(suggestion, event) {
@@ -59,14 +63,10 @@ export default class EventsPlayground extends Component {
     });
   }
 
-  onInputBlurred(value) {
+  onInputBlurred() {
     this.props.onEventAdded({
       type: 'input-blurred'
     });
-  }
-
-  componentDidMount() {
-    document.getElementById('events-playground').focus();
   }
 
   render() {

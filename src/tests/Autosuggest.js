@@ -1,10 +1,13 @@
 'use strict';
 
 import proxyquire from 'proxyquire';
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
 import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 import React from 'react/addons';
-import SyntheticEvent from 'react/lib/SyntheticEvent'
+import SyntheticEvent from 'react/lib/SyntheticEvent';
+
+chai.use(sinonChai);
 
 const Autosuggest = proxyquire('../Autosuggest', { debounce: fn => fn });
 const TestUtils = React.addons.TestUtils;
@@ -19,12 +22,12 @@ const suburbObjects = [
 const stringSuburbs = suburbObjects.map(suburbObj => suburbObj.suburb);
 const reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 let autosuggest, input, suggestions;
-// const onSuggestionSelected = jest.genMockFunction();
-// const onSuggestionFocused = jest.genMockFunction();
-// const onSuggestionUnfocused = jest.genMockFunction();
-// const onChange = jest.genMockFunction();
-// const onBlur = jest.genMockFunction();
-// const getSuburbs = jest.genMockFunction().mockImplementation(getSuburbStrings);
+const onSuggestionSelected = sinon.spy();
+const onSuggestionFocused = sinon.spy();
+const onSuggestionUnfocused = sinon.spy();
+const onChange = sinon.spy();
+const onBlur = sinon.spy();
+const getSuburbs = sinon.spy(getSuburbStrings);
 
 function getSuburbStrings(input, callback) {
   const regex = new RegExp('^' + input, 'i');
@@ -236,8 +239,8 @@ describe('Autosuggest', () => {
     });
   });
 
-  describe('with', () => {
-    describe('string suggestions', () => {
+  describe('(basics)', () => {
+    describe('with string suggestions', () => {
       beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbStrings}
@@ -298,7 +301,7 @@ describe('Autosuggest', () => {
       });
     });
 
-    describe('object suggestions', () => {
+    describe('with object suggestions', () => {
       beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbObjects}
@@ -311,6 +314,26 @@ describe('Autosuggest', () => {
         setInputValue('m');
         expectSuggestions(['Mill Park VIC 3083', 'Mordialloc VIC 3195']);
       });
+    });
+  });
+
+  describe('revealing the suggestions using keyboard', () => {
+    beforeEach(() => {
+      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
+      setInputValue('m');
+      clickEscape();
+    });
+
+    it('should show suggestions when Down is pressed', () => {
+      clickDown();
+      expectSuggestions(['Mill Park', 'Mordialloc']);
+      expectFocusedSuggestion(null);
+    });
+
+    it('should show suggestions when Up is pressed', () => {
+      clickUp();
+      expectSuggestions(['Mill Park', 'Mordialloc']);
+      expectFocusedSuggestion(null);
     });
   });
 
@@ -368,13 +391,13 @@ describe('Autosuggest', () => {
       expectSuggestions(['Mordialloc']);
     });
   });
-/*
+
   describe('onSuggestionSelected', () => {
     beforeEach(() => {
-      onSuggestionSelected.mockClear();
+      onSuggestionSelected.reset();
     });
 
-    describe('String suggestions', () => {
+    describe('with string suggestions', () => {
       beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbStrings}
@@ -383,19 +406,19 @@ describe('Autosuggest', () => {
         setInputValue('m');
       });
 
-      it('should call onSuggestionSelected when suggestion is selected using mouse', () => {
+      it('should be called when suggestion is selected using mouse', () => {
         mouseOverFromInputToSuggestion(1);
         mouseDownSuggestion(1);
-        expect(onSuggestionSelected).toBeCalledWith('Mordialloc', jasmine.any(SyntheticEvent));
+        expect(onSuggestionSelected).to.have.been.calledWith('Mordialloc', sinon.match.instanceOf(SyntheticEvent));
       });
 
-      it('should not call onSuggestionSelected when mouse enters a suggestion', () => {
+      it('should not be called when mouse enters a suggestion', () => {
         mouseOverFromInputToSuggestion(0);
-        expect(onSuggestionSelected).not.toBeCalled();
+        expect(onSuggestionSelected).not.to.have.been.called;
       });
     });
 
-    describe('Object suggestions', () => {
+    describe('with object suggestions', () => {
       beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbObjects}
@@ -406,35 +429,35 @@ describe('Autosuggest', () => {
         setInputValue('m');
       });
 
-      it('should call onSuggestionSelected when suggestion is selected using keyboard', () => {
+      it('should be called when suggestion is selected using keyboard', () => {
         clickDown();
         clickEnter();
-        expect(onSuggestionSelected).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' }, jasmine.any(SyntheticEvent));
+        expect(onSuggestionSelected).to.have.been.calledWith({ suburb: 'Mill Park', postcode: '3083' }, sinon.match.instanceOf(SyntheticEvent));
       });
 
-      it('should not call onSuggestionSelected when navigating using keyboard', () => {
+      it('should not be called when navigating using keyboard', () => {
         clickDown();
-        expect(onSuggestionSelected).not.toBeCalled();
+        expect(onSuggestionSelected).not.to.have.been.called;
       });
 
-      it('should not call onSuggestionSelected if no suggestion is focussed', () => {
+      it('should not be called if no suggestion is focussed', () => {
         clickEnter();
-        expect(onSuggestionSelected).not.toBeCalled();
+        expect(onSuggestionSelected).not.to.have.been.called;
       });
 
-      it('should not call onSuggestionSelected if no suggestion is focussed after Up/Down interaction', () => {
+      it('should not be called if no suggestion is focussed after Up/Down interaction', () => {
         clickDown();
         clickDown();
         clickDown();
         clickEnter();
-        expect(onSuggestionSelected).not.toBeCalled();
+        expect(onSuggestionSelected).not.to.have.been.called;
       });
     });
   });
 
   describe('onSuggestionFocused', () => {
     beforeEach(() => {
-      onSuggestionFocused.mockClear();
+      onSuggestionFocused.reset();
       createAutosuggest(
         <Autosuggest suggestions={getSuburbStrings}
                      onSuggestionFocused={onSuggestionFocused} />
@@ -442,63 +465,63 @@ describe('Autosuggest', () => {
       setInputValue('m');
     });
 
-    describe('Mouse interactions', () => {
-      describe('should call onSuggestionFocused when', () => {
+    describe('(mouse interactions)', () => {
+      describe('should be called when', () => {
         it('mouse is entering a suggestion', () => {
           mouseOverFromInputToSuggestion(1);
-          expect(onSuggestionFocused).toBeCalledWith('Mordialloc');
+          expect(onSuggestionFocused).to.have.been.calledWith('Mordialloc');
         });
       });
     });
 
-    describe('Keyboard interactions', () => {
-      describe('should call onSuggestionFocused when', () => {
+    describe('(keyboard interactions)', () => {
+      describe('should be called when', () => {
         it('suggestion focused using Up/Down keys', () => {
           clickDown();
-          expect(onSuggestionFocused).toBeCalledWith('Mill Park');
+          expect(onSuggestionFocused).to.have.been.calledWith('Mill Park');
         });
       });
 
-      describe('should not call onSuggestionFocused when', () => {
+      describe('should not be called when', () => {
         it('Up/Down keys are pressed after ESC is pressed', () => {
           clickDown();
           clickEscape();
-          onSuggestionFocused.mockClear();
+          onSuggestionFocused.reset();
           clickDown();
-          expect(onSuggestionFocused).not.toBeCalled();
+          expect(onSuggestionFocused).not.to.have.been.called;
         });
 
         it('first suggestion is focused and Up key is pressed', () => {
           clickDown();
-          onSuggestionFocused.mockClear();
+          onSuggestionFocused.reset();
           clickUp();
-          expect(onSuggestionFocused).not.toBeCalled();
+          expect(onSuggestionFocused).not.to.have.been.called;
         });
 
         it('last suggestion is focused and Down key is pressed', () => {
           clickDown();
           clickDown();
-          onSuggestionFocused.mockClear();
+          onSuggestionFocused.reset();
           clickDown();
-          expect(onSuggestionFocused).not.toBeCalled();
+          expect(onSuggestionFocused).not.to.have.been.called;
         });
       });
     });
 
-    describe('Combined interactions', () => {
-      it('should not call onSuggestionFocused twice if focusing same suggestion with keyboard and then with mouse', () => {
+    describe('(combined interactions)', () => {
+      it('should not be called twice if focusing same suggestion with keyboard and then with mouse', () => {
         clickDown();
-        expect(onSuggestionFocused).toBeCalledWith('Mill Park');
-        onSuggestionFocused.mockClear();
+        expect(onSuggestionFocused).to.have.been.calledWith('Mill Park');
+        onSuggestionFocused.reset();
         mouseOverFromInputToSuggestion(0);
-        expect(onSuggestionFocused).not.toBeCalled();
+        expect(onSuggestionFocused).not.to.have.been.called;
       });
     });
   });
 
   describe('onSuggestionUnfocused', () => {
     beforeEach(() => {
-      onSuggestionUnfocused.mockClear();
+      onSuggestionUnfocused.reset();
       createAutosuggest(
         <Autosuggest suggestions={getSuburbObjects}
                      suggestionRenderer={renderSuburbObject}
@@ -508,136 +531,136 @@ describe('Autosuggest', () => {
       setInputValue('m');
     });
 
-    describe('Mouse interactions', () => {
-      describe('should call onSuggestionUnfocused when', () => {
+    describe('(mouse interactions)', () => {
+      describe('should be called when', () => {
         it('mouse is moving between suggestions', () => {
           mouseOverFromInputToSuggestion(0);
           mouseOverBetweenSuggestions(0, 1);
-          expect(onSuggestionUnfocused.mock.calls.length).toEqual(1);
-          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+          expect(onSuggestionUnfocused).to.have.been.calledOnce;
+          expect(onSuggestionUnfocused).to.have.been.calledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
 
         it('mouse is leaving a focused suggestion', () => {
           mouseOverFromInputToSuggestion(0);
           mouseOverFromSuggestionToInput(0);
-          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+          expect(onSuggestionUnfocused).to.have.been.calledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
 
         it('suggestion is clicked', () => {
           mouseOverFromInputToSuggestion(0);
           mouseDownSuggestion(0);
-          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+          expect(onSuggestionUnfocused).to.have.been.calledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
 
         it('suggestion is focused and mouse is entering another suggestion', () => {
           clickDown();
           clickDown();
-          onSuggestionUnfocused.mockClear();
+          onSuggestionUnfocused.reset();
           mouseOverFromInputToSuggestion(0);
-          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mordialloc', postcode: '3195' });
+          expect(onSuggestionUnfocused).to.have.been.calledWith({ suburb: 'Mordialloc', postcode: '3195' });
         });
 
         it('clicking outside and suggestion is focused', () => {
           clickDown();
           clickOutside();
-          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+          expect(onSuggestionUnfocused).to.have.been.calledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
       });
 
-      describe('should not call onSuggestionUnfocused when', () => {
+      describe('should not be called when', () => {
         it('suggestion is focused and mouse is entering the same suggestion', () => {
           clickDown();
           mouseOverFromInputToSuggestion(0);
-          expect(onSuggestionUnfocused).not.toBeCalled();
+          expect(onSuggestionUnfocused).not.to.have.been.called;
         });
 
         it('suggestion is focused and mouse is leaving another suggestion', () => {
           mouseOverFromInputToSuggestion(0);
           clickDown();
-          onSuggestionUnfocused.mockClear();
+          onSuggestionUnfocused.reset();
           mouseOverFromSuggestionToInput(0);
-          expect(onSuggestionUnfocused).not.toBeCalled();
+          expect(onSuggestionUnfocused).not.to.have.been.called;
         });
       });
     });
 
-    describe('Keyboard interactions', () => {
-      describe('should call onSuggestionUnfocused when', () => {
+    describe('(keyboard interactions)', () => {
+      describe('should be called when', () => {
         it('moving between suggestions using Up/Down keys', () => {
           clickDown();
-          expect(onSuggestionUnfocused).not.toBeCalled();
+          expect(onSuggestionUnfocused).not.to.have.been.called;
           clickDown();
-          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+          expect(onSuggestionUnfocused).to.have.been.calledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
 
         it('first suggestion is focused and Up key is pressed', () => {
           clickDown();
           clickUp();
-          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+          expect(onSuggestionUnfocused).to.have.been.calledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
 
         it('last suggestion is focused and Down key is pressed', () => {
           clickDown();
           clickDown();
-          onSuggestionUnfocused.mockClear();
+          onSuggestionUnfocused.reset();
           clickDown();
-          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mordialloc', postcode: '3195' });
+          expect(onSuggestionUnfocused).to.have.been.calledWith({ suburb: 'Mordialloc', postcode: '3195' });
         });
 
         it('ESC key pressed and suggestion is focused', () => {
           clickDown();
           clickEscape();
-          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+          expect(onSuggestionUnfocused).to.have.been.calledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
 
         it('Enter is pressed and suggestion is focused', () => {
           clickDown();
           clickEnter();
-          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+          expect(onSuggestionUnfocused).to.have.been.calledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
 
         it('input value is changed and suggestion is focused', () => {
           clickDown();
           setInputValue(input.value.slice(0, -1)); // Simulates Backspace
-          expect(onSuggestionUnfocused).toBeCalledWith({ suburb: 'Mill Park', postcode: '3083' });
+          expect(onSuggestionUnfocused).to.have.been.calledWith({ suburb: 'Mill Park', postcode: '3083' });
         });
       });
 
-      describe('should not call onSuggestionUnfocused when', () => {
+      describe('should not be called when', () => {
         it('Up/Down keys are pressed after ESC is pressed', () => {
           clickDown();
           clickEscape();
-          onSuggestionUnfocused.mockClear();
+          onSuggestionUnfocused.reset();
           clickDown();
-          expect(onSuggestionUnfocused).not.toBeCalled();
+          expect(onSuggestionUnfocused).not.to.have.been.called;
         });
 
         it('ESC key pressed and no suggestion focused', () => {
           clickEscape();
-          expect(onSuggestionUnfocused).not.toBeCalled();
+          expect(onSuggestionUnfocused).not.to.have.been.called;
         });
 
         it('clicking outside and no suggestion focused', () => {
           clickDown();
           clickDown();
           clickDown();
-          onSuggestionUnfocused.mockClear();
+          onSuggestionUnfocused.reset();
           clickOutside();
-          expect(onSuggestionUnfocused).not.toBeCalled();
+          expect(onSuggestionUnfocused).not.to.have.been.called;
         });
 
         it('Enter is pressed and no suggestion focused', () => {
           clickEnter();
-          expect(onSuggestionUnfocused).not.toBeCalled();
+          expect(onSuggestionUnfocused).not.to.have.been.called;
         });
 
         it('input value is changed and no suggestion focused', () => {
           clickDown();
           clickDown();
           clickDown();
-          onSuggestionUnfocused.mockClear();
+          onSuggestionUnfocused.reset();
           setInputValue(input.value.slice(0, -1));
-          expect(onSuggestionUnfocused).not.toBeCalled();
+          expect(onSuggestionUnfocused).not.to.have.been.called;
         });
       });
     });
@@ -645,7 +668,7 @@ describe('Autosuggest', () => {
 
   describe('inputAttributes.onChange', () => {
     beforeEach(() => {
-      onChange.mockClear();
+      onChange.reset();
       createAutosuggest(
         <Autosuggest suggestions={getSuburbStrings}
                      inputAttributes={{ onChange: onChange }} />
@@ -653,103 +676,106 @@ describe('Autosuggest', () => {
       setInputValue('m');
     });
 
-    describe('should call onChange when', () => {
+    describe('should be called when', () => {
       it('user types characters', () => {
-        expect(onChange).toBeCalledWith('m');
+        expect(onChange).to.have.been.calledWith('m');
       });
 
       it('Down key is pressed', () => {
-        onChange.mockClear();
+        onChange.reset();
         clickDown();
-        expect(onChange).toBeCalledWith('Mill Park');
+        expect(onChange).to.have.been.calledWith('Mill Park');
       });
 
       it('Up key is pressed', () => {
-        onChange.mockClear();
+        onChange.reset();
         clickUp();
-        expect(onChange).toBeCalledWith('Mordialloc');
+        expect(onChange).to.have.been.calledWith('Mordialloc');
       });
 
-      it('ESC key is pressed to clear the input', () => {
+      it('ESC key is pressed when input is not empty', () => {
         clickEscape();
-        onChange.mockClear();
+        onChange.reset();
         clickEscape();
-        expect(onChange).toBeCalledWith('');
+        expect(onChange).to.have.been.calledWith('');
       });
 
       it('suggestion is clicked', () => {
+        onChange.reset();
+        mouseDownSuggestion(0);
+        expect(onChange).to.have.been.calledWith('Mill Park');
       });
     });
 
-    describe('should not call onChange when', () => {
+    describe('should not be called when', () => {
       it('ESC key is pressed to hide suggestions', () => {
-        onChange.mockClear();
+        onChange.reset();
         clickEscape();
-        expect(onChange).not.toBeCalled();
+        expect(onChange).not.to.have.been.called;
       });
 
-      it('ESC key is pressed and input is empty', () => {
+      it('ESC key is pressed when input is empty', () => {
         setInputValue('');
-        onChange.mockClear();
+        onChange.reset();
         clickEscape();
-        expect(onChange).not.toBeCalled();
+        expect(onChange).not.to.have.been.called;
       });
     });
   });
 
   describe('inputAttributes.onBlur', () => {
     beforeEach(() => {
-      onBlur.mockClear();
+      onBlur.reset();
       createAutosuggest(
         <Autosuggest suggestions={getSuburbStrings}
                      inputAttributes={{ onBlur: onBlur }} />
       );
     });
 
-    describe('should call onBlur when', () => {
+    describe('should be called when', () => {
       it('input is blurred', () => {
         clickOutside();
-        expect(onBlur).toBeCalled();
+        expect(onBlur).to.have.been.called;
       });
     });
 
-    describe('should not call onBlur when', () => {
+    describe('should not be called when', () => {
       it('suggestion is clicked', () => {
         setInputValue('m');
         mouseDownSuggestion(0);
-        expect(onBlur).not.toBeCalled();
+        expect(onBlur).not.to.have.been.called;
       });
 
       it('suggestion is selected by pressing Enter', () => {
         setInputValue('m');
         clickDown();
         clickEnter();
-        expect(onBlur).not.toBeCalled();
+        expect(onBlur).not.to.have.been.called;
       });
     });
   });
 
-  describe('Keyboard interactions', () => {
-    describe('String suggestions', () => {
+  describe('(keyboard interactions)', () => {
+    describe('with string suggestions', () => {
       beforeEach(() => {
         createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
         setInputValue('m');
       });
 
-      it('should focus on first suggestion and change input value when Down is clicked', () => {
+      it('should focus on first suggestion and change input value when Down is pressed', () => {
         clickDown();
         expectFocusedSuggestion('Mill Park');
         expectInputValue('Mill Park');
       });
 
-      it('should focus on next suggestion and change input value when Down is clicked again', () => {
+      it('should focus on next suggestion and change input value when Down is pressed again', () => {
         clickDown();
         clickDown();
         expectFocusedSuggestion('Mordialloc');
         expectInputValue('Mordialloc');
       });
 
-      it('should remove focus from suggestions when last suggestion is focused and Down is clicked', () => {
+      it('should remove focus from suggestions when last suggestion is focused and Down is pressed', () => {
         clickDown();
         clickDown();
         clickDown();
@@ -764,20 +790,20 @@ describe('Autosuggest', () => {
         expectInputValue('m');
       });
 
-      it('should focus on last suggestion and change input value when Up is clicked', () => {
+      it('should focus on last suggestion and change input value when Up is pressed', () => {
         clickUp();
         expectFocusedSuggestion('Mordialloc');
         expectInputValue('Mordialloc');
       });
 
-      it('should focus on previous suggestion and change input value when Up is clicked again', () => {
+      it('should focus on previous suggestion and change input value when Up is pressed again', () => {
         clickUp();
         clickUp();
         expectFocusedSuggestion('Mill Park');
         expectInputValue('Mill Park');
       });
 
-      it('should remove focus from suggestions when first suggestion is focused and Up is clicked', () => {
+      it('should remove focus from suggestions when first suggestion is focused and Up is pressed', () => {
         clickUp();
         clickUp();
         clickUp();
@@ -786,7 +812,7 @@ describe('Autosuggest', () => {
       });
     });
 
-    describe('Object suggestions', () => {
+    describe('with object suggestions', () => {
       beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbObjects}
@@ -796,7 +822,7 @@ describe('Autosuggest', () => {
         setInputValue('m');
       });
 
-      it('should focus on first suggestion and change input value when Down is clicked', () => {
+      it('should focus on first suggestion and change input value when Down is pressed', () => {
         clickDown();
         expectFocusedSuggestion('Mill Park VIC 3083');
         expectInputValue('Mill Park VIC 3083');
@@ -804,28 +830,8 @@ describe('Autosuggest', () => {
     });
   });
 
-  describe('Revealing the suggestions using keyboard', () => {
-    beforeEach(() => {
-      createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
-      setInputValue('m');
-      clickEscape();
-    });
-
-    it('should show suggestions when Down is clicked', () => {
-      clickDown();
-      expectSuggestions(['Mill Park', 'Mordialloc']);
-      expectFocusedSuggestion(null);
-    });
-
-    it('should show suggestions when Up is clicked', () => {
-      clickUp();
-      expectSuggestions(['Mill Park', 'Mordialloc']);
-      expectFocusedSuggestion(null);
-    });
-  });
-
-  describe('Mouse interactions', () => {
-    describe('String suggestions', () => {
+  describe('(mouse interactions)', () => {
+    describe('with string suggestions', () => {
       beforeEach(() => {
         createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
         setInputValue('m');
@@ -856,7 +862,7 @@ describe('Autosuggest', () => {
       });
     });
 
-    describe('Object suggestions', () => {
+    describe('with object suggestions', () => {
       beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbObjects}
@@ -873,26 +879,26 @@ describe('Autosuggest', () => {
     });
   });
 
-  describe('Accessibility attributes', () => {
+  describe('(accessibility attributes)', () => {
     beforeEach(() => {
       createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
     });
 
-    describe('when Autosuggest is rendered', () => {
+    describe('when rendered', () => {
       it('input\'s role should be combobox', () => {
-        expect(input.getAttribute('role')).to.be('combobox');
+        expect(input.getAttribute('role')).to.equal('combobox');
       });
 
       it('input\'s aria-autocomplete should be list', () => {
-        expect(input.getAttribute('aria-autocomplete')).to.be('list');
+        expect(input.getAttribute('aria-autocomplete')).to.equal('list');
       });
 
       it('input\'s aria-expanded should be false', () => {
-        expect(input.getAttribute('aria-expanded')).to.be('false');
+        expect(input.getAttribute('aria-expanded')).to.equal('false');
       });
 
       it('input\'s aria-activedescendant should not present', () => {
-        expect(input.getAttribute('aria-activedescendant')).toBeNull();
+        expect(input.getAttribute('aria-activedescendant')).to.be.null;
       });
     });
 
@@ -902,45 +908,45 @@ describe('Autosuggest', () => {
       });
 
       it('input\'s aria-expanded should be true', () => {
-        expect(input.getAttribute('aria-expanded')).to.be('true');
+        expect(input.getAttribute('aria-expanded')).to.equal('true');
       });
 
       it('input\'s aria-expanded should become false when input is cleared', () => {
         setInputValue('');
-        expect(input.getAttribute('aria-expanded')).to.be('false');
+        expect(input.getAttribute('aria-expanded')).to.equal('false');
       });
 
       it('input\'s aria-activedescendant should be the id of the focused suggestion when using keyboard', () => {
         clickDown();
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(input.getAttribute('aria-activedescendant')).to.be(React.findDOMNode(suggestions[0]).id);
+        expect(input.getAttribute('aria-activedescendant')).to.equal(React.findDOMNode(suggestions[0]).id);
       });
 
       it('input\'s aria-activedescendant should be the id of the focused suggestion when using mouse', () => {
         mouseOverFromInputToSuggestion(0);
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(input.getAttribute('aria-activedescendant')).to.be(React.findDOMNode(suggestions[0]).id);
+        expect(input.getAttribute('aria-activedescendant')).to.equal(React.findDOMNode(suggestions[0]).id);
       });
 
       it('suggestion\'s role should be option', () => {
         clickDown();
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(React.findDOMNode(suggestions[0]).getAttribute('role')).to.be('option');
+        expect(React.findDOMNode(suggestions[0]).getAttribute('role')).to.equal('option');
       });
 
       it('input\'s aria-owns should be equal to suggestions list\'s id', () => {
-        suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
-        expect(input.getAttribute('aria-owns')).to.be(React.findDOMNode(suggestionsList).id);
+        const suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
+        expect(input.getAttribute('aria-owns')).to.equal(React.findDOMNode(suggestionsList).id);
       });
 
       it('suggestions list\'s role should be listbox', () => {
-        suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
-        expect(React.findDOMNode(suggestionsList).getAttribute('role')).to.be('listbox');
+        const suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
+        expect(React.findDOMNode(suggestionsList).getAttribute('role')).to.equal('listbox');
       });
     });
   });
 
-  describe('Multiple sections', () => {
+  describe('(multiple sections)', () => {
     beforeEach(() => {
       createAutosuggest(<Autosuggest suggestions={getMultipleSectionsSuburbs} />);
       setInputValue('m');
@@ -951,8 +957,8 @@ describe('Autosuggest', () => {
     });
   });
 
-  describe('Delayed requests', () => {
-    it('should set suggestions', () => {
+  describe('(delayed requests)', () => {
+    it('should set suggestions', (done) => {
       function getDelayedSuburbStrings(input, callback) {
         switch (input) {
           case 'r':
@@ -967,12 +973,14 @@ describe('Autosuggest', () => {
 
       setInputValue('r');
       setInputValue('ri');
-      jest.runAllTimers();
 
-      expectSuggestions(['Riachella', 'Richmond']);
+      setTimeout(() => {
+        expectSuggestions(['Riachella', 'Richmond']);
+        done();
+      }, 51);
     });
 
-    it('should ignore delayed suggestions', () => {
+    it('should ignore delayed request', (done) => {
       function getDelayedSuburbStrings(input, callback) {
         switch (input) {
           case 'r':
@@ -987,12 +995,14 @@ describe('Autosuggest', () => {
 
       setInputValue('r');
       setInputValue('ri');
-      jest.runAllTimers();
 
-      expectSuggestions(['Riachella', 'Richmond']);
+      setTimeout(() => {
+        expectSuggestions(['Riachella', 'Richmond']);
+        done();
+      }, 51);
     });
 
-    it('should not display delayed suggestions if input is empty', () => {
+    it('should ignore request if input is empty', (done) => {
       function getDelayedSuburbStrings(input, callback) {
         setTimeout(() => { callback(null, ['Raglan', 'Riachella', 'Richmond']); }, 50);
       }
@@ -1000,34 +1010,35 @@ describe('Autosuggest', () => {
 
       setInputValue('r');
       setInputValue('');
-      jest.runAllTimers();
 
-      expectSuggestions([]);
+      setTimeout(() => {
+        expectSuggestions([]);
+        done();
+      }, 51);
     });
   });
 
-  describe('Caching', () => {
+  describe('(caching)', () => {
     beforeEach(() => {
       createAutosuggest(<Autosuggest suggestions={getSuburbs} />);
       setInputValue('m');
-      getSuburbs.mockClear();
+      getSuburbs.reset();
     });
 
     describe('should not call suggestions function if', () => {
-      it('suggestions function was called before with the same input', () => {
+      it('it was called before with the same input', () => {
         setInputValue('mi');
-        getSuburbs.mockClear();
+        getSuburbs.reset();
         setInputValue('m');
-        expect(getSuburbs).not.toBeCalled();
+        expect(getSuburbs).not.to.have.been.called;
       });
 
-      it('suggestions function was called before with the same case insensitive input', () => {
+      it('it was called before with the same case insensitive input', () => {
         setInputValue('mi');
-        getSuburbs.mockClear();
+        getSuburbs.reset();
         setInputValue('M');
-        expect(getSuburbs).not.toBeCalled();
+        expect(getSuburbs).not.to.have.been.called;
       });
     });
   });
-*/
 });

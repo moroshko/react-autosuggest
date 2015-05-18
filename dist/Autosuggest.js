@@ -4,13 +4,11 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { desc = parent = getter = undefined; _again = false; var object = _x,
-    property = _x2,
-    receiver = _x3; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -36,8 +34,6 @@ var _sectionIterator = require('./sectionIterator');
 
 var _sectionIterator2 = _interopRequireDefault(_sectionIterator);
 
-'use strict';
-
 var guid = 0;
 
 var Autosuggest = (function (_Component) {
@@ -59,13 +55,13 @@ var Autosuggest = (function (_Component) {
       // interaction in order to revert back if ESC hit.
       // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
-    this.suggestionsFn = _debounce2['default'](props.suggestions, 100);
+    this.suggestionsFn = (0, _debounce2['default'])(props.suggestions, 100);
     this.onChange = props.inputAttributes.onChange || function () {};
     this.onBlur = props.inputAttributes.onBlur || function () {};
     this.lastSuggestionsInputValue = null; // Helps to deal with delayed requests
     this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
     // twice when mouse is moving between suggestions
-    this.justClickedSuggestion = false; // Helps not to call inputAttributes.onBlur
+    this.justClickedOnSuggestion = false; // Helps not to call inputAttributes.onBlur
     // when suggestion is clicked
   }
 
@@ -112,7 +108,7 @@ var Autosuggest = (function (_Component) {
   }, {
     key: 'showSuggestions',
     value: function showSuggestions(input) {
-      var _this2 = this;
+      var _this = this;
 
       var cacheKey = input.toLowerCase();
 
@@ -125,19 +121,19 @@ var Autosuggest = (function (_Component) {
       } else {
         this.suggestionsFn(input, function (error, suggestions) {
           // If input value changed, suggestions are not relevant anymore.
-          if (_this2.lastSuggestionsInputValue !== input) {
+          if (_this.lastSuggestionsInputValue !== input) {
             return;
           }
 
           if (error) {
             throw error;
           } else {
-            if (!_this2.suggestionsExist(suggestions)) {
+            if (!_this.suggestionsExist(suggestions)) {
               suggestions = null;
             }
 
-            _this2.cache[cacheKey] = suggestions;
-            _this2.setSuggestionsState(suggestions);
+            _this.cache[cacheKey] = suggestions;
+            _this.setSuggestionsState(suggestions);
           }
         });
       }
@@ -317,7 +313,7 @@ var Autosuggest = (function (_Component) {
     value: function onInputBlur() {
       this.onSuggestionUnfocused();
 
-      if (!this.justClickedSuggestion) {
+      if (!this.justClickedOnSuggestion) {
         this.onBlur();
       }
 
@@ -355,11 +351,11 @@ var Autosuggest = (function (_Component) {
   }, {
     key: 'onSuggestionMouseDown',
     value: function onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
-      var _this3 = this;
+      var _this2 = this;
 
       var suggestionValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
 
-      this.justClickedSuggestion = true;
+      this.justClickedOnSuggestion = true;
 
       this.onSuggestionSelected(event);
       this.onChange(suggestionValue);
@@ -372,8 +368,8 @@ var Autosuggest = (function (_Component) {
       }, function () {
         // This code executes after the component is re-rendered
         setTimeout(function () {
-          _react.findDOMNode(_this3.refs.input).focus();
-          _this3.justClickedSuggestion = false;
+          (0, _react.findDOMNode)(_this2.refs.input).focus();
+          _this2.justClickedOnSuggestion = false;
         });
       });
     }
@@ -402,38 +398,38 @@ var Autosuggest = (function (_Component) {
   }, {
     key: 'renderSuggestionsList',
     value: function renderSuggestionsList(suggestions, sectionIndex) {
-      var _this4 = this;
+      var _this3 = this;
 
       return suggestions.map(function (suggestion, suggestionIndex) {
-        var classes = _classnames2['default']({
+        var classes = (0, _classnames2['default'])({
           'react-autosuggest__suggestion': true,
-          'react-autosuggest__suggestion--focused': sectionIndex === _this4.state.focusedSectionIndex && suggestionIndex === _this4.state.focusedSuggestionIndex
+          'react-autosuggest__suggestion--focused': sectionIndex === _this3.state.focusedSectionIndex && suggestionIndex === _this3.state.focusedSuggestionIndex
         });
         var suggestionKey = 'suggestion-' + (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
 
         return _react2['default'].createElement(
           'li',
-          { id: _this4.getSuggestionId(sectionIndex, suggestionIndex),
+          { id: _this3.getSuggestionId(sectionIndex, suggestionIndex),
             className: classes,
             role: 'option',
             key: suggestionKey,
             onMouseEnter: function () {
-              return _this4.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
+              return _this3.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
             },
             onMouseLeave: function () {
-              return _this4.onSuggestionMouseLeave(sectionIndex, suggestionIndex);
+              return _this3.onSuggestionMouseLeave(sectionIndex, suggestionIndex);
             },
             onMouseDown: function (event) {
-              return _this4.onSuggestionMouseDown(sectionIndex, suggestionIndex, event);
+              return _this3.onSuggestionMouseDown(sectionIndex, suggestionIndex, event);
             } },
-          _this4.renderSuggestionContent(suggestion)
+          _this3.renderSuggestionContent(suggestion)
         );
       });
     }
   }, {
     key: 'renderSuggestions',
     value: function renderSuggestions() {
-      var _this5 = this;
+      var _this4 = this;
 
       if (this.state.value === '' || this.state.suggestions === null) {
         return null;
@@ -460,7 +456,7 @@ var Autosuggest = (function (_Component) {
               _react2['default'].createElement(
                 'ul',
                 { className: 'react-autosuggest__suggestions-section-suggestions' },
-                _this5.renderSuggestionsList(section.suggestions, sectionIndex)
+                _this4.renderSuggestionsList(section.suggestions, sectionIndex)
               )
             );
           })
@@ -501,6 +497,7 @@ var Autosuggest = (function (_Component) {
     }
   }], [{
     key: 'propTypes',
+    // eslint-disable-line no-shadow
     value: {
       suggestions: _react.PropTypes.func.isRequired, // Function to get the suggestions
       suggestionRenderer: _react.PropTypes.func, // Function that renders a given suggestion (must be implemented when suggestions are objects)

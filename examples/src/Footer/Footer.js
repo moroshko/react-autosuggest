@@ -4,7 +4,7 @@ require('./Footer.less');
 
 import React, { Component } from 'react';
 
-export default class Footer extends Component {
+export default class Footer extends Component { // eslint-disable-line no-shadow
   render() {
     return (
       <div className="footer">

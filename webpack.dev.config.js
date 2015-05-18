@@ -10,7 +10,7 @@ module.exports = {
   ],
 
   output: {
-    path: path.resolve('./examples/dist'), // Must be an absolute path
+    path: path.join(__dirname, 'examples', 'dist'), // Must be an absolute path
     filename: 'app.js',
     publicPath: '/examples/dist'
   },
@@ -18,8 +18,11 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['react-hot', 'babel?optional=es7.classProperties', 'eslint'],
-      exclude: /node_modules/
+      loaders: ['react-hot', 'babel', 'eslint'],
+      include: [
+        path.join(__dirname, 'src'), // Must be an absolute path
+        path.join(__dirname, 'examples', 'src') // Must be an absolute path
+      ]
     }, {
       test: /\.less$/,
       loader: ExtractTextPlugin.extract('style', 'css!less'),
