@@ -66,5 +66,13 @@
     "react-auto-complete",
     "react-component"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "browserify": {
+		"transform": [
+			"browserify-global-shim"
+		]
+  },
+  "browserify-global-shim": {
+    "react": "React"
+  }
 }
