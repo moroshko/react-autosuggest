@@ -73,16 +73,16 @@ export default class EventsPlayground extends Component { // eslint-disable-line
     const inputAttributes = {
       id: 'events-playground',
       placeholder: 'Where are you now?',
-      onChange: this.onInputChanged.bind(this),
-      onBlur: this.onInputBlurred.bind(this)
+      onChange: ::this.onInputChanged,
+      onBlur: ::this.onInputBlurred
     };
 
     return (
       <div>
         <Autosuggest suggestions={getSuggestions}
-                     onSuggestionSelected={this.onSuggestionSelected.bind(this)}
-                     onSuggestionFocused={this.onSuggestionFocused.bind(this)}
-                     onSuggestionUnfocused={this.onSuggestionUnfocused.bind(this)}
+                     onSuggestionSelected={::this.onSuggestionSelected}
+                     onSuggestionFocused={::this.onSuggestionFocused}
+                     onSuggestionUnfocused={::this.onSuggestionUnfocused}
                      inputAttributes={inputAttributes} />
         <SourceCodeLink file="examples/src/EventsPlayground/EventsPlayground.js" />
       </div>

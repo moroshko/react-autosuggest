@@ -34,6 +34,8 @@ npm install react-autosuggest --save
 
 ## Basic Usage
 
+#### CommonJS module:
+
 ```js
 import Autosuggest from 'react-autosuggest';
 
@@ -50,7 +52,11 @@ function getSuggestions(input, callback) {
 <Autosuggest suggestions={getSuggestions} />
 ```
 
-### Options
+#### UMD module: 
+
+Check out the [standalone example](https://github.com/moroshko/react-autosuggest/tree/master/examples/standalone).
+
+## Options
 
 * [`suggestions`](#suggestionsOption)
 * [`suggestionRenderer`](#suggestionRendererOption)
@@ -60,9 +66,10 @@ function getSuggestions(input, callback) {
 * [`onSuggestionFocused`](#onSuggestionFocusedOption)
 * [`onSuggestionUnfocused`](#onSuggestionUnfocusedOption)
 * [`inputAttributes`](#inputAttributesOption)
+* [`id`](#idOption)
 
 <a name="suggestionsOption"></a>
-##### suggestions (required)
+#### suggestions (required)
 
 Implement this function to tell `<Autosuggest />` which suggestions to display.
 
@@ -100,7 +107,7 @@ function(input, callback) {
 * Object, e.g.: `{ suburb: 'Mentone', postcode: '3194' }`. This object cannot have a `suggestions` key. **You must implement [`suggestionRenderer`](#suggestionRendererOption) and [`suggestionValue`](#suggestionValueOption) in this case.**
 
 <a name="suggestionRendererOption"></a>
-##### suggestionRenderer (required when suggestions are objects)
+#### suggestionRenderer (required when suggestions are objects)
 
 This function will be used to render the suggestion. It should return `ReactElement` or a string.
 
@@ -129,7 +136,7 @@ function renderSuggestion(suggestion, input) { // In this example, 'suggestion' 
 ```
 
 <a name="suggestionValueOption"></a>
-##### suggestionValue (required when suggestions are objects)
+#### suggestionValue (required when suggestions are objects)
 
 This function will be used to set the value of the input field when suggestion is selected. It has one parameter which is the suggestion object. This function is ignored when suggestions are strings.
 
@@ -148,7 +155,7 @@ function getSuggestionValue(suggestionObj) {
 ```
 
 <a name="showWhenOption"></a>
-##### showWhen (optional)
+#### showWhen (optional)
 
 This function will be used to determine whether to show suggestions or not. It has one parameter which is the value of the input field (e.g.: `'m '`). The default is:
 
@@ -166,7 +173,7 @@ For example, this is how you could show suggestions only when user typed 2 or mo
 ```
 
 <a name="onSuggestionSelectedOption"></a>
-##### onSuggestionSelected (optional)
+#### onSuggestionSelected (optional)
 
 This function will be called when suggestion is selected via mouse click or Enter.
 
@@ -194,7 +201,7 @@ function onSuggestionSelected(suggestion, event) {
 ```
 
 <a name="onSuggestionFocusedOption"></a>
-##### onSuggestionFocused (optional)
+#### onSuggestionFocused (optional)
 
 This function will be called when suggestion is focused via mouse hover or Up/Down keys.
 
@@ -220,7 +227,7 @@ function onSuggestionFocused(suggestion) { // In this example 'suggestion' is a 
 ```
 
 <a name="onSuggestionUnfocusedOption"></a>
-##### onSuggestionUnfocused (optional)
+#### onSuggestionUnfocused (optional)
 
 This function will be called when suggestion is unfocused.
 
@@ -246,7 +253,7 @@ function onSuggestionUnfocused(suggestion) { // In this example 'suggestion' is 
 ```
 
 <a name="inputAttributesOption"></a>
-##### inputAttributes (optional)
+#### inputAttributes (optional)
 
 Hash of attributes to pass to the input field. For example:
 
@@ -266,6 +273,20 @@ const inputAttributes = {
 <label htmlFor="locations-autosuggest">Where</label>
 <Autosuggest suggestions={getSuggestions}
              inputAttributes={inputAttributes} />
+```
+
+<a name="idOption"></a>
+#### id (required when multiple Autosuggests are rendered on a page)
+
+The only reason `id` exists, is to set ARIA attributes (they require a unique id).
+
+When rendering a single `<Autosuggest />`, don't set the `id` (it will be set to `'1'`, by default).
+
+When rendering multiple `<Autosuggest />`s, make sure to give them unique `id`s. For example:
+
+```xml
+<Autosuggest id="source" suggestions={getSourceSuggestions} />
+<Autosuggest id="destination" suggestions={getDestinationSuggestions} />
 ```
 
 <a name="styling"></a>

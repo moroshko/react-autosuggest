@@ -5,8 +5,6 @@ import debounce from 'debounce';
 import classnames from 'classnames';
 import sectionIterator from './sectionIterator';
 
-let guid = 0;
-
 export default class Autosuggest extends Component { // eslint-disable-line no-shadow
   static propTypes = {
     suggestions: PropTypes.func.isRequired, // Function to get the suggestions
@@ -16,7 +14,8 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     onSuggestionSelected: PropTypes.func,   // This function is called when suggestion is selected via mouse click or Enter
     onSuggestionFocused: PropTypes.func,    // This function is called when suggestion is focused via mouse hover or Up/Down keys
     onSuggestionUnfocused: PropTypes.func,  // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
-    inputAttributes: PropTypes.object       // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+    inputAttributes: PropTypes.object,      // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+    id: PropTypes.string                    // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
   }
 
   static defaultProps = {
@@ -24,14 +23,13 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     onSuggestionSelected: () => {},
     onSuggestionFocused: () => {},
     onSuggestionUnfocused: () => {},
-    inputAttributes: {}
+    inputAttributes: {},
+    id: '1'
   }
 
   constructor(props) {
     super();
 
-    guid += 1;
-    this.id = guid;
     this.cache = {};
     this.state = {
       value: props.inputAttributes.value || '',
@@ -340,7 +338,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
       return null;
     }
 
-    return 'react-autosuggest-' + this.id + '-suggestion-' +
+    return 'react-autosuggest-' + this.props.id + '-suggestion-' +
            (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
   }
 
@@ -392,7 +390,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
 
     if (this.isMultipleSections(this.state.suggestions)) {
       return (
-        <div id={'react-autosuggest-' + this.id}
+        <div id={'react-autosuggest-' + this.props.id}
              className="react-autosuggest__suggestions"
              role="listbox">
           {this.state.suggestions.map((section, sectionIndex) => {
@@ -417,7 +415,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     }
 
     return (
-      <ul id={'react-autosuggest-' + this.id}
+      <ul id={'react-autosuggest-' + this.props.id}
           className="react-autosuggest__suggestions"
           role="listbox">
         {this.renderSuggestionsList(this.state.suggestions, null)}
@@ -437,13 +435,13 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
                autoComplete="off"
                role="combobox"
                aria-autocomplete="list"
-               aria-owns={'react-autosuggest-' + this.id}
+               aria-owns={'react-autosuggest-' + this.props.id}
                aria-expanded={this.state.suggestions !== null}
                aria-activedescendant={ariaActivedescendant}
                ref="input"
-               onChange={this.onInputChange.bind(this)}
-               onKeyDown={this.onInputKeyDown.bind(this)}
-               onBlur={this.onInputBlur.bind(this)} />
+               onChange={::this.onInputChange}
+               onKeyDown={::this.onInputKeyDown}
+               onBlur={::this.onInputBlur} />
         {this.renderSuggestions()}
       </div>
     );

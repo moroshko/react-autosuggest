@@ -76,7 +76,7 @@ export default class Examples extends Component { // eslint-disable-line no-shad
     if (this.state.activeExample === 'Events playground') {
       return (
         <div className="examples__events-log-wrapper">
-          { this.eventsExist() && <button onClick={this.clearEvents.bind(this)}>Clear</button> }
+          { this.eventsExist() && <button onClick={::this.clearEvents}>Clear</button> }
           <EventsLog ref="eventsLog" events={this.state.events} />
         </div>
       );
@@ -121,7 +121,7 @@ export default class Examples extends Component { // eslint-disable-line no-shad
       case 'Basic example': return <BasicExample />;
       case 'Custom renderer': return <CustomRenderer />;
       case 'Multiple sections': return <MultipleSections />;
-      case 'Events playground': return <EventsPlayground onEventAdded={this.onEventAdded.bind(this)} />;
+      case 'Events playground': return <EventsPlayground onEventAdded={::this.onEventAdded} />;
     }
   }
 

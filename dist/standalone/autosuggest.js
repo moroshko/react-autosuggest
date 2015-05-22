@@ -90,16 +90,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _sectionIterator2 = _interopRequireDefault(_sectionIterator);
 
-	var guid = 0;
-
 	var Autosuggest = (function (_Component) {
 	  function Autosuggest(props) {
 	    _classCallCheck(this, Autosuggest);
 
 	    _get(Object.getPrototypeOf(Autosuggest.prototype), 'constructor', this).call(this);
 
-	    guid += 1;
-	    this.id = guid;
 	    this.cache = {};
 	    this.state = {
 	      value: props.inputAttributes.value || '',
@@ -436,7 +432,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return null;
 	      }
 
-	      return 'react-autosuggest-' + this.id + '-suggestion-' + (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
+	      return 'react-autosuggest-' + this.props.id + '-suggestion-' + (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
 	    }
 	  }, {
 	    key: 'renderSuggestionContent',
@@ -494,7 +490,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.isMultipleSections(this.state.suggestions)) {
 	        return _react2['default'].createElement(
 	          'div',
-	          { id: 'react-autosuggest-' + this.id,
+	          { id: 'react-autosuggest-' + this.props.id,
 	            className: 'react-autosuggest__suggestions',
 	            role: 'listbox' },
 	          this.state.suggestions.map(function (section, sectionIndex) {
@@ -521,7 +517,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      return _react2['default'].createElement(
 	        'ul',
-	        { id: 'react-autosuggest-' + this.id,
+	        { id: 'react-autosuggest-' + this.props.id,
 	          className: 'react-autosuggest__suggestions',
 	          role: 'listbox' },
 	        this.renderSuggestionsList(this.state.suggestions, null)
@@ -541,7 +537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          autoComplete: 'off',
 	          role: 'combobox',
 	          'aria-autocomplete': 'list',
-	          'aria-owns': 'react-autosuggest-' + this.id,
+	          'aria-owns': 'react-autosuggest-' + this.props.id,
 	          'aria-expanded': this.state.suggestions !== null,
 	          'aria-activedescendant': ariaActivedescendant,
 	          ref: 'input',
@@ -562,7 +558,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      onSuggestionSelected: _react.PropTypes.func, // This function is called when suggestion is selected via mouse click or Enter
 	      onSuggestionFocused: _react.PropTypes.func, // This function is called when suggestion is focused via mouse hover or Up/Down keys
 	      onSuggestionUnfocused: _react.PropTypes.func, // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
-	      inputAttributes: _react.PropTypes.object // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+	      inputAttributes: _react.PropTypes.object, // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+	      id: _react.PropTypes.string // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
 	    },
 	    enumerable: true
 	  }, {
@@ -574,7 +571,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      onSuggestionSelected: function onSuggestionSelected() {},
 	      onSuggestionFocused: function onSuggestionFocused() {},
 	      onSuggestionUnfocused: function onSuggestionUnfocused() {},
-	      inputAttributes: {}
+	      inputAttributes: {},
+	      id: '1'
 	    },
 	    enumerable: true
 	  }]);
