@@ -3,6 +3,7 @@
 require('./app.less');
 
 import React, { Component } from 'react';
+import a11y from 'react-a11y';
 import Badges from './Badges/Badges';
 import Examples from './Examples';
 import Footer from './Footer/Footer';
@@ -23,3 +24,5 @@ class App extends Component { // eslint-disable-line no-shadow
 }
 
 React.render(<App />, document.getElementById('app'));
+
+a11y(React, { includeSrcNode: true });

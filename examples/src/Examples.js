@@ -43,7 +43,7 @@ export default class Examples extends Component { // eslint-disable-line no-shad
 
   renderMenu() {
     return (
-      <div className="examples__menu">
+      <div className="examples__menu" role="menu">
         {this.examples.map(example => {
           const classes = classnames({
             'examples__menu-item': true,
@@ -53,6 +53,8 @@ export default class Examples extends Component { // eslint-disable-line no-shad
           return (
             <div className={classes}
                  key={example}
+                 role="menuitem"
+                 tabIndex="0"
                  onClick={this.changeExample.bind(this, example)}>
               {example}
             </div>

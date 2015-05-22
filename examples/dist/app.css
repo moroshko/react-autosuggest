@@ -1,3 +1,10 @@
+.badges {
+  flex-shrink: 0;
+  margin-bottom: 50px;
+}
+.badges a {
+  margin-right: 5px;
+}
 .source-code-link {
   float: right;
   text-decoration: none;
@@ -134,13 +141,6 @@
 }
 .react-autosuggest__suggestion--focused {
   background-color: #ddd;
-}
-.badges {
-  flex-shrink: 0;
-  margin-bottom: 50px;
-}
-.badges a {
-  margin-right: 5px;
 }
 .footer {
   display: flex;
