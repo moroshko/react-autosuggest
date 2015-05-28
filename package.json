@@ -23,7 +23,9 @@
   },
   "dependencies": {
     "classnames": "^2.1.1",
-    "debounce": "^1.0.0",
+    "debounce": "^1.0.0"
+  },
+  "peerDependencies": {
     "react": "^0.13.3"
   },
   "devDependencies": {
@@ -42,6 +44,7 @@
     "less-loader": "^2.2.0",
     "mocha": "^2.2.5",
     "proxyquire": "^1.5.0",
+    "react": "^0.13.3",
     "react-a11y": "^0.1.1",
     "react-hot-loader": "^1.2.7",
     "sinon": "^1.14.1",
