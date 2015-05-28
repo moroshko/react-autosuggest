@@ -48,7 +48,11 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
                                 // twice when mouse is moving between suggestions
     this.justClickedOnSuggestion = false; // Helps not to call inputAttributes.onBlur
-                                        // when suggestion is clicked
+                                          // when suggestion is clicked
+
+    this.onInputChange = ::this.onInputChange;
+    this.onInputKeyDown = ::this.onInputKeyDown;
+    this.onInputBlur = ::this.onInputBlur;
   }
 
   resetSectionIterator(suggestions) {
@@ -439,9 +443,9 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
                aria-expanded={this.state.suggestions !== null}
                aria-activedescendant={ariaActivedescendant}
                ref="input"
-               onChange={::this.onInputChange}
-               onKeyDown={::this.onInputKeyDown}
-               onBlur={::this.onInputBlur} />
+               onChange={this.onInputChange}
+               onKeyDown={this.onInputKeyDown}
+               onBlur={this.onInputBlur} />
         {this.renderSuggestions()}
       </div>
     );

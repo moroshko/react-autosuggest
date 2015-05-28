@@ -59,6 +59,10 @@ var Autosuggest = (function (_Component) {
     // twice when mouse is moving between suggestions
     this.justClickedOnSuggestion = false; // Helps not to call inputAttributes.onBlur
     // when suggestion is clicked
+
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onInputKeyDown = this.onInputKeyDown.bind(this);
+    this.onInputBlur = this.onInputBlur.bind(this);
   }
 
   _inherits(Autosuggest, _Component);
@@ -485,9 +489,9 @@ var Autosuggest = (function (_Component) {
           'aria-expanded': this.state.suggestions !== null,
           'aria-activedescendant': ariaActivedescendant,
           ref: 'input',
-          onChange: this.onInputChange.bind(this),
-          onKeyDown: this.onInputKeyDown.bind(this),
-          onBlur: this.onInputBlur.bind(this) })),
+          onChange: this.onInputChange,
+          onKeyDown: this.onInputKeyDown,
+          onBlur: this.onInputBlur })),
         this.renderSuggestions()
       );
     }
