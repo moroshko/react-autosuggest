@@ -1,14 +1,7 @@
-.badges {
-  flex-shrink: 0;
-  margin-bottom: 50px;
-}
-.badges a {
-  margin-right: 5px;
-}
 .source-code-link {
   float: right;
   text-decoration: none;
-  color: #3ba3d7;
+  color: #2c7ea7;
   font-size: 12px;
   margin-top: 3px;
   margin-right: 5px;
@@ -34,7 +27,7 @@
   color: #1cb30c;
 }
 .examples__events-log__event--suggestion-focused .examples__events-log__event-description {
-  color: #3ba3d7;
+  color: #2c7ea7;
 }
 .examples__events-log__event--suggestion-unfocused .examples__events-log__event-description {
   color: #777;
@@ -67,7 +60,7 @@
   cursor: pointer;
 }
 .examples__menu-item--active {
-  color: #ff0000;
+  color: #ee0000;
   cursor: default;
 }
 .examples__events-log-wrapper {
@@ -142,6 +135,13 @@
 .react-autosuggest__suggestion--focused {
   background-color: #ddd;
 }
+.badges {
+  flex-shrink: 0;
+  margin-bottom: 50px;
+}
+.badges a {
+  margin-right: 5px;
+}
 .footer {
   display: flex;
   flex-shrink: 0;
@@ -154,11 +154,11 @@
   border-radius: 4px;
 }
 .footer strong {
-  color: red;
+  color: #ee0000;
 }
 .footer a {
   text-decoration: none;
-  color: #3ba3d7;
+  color: #2c7ea7;
 }
 html,
 body {

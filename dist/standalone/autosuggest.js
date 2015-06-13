@@ -254,7 +254,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'focusOnSuggestionUsingKeyboard',
-	    value: function focusOnSuggestionUsingKeyboard(suggestionPosition) {
+	    value: function focusOnSuggestionUsingKeyboard(direction, suggestionPosition) {
 	      var _suggestionPosition = _slicedToArray(suggestionPosition, 2);
 
 	      var sectionIndex = _suggestionPosition[0];
@@ -275,6 +275,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.onSuggestionUnfocused();
 	      } else {
 	        this.onSuggestionFocused(sectionIndex, suggestionIndex);
+
+	        var suggestionRef = this.getSuggestionRef(sectionIndex, suggestionIndex);
+	        var focusedSuggestion = (0, _react.findDOMNode)(this.refs[suggestionRef]);
+
+	        if (focusedSuggestion.scrollIntoView) {
+	          focusedSuggestion.scrollIntoView(direction === 'up');
+	        }
 	      }
 
 	      this.onChange(newState.value);
@@ -347,7 +354,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          if (this.state.suggestions === null) {
 	            this.showSuggestions(this.state.value);
 	          } else {
-	            this.focusOnSuggestionUsingKeyboard(_sectionIterator2['default'].prev([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
+	            this.focusOnSuggestionUsingKeyboard('up', _sectionIterator2['default'].prev([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
 	          }
 
 	          event.preventDefault(); // Prevent the cursor from jumping to input's start
@@ -358,7 +365,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          if (this.state.suggestions === null) {
 	            this.showSuggestions(this.state.value);
 	          } else {
-	            this.focusOnSuggestionUsingKeyboard(_sectionIterator2['default'].next([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
+	            this.focusOnSuggestionUsingKeyboard('down', _sectionIterator2['default'].next([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
 	          }
 
 	          break;
@@ -436,7 +443,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return null;
 	      }
 
-	      return 'react-autosuggest-' + this.props.id + '-suggestion-' + (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
+	      return 'react-autosuggest-' + this.props.id + '-' + this.getSuggestionRef(sectionIndex, suggestionIndex);
+	    }
+	  }, {
+	    key: 'getSuggestionRef',
+	    value: function getSuggestionRef(sectionIndex, suggestionIndex) {
+	      return 'suggestion-' + (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
 	    }
 	  }, {
 	    key: 'renderSuggestionContent',
@@ -461,14 +473,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	          'react-autosuggest__suggestion': true,
 	          'react-autosuggest__suggestion--focused': sectionIndex === _this3.state.focusedSectionIndex && suggestionIndex === _this3.state.focusedSuggestionIndex
 	        });
-	        var suggestionKey = 'suggestion-' + (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
+	        var suggestionRef = _this3.getSuggestionRef(sectionIndex, suggestionIndex);
 
 	        return _react2['default'].createElement(
 	          'li',
 	          { id: _this3.getSuggestionId(sectionIndex, suggestionIndex),
 	            className: classes,
 	            role: 'option',
-	            key: suggestionKey,
+	            ref: suggestionRef,
+	            key: suggestionRef,
 	            onMouseEnter: function () {
 	              return _this3.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
 	            },
@@ -667,53 +680,55 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
 	  Copyright (c) 2015 Jed Watson.
 	  Licensed under the MIT License (MIT), see
 	  http://jedwatson.github.io/classnames
 	*/
 
-	function classNames () {
+	(function () {
 		'use strict';
 
-		var classes = '';
+		function classNames () {
 
-		for (var i = 0; i < arguments.length; i++) {
-			var arg = arguments[i];
-			if (!arg) continue;
+			var classes = '';
 
-			var argType = typeof arg;
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
 
-			if ('string' === argType || 'number' === argType) {
-				classes += ' ' + arg;
+				var argType = typeof arg;
 
-			} else if (Array.isArray(arg)) {
-				classes += ' ' + classNames.apply(null, arg);
+				if ('string' === argType || 'number' === argType) {
+					classes += ' ' + arg;
 
-			} else if ('object' === argType) {
-				for (var key in arg) {
-					if (arg.hasOwnProperty(key) && arg[key]) {
-						classes += ' ' + key;
+				} else if (Array.isArray(arg)) {
+					classes += ' ' + classNames.apply(null, arg);
+
+				} else if ('object' === argType) {
+					for (var key in arg) {
+						if (arg.hasOwnProperty(key) && arg[key]) {
+							classes += ' ' + key;
+						}
 					}
 				}
 			}
+
+			return classes.substr(1);
 		}
 
-		return classes.substr(1);
-	}
+		if (true) {
+			// AMD. Register as an anonymous module.
+			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else {
+			window.classNames = classNames;
+		}
 
-	// safely export classNames for node / browserify
-	if (typeof module !== 'undefined' && module.exports) {
-		module.exports = classNames;
-	}
-
-	/* global define */
-	// safely export classNames for RequireJS
-	if (true) {
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
-			return classNames;
-		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}
+	}());
 
 
 /***/ },

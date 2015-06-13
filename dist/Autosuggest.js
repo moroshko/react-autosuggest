@@ -198,7 +198,7 @@ var Autosuggest = (function (_Component) {
     }
   }, {
     key: 'focusOnSuggestionUsingKeyboard',
-    value: function focusOnSuggestionUsingKeyboard(suggestionPosition) {
+    value: function focusOnSuggestionUsingKeyboard(direction, suggestionPosition) {
       var _suggestionPosition = _slicedToArray(suggestionPosition, 2);
 
       var sectionIndex = _suggestionPosition[0];
@@ -219,6 +219,13 @@ var Autosuggest = (function (_Component) {
         this.onSuggestionUnfocused();
       } else {
         this.onSuggestionFocused(sectionIndex, suggestionIndex);
+
+        var suggestionRef = this.getSuggestionRef(sectionIndex, suggestionIndex);
+        var focusedSuggestion = (0, _react.findDOMNode)(this.refs[suggestionRef]);
+
+        if (focusedSuggestion.scrollIntoView) {
+          focusedSuggestion.scrollIntoView(direction === 'up');
+        }
       }
 
       this.onChange(newState.value);
@@ -291,7 +298,7 @@ var Autosuggest = (function (_Component) {
           if (this.state.suggestions === null) {
             this.showSuggestions(this.state.value);
           } else {
-            this.focusOnSuggestionUsingKeyboard(_sectionIterator2['default'].prev([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
+            this.focusOnSuggestionUsingKeyboard('up', _sectionIterator2['default'].prev([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
           }
 
           event.preventDefault(); // Prevent the cursor from jumping to input's start
@@ -302,7 +309,7 @@ var Autosuggest = (function (_Component) {
           if (this.state.suggestions === null) {
             this.showSuggestions(this.state.value);
           } else {
-            this.focusOnSuggestionUsingKeyboard(_sectionIterator2['default'].next([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
+            this.focusOnSuggestionUsingKeyboard('down', _sectionIterator2['default'].next([this.state.focusedSectionIndex, this.state.focusedSuggestionIndex]));
           }
 
           break;
@@ -380,7 +387,12 @@ var Autosuggest = (function (_Component) {
         return null;
       }
 
-      return 'react-autosuggest-' + this.props.id + '-suggestion-' + (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
+      return 'react-autosuggest-' + this.props.id + '-' + this.getSuggestionRef(sectionIndex, suggestionIndex);
+    }
+  }, {
+    key: 'getSuggestionRef',
+    value: function getSuggestionRef(sectionIndex, suggestionIndex) {
+      return 'suggestion-' + (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
     }
   }, {
     key: 'renderSuggestionContent',
@@ -405,14 +417,15 @@ var Autosuggest = (function (_Component) {
           'react-autosuggest__suggestion': true,
           'react-autosuggest__suggestion--focused': sectionIndex === _this3.state.focusedSectionIndex && suggestionIndex === _this3.state.focusedSuggestionIndex
         });
-        var suggestionKey = 'suggestion-' + (sectionIndex === null ? '' : sectionIndex) + '-' + suggestionIndex;
+        var suggestionRef = _this3.getSuggestionRef(sectionIndex, suggestionIndex);
 
         return _react2['default'].createElement(
           'li',
           { id: _this3.getSuggestionId(sectionIndex, suggestionIndex),
             className: classes,
             role: 'option',
-            key: suggestionKey,
+            ref: suggestionRef,
+            key: suggestionRef,
             onMouseEnter: function () {
               return _this3.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
             },

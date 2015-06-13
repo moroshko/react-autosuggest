@@ -9,13 +9,16 @@ export default class Badges extends Component { // eslint-disable-line no-shadow
     return (
       <div className="badges">
         <a href="//codeship.com/projects/67868" target="_blank">
-          <img src="//img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg" />
+          <img src="//img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg"
+               alt="build status" />
         </a>
         <a href="//npmjs.org/package/react-autosuggest" target="_blank">
-          <img src="//img.shields.io/npm/v/react-autosuggest.svg" />
+          <img src="//img.shields.io/npm/v/react-autosuggest.svg"
+               alt="npm version" />
         </a>
         <a href="//npmjs.org/package/react-autosuggest" target="_blank">
-          <img src="//img.shields.io/npm/dm/react-autosuggest.svg" />
+          <img src="//img.shields.io/npm/dm/react-autosuggest.svg"
+               alt="npm downloads" />
         </a>
       </div>
     );
