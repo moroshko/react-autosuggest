@@ -19,7 +19,8 @@
     "dist": "babel src/sectionIterator.js -o dist/sectionIterator.js && babel src/Autosuggest.js -o dist/Autosuggest.js",
     "examples-dist": "webpack --config webpack.dev.config.js",
     "standalone": "webpack --config webpack.standalone.config.js",
-    "build": "npm run lint && npm test && npm run dist && npm run examples-dist && npm run standalone"
+    "build": "npm run lint && npm test && npm run dist && npm run examples-dist && npm run standalone",
+    "gh-pages": "git checkout gh-pages; git merge master; cp examples/dist/*.* .; git commit -am 'Update gh-pages files'; git push"
   },
   "dependencies": {
     "classnames": "^2.1.2",
@@ -29,16 +30,16 @@
     "react": "^0.13.3"
   },
   "devDependencies": {
-    "babel": "^5.5.7",
+    "babel": "^5.5.8",
     "babel-eslint": "^3.1.15",
     "babel-loader": "^5.1.4",
     "chai": "^3.0.0",
     "css-loader": "^0.14.5",
     "eslint": "^0.22.1",
-    "eslint-loader": "^0.12.0",
-    "eslint-plugin-react": "^2.5.0",
-    "extract-text-webpack-plugin": "^0.8.1",
-    "jsdom": "^3.1.2",
+    "eslint-loader": "^0.14.0",
+    "eslint-plugin-react": "^2.5.2",
+    "extract-text-webpack-plugin": "^0.8.2",
+    "jsdom": "3.1.2",
     "json-loader": "^0.5.2",
     "less": "^2.5.1",
     "less-loader": "^2.2.0",
@@ -49,7 +50,7 @@
     "sinon": "^1.15.3",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.12.3",
-    "webpack": "^1.9.10",
+    "webpack": "^1.9.11",
     "webpack-dev-server": "^1.9.0"
   },
   "keywords": [
