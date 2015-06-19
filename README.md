@@ -22,7 +22,8 @@
 * Full control over [styling](#styling) (we just provide the mechanics and classes for you)
 * Full control over [when to show the suggestions](#showWhenOption) (e.g. when user types 2 or more characters)
 * Various hooks: [onSuggestionSelected](#onSuggestionSelectedOption), [onSuggestionFocused](#onSuggestionFocusedOption), [onSuggestionUnfocused](#onSuggestionUnfocusedOption)
-* Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder, onChange, onBlur)
+* Support for [controlled](https://facebook.github.io/react/docs/forms.html#controlled-components) as well as [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) state
+* Ability to [pass props to the input field](#inputAttributesOption) (e.g. placeholder, onChange, onBlur)
 * In-memory caching (we retrieve suggestions for a given input only once)
 * Thoroughly tested (over 100 tests)
 
@@ -61,6 +62,8 @@ Check out the [standalone example](https://github.com/moroshko/react-autosuggest
 * [`suggestions`](#suggestionsOption)
 * [`suggestionRenderer`](#suggestionRendererOption)
 * [`suggestionValue`](#suggestionValueOption)
+* [`defaultValue`](#defaultValueOption)
+* [`value`](#valueOption)
 * [`showWhen`](#showWhenOption)
 * [`onSuggestionSelected`](#onSuggestionSelectedOption)
 * [`onSuggestionFocused`](#onSuggestionFocusedOption)
@@ -153,6 +156,52 @@ function getSuggestionValue(suggestionObj) {
              suggestionRenderer={renderSuggestion}
              suggestionValue={getSuggestionValue} />
 ```
+
+<a name="defaultValueOption"></a>
+#### defaultValue (optional)
+
+This string sets the initial value of the text. The default is an empty string.
+
+Set this value if you want to use the component in an [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) manner (the component keeps track of its state internally).
+
+For example:
+
+```xml
+<Autosuggest suggestions={getSuggestions}
+             defaultValue="Mordialloc" />
+```
+
+Note: if you specify this option then you should not include a [`value`](#valueOption).
+
+<a name="valueOption"></a>
+#### value (optional)
+
+This string determines the value of the currently-selected suggestion.
+
+Set this value if you want to use the component in a [controlled](https://facebook.github.io/react/docs/forms.html#controlled-components) manner (the component uses an outside source of state). The currently-selected suggestion text will update whenever this option is updated, so it is recommended that you use a combination of `value` and [`onSuggestionSelected`](#onSuggestionSelectedOption) to keep track of the selected state inside a parent component.
+
+For example:
+
+```js
+// Inside a React component...
+function getInitialState() {
+  return { activeSuggestion: 'one' };
+}
+function getActiveSuggestion() {
+  return this.state.activeSuggestion;
+}
+function setActiveSuggestion(suggestion) {
+  this.setState({ activeSuggestion: suggestion });
+}
+```
+
+```xml
+<Autosuggest suggestions={getSuggestions}
+             value={getActiveSuggestion()}
+             onSuggestionSelected={setActiveSuggestion} />
+```
+
+Note: if you specify this option then you should not include a [defaultValue](#defaultValueOption).
 
 <a name="showWhenOption"></a>
 #### showWhen (optional)
@@ -263,7 +312,6 @@ const inputAttributes = {
   name: 'locations-autosuggest',
   className: 'my-sweet-locations-autosuggest',
   placeholder: 'Enter locations...',
-  value: 'Mordialloc',   // Initial value
   onChange: value => console.log(`Input value changed to: ${value}`),
   onBlur: () => console.log('Input blurred')
 };
