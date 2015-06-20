@@ -91,8 +91,13 @@ function prev(position) {
   return [null, itemIndex - 1];
 }
 
+function isLast(position) {
+  return next(position)[1] === null;
+}
+
 export default {
-  setData: setData,
-  next: next,
-  prev: prev
+  setData,
+  next,
+  prev,
+  isLast
 };

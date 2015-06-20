@@ -104,9 +104,14 @@ function prev(position) {
   return [null, itemIndex - 1];
 }
 
+function isLast(position) {
+  return next(position)[1] === null;
+}
+
 exports['default'] = {
   setData: setData,
   next: next,
-  prev: prev
+  prev: prev,
+  isLast: isLast
 };
 module.exports = exports['default'];

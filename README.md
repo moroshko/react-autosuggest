@@ -67,6 +67,7 @@ Check out the [standalone example](https://github.com/moroshko/react-autosuggest
 * [`onSuggestionUnfocused`](#onSuggestionUnfocusedOption)
 * [`inputAttributes`](#inputAttributesOption)
 * [`id`](#idOption)
+* [`scrollBar`](#scrollBarOption)
 
 <a name="suggestionsOption"></a>
 #### suggestions (required)
@@ -288,6 +289,13 @@ When rendering multiple `<Autosuggest />`s, make sure to give them unique `id`s.
 <Autosuggest id="source" suggestions={getSourceSuggestions} />
 <Autosuggest id="destination" suggestions={getDestinationSuggestions} />
 ```
+
+<a name="scrollBarOption"></a>
+#### scrollBar (optional)
+
+Set it to `true` only if suggestions container (`react-autosuggest__suggestions`) can have a scroll bar (e.g. if it has `height: 200px; overflow: auto`). Suggestions container must be a [positioned element](https://developer.mozilla.org/en-US/docs/Web/CSS/position) in this case. When set to `true`, suggestions container will adjust its scroll bar every time user interacts using the Up and Down keys.
+
+Defaults to `false`.
 
 <a name="styling"></a>
 ## Styling

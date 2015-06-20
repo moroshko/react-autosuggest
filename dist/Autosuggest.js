@@ -197,6 +197,53 @@ var Autosuggest = (function (_Component) {
       this.justUnfocused = false;
     }
   }, {
+    key: 'scrollToElement',
+    value: function scrollToElement(container, element, alignTo) {
+      if (alignTo === 'bottom') {
+        var scrollDelta = element.offsetTop + element.offsetHeight - container.scrollTop - container.offsetHeight;
+
+        if (scrollDelta > 0) {
+          container.scrollTop += scrollDelta;
+        }
+      } else {
+        var scrollDelta = container.scrollTop - element.offsetTop;
+
+        if (scrollDelta > 0) {
+          container.scrollTop -= scrollDelta;
+        }
+      }
+    }
+  }, {
+    key: 'scrollToSuggestion',
+    value: function scrollToSuggestion(direction, sectionIndex, suggestionIndex) {
+      var alignTo = direction === 'down' ? 'bottom' : 'top';
+
+      if (suggestionIndex === null) {
+        if (direction === 'down') {
+          alignTo = 'top';
+
+          var _sectionIterator$next = _sectionIterator2['default'].next([null, null]);
+
+          var _sectionIterator$next2 = _slicedToArray(_sectionIterator$next, 2);
+
+          sectionIndex = _sectionIterator$next2[0];
+          suggestionIndex = _sectionIterator$next2[1];
+        } else {
+          return;
+        }
+      } else {
+        if (_sectionIterator2['default'].isLast([sectionIndex, suggestionIndex]) && direction === 'up') {
+          alignTo = 'bottom';
+        }
+      }
+
+      var suggestions = (0, _react.findDOMNode)(this.refs.suggestions);
+      var suggestionRef = this.getSuggestionRef(sectionIndex, suggestionIndex);
+      var suggestion = (0, _react.findDOMNode)(this.refs[suggestionRef]);
+
+      this.scrollToElement(suggestions, suggestion, alignTo);
+    }
+  }, {
     key: 'focusOnSuggestionUsingKeyboard',
     value: function focusOnSuggestionUsingKeyboard(direction, suggestionPosition) {
       var _suggestionPosition = _slicedToArray(suggestionPosition, 2);
@@ -219,13 +266,10 @@ var Autosuggest = (function (_Component) {
         this.onSuggestionUnfocused();
       } else {
         this.onSuggestionFocused(sectionIndex, suggestionIndex);
+      }
 
-        var suggestionRef = this.getSuggestionRef(sectionIndex, suggestionIndex);
-        var focusedSuggestion = (0, _react.findDOMNode)(this.refs[suggestionRef]);
-
-        if (focusedSuggestion.scrollIntoView) {
-          focusedSuggestion.scrollIntoView(direction === 'up');
-        }
+      if (this.props.scrollBar) {
+        this.scrollToSuggestion(direction, sectionIndex, suggestionIndex);
       }
 
       this.onChange(newState.value);
@@ -453,6 +497,7 @@ var Autosuggest = (function (_Component) {
           'div',
           { id: 'react-autosuggest-' + this.props.id,
             className: 'react-autosuggest__suggestions',
+            ref: 'suggestions',
             role: 'listbox' },
           this.state.suggestions.map(function (section, sectionIndex) {
             var sectionName = section.sectionName ? _react2['default'].createElement(
@@ -480,6 +525,7 @@ var Autosuggest = (function (_Component) {
         'ul',
         { id: 'react-autosuggest-' + this.props.id,
           className: 'react-autosuggest__suggestions',
+          ref: 'suggestions',
           role: 'listbox' },
         this.renderSuggestionsList(this.state.suggestions, null)
       );
@@ -520,7 +566,8 @@ var Autosuggest = (function (_Component) {
       onSuggestionFocused: _react.PropTypes.func, // This function is called when suggestion is focused via mouse hover or Up/Down keys
       onSuggestionUnfocused: _react.PropTypes.func, // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
       inputAttributes: _react.PropTypes.object, // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
-      id: _react.PropTypes.string // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
+      id: _react.PropTypes.string, // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
+      scrollBar: _react.PropTypes.bool // Should be set to true when the suggestions container can have a scroll bar
     },
     enumerable: true
   }, {
@@ -533,7 +580,8 @@ var Autosuggest = (function (_Component) {
       onSuggestionFocused: function onSuggestionFocused() {},
       onSuggestionUnfocused: function onSuggestionUnfocused() {},
       inputAttributes: {},
-      id: '1'
+      id: '1',
+      scrollBar: false
     },
     enumerable: true
   }]);

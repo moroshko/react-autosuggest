@@ -205,7 +205,6 @@ describe('Autosuggest', () => {
     });
   });
 
-
   describe('suggestionsExist()', () => {
     beforeEach(() => {
       createAutosuggest(<Autosuggest suggestions={getSuburbStrings} />);
@@ -389,6 +388,41 @@ describe('Autosuggest', () => {
     it('should show suggestions when showWhen returns true', () => {
       setInputValue('mor');
       expectSuggestions(['Mordialloc']);
+    });
+  });
+
+  describe('scrollBar', () => {
+    describe('when true', () => {
+      beforeEach(() => {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbStrings}
+                       scrollBar={true} />
+        );
+
+        sinon.spy(autosuggest, 'scrollToSuggestion');
+      });
+
+      it('should call "scrollToSuggestion" when using Up/Down', () => {
+        setInputValue('m');
+        clickUp();
+        expect(autosuggest.scrollToSuggestion).to.have.been.called;
+      });
+    });
+
+    describe('when false', () => {
+      beforeEach(() => {
+        createAutosuggest(
+          <Autosuggest suggestions={getSuburbStrings} />
+        );
+
+        sinon.spy(autosuggest, 'scrollToSuggestion');
+      });
+
+      it('should not call "scrollToSuggestion" when using Up/Down', () => {
+        setInputValue('m');
+        clickUp();
+        expect(autosuggest.scrollToSuggestion).not.to.have.been.called;
+      });
     });
   });
 

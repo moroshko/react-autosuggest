@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "efcea528f5cfe180e39b"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "8912c502bcd2b914c052"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -7977,7 +7977,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _BadgesBadges = __webpack_require__(246);
+	var _BadgesBadges = __webpack_require__(247);
 
 	var _BadgesBadges2 = _interopRequireDefault(_BadgesBadges);
 
@@ -7985,15 +7985,15 @@
 
 	var _Examples2 = _interopRequireDefault(_Examples);
 
-	var _FooterFooter = __webpack_require__(248);
+	var _FooterFooter = __webpack_require__(249);
 
 	var _FooterFooter2 = _interopRequireDefault(_FooterFooter);
 
-	var _ForkMeOnGitHubForkMeOnGitHub = __webpack_require__(250);
+	var _ForkMeOnGitHubForkMeOnGitHub = __webpack_require__(251);
 
 	var _ForkMeOnGitHubForkMeOnGitHub2 = _interopRequireDefault(_ForkMeOnGitHubForkMeOnGitHub);
 
-	__webpack_require__(251);
+	__webpack_require__(252);
 
 	var App = (function (_Component) {
 	  function App() {
@@ -8072,20 +8072,20 @@
 
 	var _CustomRendererCustomRenderer2 = _interopRequireDefault(_CustomRendererCustomRenderer);
 
-	var _MultipleSectionsMultipleSections = __webpack_require__(240);
+	var _MultipleSectionsMultipleSections = __webpack_require__(241);
 
 	var _MultipleSectionsMultipleSections2 = _interopRequireDefault(_MultipleSectionsMultipleSections);
 
-	var _EventsPlaygroundEventsPlayground = __webpack_require__(241);
+	var _EventsPlaygroundEventsPlayground = __webpack_require__(242);
 
 	var _EventsPlaygroundEventsPlayground2 = _interopRequireDefault(_EventsPlaygroundEventsPlayground);
 
-	var _EventsLogEventsLog = __webpack_require__(242);
+	var _EventsLogEventsLog = __webpack_require__(243);
 
 	var _EventsLogEventsLog2 = _interopRequireDefault(_EventsLogEventsLog);
 
-	__webpack_require__(244);
 	__webpack_require__(245);
+	__webpack_require__(246);
 
 	var Examples = (function (_Component) {
 	  // eslint-disable-line no-shadow
@@ -29540,6 +29540,53 @@
 	      this.justUnfocused = false;
 	    }
 	  }, {
+	    key: 'scrollToElement',
+	    value: function scrollToElement(container, element, alignTo) {
+	      if (alignTo === 'bottom') {
+	        var scrollDelta = element.offsetTop + element.offsetHeight - container.scrollTop - container.offsetHeight;
+
+	        if (scrollDelta > 0) {
+	          container.scrollTop += scrollDelta;
+	        }
+	      } else {
+	        var scrollDelta = container.scrollTop - element.offsetTop;
+
+	        if (scrollDelta > 0) {
+	          container.scrollTop -= scrollDelta;
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'scrollToSuggestion',
+	    value: function scrollToSuggestion(direction, sectionIndex, suggestionIndex) {
+	      var alignTo = direction === 'down' ? 'bottom' : 'top';
+
+	      if (suggestionIndex === null) {
+	        if (direction === 'down') {
+	          alignTo = 'top';
+
+	          var _sectionIterator$next = _sectionIterator2['default'].next([null, null]);
+
+	          var _sectionIterator$next2 = _slicedToArray(_sectionIterator$next, 2);
+
+	          sectionIndex = _sectionIterator$next2[0];
+	          suggestionIndex = _sectionIterator$next2[1];
+	        } else {
+	          return;
+	        }
+	      } else {
+	        if (_sectionIterator2['default'].isLast([sectionIndex, suggestionIndex]) && direction === 'up') {
+	          alignTo = 'bottom';
+	        }
+	      }
+
+	      var suggestions = (0, _react.findDOMNode)(this.refs.suggestions);
+	      var suggestionRef = this.getSuggestionRef(sectionIndex, suggestionIndex);
+	      var suggestion = (0, _react.findDOMNode)(this.refs[suggestionRef]);
+
+	      this.scrollToElement(suggestions, suggestion, alignTo);
+	    }
+	  }, {
 	    key: 'focusOnSuggestionUsingKeyboard',
 	    value: function focusOnSuggestionUsingKeyboard(direction, suggestionPosition) {
 	      var _suggestionPosition = _slicedToArray(suggestionPosition, 2);
@@ -29562,13 +29609,10 @@
 	        this.onSuggestionUnfocused();
 	      } else {
 	        this.onSuggestionFocused(sectionIndex, suggestionIndex);
+	      }
 
-	        var suggestionRef = this.getSuggestionRef(sectionIndex, suggestionIndex);
-	        var focusedSuggestion = (0, _react.findDOMNode)(this.refs[suggestionRef]);
-
-	        if (focusedSuggestion.scrollIntoView) {
-	          focusedSuggestion.scrollIntoView(direction === 'up');
-	        }
+	      if (this.props.scrollBar) {
+	        this.scrollToSuggestion(direction, sectionIndex, suggestionIndex);
 	      }
 
 	      this.onChange(newState.value);
@@ -29796,6 +29840,7 @@
 	          'div',
 	          { id: 'react-autosuggest-' + this.props.id,
 	            className: 'react-autosuggest__suggestions',
+	            ref: 'suggestions',
 	            role: 'listbox' },
 	          this.state.suggestions.map(function (section, sectionIndex) {
 	            var sectionName = section.sectionName ? _react2['default'].createElement(
@@ -29823,6 +29868,7 @@
 	        'ul',
 	        { id: 'react-autosuggest-' + this.props.id,
 	          className: 'react-autosuggest__suggestions',
+	          ref: 'suggestions',
 	          role: 'listbox' },
 	        this.renderSuggestionsList(this.state.suggestions, null)
 	      );
@@ -29863,7 +29909,8 @@
 	      onSuggestionFocused: _react.PropTypes.func, // This function is called when suggestion is focused via mouse hover or Up/Down keys
 	      onSuggestionUnfocused: _react.PropTypes.func, // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
 	      inputAttributes: _react.PropTypes.object, // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
-	      id: _react.PropTypes.string // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
+	      id: _react.PropTypes.string, // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
+	      scrollBar: _react.PropTypes.bool // Should be set to true when the suggestions container can have a scroll bar
 	    },
 	    enumerable: true
 	  }, {
@@ -29876,7 +29923,8 @@
 	      onSuggestionFocused: function onSuggestionFocused() {},
 	      onSuggestionUnfocused: function onSuggestionUnfocused() {},
 	      inputAttributes: {},
-	      id: '1'
+	      id: '1',
+	      scrollBar: false
 	    },
 	    enumerable: true
 	  }]);
@@ -30072,10 +30120,15 @@
 	  return [null, itemIndex - 1];
 	}
 
+	function isLast(position) {
+	  return next(position)[1] === null;
+	}
+
 	exports['default'] = {
 	  setData: setData,
 	  next: next,
-	  prev: prev
+	  prev: prev,
+	  isLast: isLast
 	};
 	module.exports = exports['default'];
 
@@ -43893,6 +43946,8 @@
 
 	var _jsonSuburbsJson2 = _interopRequireDefault(_jsonSuburbsJson);
 
+	__webpack_require__(240);
+
 	function population(suburbObj) {
 	  return suburbObj.suburb.split('').reduce(function (result, char) {
 	    return result + char.charCodeAt(0);
@@ -43985,11 +44040,12 @@
 
 	      return _react2['default'].createElement(
 	        'div',
-	        null,
+	        { className: 'custom-renderer-example' },
 	        _react2['default'].createElement(_srcAutosuggest2['default'], { suggestions: getSuggestions,
 	          suggestionRenderer: renderSuggestion,
 	          suggestionValue: getSuggestionValue,
 	          inputAttributes: inputAttributes,
+	          scrollBar: true,
 	          ref: function () {
 	            document.getElementById('custom-renderer').focus();
 	          } }),
@@ -44009,6 +44065,12 @@
 
 /***/ },
 /* 240 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(221), RootInstanceProvider = __webpack_require__(60), ReactMount = __webpack_require__(62), React = __webpack_require__(116); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -44155,7 +44217,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34)(module)))
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(221), RootInstanceProvider = __webpack_require__(60), ReactMount = __webpack_require__(62), React = __webpack_require__(116); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -44310,7 +44372,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34)(module)))
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(221), RootInstanceProvider = __webpack_require__(60), ReactMount = __webpack_require__(62), React = __webpack_require__(116); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -44333,7 +44395,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	__webpack_require__(243);
+	__webpack_require__(244);
 
 	var EventsLog = (function (_Component) {
 	  function EventsLog() {
@@ -44451,12 +44513,6 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34)(module)))
 
 /***/ },
-/* 243 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
 /* 244 */
 /***/ function(module, exports) {
 
@@ -44470,6 +44526,12 @@
 
 /***/ },
 /* 246 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(221), RootInstanceProvider = __webpack_require__(60), ReactMount = __webpack_require__(62), React = __webpack_require__(116); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -44492,7 +44554,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	__webpack_require__(247);
+	__webpack_require__(248);
 
 	var Badges = (function (_Component) {
 	  function Badges() {
@@ -44544,13 +44606,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34)(module)))
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(221), RootInstanceProvider = __webpack_require__(60), ReactMount = __webpack_require__(62), React = __webpack_require__(116); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -44573,7 +44635,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	__webpack_require__(249);
+	__webpack_require__(250);
 
 	var Footer = (function (_Component) {
 	  function Footer() {
@@ -44625,13 +44687,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34)(module)))
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(221), RootInstanceProvider = __webpack_require__(60), ReactMount = __webpack_require__(62), React = __webpack_require__(116); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -44701,7 +44763,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34)(module)))
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
