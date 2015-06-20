@@ -1,5 +1,7 @@
 'use strict';
 
+require('./CustomRenderer.less');
+
 import React, { Component } from 'react';
 import utils from '../utils';
 import Autosuggest from '../../../src/Autosuggest';
@@ -71,11 +73,12 @@ export default class CustomRenderer extends Component { // eslint-disable-line n
     };
 
     return (
-      <div>
+      <div className="custom-renderer-example">
         <Autosuggest suggestions={getSuggestions}
                      suggestionRenderer={renderSuggestion}
                      suggestionValue={getSuggestionValue}
                      inputAttributes={inputAttributes}
+                     scrollBar={true}
                      ref={ () => { document.getElementById('custom-renderer').focus(); } } />
         <SourceCodeLink file="examples/src/CustomRenderer/CustomRenderer.js" />
       </div>

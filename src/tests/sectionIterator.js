@@ -17,6 +17,10 @@ describe('sectionIterator', () => {
       it('should calculate prev', () => {
         expect(sectionIterator.prev([null, null])).to.deep.equal([null, null]);
       });
+
+      it('should calculate isLast', () => {
+        expect(sectionIterator.isLast([null, null])).to.be.true;
+      });
     });
 
     describe('and 1 item', () => {
@@ -32,6 +36,11 @@ describe('sectionIterator', () => {
       it('should calculate prev', () => {
         expect(sectionIterator.prev([null, null])).to.deep.equal([null, 0]);
         expect(sectionIterator.prev([null, 0])).to.deep.equal([null, null]);
+      });
+
+      it('should calculate isLast', () => {
+        expect(sectionIterator.isLast([null, null])).to.be.false;
+        expect(sectionIterator.isLast([null, 0])).to.be.true;
       });
     });
 
@@ -51,6 +60,12 @@ describe('sectionIterator', () => {
         expect(sectionIterator.prev([null, 3])).to.deep.equal([null, 2]);
         expect(sectionIterator.prev([null, 0])).to.deep.equal([null, null]);
       });
+
+      it('should calculate isLast', () => {
+        expect(sectionIterator.isLast([null, null])).to.be.false;
+        expect(sectionIterator.isLast([null, 0])).to.be.false;
+        expect(sectionIterator.isLast([null, 3])).to.be.true;
+      });
     });
   });
 
@@ -67,6 +82,10 @@ describe('sectionIterator', () => {
       it('should calculate prev', () => {
         expect(sectionIterator.prev([null, null])).to.deep.equal([null, null]);
       });
+
+      it('should calculate isLast', () => {
+        expect(sectionIterator.isLast([null, null])).to.be.true;
+      });
     });
 
     describe('and 1 item', () => {
@@ -82,6 +101,11 @@ describe('sectionIterator', () => {
       it('should calculate prev', () => {
         expect(sectionIterator.prev([null, null])).to.deep.equal([0, 0]);
         expect(sectionIterator.prev([0, 0])).to.deep.equal([null, null]);
+      });
+
+      it('should calculate isLast', () => {
+        expect(sectionIterator.isLast([null, null])).to.be.false;
+        expect(sectionIterator.isLast([0, 0])).to.be.true;
       });
     });
 
@@ -100,6 +124,12 @@ describe('sectionIterator', () => {
         expect(sectionIterator.prev([null, null])).to.deep.equal([0, 3]);
         expect(sectionIterator.prev([0, 3])).to.deep.equal([0, 2]);
         expect(sectionIterator.prev([0, 0])).to.deep.equal([null, null]);
+      });
+
+      it('should calculate isLast', () => {
+        expect(sectionIterator.isLast([null, null])).to.be.false;
+        expect(sectionIterator.isLast([0, 0])).to.be.false;
+        expect(sectionIterator.isLast([0, 3])).to.be.true;
       });
     });
   });
@@ -127,6 +157,16 @@ describe('sectionIterator', () => {
       expect(sectionIterator.prev([3, 3])).to.deep.equal([3, 2]);
       expect(sectionIterator.prev([3, 0])).to.deep.equal([0, 1]);
       expect(sectionIterator.prev([0, 0])).to.deep.equal([null, null]);
+    });
+
+    it('should calculate isLast', () => {
+      expect(sectionIterator.isLast([null, null])).to.be.false;
+      expect(sectionIterator.isLast([0, 0])).to.be.false;
+      expect(sectionIterator.isLast([0, 1])).to.be.false;
+      expect(sectionIterator.isLast([3, 0])).to.be.false;
+      expect(sectionIterator.isLast([3, 3])).to.be.false;
+      expect(sectionIterator.isLast([4, 0])).to.be.false;
+      expect(sectionIterator.isLast([6, 2])).to.be.true;
     });
   });
 });

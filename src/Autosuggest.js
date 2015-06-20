@@ -15,7 +15,8 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     onSuggestionFocused: PropTypes.func,    // This function is called when suggestion is focused via mouse hover or Up/Down keys
     onSuggestionUnfocused: PropTypes.func,  // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
     inputAttributes: PropTypes.object,      // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
-    id: PropTypes.string                    // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
+    id: PropTypes.string,                   // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
+    scrollBar: PropTypes.bool               // Should be set to true when the suggestions container can have a scroll bar
   }
 
   static defaultProps = {
@@ -24,7 +25,8 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     onSuggestionFocused: () => {},
     onSuggestionUnfocused: () => {},
     inputAttributes: {},
-    id: '1'
+    id: '1',
+    scrollBar: false
   }
 
   constructor(props) {
@@ -170,6 +172,50 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     this.justUnfocused = false;
   }
 
+  scrollToElement(container, element, alignTo) {
+    if (alignTo === 'bottom') {
+      const scrollDelta = element.offsetTop +
+                          element.offsetHeight -
+                          container.scrollTop -
+                          container.offsetHeight;
+
+      if (scrollDelta > 0) {
+        container.scrollTop += scrollDelta;
+      }
+    } else {
+      const scrollDelta = container.scrollTop -
+                          element.offsetTop;
+
+      if (scrollDelta > 0) {
+        container.scrollTop -= scrollDelta;
+      }
+    }
+  }
+
+  scrollToSuggestion(direction, sectionIndex, suggestionIndex) {
+    let alignTo = (direction === 'down' ? 'bottom' : 'top');
+
+    if (suggestionIndex === null) {
+      if (direction === 'down') {
+        alignTo = 'top';
+        [sectionIndex, suggestionIndex] = sectionIterator.next([null, null]);
+      } else {
+        return;
+      }
+    } else {
+      if (sectionIterator.isLast([sectionIndex, suggestionIndex]) &&
+          direction === 'up') {
+        alignTo = 'bottom';
+      }
+    }
+
+    const suggestions = findDOMNode(this.refs.suggestions);
+    const suggestionRef = this.getSuggestionRef(sectionIndex, suggestionIndex);
+    const suggestion = findDOMNode(this.refs[suggestionRef]);
+
+    this.scrollToElement(suggestions, suggestion, alignTo);
+  }
+
   focusOnSuggestionUsingKeyboard(direction, suggestionPosition) {
     const [sectionIndex, suggestionIndex] = suggestionPosition;
     const newState = {
@@ -189,14 +235,10 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
       this.onSuggestionUnfocused();
     } else {
       this.onSuggestionFocused(sectionIndex, suggestionIndex);
+    }
 
-      const suggestionRef =
-        this.getSuggestionRef(sectionIndex, suggestionIndex);
-      const focusedSuggestion = findDOMNode(this.refs[suggestionRef]);
-
-      if (focusedSuggestion.scrollIntoView) {
-        focusedSuggestion.scrollIntoView(direction === 'up');
-      }
+    if (this.props.scrollBar) {
+      this.scrollToSuggestion(direction, sectionIndex, suggestionIndex);
     }
 
     this.onChange(newState.value);
@@ -411,6 +453,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
       return (
         <div id={'react-autosuggest-' + this.props.id}
              className="react-autosuggest__suggestions"
+             ref="suggestions"
              role="listbox">
           {this.state.suggestions.map((section, sectionIndex) => {
             const sectionName = section.sectionName ? (
@@ -436,6 +479,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     return (
       <ul id={'react-autosuggest-' + this.props.id}
           className="react-autosuggest__suggestions"
+          ref="suggestions"
           role="listbox">
         {this.renderSuggestionsList(this.state.suggestions, null)}
       </ul>

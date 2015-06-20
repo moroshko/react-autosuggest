@@ -6,6 +6,10 @@
   margin-top: 3px;
   margin-right: 5px;
 }
+.custom-renderer-example .react-autosuggest__suggestions {
+  height: 240px;
+  overflow: auto;
+}
 .examples__events-log {
   width: 300px;
   margin: 20px 0;
