@@ -8,10 +8,10 @@
 
 ## Live Examples
 
-* <a href="//moroshko.github.io/react-autosuggest" target="_blank">Basic example</a><br>
-* <a href="//moroshko.github.io/react-autosuggest#Custom renderer" target="_blank">Custom renderer</a><br>
-* <a href="//moroshko.github.io/react-autosuggest#Multiple sections" target="_blank">Multiple sections</a>
-* <a href="//moroshko.github.io/react-autosuggest#Events playground" target="_blank">Events playground</a>
+* <a href="https://moroshko.github.io/react-autosuggest" target="_blank">Basic example</a><br>
+* <a href="https://moroshko.github.io/react-autosuggest#Custom renderer" target="_blank">Custom renderer</a><br>
+* <a href="https://moroshko.github.io/react-autosuggest#Multiple sections" target="_blank">Multiple sections</a>
+* <a href="https://moroshko.github.io/react-autosuggest#Events playground" target="_blank">Events playground</a>
 
 ## Features
 
@@ -293,7 +293,7 @@ When rendering multiple `<Autosuggest />`s, make sure to give them unique `id`s.
 <a name="scrollBarOption"></a>
 #### scrollBar (optional)
 
-Set it to `true` only if suggestions container (`react-autosuggest__suggestions`) can have a scroll bar (e.g. if it has `height: 200px; overflow: auto`). Suggestions container must be a [positioned element](https://developer.mozilla.org/en-US/docs/Web/CSS/position) in this case. When set to `true`, suggestions container will adjust its scroll bar every time user interacts using the Up and Down keys.
+Set it to `true` only if suggestions container (`react-autosuggest__suggestions`) can have a scroll bar (e.g. if it has `height: 200px; overflow: auto`). Suggestions container must be a [positioned element](https://developer.mozilla.org/en-US/docs/Web/CSS/position) in this case. When set to `true`, suggestions container will adjust its scroll bar every time user interacts using the Up and Down keys (see the [this example](https://moroshko.github.io/react-autosuggest#Custom renderer)).
 
 Defaults to `false`.
 
@@ -366,7 +366,7 @@ The following diagrams explain the classes above.
 npm start
 ```
 
-Now, open `http://localhost:3000/examples/dist/index.html`
+Now, open `http://localhost:3000/examples/dist/index.html` and start hacking!
 
 ## Running Tests
 
@@ -384,7 +384,7 @@ npm test
 [npm-url]: https://npmjs.org/package/react-autosuggest
 [downloads-image]: https://img.shields.io/npm/dm/react-autosuggest.svg
 [downloads-url]: https://npmjs.org/package/react-autosuggest
-[wai-aria]: http://www.w3.org/TR/wai-aria-practices/#autocomplete
+[wai-aria]: https://www.w3.org/TR/wai-aria-practices/#autocomplete
 [event]: https://facebook.github.io/react/docs/events.html#syntheticevent
-[basic-example]: http://moroshko.github.io/react-autosuggest
-[multiple-sections]: http://moroshko.github.io/react-autosuggest/#Multiple%20sections
+[basic-example]: https://moroshko.github.io/react-autosuggest
+[multiple-sections]: https://moroshko.github.io/react-autosuggest/#Multiple%20sections
