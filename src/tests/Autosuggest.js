@@ -138,6 +138,10 @@ function clickEnter() {
   Simulate.keyDown(input, { keyCode: 13 });
 }
 
+function clickTab() {
+  Simulate.keyDown(input, { keyCode: 9 });
+}
+
 function expectInputValue(expectedValue) {
   expect(input.value).to.equal(expectedValue);
 }
@@ -463,9 +467,15 @@ describe('Autosuggest', () => {
         setInputValue('m');
       });
 
-      it('should be called when suggestion is selected using keyboard', () => {
+      it('should be called when suggestion is selected using enter key', () => {
         clickDown();
         clickEnter();
+        expect(onSuggestionSelected).to.have.been.calledWith({ suburb: 'Mill Park', postcode: '3083' }, sinon.match.instanceOf(SyntheticEvent));
+      });
+
+      it('should be called when suggestion is selected using tab key', () => {
+        clickDown();
+        clickTab();
         expect(onSuggestionSelected).to.have.been.calledWith({ suburb: 'Mill Park', postcode: '3083' }, sinon.match.instanceOf(SyntheticEvent));
       });
 
