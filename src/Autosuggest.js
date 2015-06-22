@@ -270,6 +270,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     let newState;
 
     switch (event.keyCode) {
+      case 9: // Tab
       case 13: // Enter
         if (this.state.valueBeforeUpDown !== null && this.suggestionIsFocused()) {
           this.onSuggestionSelected(event);
