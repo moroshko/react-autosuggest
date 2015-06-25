@@ -44,6 +44,7 @@
     "less": "^2.5.1",
     "less-loader": "^2.2.0",
     "mocha": "^2.2.5",
+    "path-is-absolute": "^1.0.0",
     "proxyquire": "^1.5.0",
     "react": "^0.13.3",
     "react-hot-loader": "^1.2.7",
