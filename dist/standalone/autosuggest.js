@@ -109,6 +109,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    this.suggestionsFn = (0, _debounce2['default'])(props.suggestions, 100);
 	    this.onChange = props.inputAttributes.onChange || function () {};
+	    this.onFocus = props.inputAttributes.onFocus || function () {};
 	    this.onBlur = props.inputAttributes.onBlur || function () {};
 	    this.lastSuggestionsInputValue = null; // Helps to deal with delayed requests
 	    this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
@@ -118,6 +119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.onInputChange = this.onInputChange.bind(this);
 	    this.onInputKeyDown = this.onInputKeyDown.bind(this);
+	    this.onInputFocus = this.onInputFocus.bind(this);
 	    this.onInputBlur = this.onInputBlur.bind(this);
 	  }
 
@@ -416,12 +418,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
+	    key: 'onInputFocus',
+	    value: function onInputFocus(event) {
+	      this.showSuggestions(this.state.value);
+	      this.onFocus(event);
+	    }
+	  }, {
 	    key: 'onInputBlur',
-	    value: function onInputBlur() {
+	    value: function onInputBlur(event) {
 	      this.onSuggestionUnfocused();
 
 	      if (!this.justClickedOnSuggestion) {
-	        this.onBlur();
+	        this.onBlur(event);
 	      }
 
 	      this.setSuggestionsState(null);
@@ -606,6 +614,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          ref: 'input',
 	          onChange: this.onInputChange,
 	          onKeyDown: this.onInputKeyDown,
+	          onFocus: this.onInputFocus,
 	          onBlur: this.onInputBlur })),
 	        this.renderSuggestions()
 	      );

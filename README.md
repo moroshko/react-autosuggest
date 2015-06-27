@@ -314,7 +314,7 @@ const inputAttributes = {
   className: 'my-sweet-locations-autosuggest',
   placeholder: 'Enter locations...',
   onChange: value => console.log(`Input value changed to: ${value}`),
-  onBlur: () => console.log('Input blurred')
+  onBlur: event => console.log('Input blurred. Event:', event)
 };
 ```
 

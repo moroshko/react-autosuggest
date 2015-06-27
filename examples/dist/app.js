@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "8912c502bcd2b914c052"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "12c93abb9c10e199fbba"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -29396,6 +29396,7 @@
 	    };
 	    this.suggestionsFn = (0, _debounce2['default'])(props.suggestions, 100);
 	    this.onChange = props.inputAttributes.onChange || function () {};
+	    this.onFocus = props.inputAttributes.onFocus || function () {};
 	    this.onBlur = props.inputAttributes.onBlur || function () {};
 	    this.lastSuggestionsInputValue = null; // Helps to deal with delayed requests
 	    this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
@@ -29405,6 +29406,7 @@
 
 	    this.onInputChange = this.onInputChange.bind(this);
 	    this.onInputKeyDown = this.onInputKeyDown.bind(this);
+	    this.onInputFocus = this.onInputFocus.bind(this);
 	    this.onInputBlur = this.onInputBlur.bind(this);
 	  }
 
@@ -29703,12 +29705,18 @@
 	      }
 	    }
 	  }, {
+	    key: 'onInputFocus',
+	    value: function onInputFocus(event) {
+	      this.showSuggestions(this.state.value);
+	      this.onFocus(event);
+	    }
+	  }, {
 	    key: 'onInputBlur',
-	    value: function onInputBlur() {
+	    value: function onInputBlur(event) {
 	      this.onSuggestionUnfocused();
 
 	      if (!this.justClickedOnSuggestion) {
-	        this.onBlur();
+	        this.onBlur(event);
 	      }
 
 	      this.setSuggestionsState(null);
@@ -29893,6 +29901,7 @@
 	          ref: 'input',
 	          onChange: this.onInputChange,
 	          onKeyDown: this.onInputKeyDown,
+	          onFocus: this.onInputFocus,
 	          onBlur: this.onInputBlur })),
 	        this.renderSuggestions()
 	      );
