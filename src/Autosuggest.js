@@ -330,11 +330,11 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     }
   }
 
-  onInputBlur() {
+  onInputBlur(event) {
     this.onSuggestionUnfocused();
 
     if (!this.justClickedOnSuggestion) {
-      this.onBlur();
+      this.onBlur(event);
     }
 
     this.setSuggestionsState(null);

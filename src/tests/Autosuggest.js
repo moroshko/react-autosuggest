@@ -769,7 +769,7 @@ describe('Autosuggest', () => {
     describe('should be called when', () => {
       it('input is blurred', () => {
         clickOutside();
-        expect(onBlur).to.have.been.called;
+        expect(onBlur).to.have.been.calledWith(sinon.match.instanceOf(SyntheticEvent));
       });
     });
 

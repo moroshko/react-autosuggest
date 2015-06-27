@@ -266,7 +266,7 @@ const inputAttributes = {
   placeholder: 'Enter locations...',
   value: 'Mordialloc',   // Initial value
   onChange: value => console.log(`Input value changed to: ${value}`),
-  onBlur: () => console.log('Input blurred')
+  onBlur: event => console.log('Input blurred. Event: ', event)
 };
 ```
 
