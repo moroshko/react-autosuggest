@@ -30,11 +30,11 @@
     "react": "^0.13.3"
   },
   "devDependencies": {
-    "babel": "^5.5.8",
-    "babel-eslint": "^3.1.15",
-    "babel-loader": "^5.1.4",
+    "babel": "^5.6.14",
+    "babel-eslint": "^3.1.19",
+    "babel-loader": "^5.2.2",
     "chai": "^3.0.0",
-    "css-loader": "^0.14.5",
+    "css-loader": "^0.15.1",
     "eslint": "^0.22.1",
     "eslint-loader": "^0.14.0",
     "eslint-plugin-react": "^2.5.2",
@@ -50,7 +50,7 @@
     "sinon": "^1.15.3",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.12.3",
-    "webpack": "^1.9.11",
+    "webpack": "^1.9.12",
     "webpack-dev-server": "^1.9.0"
   },
   "keywords": [
