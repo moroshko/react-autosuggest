@@ -22,7 +22,7 @@
 * Full control over [styling](#styling) (we just provide the mechanics and classes for you)
 * Full control over [when to show the suggestions](#showWhenOption) (e.g. when user types 2 or more characters)
 * Various hooks: [onSuggestionSelected](#onSuggestionSelectedOption), [onSuggestionFocused](#onSuggestionFocusedOption), [onSuggestionUnfocused](#onSuggestionUnfocusedOption)
-* Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder, onChange, onBlur)
+* Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder, type, onChange, onBlur)
 * In-memory caching (we retrieve suggestions for a given input only once)
 * Thoroughly tested (over 100 tests)
 
@@ -264,6 +264,7 @@ const inputAttributes = {
   name: 'locations-autosuggest',
   className: 'my-sweet-locations-autosuggest',
   placeholder: 'Enter locations...',
+  type: 'search',
   value: 'Mordialloc',   // Initial value
   onChange: value => console.log(`Input value changed to: ${value}`),
   onBlur: event => console.log('Input blurred. Event:', event)

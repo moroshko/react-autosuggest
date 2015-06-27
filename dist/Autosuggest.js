@@ -547,7 +547,7 @@ var Autosuggest = (function (_Component) {
         'div',
         { className: 'react-autosuggest' },
         _react2['default'].createElement('input', _extends({}, this.props.inputAttributes, {
-          type: 'text',
+          type: this.props.inputAttributes.type || 'text',
           value: this.state.value,
           autoComplete: 'off',
           role: 'combobox',
