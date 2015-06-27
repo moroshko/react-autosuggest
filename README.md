@@ -23,7 +23,7 @@
 * Full control over [when to show the suggestions](#showWhenOption) (e.g. when user types 2 or more characters)
 * Various hooks: [onSuggestionSelected](#onSuggestionSelectedOption), [onSuggestionFocused](#onSuggestionFocusedOption), [onSuggestionUnfocused](#onSuggestionUnfocusedOption)
 * Support for [controlled](https://facebook.github.io/react/docs/forms.html#controlled-components) as well as [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) state
-* Ability to [pass props to the input field](#inputAttributesOption) (e.g. placeholder, onChange, onBlur)
+* Ability to [pass props to the input field](#inputAttributesOption) (e.g. placeholder, type, onChange, onBlur)
 * In-memory caching (we retrieve suggestions for a given input only once)
 * Thoroughly tested (over 100 tests)
 
@@ -53,7 +53,7 @@ function getSuggestions(input, callback) {
 <Autosuggest suggestions={getSuggestions} />
 ```
 
-#### UMD module: 
+#### UMD module:
 
 Check out the [standalone example](https://github.com/moroshko/react-autosuggest/tree/master/examples/standalone).
 
@@ -313,6 +313,7 @@ const inputAttributes = {
   name: 'locations-autosuggest',
   className: 'my-sweet-locations-autosuggest',
   placeholder: 'Enter locations...',
+  type: 'search',
   onChange: value => console.log(`Input value changed to: ${value}`),
   onBlur: event => console.log('Input blurred. Event:', event)
 };

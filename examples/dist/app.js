@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "12c93abb9c10e199fbba"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "8e6f2c25680985f27a9b"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -29890,7 +29890,7 @@
 	        'div',
 	        { className: 'react-autosuggest' },
 	        _react2['default'].createElement('input', _extends({}, this.props.inputAttributes, {
-	          type: 'text',
+	          type: this.props.inputAttributes.type || 'text',
 	          value: this.state.value,
 	          autoComplete: 'off',
 	          role: 'combobox',

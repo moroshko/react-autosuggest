@@ -511,7 +511,7 @@ export default class Autosuggest extends Component {
     return (
       <div className="react-autosuggest">
         <input {...this.props.inputAttributes}
-               type="text"
+               type={this.props.inputAttributes.type || 'text'}
                value={this.state.value}
                autoComplete="off"
                role="combobox"

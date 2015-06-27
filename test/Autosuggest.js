@@ -251,6 +251,7 @@ describe('Autosuggest', () => {
                        inputAttributes={{ id: 'my-autosuggest',
                                           name: 'my-autosuggest-name',
                                           placeholder: 'Enter location...',
+                                          type: 'search',
                                           className: 'my-sweet-autosuggest' }} />
         );
       });
@@ -258,6 +259,7 @@ describe('Autosuggest', () => {
       it('should set input attributes', () => {
         expect(input.id).to.equal('my-autosuggest');
         expect(input.name).to.equal('my-autosuggest-name');
+        expect(input.type).to.equal('search');
         expect(input.getAttribute('placeholder')).to.equal('Enter location...');
         expect(input.className).to.equal('my-sweet-autosuggest');
       });
@@ -319,6 +321,10 @@ describe('Autosuggest', () => {
                        suggestionRenderer={renderSuburbObject}
                        suggestionValue={getSuburbObjectValue} />
         );
+      });
+
+      it('should set type to "text" by default', () => {
+        expect(input.type).to.equal('text');
       });
 
       it('should show suggestions when matches exist', () => {
