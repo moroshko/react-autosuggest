@@ -9,7 +9,7 @@ import SyntheticEvent from 'react/lib/SyntheticEvent';
 
 chai.use(sinonChai);
 
-const Autosuggest = proxyquire('../Autosuggest', { debounce: fn => fn });
+const Autosuggest = proxyquire('../src/Autosuggest', { debounce: fn => fn });
 const TestUtils = React.addons.TestUtils;
 const Simulate = TestUtils.Simulate;
 const SimulateNative = TestUtils.SimulateNative;
@@ -120,6 +120,10 @@ function mouseOverBetweenSuggestions(suggestionIndex1, suggestionIndex2) {
 
 function clickOutside() {
   Simulate.blur(input);
+}
+
+function focusOnInput() {
+  Simulate.focus(input);
 }
 
 function clickEscape() {
@@ -281,7 +285,7 @@ describe('Autosuggest', () => {
         expectSuggestions(['Nunawading']);
       });
 
-      it('should show not suggestions when no matches exist', () => {
+      it('should not show suggestions when no matches exist', () => {
         setInputValue('a');
         expectSuggestions([]);
       });
@@ -297,6 +301,14 @@ describe('Autosuggest', () => {
         clickEscape();
         clickEscape();
         expectInputValue('');
+      });
+
+      it('should show suggestions when when input is focussed', () => {
+        setInputValue('m');
+        clickOutside();
+        expectSuggestions([]);
+        focusOnInput();
+        expectSuggestions(['Mill Park', 'Mordialloc']);
       });
     });
 

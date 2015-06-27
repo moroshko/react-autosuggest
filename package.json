@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "1.16.0",
+  "version": "1.16.1",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/Autosuggest.js",
   "repository": {
@@ -15,8 +15,8 @@
   "scripts": {
     "start": "node server",
     "lint": "eslint src/sectionIterator.js src/Autosuggest.js examples/src",
-    "test": "mocha src/tests/index.js --compilers js:babel/register",
-    "dist": "babel src/sectionIterator.js -o dist/sectionIterator.js && babel src/Autosuggest.js -o dist/Autosuggest.js",
+    "test": "mocha test/index.js --opts mocha.opts",
+    "dist": "babel src -d dist",
     "examples-dist": "webpack --config webpack.dev.config.js",
     "standalone": "webpack --config webpack.standalone.config.js",
     "build": "npm run lint && npm test && npm run dist && npm run examples-dist && npm run standalone",

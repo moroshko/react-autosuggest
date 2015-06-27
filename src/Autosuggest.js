@@ -45,6 +45,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     };
     this.suggestionsFn = debounce(props.suggestions, 100);
     this.onChange = props.inputAttributes.onChange || (() => {});
+    this.onFocus = props.inputAttributes.onFocus || (() => {});
     this.onBlur = props.inputAttributes.onBlur || (() => {});
     this.lastSuggestionsInputValue = null; // Helps to deal with delayed requests
     this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
@@ -54,6 +55,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
 
     this.onInputChange = ::this.onInputChange;
     this.onInputKeyDown = ::this.onInputKeyDown;
+    this.onInputFocus = ::this.onInputFocus;
     this.onInputBlur = ::this.onInputBlur;
   }
 
@@ -330,6 +332,11 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     }
   }
 
+  onInputFocus(event) {
+    this.showSuggestions(this.state.value);
+    this.onFocus(event);
+  }
+
   onInputBlur(event) {
     this.onSuggestionUnfocused();
 
@@ -504,6 +511,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
                ref="input"
                onChange={this.onInputChange}
                onKeyDown={this.onInputKeyDown}
+               onFocus={this.onInputFocus}
                onBlur={this.onInputBlur} />
         {this.renderSuggestions()}
       </div>
