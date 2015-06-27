@@ -17,7 +17,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     inputAttributes: PropTypes.object,      // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
     id: PropTypes.string,                   // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
     scrollBar: PropTypes.bool,              // Should be set to true when the suggestions container can have a scroll bar
-    disableCache: PropTypes.bool
+    disableCache: PropTypes.bool            // Should be set to true when disabling the in-memory caching
   }
 
   static defaultProps = {
