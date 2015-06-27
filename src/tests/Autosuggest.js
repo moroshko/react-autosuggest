@@ -243,11 +243,11 @@ describe('Autosuggest', () => {
       beforeEach(() => {
         createAutosuggest(
           <Autosuggest suggestions={getSuburbStrings}
+                       defaultValue="my value"
                        inputAttributes={{ id: 'my-autosuggest',
                                           name: 'my-autosuggest-name',
                                           placeholder: 'Enter location...',
-                                          className: 'my-sweet-autosuggest',
-                                          value: 'my value' }} />
+                                          className: 'my-sweet-autosuggest' }} />
         );
       });
 
@@ -313,6 +313,68 @@ describe('Autosuggest', () => {
         setInputValue('m');
         expectSuggestions(['Mill Park VIC 3083', 'Mordialloc VIC 3195']);
       });
+    });
+  });
+
+  describe('(controlled behavior)', () => {
+    beforeEach(() => {
+      const parent = React.createElement(React.createClass({
+        getInitialState() {
+          return { location: 'Mill Park' };
+        },
+        getLocation() {
+          return this.state.location;
+        },
+        setLocation(location) {
+          this.setState({ location });
+        },
+        render() {
+          return (
+            <div>
+              <Autosuggest suggestions={getSuburbStrings}
+                value={this.getLocation()}
+                onSuggestionSelected={this.setLocation}
+                inputAttributes={{ id: 'my-autosuggest',
+                                   name: 'my-autosuggest-name',
+                                   placeholder: 'Enter location...',
+                                   className: 'my-sweet-autosuggest' }} />
+              <div className="result">{ this.getLocation() }</div>
+            </div>
+          );
+        }
+      }));
+      createAutosuggest(parent);
+    });
+
+    it('should set initial value', () => {
+      expectInputValue('Mill Park');
+    });
+
+    it('should not show suggestions by default', () => {
+      expectSuggestions([]);
+    });
+
+    it('should show suggestions when matches exist', () => {
+      setInputValue('m');
+      expectSuggestions(['Mill Park', 'Mordialloc']);
+    });
+
+    it('should show not suggestions when no matches exist', () => {
+      setInputValue('a');
+      expectSuggestions([]);
+    });
+
+    it('should only update when the outside value changes', () => {
+      setInputValue('m');
+      mouseOverFromInputToSuggestion(1);
+      mouseDownSuggestion(1);
+      expectSuggestions([]);
+      expectInputValue('Mordialloc');
+      let val = React.findDOMNode(TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'result')).innerHTML;
+      expect(val).to.equal('Mordialloc');
+      setInputValue('some other invalid value');
+      val = React.findDOMNode(TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'result')).innerHTML;
+      expect(val).to.equal('Mordialloc');
     });
   });
 

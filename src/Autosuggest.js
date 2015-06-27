@@ -7,6 +7,8 @@ import sectionIterator from './sectionIterator';
 
 export default class Autosuggest extends Component { // eslint-disable-line no-shadow
   static propTypes = {
+    value: PropTypes.string,                // Controlled value of the selected suggestion
+    defaultValue: PropTypes.string,         // Initial value of the text
     suggestions: PropTypes.func.isRequired, // Function to get the suggestions
     suggestionRenderer: PropTypes.func,     // Function that renders a given suggestion (must be implemented when suggestions are objects)
     suggestionValue: PropTypes.func,        // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
@@ -17,6 +19,13 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     inputAttributes: PropTypes.object,      // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
     id: PropTypes.string,                   // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
     scrollBar: PropTypes.bool               // Should be set to true when the suggestions container can have a scroll bar
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value) {
+      // If this component is controlled, then handle the value update
+      this.handleValueChange(nextProps.value);
+    }
   }
 
   static defaultProps = {
@@ -34,7 +43,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
 
     this.cache = {};
     this.state = {
-      value: props.inputAttributes.value || '',
+      value: props.value || props.defaultValue || '',
       suggestions: null,
       focusedSectionIndex: null,    // Used when multiple sections are displayed
       focusedSuggestionIndex: null, // Index within a section
@@ -254,7 +263,11 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
 
   onInputChange(event) {
     const newValue = event.target.value;
+    this.handleValueChange(newValue);
+    this.showSuggestions(newValue);
+  }
 
+  handleValueChange(newValue) {
     this.onSuggestionUnfocused();
     this.onChange(newValue);
 
@@ -262,8 +275,6 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
       value: newValue,
       valueBeforeUpDown: null
     });
-
-    this.showSuggestions(newValue);
   }
 
   onInputKeyDown(event) {
