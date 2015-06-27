@@ -23,7 +23,7 @@
 * Full control over [when to show the suggestions](#showWhenOption) (e.g. when user types 2 or more characters)
 * Various hooks: [onSuggestionSelected](#onSuggestionSelectedOption), [onSuggestionFocused](#onSuggestionFocusedOption), [onSuggestionUnfocused](#onSuggestionUnfocusedOption)
 * Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder, onChange, onBlur)
-* In-memory caching (we retrieve suggestions for a given input only once)
+* In-memory caching (we retrieve suggestions for a given input only once unless disabled)
 * Thoroughly tested (over 100 tests)
 
 ## Installation
@@ -67,6 +67,7 @@ Check out the [standalone example](https://github.com/moroshko/react-autosuggest
 * [`onSuggestionUnfocused`](#onSuggestionUnfocusedOption)
 * [`inputAttributes`](#inputAttributesOption)
 * [`id`](#idOption)
+* [`disableCache`](#disableCacheOption)
 * [`scrollBar`](#scrollBarOption)
 
 <a name="suggestionsOption"></a>
@@ -289,6 +290,13 @@ When rendering multiple `<Autosuggest />`s, make sure to give them unique `id`s.
 <Autosuggest id="source" suggestions={getSourceSuggestions} />
 <Autosuggest id="destination" suggestions={getDestinationSuggestions} />
 ```
+
+<a name="disableCacheOption"></a>
+#### disableCacheOption (optional)
+
+When set to `true`, in-memory cache will not interrupt the search request.
+
+Defaults to `false`.
 
 <a name="scrollBarOption"></a>
 #### scrollBar (optional)
