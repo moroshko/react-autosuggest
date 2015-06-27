@@ -61,7 +61,7 @@ function getSuggestions(input, callback) {
   setTimeout(() => callback(null, suggestions), 300);
 }
 
-export default class MultipleSections extends Component { // eslint-disable-line no-shadow
+export default class MultipleSections extends Component {
   render() {
     const inputAttributes = {
       id: 'multiple-sections',

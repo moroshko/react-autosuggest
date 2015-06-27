@@ -25,7 +25,7 @@ function getSuggestions(input, callback) {
   setTimeout(() => callback(null, suggestions), 300);
 }
 
-export default class EventsPlayground extends Component { // eslint-disable-line no-shadow
+export default class EventsPlayground extends Component {
   static propTypes = {
     onEventAdded: PropTypes.func.isRequired
   }

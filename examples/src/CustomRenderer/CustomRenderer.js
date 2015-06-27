@@ -65,7 +65,7 @@ function getSuggestionValue(suggestionObj) {
   return suggestionObj.suburb + ' VIC ' + suggestionObj.postcode;
 }
 
-export default class CustomRenderer extends Component { // eslint-disable-line no-shadow
+export default class CustomRenderer extends Component {
   render() {
     const inputAttributes = {
       id: 'custom-renderer',

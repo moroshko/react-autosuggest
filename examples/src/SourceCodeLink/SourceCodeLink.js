@@ -4,7 +4,7 @@ require('./SourceCodeLink.less');
 
 import React, { Component, PropTypes } from 'react';
 
-export default class SourceCodeLink extends Component { // eslint-disable-line no-shadow
+export default class SourceCodeLink extends Component {
   static propTypes = {
     file: PropTypes.string.isRequired
   }

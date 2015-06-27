@@ -5,7 +5,7 @@ import debounce from 'debounce';
 import classnames from 'classnames';
 import sectionIterator from './sectionIterator';
 
-export default class Autosuggest extends Component { // eslint-disable-line no-shadow
+export default class Autosuggest extends Component {
   static propTypes = {
     value: PropTypes.string,                // Controlled value of the selected suggestion
     defaultValue: PropTypes.string,         // Initial value of the text
