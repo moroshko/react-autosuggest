@@ -1,5 +1,3 @@
-'use strict';
-
 require('./SourceCodeLink.less');
 
 import React, { Component, PropTypes } from 'react';

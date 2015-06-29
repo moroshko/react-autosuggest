@@ -1,5 +1,3 @@
-'use strict';
-
 require('./Badges.less');
 
 import React, { Component } from 'react';

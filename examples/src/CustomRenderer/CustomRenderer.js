@@ -1,5 +1,3 @@
-'use strict';
-
 require('./CustomRenderer.less');
 
 import React, { Component } from 'react';

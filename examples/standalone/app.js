@@ -1,5 +1,3 @@
-'use strict';
-
 var suburbs = ['Cheltenham', 'Mill Park', 'Mordialloc', 'Nunawading'];
 
 function getSuggestions(input, callback) {
