@@ -1,5 +1,3 @@
-'use strict';
-
 require('./app.less');
 
 import React, { Component } from 'react';
