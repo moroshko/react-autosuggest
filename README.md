@@ -45,7 +45,7 @@ function getSuggestions(input, callback) {
   const regex = new RegExp('^' + input, 'i');
   const suggestions = suburbs.filter(suburb => regex.test(suburb));
 
-  setTimeout(() => callback(null, suggestions)), 300); // Emulate API call
+  setTimeout(() => callback(null, suggestions), 300); // Emulate API call
 }
 ```
 ```xml
