@@ -293,7 +293,7 @@ When rendering multiple `<Autosuggest />`s, make sure to give them unique `id`s.
 ```
 
 <a name="disableCacheOption"></a>
-#### scrollBar (optional)
+#### disableCacheOption (optional)
 
 When set to `true`, in-memory cache will not interrupt the search request.
 
