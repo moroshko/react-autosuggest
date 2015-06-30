@@ -1101,7 +1101,7 @@ describe('Autosuggest', () => {
       getSuburbs.reset();
     });
 
-    describe('should not call suggestions function if', () => {
+    describe('should call suggestions function if', () => {
       it('it was called before with the same input', () => {
         setInputValue('mi');
         getSuburbs.reset();
