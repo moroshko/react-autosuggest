@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "403483012fc23ce61c00"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "ee5580e4e943b300b833"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -29463,7 +29463,7 @@
 
 	      if (!this.props.showWhen(input)) {
 	        this.setSuggestionsState(null);
-	      } else if (!this.props.disableCache && this.cache[cacheKey]) {
+	      } else if (this.props.cache && this.cache[cacheKey]) {
 	        this.setSuggestionsState(this.cache[cacheKey]);
 	      } else {
 	        this.suggestionsFn(input, function (error, suggestions) {
@@ -29479,7 +29479,10 @@
 	              suggestions = null;
 	            }
 
-	            _this.cache[cacheKey] = suggestions;
+	            if (_this.props.cache) {
+	              _this.cache[cacheKey] = suggestions;
+	            }
+
 	            _this.setSuggestionsState(suggestions);
 	          }
 	        });
@@ -29920,9 +29923,9 @@
 	      onSuggestionFocused: _react.PropTypes.func, // This function is called when suggestion is focused via mouse hover or Up/Down keys
 	      onSuggestionUnfocused: _react.PropTypes.func, // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
 	      inputAttributes: _react.PropTypes.object, // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+	      cache: _react.PropTypes.bool, // Set it to false to disable in-memory caching
 	      id: _react.PropTypes.string, // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
-	      scrollBar: _react.PropTypes.bool, // Should be set to true when the suggestions container can have a scroll bar
-	      disableCache: _react.PropTypes.bool // Should be set to true when disabling the in-memory caching
+	      scrollBar: _react.PropTypes.bool // Set it to true when the suggestions container can have a scroll bar
 	    },
 	    enumerable: true
 	  }, {
@@ -29935,8 +29938,8 @@
 	      onSuggestionFocused: function onSuggestionFocused() {},
 	      onSuggestionUnfocused: function onSuggestionUnfocused() {},
 	      inputAttributes: {},
+	      cache: true,
 	      id: '1',
-	      disableCache: false,
 	      scrollBar: false
 	    },
 	    enumerable: true

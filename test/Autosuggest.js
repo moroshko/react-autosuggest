@@ -1068,50 +1068,52 @@ describe('Autosuggest', () => {
     });
   });
 
-  describe('(caching)', () => {
-    beforeEach(() => {
-      createAutosuggest(<Autosuggest suggestions={getSuburbs} />);
-      setInputValue('m');
-      getSuburbs.reset();
-    });
-
-    describe('should not call suggestions function if', () => {
-      it('it was called before with the same input', () => {
-        setInputValue('mi');
-        getSuburbs.reset();
+  describe('with caching', () => {
+    describe('enabled', () => {
+      beforeEach(() => {
+        createAutosuggest(<Autosuggest suggestions={getSuburbs} />);
         setInputValue('m');
-        expect(getSuburbs).not.to.have.been.called;
+        getSuburbs.reset();
       });
 
-      it('it was called before with the same case insensitive input', () => {
-        setInputValue('mi');
-        getSuburbs.reset();
-        setInputValue('M');
-        expect(getSuburbs).not.to.have.been.called;
+      describe('should not call suggestions function if', () => {
+        it('it was called before with the same input', () => {
+          setInputValue('mi');
+          getSuburbs.reset();
+          setInputValue('m');
+          expect(getSuburbs).not.to.have.been.called;
+        });
+
+        it('it was called before with the same case insensitive input', () => {
+          setInputValue('mi');
+          getSuburbs.reset();
+          setInputValue('M');
+          expect(getSuburbs).not.to.have.been.called;
+        });
       });
     });
-  });
 
-  describe('(disabled caching)', () => {
-    beforeEach(() => {
-      createAutosuggest(<Autosuggest disableCache={true} suggestions={getSuburbs} />);
-      setInputValue('m');
-      getSuburbs.reset();
-    });
-
-    describe('should call suggestions function if', () => {
-      it('it was called before with the same input', () => {
-        setInputValue('mi');
-        getSuburbs.reset();
+    describe('disabled', () => {
+      beforeEach(() => {
+        createAutosuggest(<Autosuggest cache={false} suggestions={getSuburbs} />);
         setInputValue('m');
-        expect(getSuburbs).to.have.been.called;
+        getSuburbs.reset();
       });
 
-      it('it was called before with the same case insensitive input', () => {
-        setInputValue('mi');
-        getSuburbs.reset();
-        setInputValue('M');
-        expect(getSuburbs).to.have.been.called;
+      describe('should call suggestions function if', () => {
+        it('it was called before with the same input', () => {
+          setInputValue('mi');
+          getSuburbs.reset();
+          setInputValue('m');
+          expect(getSuburbs).to.have.been.called;
+        });
+
+        it('it was called before with the same case insensitive input', () => {
+          setInputValue('mi');
+          getSuburbs.reset();
+          setInputValue('M');
+          expect(getSuburbs).to.have.been.called;
+        });
       });
     });
   });
