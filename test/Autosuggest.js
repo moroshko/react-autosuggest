@@ -1091,4 +1091,28 @@ describe('Autosuggest', () => {
       });
     });
   });
+
+  describe('(disabled caching)', () => {
+    beforeEach(() => {
+      createAutosuggest(<Autosuggest disableCache={true} suggestions={getSuburbs} />);
+      setInputValue('m');
+      getSuburbs.reset();
+    });
+
+    describe('should call suggestions function if', () => {
+      it('it was called before with the same input', () => {
+        setInputValue('mi');
+        getSuburbs.reset();
+        setInputValue('m');
+        expect(getSuburbs).to.have.been.called;
+      });
+
+      it('it was called before with the same case insensitive input', () => {
+        setInputValue('mi');
+        getSuburbs.reset();
+        setInputValue('M');
+        expect(getSuburbs).to.have.been.called;
+      });
+    });
+  });
 });

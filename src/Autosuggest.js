@@ -14,7 +14,8 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     onSuggestionUnfocused: PropTypes.func,  // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
     inputAttributes: PropTypes.object,      // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
     id: PropTypes.string,                   // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
-    scrollBar: PropTypes.bool               // Should be set to true when the suggestions container can have a scroll bar
+    scrollBar: PropTypes.bool,              // Should be set to true when the suggestions container can have a scroll bar
+    disableCache: PropTypes.bool            // Should be set to true when disabling the in-memory caching
   }
 
   static defaultProps = {
@@ -24,6 +25,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     onSuggestionUnfocused: () => {},
     inputAttributes: {},
     id: '1',
+    disableCache: false,
     scrollBar: false
   }
 
@@ -96,7 +98,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
 
     if (!this.props.showWhen(input)) {
       this.setSuggestionsState(null);
-    } else if (this.cache[cacheKey]) {
+    } else if (!this.props.disableCache && this.cache[cacheKey]) {
       this.setSuggestionsState(this.cache[cacheKey]);
     } else {
       this.suggestionsFn(input, (error, suggestions) => {
