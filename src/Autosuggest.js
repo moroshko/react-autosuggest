@@ -14,6 +14,7 @@ export default class Autosuggest extends Component {
     onSuggestionSelected: PropTypes.func,   // This function is called when suggestion is selected via mouse click or Enter
     onSuggestionFocused: PropTypes.func,    // This function is called when suggestion is focused via mouse hover or Up/Down keys
     onSuggestionUnfocused: PropTypes.func,  // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
+    onInputChange: PropTypes.func,
     inputAttributes: PropTypes.object,      // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
     id: PropTypes.string,                   // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
     scrollBar: PropTypes.bool               // Should be set to true when the suggestions container can have a scroll bar
@@ -265,6 +266,9 @@ export default class Autosuggest extends Component {
     const newValue = event.target.value;
     this.handleValueChange(newValue);
     this.showSuggestions(newValue);
+    if (this.props.onInputChange) {
+      this.props.onInputChange(newValue);
+    }
   }
 
   handleValueChange(newValue) {

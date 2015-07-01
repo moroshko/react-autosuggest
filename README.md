@@ -302,6 +302,30 @@ function onSuggestionUnfocused(suggestion) { // In this example 'suggestion' is 
              onSuggestionUnfocused={onSuggestionUnfocused} />
 ```
 
+<a name="onInputChange"></a>
+#### onInputChange (optional)
+
+This function will be called when user changes the input.
+Combined with [value](#valueOption) you can implement a fully
+[controlled](https://facebook.github.io/react/docs/forms.html#controlled-components)
+component.
+
+```js
+function(input) {
+  ...
+}
+```
+
+* `input` - Will be the value of the input field
+
+For example:
+
+```js
+function onInputChange(input) {
+  console.log('Got new input: [' + input + ']');
+}
+```
+
 <a name="inputAttributesOption"></a>
 #### inputAttributes (optional)
 
