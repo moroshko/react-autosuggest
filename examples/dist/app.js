@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "6d7860fda04ac03ecc2d"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "403483012fc23ce61c00"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -122,10 +122,11 @@
 /******/ 					hot._selfAccepted = true;
 /******/ 				else if(typeof dep === "function")
 /******/ 					hot._selfAccepted = dep;
-/******/ 				else if(typeof dep === "number")
-/******/ 					hot._acceptedDependencies[dep] = callback;
-/******/ 				else for(var i = 0; i < dep.length; i++)
+/******/ 				else if(typeof dep === "object")
+/******/ 				for(var i = 0; i < dep.length; i++)
 /******/ 					hot._acceptedDependencies[dep[i]] = callback;
+/******/ 				else
+/******/ 					hot._acceptedDependencies[dep] = callback;
 /******/ 			},
 /******/ 			decline: function(dep) {
 /******/ 				if(typeof dep === "undefined")
@@ -186,6 +187,10 @@
 /******/ 	
 /******/ 	// The update info
 /******/ 	var hotUpdate, hotUpdateNewHash;
+/******/ 	
+/******/ 	function toModuleId(id) {
+/******/ 		return (+id) + "" === id ? +id : id;
+/******/ 	}
 /******/ 	
 /******/ 	function hotCheck(apply, callback) {
 /******/ 		if(hotStatus !== "idle") throw new Error("check() is only allowed in idle status");
@@ -260,7 +265,7 @@
 /******/ 			var outdatedModules = [];
 /******/ 			for(var id in hotUpdate) {
 /******/ 				if(Object.prototype.hasOwnProperty.call(hotUpdate, id)) {
-/******/ 					outdatedModules.push(+id);
+/******/ 					outdatedModules.push(toModuleId(id));
 /******/ 				}
 /******/ 			}
 /******/ 			callback(null, outdatedModules);
@@ -291,9 +296,6 @@
 /******/ 					continue;
 /******/ 				if(module.hot._selfDeclined) {
 /******/ 					return new Error("Aborted because of self decline: " + moduleId);
-/******/ 				}
-/******/ 				if(moduleId === 0) {
-/******/ 					return;
 /******/ 				}
 /******/ 				for(var i = 0; i < module.parents.length; i++) {
 /******/ 					var parentId = module.parents[i];
@@ -331,7 +333,7 @@
 /******/ 		var appliedUpdate = {};
 /******/ 		for(var id in hotUpdate) {
 /******/ 			if(Object.prototype.hasOwnProperty.call(hotUpdate, id)) {
-/******/ 				var moduleId = +id;
+/******/ 				var moduleId = toModuleId(id);
 /******/ 				var result = getAffectedStuff(moduleId);
 /******/ 				if(!result) {
 /******/ 					if(options.ignoreUnaccepted)
@@ -29461,7 +29463,7 @@
 
 	      if (!this.props.showWhen(input)) {
 	        this.setSuggestionsState(null);
-	      } else if (this.cache[cacheKey]) {
+	      } else if (!this.props.disableCache && this.cache[cacheKey]) {
 	        this.setSuggestionsState(this.cache[cacheKey]);
 	      } else {
 	        this.suggestionsFn(input, function (error, suggestions) {
@@ -29919,7 +29921,8 @@
 	      onSuggestionUnfocused: _react.PropTypes.func, // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
 	      inputAttributes: _react.PropTypes.object, // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
 	      id: _react.PropTypes.string, // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
-	      scrollBar: _react.PropTypes.bool // Should be set to true when the suggestions container can have a scroll bar
+	      scrollBar: _react.PropTypes.bool, // Should be set to true when the suggestions container can have a scroll bar
+	      disableCache: _react.PropTypes.bool // Should be set to true when disabling the in-memory caching
 	    },
 	    enumerable: true
 	  }, {
@@ -29933,6 +29936,7 @@
 	      onSuggestionUnfocused: function onSuggestionUnfocused() {},
 	      inputAttributes: {},
 	      id: '1',
+	      disableCache: false,
 	      scrollBar: false
 	    },
 	    enumerable: true

@@ -174,7 +174,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      if (!this.props.showWhen(input)) {
 	        this.setSuggestionsState(null);
-	      } else if (this.cache[cacheKey]) {
+	      } else if (!this.props.disableCache && this.cache[cacheKey]) {
 	        this.setSuggestionsState(this.cache[cacheKey]);
 	      } else {
 	        this.suggestionsFn(input, function (error, suggestions) {
@@ -632,7 +632,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      onSuggestionUnfocused: _react.PropTypes.func, // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
 	      inputAttributes: _react.PropTypes.object, // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
 	      id: _react.PropTypes.string, // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
-	      scrollBar: _react.PropTypes.bool // Should be set to true when the suggestions container can have a scroll bar
+	      scrollBar: _react.PropTypes.bool, // Should be set to true when the suggestions container can have a scroll bar
+	      disableCache: _react.PropTypes.bool // Should be set to true when disabling the in-memory caching
 	    },
 	    enumerable: true
 	  }, {
@@ -646,6 +647,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      onSuggestionUnfocused: function onSuggestionUnfocused() {},
 	      inputAttributes: {},
 	      id: '1',
+	      disableCache: false,
 	      scrollBar: false
 	    },
 	    enumerable: true
