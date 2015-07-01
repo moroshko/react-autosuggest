@@ -118,7 +118,7 @@ var Autosuggest = (function (_Component) {
 
       if (!this.props.showWhen(input)) {
         this.setSuggestionsState(null);
-      } else if (this.cache[cacheKey]) {
+      } else if (this.props.cache && this.cache[cacheKey]) {
         this.setSuggestionsState(this.cache[cacheKey]);
       } else {
         this.suggestionsFn(input, function (error, suggestions) {
@@ -134,7 +134,10 @@ var Autosuggest = (function (_Component) {
               suggestions = null;
             }
 
-            _this.cache[cacheKey] = suggestions;
+            if (_this.props.cache) {
+              _this.cache[cacheKey] = suggestions;
+            }
+
             _this.setSuggestionsState(suggestions);
           }
         });
@@ -575,8 +578,9 @@ var Autosuggest = (function (_Component) {
       onSuggestionFocused: _react.PropTypes.func, // This function is called when suggestion is focused via mouse hover or Up/Down keys
       onSuggestionUnfocused: _react.PropTypes.func, // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
       inputAttributes: _react.PropTypes.object, // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+      cache: _react.PropTypes.bool, // Set it to false to disable in-memory caching
       id: _react.PropTypes.string, // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
-      scrollBar: _react.PropTypes.bool // Should be set to true when the suggestions container can have a scroll bar
+      scrollBar: _react.PropTypes.bool // Set it to true when the suggestions container can have a scroll bar
     },
     enumerable: true
   }, {
@@ -589,6 +593,7 @@ var Autosuggest = (function (_Component) {
       onSuggestionFocused: function onSuggestionFocused() {},
       onSuggestionUnfocused: function onSuggestionUnfocused() {},
       inputAttributes: {},
+      cache: true,
       id: '1',
       scrollBar: false
     },

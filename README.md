@@ -18,14 +18,14 @@
 * [WAI-ARIA accessible][wai-aria] (including ARIA attributes and keyboard interactions)
 * Supports [multiple sections][multiple-sections] as well as [plain list of suggestions][basic-example]
 * Supports delayed requests (if request comes back after user types another letter, it will be ignored)
+* Support for [controlled](https://facebook.github.io/react/docs/forms.html#controlled-components) as well as [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) state
 * Full control over [suggestion rendering](#suggestionRendererOption) (you can display extra data, images, whatever you want)
-* Full control over [styling](#styling) (we just provide the mechanics and classes for you)
 * Full control over [when to show the suggestions](#showWhenOption) (e.g. when user types 2 or more characters)
 * Various hooks: [onSuggestionSelected](#onSuggestionSelectedOption), [onSuggestionFocused](#onSuggestionFocusedOption), [onSuggestionUnfocused](#onSuggestionUnfocusedOption)
-* Support for [controlled](https://facebook.github.io/react/docs/forms.html#controlled-components) as well as [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) state
-* Ability to [pass props to the input field](#inputAttributesOption) (e.g. placeholder, type, onChange, onBlur)
-* In-memory caching (we retrieve suggestions for a given input only once)
-* Thoroughly tested (over 100 tests)
+* Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder, type, onChange, onBlur)
+* In-memory caching (suggestions for a given input are retrieved only once). Can be disabled.
+* Comes with no styles. [Only classes are provided.](#styling)
+* Thoroughly tested (over 110 tests)
 
 ## Installation
 
@@ -46,7 +46,7 @@ function getSuggestions(input, callback) {
   const regex = new RegExp('^' + input, 'i');
   const suggestions = suburbs.filter(suburb => regex.test(suburb));
 
-  setTimeout(() => callback(null, suggestions)), 300); // Emulate API call
+  setTimeout(() => callback(null, suggestions), 300); // Emulate API call
 }
 ```
 ```xml
@@ -69,6 +69,7 @@ Check out the [standalone example](https://github.com/moroshko/react-autosuggest
 * [`onSuggestionFocused`](#onSuggestionFocusedOption)
 * [`onSuggestionUnfocused`](#onSuggestionUnfocusedOption)
 * [`inputAttributes`](#inputAttributesOption)
+* [`cache`](#cacheOption)
 * [`id`](#idOption)
 * [`scrollBar`](#scrollBarOption)
 
@@ -324,6 +325,15 @@ const inputAttributes = {
 <Autosuggest suggestions={getSuggestions}
              inputAttributes={inputAttributes} />
 ```
+
+<a name="cacheOption"></a>
+#### cache (optional)
+
+Defaults to `true`, meaning that the [`suggestions`](#suggestionsOption) function will be called only once for a given input.
+
+For example, if user types `m`, and suggestions are retrieved, we store the result in memory. Then, if user types `e` and hits `Backspace`, we get the suggestions for `m` from the cache.
+
+Set `cache={false}` to disable this behaviour.
 
 <a name="idOption"></a>
 #### id (required when multiple Autosuggests are rendered on a page)
