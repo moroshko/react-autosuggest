@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "ee5580e4e943b300b833"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "3efa4721c013ea77a64a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -8010,7 +8010,6 @@
 
 	  _createClass(App, [{
 	    key: 'render',
-	    // eslint-disable-line no-shadow
 	    value: function render() {
 	      return _react2['default'].createElement(
 	        'div',
@@ -8090,8 +8089,6 @@
 	__webpack_require__(246);
 
 	var Examples = (function (_Component) {
-	  // eslint-disable-line no-shadow
-
 	  function Examples() {
 	    _classCallCheck(this, Examples);
 
@@ -28818,7 +28815,6 @@
 
 	  _createClass(BasicExample, [{
 	    key: 'render',
-	    // eslint-disable-line no-shadow
 	    value: function render() {
 	      var inputAttributes = {
 	        id: 'basic-example',
@@ -29387,7 +29383,7 @@
 
 	    this.cache = {};
 	    this.state = {
-	      value: props.inputAttributes.value || '',
+	      value: props.value || props.defaultValue || '',
 	      suggestions: null,
 	      focusedSectionIndex: null, // Used when multiple sections are displayed
 	      focusedSuggestionIndex: null, // Index within a section
@@ -29415,6 +29411,14 @@
 	  _inherits(Autosuggest, _Component);
 
 	  _createClass(Autosuggest, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.value) {
+	        // If this component is controlled, then handle the value update
+	        this.handleValueChange(nextProps.value);
+	      }
+	    }
+	  }, {
 	    key: 'resetSectionIterator',
 	    value: function resetSectionIterator(suggestions) {
 	      if (this.isMultipleSections(suggestions)) {
@@ -29637,7 +29641,12 @@
 	    key: 'onInputChange',
 	    value: function onInputChange(event) {
 	      var newValue = event.target.value;
-
+	      this.handleValueChange(newValue);
+	      this.showSuggestions(newValue);
+	    }
+	  }, {
+	    key: 'handleValueChange',
+	    value: function handleValueChange(newValue) {
 	      this.onSuggestionUnfocused();
 	      this.onChange(newValue);
 
@@ -29645,8 +29654,6 @@
 	        value: newValue,
 	        valueBeforeUpDown: null
 	      });
-
-	      this.showSuggestions(newValue);
 	    }
 	  }, {
 	    key: 'onInputKeyDown',
@@ -29913,8 +29920,9 @@
 	    }
 	  }], [{
 	    key: 'propTypes',
-	    // eslint-disable-line no-shadow
 	    value: {
+	      value: _react.PropTypes.string, // Controlled value of the selected suggestion
+	      defaultValue: _react.PropTypes.string, // Initial value of the text
 	      suggestions: _react.PropTypes.func.isRequired, // Function to get the suggestions
 	      suggestionRenderer: _react.PropTypes.func, // Function that renders a given suggestion (must be implemented when suggestions are objects)
 	      suggestionValue: _react.PropTypes.func, // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
@@ -30201,7 +30209,6 @@
 	    }
 	  }], [{
 	    key: 'propTypes',
-	    // eslint-disable-line no-shadow
 	    value: {
 	      file: _react.PropTypes.string.isRequired
 	    },
@@ -44047,7 +44054,6 @@
 
 	  _createClass(CustomRenderer, [{
 	    key: 'render',
-	    // eslint-disable-line no-shadow
 	    value: function render() {
 	      var inputAttributes = {
 	        id: 'custom-renderer',
@@ -44203,7 +44209,6 @@
 
 	  _createClass(MultipleSections, [{
 	    key: 'render',
-	    // eslint-disable-line no-shadow
 	    value: function render() {
 	      var inputAttributes = {
 	        id: 'multiple-sections',
@@ -44371,7 +44376,6 @@
 	    }
 	  }], [{
 	    key: 'propTypes',
-	    // eslint-disable-line no-shadow
 	    value: {
 	      onEventAdded: _react.PropTypes.func.isRequired
 	    },
@@ -44512,7 +44516,6 @@
 	    }
 	  }], [{
 	    key: 'propTypes',
-	    // eslint-disable-line no-shadow
 	    value: {
 	      events: _react.PropTypes.array.isRequired
 	    },
@@ -44585,7 +44588,6 @@
 
 	  _createClass(Badges, [{
 	    key: 'render',
-	    // eslint-disable-line no-shadow
 	    value: function render() {
 	      return _react2['default'].createElement(
 	        'div',
@@ -44666,12 +44668,11 @@
 
 	  _createClass(Footer, [{
 	    key: 'render',
-	    // eslint-disable-line no-shadow
 	    value: function render() {
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: 'footer' },
-	        _react2['default'].createElement('img', { src: '//gravatar.com/avatar/e56de06f4b56f6f06e4a9a271ed57e26?s=32',
+	        _react2['default'].createElement('img', { src: 'https://gravatar.com/avatar/e56de06f4b56f6f06e4a9a271ed57e26?s=32',
 	          alt: 'Misha Moroshko' }),
 	        _react2['default'].createElement(
 	          'span',
@@ -44682,11 +44683,21 @@
 	            null,
 	            'love'
 	          ),
-	          ' by ',
+	          ' by',
+	          ' ',
 	          _react2['default'].createElement(
 	            'a',
-	            { href: '//twitter.com/moroshko', target: '_blank' },
+	            { href: 'https://twitter.com/moroshko',
+	              target: '_blank' },
 	            '@moroshko'
+	          ),
+	          ' ',
+	          'and ',
+	          _react2['default'].createElement(
+	            'a',
+	            { href: 'https://github.com/moroshko/react-autosuggest/graphs/contributors',
+	              target: '_blank' },
+	            'contributors'
 	          )
 	        )
 	      );
@@ -44761,7 +44772,6 @@
 	    }
 	  }], [{
 	    key: 'propTypes',
-	    // eslint-disable-line no-shadow
 	    value: {
 	      user: _react.PropTypes.string.isRequired,
 	      repo: _react.PropTypes.string.isRequired

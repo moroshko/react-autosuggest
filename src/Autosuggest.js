@@ -20,13 +20,6 @@ export default class Autosuggest extends Component {
     scrollBar: PropTypes.bool               // Set it to true when the suggestions container can have a scroll bar
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value) {
-      // If this component is controlled, then handle the value update
-      this.handleValueChange(nextProps.value);
-    }
-  }
-
   static defaultProps = {
     showWhen: input => input.trim().length > 0,
     onSuggestionSelected: () => {},
@@ -66,6 +59,13 @@ export default class Autosuggest extends Component {
     this.onInputKeyDown = ::this.onInputKeyDown;
     this.onInputFocus = ::this.onInputFocus;
     this.onInputBlur = ::this.onInputBlur;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value) {
+      // If this component is controlled, then handle the value update
+      this.handleValueChange(nextProps.value);
+    }
   }
 
   resetSectionIterator(suggestions) {

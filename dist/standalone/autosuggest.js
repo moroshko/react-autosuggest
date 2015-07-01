@@ -98,7 +98,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.cache = {};
 	    this.state = {
-	      value: props.inputAttributes.value || '',
+	      value: props.value || props.defaultValue || '',
 	      suggestions: null,
 	      focusedSectionIndex: null, // Used when multiple sections are displayed
 	      focusedSuggestionIndex: null, // Index within a section
@@ -126,6 +126,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _inherits(Autosuggest, _Component);
 
 	  _createClass(Autosuggest, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.value) {
+	        // If this component is controlled, then handle the value update
+	        this.handleValueChange(nextProps.value);
+	      }
+	    }
+	  }, {
 	    key: 'resetSectionIterator',
 	    value: function resetSectionIterator(suggestions) {
 	      if (this.isMultipleSections(suggestions)) {
@@ -348,7 +356,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'onInputChange',
 	    value: function onInputChange(event) {
 	      var newValue = event.target.value;
-
+	      this.handleValueChange(newValue);
+	      this.showSuggestions(newValue);
+	    }
+	  }, {
+	    key: 'handleValueChange',
+	    value: function handleValueChange(newValue) {
 	      this.onSuggestionUnfocused();
 	      this.onChange(newValue);
 
@@ -356,8 +369,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: newValue,
 	        valueBeforeUpDown: null
 	      });
-
-	      this.showSuggestions(newValue);
 	    }
 	  }, {
 	    key: 'onInputKeyDown',
@@ -624,8 +635,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }], [{
 	    key: 'propTypes',
-	    // eslint-disable-line no-shadow
 	    value: {
+	      value: _react.PropTypes.string, // Controlled value of the selected suggestion
+	      defaultValue: _react.PropTypes.string, // Initial value of the text
 	      suggestions: _react.PropTypes.func.isRequired, // Function to get the suggestions
 	      suggestionRenderer: _react.PropTypes.func, // Function that renders a given suggestion (must be implemented when suggestions are objects)
 	      suggestionValue: _react.PropTypes.func, // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
