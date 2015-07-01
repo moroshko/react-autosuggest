@@ -2,6 +2,10 @@
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 
+To do:
+- [ ] Add example for a controlled component (make sure that `getSuggestionValue()` is called)
+- [ ] Add tests for a controlled component using object suggestions
+
 # React Autosuggest
 
 [WAI-ARIA compliant][wai-aria] React autosuggest component.
