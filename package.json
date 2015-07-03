@@ -23,7 +23,7 @@
     "gh-pages": "git checkout gh-pages; git pull; git merge master; npm run examples-dist; cp examples/dist/*.* .; git add index.html app.css app.js; git commit -m 'Update gh-pages files'; git push; git checkout master"
   },
   "dependencies": {
-    "classnames": "^2.1.2",
+    "classnames": "^2.1.3",
     "debounce": "^1.0.0"
   },
   "peerDependencies": {
@@ -32,14 +32,14 @@
   "devDependencies": {
     "babel": "^5.6.14",
     "babel-eslint": "^3.1.20",
-    "babel-loader": "^5.2.2",
+    "babel-loader": "^5.3.0",
     "chai": "^3.0.0",
     "css-loader": "^0.15.1",
     "eslint": "^0.24.0",
     "eslint-loader": "^0.14.1",
-    "eslint-plugin-react": "^2.6.3",
+    "eslint-plugin-react": "^2.6.4",
     "extract-text-webpack-plugin": "^0.8.2",
-    "jsdom": "3.1.2",
+    "jsdom": "<4.0.0",
     "json-loader": "^0.5.2",
     "less": "^2.5.1",
     "less-loader": "^2.2.0",
@@ -50,7 +50,7 @@
     "sinon": "^1.15.4",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.12.3",
-    "webpack": "^1.10.0",
+    "webpack": "^1.10.1",
     "webpack-dev-server": "^1.10.1"
   },
   "keywords": [
