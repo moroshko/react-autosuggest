@@ -32,6 +32,12 @@
 npm install react-autosuggest --save
 ```
 
+Or
+
+```shell
+bower install react-autosuggest --save
+```
+
 ## Basic Usage
 
 #### CommonJS module:
