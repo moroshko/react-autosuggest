@@ -32,7 +32,7 @@
 npm install react-autosuggest --save
 ```
 
-Or
+or
 
 ```shell
 bower install react-autosuggest --save
