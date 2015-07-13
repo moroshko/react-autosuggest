@@ -1,0 +1,23 @@
+{
+  "name": "react-autosuggest",
+  "version": "1.18.2",
+  "homepage": "https://github.com/yagudaev/react-autosuggest",
+  "authors": [
+    "Misha Moroshko <michael.moroshko@gmail.com>"
+  ],
+  "description": "WAI-ARIA compliant React autosuggest component",
+  "main": "dist/standalone/autosuggest.js",
+  "keywords": [
+    "react",
+    "autocomplete"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "src"
+  ]
+}
