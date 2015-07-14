@@ -1,5 +1,3 @@
-'use strict';
-
 require('./EventsLog.less');
 
 import React, { Component, PropTypes } from 'react';

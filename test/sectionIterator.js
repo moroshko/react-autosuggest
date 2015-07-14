@@ -1,7 +1,5 @@
-'use strict';
-
 import { expect } from 'chai';
-import sectionIterator from '../sectionIterator.js';
+import sectionIterator from '../src/sectionIterator.js';
 
 describe('sectionIterator', () => {
   describe('with no sections', () => {

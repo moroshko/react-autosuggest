@@ -1,5 +1,3 @@
-'use strict';
-
 require('./Footer.less');
 
 import React, { Component } from 'react';

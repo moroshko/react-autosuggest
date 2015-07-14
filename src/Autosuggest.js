@@ -1,5 +1,3 @@
-'use strict';
-
 import React, { Component, PropTypes, findDOMNode } from 'react';
 import debounce from 'debounce';
 import classnames from 'classnames';
@@ -15,8 +13,9 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     onSuggestionFocused: PropTypes.func,    // This function is called when suggestion is focused via mouse hover or Up/Down keys
     onSuggestionUnfocused: PropTypes.func,  // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
     inputAttributes: PropTypes.object,      // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+    cache: PropTypes.bool,                  // Set it to false to disable in-memory caching
     id: PropTypes.string,                   // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
-    scrollBar: PropTypes.bool               // Should be set to true when the suggestions container can have a scroll bar
+    scrollBar: PropTypes.bool               // Set it to true when the suggestions container can have a scroll bar
   }
 
   static defaultProps = {
@@ -25,6 +24,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     onSuggestionFocused: () => {},
     onSuggestionUnfocused: () => {},
     inputAttributes: {},
+    cache: true,
     id: '1',
     scrollBar: false
   }
@@ -45,6 +45,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     };
     this.suggestionsFn = debounce(props.suggestions, 100);
     this.onChange = props.inputAttributes.onChange || (() => {});
+    this.onFocus = props.inputAttributes.onFocus || (() => {});
     this.onBlur = props.inputAttributes.onBlur || (() => {});
     this.lastSuggestionsInputValue = null; // Helps to deal with delayed requests
     this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
@@ -54,6 +55,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
 
     this.onInputChange = ::this.onInputChange;
     this.onInputKeyDown = ::this.onInputKeyDown;
+    this.onInputFocus = ::this.onInputFocus;
     this.onInputBlur = ::this.onInputBlur;
   }
 
@@ -96,7 +98,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
 
     if (!this.props.showWhen(input)) {
       this.setSuggestionsState(null);
-    } else if (this.cache[cacheKey]) {
+    } else if (this.props.cache && this.cache[cacheKey]) {
       this.setSuggestionsState(this.cache[cacheKey]);
     } else {
       this.suggestionsFn(input, (error, suggestions) => {
@@ -112,7 +114,10 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
             suggestions = null;
           }
 
-          this.cache[cacheKey] = suggestions;
+          if (this.props.cache) {
+            this.cache[cacheKey] = suggestions;
+          }
+
           this.setSuggestionsState(suggestions);
         }
       });
@@ -330,11 +335,16 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     }
   }
 
-  onInputBlur() {
+  onInputFocus(event) {
+    this.showSuggestions(this.state.value);
+    this.onFocus(event);
+  }
+
+  onInputBlur(event) {
     this.onSuggestionUnfocused();
 
     if (!this.justClickedOnSuggestion) {
-      this.onBlur();
+      this.onBlur(event);
     }
 
     this.setSuggestionsState(null);
@@ -445,7 +455,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
   }
 
   renderSuggestions() {
-    if (this.state.value === '' || this.state.suggestions === null) {
+    if (this.state.suggestions === null) {
       return null;
     }
 
@@ -493,7 +503,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
     return (
       <div className="react-autosuggest">
         <input {...this.props.inputAttributes}
-               type="text"
+               type={this.props.inputAttributes.type || 'text'}
                value={this.state.value}
                autoComplete="off"
                role="combobox"
@@ -504,6 +514,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
                ref="input"
                onChange={this.onInputChange}
                onKeyDown={this.onInputKeyDown}
+               onFocus={this.onInputFocus}
                onBlur={this.onInputBlur} />
         {this.renderSuggestions()}
       </div>

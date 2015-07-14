@@ -1,5 +1,3 @@
-'use strict';
-
 let data, multipleSections;
 
 function setData(newData) {
