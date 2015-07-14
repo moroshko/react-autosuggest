@@ -455,6 +455,7 @@ export default class Autosuggest extends Component { // eslint-disable-line no-s
   }
 
   renderSuggestions() {
+    if (this.state.suggestions === null) {
       return null;
     }
 
