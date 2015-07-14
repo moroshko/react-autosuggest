@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "1.18.1",
+  "version": "1.18.2",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/Autosuggest.js",
   "repository": {
@@ -13,7 +13,7 @@
   },
   "homepage": "https://github.com/moroshko/react-autosuggest",
   "scripts": {
-    "start": "node server",
+    "start": "node server & open http://localhost:3000/examples/dist/index.html",
     "lint": "eslint src/sectionIterator.js src/Autosuggest.js examples/src",
     "test": "mocha test/index.js --opts mocha.opts",
     "dist": "babel src -d dist",

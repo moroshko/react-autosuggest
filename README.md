@@ -383,8 +383,6 @@ The following diagrams explain the classes above.
 npm start
 ```
 
-Now, open `http://localhost:3000/examples/dist/index.html` and start hacking!
-
 ## Running Tests
 
 ```shell
