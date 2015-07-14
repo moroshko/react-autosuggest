@@ -20,7 +20,7 @@
     "examples-dist": "webpack --config webpack.dev.config.js",
     "standalone": "webpack --config webpack.standalone.config.js",
     "build": "npm run lint && npm test && npm run dist && npm run examples-dist && npm run standalone",
-    "gh-pages": "git checkout gh-pages; git pull; git merge master; npm run examples-dist; cp examples/dist/*.* .; git add index.html app.css app.js; git commit -m 'Update gh-pages files'; git push; git checkout master"
+    "gh-pages": "git checkout gh-pages; git pull; git merge master --no-edit; npm run examples-dist; cp examples/dist/*.* .; git add index.html app.css app.js; git commit -m 'Update gh-pages files'; git push; git checkout master"
   },
   "dependencies": {
     "classnames": "^2.1.3",
