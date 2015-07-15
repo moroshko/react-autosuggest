@@ -510,7 +510,7 @@ var Autosuggest = (function (_Component) {
     value: function renderSuggestions() {
       var _this4 = this;
 
-      if (this.state.value === '' || this.state.suggestions === null) {
+      if (this.state.suggestions === null) {
         return null;
       }
 

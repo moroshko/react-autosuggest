@@ -466,7 +466,7 @@ export default class Autosuggest extends Component {
   }
 
   renderSuggestions() {
-    if (this.state.value === '' || this.state.suggestions === null) {
+    if (this.state.suggestions === null) {
       return null;
     }
 

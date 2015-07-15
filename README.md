@@ -37,6 +37,12 @@ To do:
 npm install react-autosuggest --save
 ```
 
+or
+
+```shell
+bower install react-autosuggest --save
+```
+
 ## Basic Usage
 
 #### CommonJS module:
@@ -428,8 +434,6 @@ The following diagrams explain the classes above.
 ```shell
 npm start
 ```
-
-Now, open `http://localhost:3000/examples/dist/index.html` and start hacking!
 
 ## Running Tests
 
