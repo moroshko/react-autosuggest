@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "1.18.2",
+  "version": "1.18.3",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/Autosuggest.js",
   "repository": {
@@ -13,14 +13,14 @@
   },
   "homepage": "https://github.com/moroshko/react-autosuggest",
   "scripts": {
-    "start": "node server & open http://localhost:3000/examples/dist/index.html",
-    "lint": "eslint src/sectionIterator.js src/Autosuggest.js examples/src",
+    "start": "node server",
+    "lint": "eslint src examples/src",
     "test": "mocha test/index.js --opts mocha.opts",
     "dist": "babel src -d dist",
     "examples-dist": "webpack --config webpack.dev.config.js",
     "standalone": "webpack --config webpack.standalone.config.js",
     "build": "npm run lint && npm test && npm run dist && npm run examples-dist && npm run standalone",
-    "gh-pages": "git checkout gh-pages; git pull; git merge master; npm run examples-dist; cp examples/dist/*.* .; git add index.html app.css app.js; git commit -m 'Update gh-pages files'; git push; git checkout master"
+    "gh-pages": "git checkout gh-pages; git pull; git merge master --no-edit; npm run examples-dist; cp examples/dist/*.* .; git add index.html app.css app.js; git commit -m 'Update gh-pages files'; git push; git checkout master"
   },
   "dependencies": {
     "classnames": "^2.1.3",
@@ -30,11 +30,11 @@
     "react": "^0.13.3"
   },
   "devDependencies": {
-    "babel": "^5.6.14",
+    "babel": "^5.6.23",
     "babel-eslint": "^3.1.23",
-    "babel-loader": "^5.3.1",
+    "babel-loader": "^5.3.2",
     "chai": "^3.0.0",
-    "css-loader": "^0.15.3",
+    "css-loader": "^0.15.4",
     "eslint": "^0.24.1",
     "eslint-loader": "^0.14.1",
     "eslint-plugin-react": "^2.7.0",
