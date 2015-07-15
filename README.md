@@ -29,7 +29,7 @@ To do:
 * Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder, type, onChange, onBlur)
 * In-memory caching (suggestions for a given input are retrieved only once). Can be disabled.
 * Comes with no styles. [Only classes are provided.](#styling)
-* Thoroughly tested (over 110 tests)
+* Thoroughly tested (over 120 tests)
 
 ## Installation
 
@@ -434,6 +434,8 @@ The following diagrams explain the classes above.
 ```shell
 npm start
 ```
+
+Now, open `http://localhost:3000/examples/dist/index.html` and start hacking!
 
 ## Running Tests
 

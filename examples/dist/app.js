@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "9de644b8684ec696c58d"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "7ab08232b898504f7175"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -29403,7 +29403,7 @@
 	    this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
 	    // twice when mouse is moving between suggestions
 	    this.justClickedOnSuggestion = false; // Helps not to call inputAttributes.onBlur
-	    // when suggestion is clicked
+	    // and showSuggestions() when suggestion is clicked
 
 	    this.onInputChange = this.onInputChange.bind(this);
 	    this.onInputKeyDown = this.onInputKeyDown.bind(this);
@@ -29629,7 +29629,10 @@
 	        this.scrollToSuggestion(direction, sectionIndex, suggestionIndex);
 	      }
 
-	      this.onChange(newState.value);
+	      if (newState.value !== this.state.value) {
+	        this.onChange(newState.value);
+	      }
+
 	      this.setState(newState);
 	    }
 	  }, {
@@ -29651,7 +29654,10 @@
 	    key: 'handleValueChange',
 	    value: function handleValueChange(newValue) {
 	      this.onSuggestionUnfocused();
-	      this.onChange(newValue);
+
+	      if (newValue !== this.state.value) {
+	        this.onChange(newValue);
+	      }
 
 	      this.setState({
 	        value: newValue,
@@ -29722,7 +29728,10 @@
 	  }, {
 	    key: 'onInputFocus',
 	    value: function onInputFocus(event) {
-	      this.showSuggestions(this.state.value);
+	      if (!this.justClickedOnSuggestion) {
+	        this.showSuggestions(this.state.value);
+	      }
+
 	      this.onFocus(event);
 	    }
 	  }, {
@@ -29775,7 +29784,11 @@
 	      this.justClickedOnSuggestion = true;
 
 	      this.onSuggestionSelected(event);
-	      this.onChange(suggestionValue);
+
+	      if (suggestionValue !== this.state.value) {
+	        this.onChange(suggestionValue);
+	      }
+
 	      this.setState({
 	        value: suggestionValue,
 	        suggestions: null,

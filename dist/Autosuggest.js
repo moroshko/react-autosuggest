@@ -35,6 +35,43 @@ var _sectionIterator = require('./sectionIterator');
 var _sectionIterator2 = _interopRequireDefault(_sectionIterator);
 
 var Autosuggest = (function (_Component) {
+  _inherits(Autosuggest, _Component);
+
+  _createClass(Autosuggest, null, [{
+    key: 'propTypes',
+    value: {
+      value: _react.PropTypes.string, // Controlled value of the selected suggestion
+      defaultValue: _react.PropTypes.string, // Initial value of the text
+      suggestions: _react.PropTypes.func.isRequired, // Function to get the suggestions
+      suggestionRenderer: _react.PropTypes.func, // Function that renders a given suggestion (must be implemented when suggestions are objects)
+      suggestionValue: _react.PropTypes.func, // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
+      showWhen: _react.PropTypes.func, // Function that determines whether to show suggestions or not
+      onSuggestionSelected: _react.PropTypes.func, // This function is called when suggestion is selected via mouse click or Enter
+      onSuggestionFocused: _react.PropTypes.func, // This function is called when suggestion is focused via mouse hover or Up/Down keys
+      onSuggestionUnfocused: _react.PropTypes.func, // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
+      inputAttributes: _react.PropTypes.object, // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+      cache: _react.PropTypes.bool, // Set it to false to disable in-memory caching
+      id: _react.PropTypes.string, // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
+      scrollBar: _react.PropTypes.bool // Set it to true when the suggestions container can have a scroll bar
+    },
+    enumerable: true
+  }, {
+    key: 'defaultProps',
+    value: {
+      showWhen: function showWhen(input) {
+        return input.trim().length > 0;
+      },
+      onSuggestionSelected: function onSuggestionSelected() {},
+      onSuggestionFocused: function onSuggestionFocused() {},
+      onSuggestionUnfocused: function onSuggestionUnfocused() {},
+      inputAttributes: {},
+      cache: true,
+      id: '1',
+      scrollBar: false
+    },
+    enumerable: true
+  }]);
+
   function Autosuggest(props) {
     _classCallCheck(this, Autosuggest);
 
@@ -59,15 +96,13 @@ var Autosuggest = (function (_Component) {
     this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
     // twice when mouse is moving between suggestions
     this.justClickedOnSuggestion = false; // Helps not to call inputAttributes.onBlur
-    // when suggestion is clicked
+    // and showSuggestions() when suggestion is clicked
 
     this.onInputChange = this.onInputChange.bind(this);
     this.onInputKeyDown = this.onInputKeyDown.bind(this);
     this.onInputFocus = this.onInputFocus.bind(this);
     this.onInputBlur = this.onInputBlur.bind(this);
   }
-
-  _inherits(Autosuggest, _Component);
 
   _createClass(Autosuggest, [{
     key: 'componentWillReceiveProps',
@@ -285,7 +320,10 @@ var Autosuggest = (function (_Component) {
         this.scrollToSuggestion(direction, sectionIndex, suggestionIndex);
       }
 
-      this.onChange(newState.value);
+      if (newState.value !== this.state.value) {
+        this.onChange(newState.value);
+      }
+
       this.setState(newState);
     }
   }, {
@@ -307,7 +345,10 @@ var Autosuggest = (function (_Component) {
     key: 'handleValueChange',
     value: function handleValueChange(newValue) {
       this.onSuggestionUnfocused();
-      this.onChange(newValue);
+
+      if (newValue !== this.state.value) {
+        this.onChange(newValue);
+      }
 
       this.setState({
         value: newValue,
@@ -378,7 +419,10 @@ var Autosuggest = (function (_Component) {
   }, {
     key: 'onInputFocus',
     value: function onInputFocus(event) {
-      this.showSuggestions(this.state.value);
+      if (!this.justClickedOnSuggestion) {
+        this.showSuggestions(this.state.value);
+      }
+
       this.onFocus(event);
     }
   }, {
@@ -431,7 +475,11 @@ var Autosuggest = (function (_Component) {
       this.justClickedOnSuggestion = true;
 
       this.onSuggestionSelected(event);
-      this.onChange(suggestionValue);
+
+      if (suggestionValue !== this.state.value) {
+        this.onChange(suggestionValue);
+      }
+
       this.setState({
         value: suggestionValue,
         suggestions: null,
@@ -577,39 +625,6 @@ var Autosuggest = (function (_Component) {
         this.renderSuggestions()
       );
     }
-  }], [{
-    key: 'propTypes',
-    value: {
-      value: _react.PropTypes.string, // Controlled value of the selected suggestion
-      defaultValue: _react.PropTypes.string, // Initial value of the text
-      suggestions: _react.PropTypes.func.isRequired, // Function to get the suggestions
-      suggestionRenderer: _react.PropTypes.func, // Function that renders a given suggestion (must be implemented when suggestions are objects)
-      suggestionValue: _react.PropTypes.func, // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
-      showWhen: _react.PropTypes.func, // Function that determines whether to show suggestions or not
-      onSuggestionSelected: _react.PropTypes.func, // This function is called when suggestion is selected via mouse click or Enter
-      onSuggestionFocused: _react.PropTypes.func, // This function is called when suggestion is focused via mouse hover or Up/Down keys
-      onSuggestionUnfocused: _react.PropTypes.func, // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
-      inputAttributes: _react.PropTypes.object, // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
-      cache: _react.PropTypes.bool, // Set it to false to disable in-memory caching
-      id: _react.PropTypes.string, // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
-      scrollBar: _react.PropTypes.bool // Set it to true when the suggestions container can have a scroll bar
-    },
-    enumerable: true
-  }, {
-    key: 'defaultProps',
-    value: {
-      showWhen: function showWhen(input) {
-        return input.trim().length > 0;
-      },
-      onSuggestionSelected: function onSuggestionSelected() {},
-      onSuggestionFocused: function onSuggestionFocused() {},
-      onSuggestionUnfocused: function onSuggestionUnfocused() {},
-      inputAttributes: {},
-      cache: true,
-      id: '1',
-      scrollBar: false
-    },
-    enumerable: true
   }]);
 
   return Autosuggest;
