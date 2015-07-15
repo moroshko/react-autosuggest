@@ -750,7 +750,7 @@ describe('Autosuggest', () => {
         expect(onChange).to.have.been.calledWith('');
       });
 
-      it('suggestion is clicked', () => {
+      it('suggestion which differs from input\'s value is clicked', () => {
         onChange.reset();
         mouseDownSuggestion(0);
         expect(onChange).to.have.been.calledWith('Mill Park');
@@ -768,6 +768,28 @@ describe('Autosuggest', () => {
         setInputValue('');
         onChange.reset();
         clickEscape();
+        expect(onChange).not.to.have.been.called;
+      });
+
+      it('input is set with the same value', () => {
+        onChange.reset();
+        setInputValue('m');
+        expect(onChange).not.to.have.been.called;
+      });
+
+      it('suggestion that is equal to input\'s value is focussed via keyboard', () => {
+        setInputValue('Mill Park');
+        clickDown();
+        onChange.reset();
+        clickDown();
+        expect(onChange).not.to.have.been.called;
+      });
+
+      it('suggestion that is equal to input\'s value is clicked', () => {
+        setInputValue('Mill Park');
+        clickDown();
+        onChange.reset();
+        mouseDownSuggestion(0);
         expect(onChange).not.to.have.been.called;
       });
     });
@@ -1008,7 +1030,7 @@ describe('Autosuggest', () => {
   });
 
   describe('(delayed requests)', () => {
-    it('should set suggestions', (done) => {
+    it('should set suggestions', done => {
       function getDelayedSuburbStrings(input, callback) {
         switch (input) {
           case 'r':
@@ -1030,7 +1052,7 @@ describe('Autosuggest', () => {
       }, 51);
     });
 
-    it('should ignore delayed request', (done) => {
+    it('should ignore delayed request', done => {
       function getDelayedSuburbStrings(input, callback) {
         switch (input) {
           case 'r':
@@ -1052,7 +1074,7 @@ describe('Autosuggest', () => {
       }, 51);
     });
 
-    it('should ignore request if input is empty', (done) => {
+    it('should ignore request if input is empty', done => {
       function getDelayedSuburbStrings(input, callback) {
         setTimeout(() => { callback(null, ['Raglan', 'Riachella', 'Richmond']); }, 50);
       }

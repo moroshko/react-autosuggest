@@ -115,7 +115,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
 	    // twice when mouse is moving between suggestions
 	    this.justClickedOnSuggestion = false; // Helps not to call inputAttributes.onBlur
-	    // when suggestion is clicked
+	    // and showSuggestions() when suggestion is clicked
 
 	    this.onInputChange = this.onInputChange.bind(this);
 	    this.onInputKeyDown = this.onInputKeyDown.bind(this);
@@ -333,7 +333,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.scrollToSuggestion(direction, sectionIndex, suggestionIndex);
 	      }
 
-	      this.onChange(newState.value);
+	      if (newState.value !== this.state.value) {
+	        this.onChange(newState.value);
+	      }
+
 	      this.setState(newState);
 	    }
 	  }, {
@@ -350,7 +353,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var newValue = event.target.value;
 
 	      this.onSuggestionUnfocused();
-	      this.onChange(newValue);
+
+	      if (newValue !== this.state.value) {
+	        this.onChange(newValue);
+	      }
 
 	      this.setState({
 	        value: newValue,
@@ -423,7 +429,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onInputFocus',
 	    value: function onInputFocus(event) {
-	      this.showSuggestions(this.state.value);
+	      if (!this.justClickedOnSuggestion) {
+	        this.showSuggestions(this.state.value);
+	      }
+
 	      this.onFocus(event);
 	    }
 	  }, {
@@ -476,7 +485,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.justClickedOnSuggestion = true;
 
 	      this.onSuggestionSelected(event);
-	      this.onChange(suggestionValue);
+
+	      if (suggestionValue !== this.state.value) {
+	        this.onChange(suggestionValue);
+	      }
+
 	      this.setState({
 	        value: suggestionValue,
 	        suggestions: null,
