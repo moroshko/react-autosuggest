@@ -521,20 +521,20 @@ export default class Autosuggest extends Component {
   }
 
   render() {
-    const ariaActivedescendant =
-      this.getSuggestionId(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex);
+    const { id, inputAttributes } = this.props;
+    const { value, suggestions, focusedSectionIndex, focusedSuggestionIndex } = this.state;
 
     return (
       <div className="react-autosuggest">
-        <input {...this.props.inputAttributes}
-               type={this.props.inputAttributes.type || 'text'}
-               value={this.state.value}
+        <input {...inputAttributes}
+               type={inputAttributes.type || 'text'}
+               value={value}
                autoComplete="off"
                role="combobox"
                aria-autocomplete="list"
-               aria-owns={'react-autosuggest-' + this.props.id}
-               aria-expanded={this.state.suggestions !== null}
-               aria-activedescendant={ariaActivedescendant}
+               aria-owns={'react-autosuggest-' + id}
+               aria-expanded={suggestions !== null}
+               aria-activedescendant={this.getSuggestionId(focusedSectionIndex, focusedSuggestionIndex)}
                ref="input"
                onChange={this.onInputChange}
                onKeyDown={this.onInputKeyDown}

@@ -12,8 +12,6 @@ export default class Footer extends Component {
           Crafted with <strong>love</strong> by
           {' '}<a href="https://twitter.com/moroshko"
                   target="_blank">@moroshko</a>
-          {' '}and <a href="https://github.com/moroshko/react-autosuggest/graphs/contributors"
-                      target="_blank">contributors</a>
         </span>
       </div>
     );

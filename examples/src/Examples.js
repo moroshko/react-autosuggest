@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import BasicExample from './BasicExample/BasicExample';
 import CustomRenderer from './CustomRenderer/CustomRenderer';
 import MultipleSections from './MultipleSections/MultipleSections';
+import ControlledComponent from './ControlledComponent/ControlledComponent';
 import EventsPlayground from './EventsPlayground/EventsPlayground';
 import EventsLog from './EventsLog/EventsLog';
 
@@ -17,6 +18,7 @@ export default class Examples extends Component {
       'Basic example',
       'Custom renderer',
       'Multiple sections',
+      'Controlled Component',
       'Events playground'
     ];
 
@@ -121,6 +123,7 @@ export default class Examples extends Component {
       case 'Basic example': return <BasicExample />;
       case 'Custom renderer': return <CustomRenderer />;
       case 'Multiple sections': return <MultipleSections />;
+      case 'Controlled Component': return <ControlledComponent />;
       case 'Events playground': return <EventsPlayground onEventAdded={::this.onEventAdded} />;
     }
   }
