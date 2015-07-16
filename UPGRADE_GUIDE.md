@@ -4,7 +4,7 @@
 
 ### `inputAttributes.value` is no longer supported
 
-Use [`defaultValue`](https://github.com/moroshko/react-autosuggest/#defaultValueOption) instead.
+To set the default value of an [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) component use [`defaultValue`](https://github.com/moroshko/react-autosuggest/#defaultValueOption).
 
 **Before**
 

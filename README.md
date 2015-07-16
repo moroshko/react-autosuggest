@@ -12,7 +12,6 @@
 </a>
 
 To do:
-- [ ] Use `getSuggestionValue()` for initial value / defaultValue
 - [ ] Test controlled component with multiple sections
 - [ ] Add tests for a controlled component using object suggestions
 - [ ] Update onChange to provide the `event` instead of the new value (update UPGRADE_GUIDE accordingly)
