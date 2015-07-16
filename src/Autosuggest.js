@@ -45,6 +45,7 @@ export default class Autosuggest extends Component {
                                     // interaction in order to revert back if ESC hit.
                                     // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
+    this.isControlledComponent = (typeof props.value !== 'undefined');
     this.suggestionsFn = debounce(props.suggestions, 100);
     this.onChange = props.inputAttributes.onChange || (() => {});
     this.onFocus = props.inputAttributes.onFocus || (() => {});
@@ -62,8 +63,7 @@ export default class Autosuggest extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.value) {
-      // If this component is controlled, then handle the value update
+    if (this.isControlledComponent) {
       this.handleValueChange(nextProps.value);
     }
   }
@@ -271,6 +271,7 @@ export default class Autosuggest extends Component {
 
   onInputChange(event) {
     const newValue = event.target.value;
+
     this.handleValueChange(newValue);
     this.showSuggestions(newValue);
   }

@@ -1,10 +1,21 @@
-[![Build Status][status-image]][status-url]
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
+<a href="https://codeship.com/projects/67868" target="_blank">
+  <img src="https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg"
+       alt="Build Status" />
+</a>
+<a href="https://npmjs.org/package/react-autosuggest" target="_blank">
+  <img src="https://img.shields.io/npm/v/react-autosuggest.svg"
+       alt="NPM Version" />
+</a>
+<a href="https://npmjs.org/package/react-autosuggest" target="_blank">
+  <img src="https://img.shields.io/npm/dm/react-autosuggest.svg"
+       alt="NPM Downloads" />
+</a>
 
 To do:
 - [ ] Add example for a controlled component (make sure that `getSuggestionValue()` is called)
 - [ ] Add tests for a controlled component using object suggestions
+- [ ] Update onChange to provide the `event` instead of the new value (update UPGRADE_GUIDE accordingly)
+- [ ] Implement onChange reason
 
 # React Autosuggest
 
@@ -447,12 +458,6 @@ npm test
 
 [MIT](http://moroshko.mit-license.org)
 
-[status-image]: https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg
-[status-url]: https://codeship.com/projects/67868
-[npm-image]: https://img.shields.io/npm/v/react-autosuggest.svg
-[npm-url]: https://npmjs.org/package/react-autosuggest
-[downloads-image]: https://img.shields.io/npm/dm/react-autosuggest.svg
-[downloads-url]: https://npmjs.org/package/react-autosuggest
 [wai-aria]: https://www.w3.org/TR/wai-aria-practices/#autocomplete
 [event]: https://facebook.github.io/react/docs/events.html#syntheticevent
 [basic-example]: https://moroshko.github.io/react-autosuggest

@@ -35,26 +35,31 @@ export default class ControlledComponent extends Component {
     };
   }
 
-  setFromValue(value) {
-    this.setState({
-      fromValue: value
-    });
+  setFromValue(fromValue) {
+    this.setState({ fromValue });
   }
 
-  setToValue(value) {
-    this.setState({
-      toValue: value
-    });
+  setToValue(toValue) {
+    this.setState({ toValue });
+  }
+
+  reverseSourceAndDestination() {
+    const fromValue = this.state.toValue;
+    const toValue = this.state.fromValue;
+
+    this.setState({ fromValue, toValue });
   }
 
   render() {
     const inputAttributesFrom = {
-      id: 'controlled-component',
-      placeholder: 'Navigate from...'
+      id: 'controlled-component-from',
+      placeholder: 'Source',
+      onChange: ::this.setFromValue
     };
 
     const inputAttributesTo = {
-      placeholder: 'to...'
+      placeholder: 'Destination',
+      onChange: ::this.setToValue
     };
 
     return (
@@ -65,10 +70,13 @@ export default class ControlledComponent extends Component {
           <Autosuggest suggestions={getSuggestions}
                        inputAttributes={inputAttributesFrom}
                        value={this.state.fromValue}
-                       id="from"
-                       ref={ () => { document.getElementById('controlled-component').focus(); } } />
+                       id="from" />
+        </div>
+        <div className="reverse-container">
+          <button onClick={::this.reverseSourceAndDestination}>⇅</button>
         </div>
         <div className="to-container">
+          <button onClick={() => this.setToValue('Bank')}>Bank</button>
           <button onClick={() => this.setToValue('Airport')}>Airport</button>
           <Autosuggest suggestions={getSuggestions}
                        inputAttributes={inputAttributesTo}

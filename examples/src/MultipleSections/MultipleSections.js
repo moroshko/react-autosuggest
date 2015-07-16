@@ -69,8 +69,7 @@ export default class MultipleSections extends Component {
     return (
       <div>
         <Autosuggest suggestions={getSuggestions}
-                     inputAttributes={inputAttributes}
-                     ref={ () => document.getElementById('multiple-sections').focus() } />
+                     inputAttributes={inputAttributes} />
         <SourceCodeLink file="examples/src/MultipleSections/MultipleSections.js" />
       </div>
     );

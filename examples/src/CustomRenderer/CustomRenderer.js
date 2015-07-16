@@ -76,8 +76,7 @@ export default class CustomRenderer extends Component {
                      suggestionRenderer={renderSuggestion}
                      suggestionValue={getSuggestionValue}
                      inputAttributes={inputAttributes}
-                     scrollBar={true}
-                     ref={ () => { document.getElementById('custom-renderer').focus(); } } />
+                     scrollBar={true} />
         <SourceCodeLink file="examples/src/CustomRenderer/CustomRenderer.js" />
       </div>
     );

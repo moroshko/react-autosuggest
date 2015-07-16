@@ -28,10 +28,6 @@ export default class EventsPlayground extends Component {
     onEventAdded: PropTypes.func.isRequired
   }
 
-  componentDidMount() {
-    document.getElementById('events-playground').focus();
-  }
-
   onSuggestionSelected(suggestion, event) {
     this.props.onEventAdded({
       type: 'suggestion-selected',

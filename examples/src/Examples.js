@@ -118,13 +118,26 @@ export default class Examples extends Component {
     }
   }
 
+  focusOn(id) {
+    document.getElementById(id).focus();
+  }
+
   renderExample() {
     switch (this.state.activeExample) {
-      case 'Basic example': return <BasicExample />;
-      case 'Custom renderer': return <CustomRenderer />;
-      case 'Multiple sections': return <MultipleSections />;
-      case 'Controlled Component': return <ControlledComponent />;
-      case 'Events playground': return <EventsPlayground onEventAdded={::this.onEventAdded} />;
+      case 'Basic example':
+        return <BasicExample ref={() => this.focusOn('basic-example')} />;
+
+      case 'Custom renderer':
+        return <CustomRenderer ref={() => this.focusOn('custom-renderer')} />;
+
+      case 'Multiple sections':
+        return <MultipleSections ref={() => this.focusOn('multiple-sections')} />;
+
+      case 'Controlled Component':
+        return <ControlledComponent ref={() => this.focusOn('controlled-component-from')} />;
+
+      case 'Events playground':
+        return <EventsPlayground onEventAdded={::this.onEventAdded} ref={() => this.focusOn('events-playground')} />;
     }
   }
 

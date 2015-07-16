@@ -33,8 +33,7 @@ export default class BasicExample extends Component {
     return (
       <div>
         <Autosuggest suggestions={getSuggestions}
-                     inputAttributes={inputAttributes}
-                     ref={ () => { document.getElementById('basic-example').focus(); } } />
+                     inputAttributes={inputAttributes} />
         <SourceCodeLink file="examples/src/BasicExample/BasicExample.js" />
       </div>
     );
