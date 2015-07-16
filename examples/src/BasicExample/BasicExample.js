@@ -9,13 +9,13 @@ function getSuggestions(input, callback) {
   const lowercasedInput = input.trim().toLowerCase();
   const suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
   const suggestions = suburbs
-    .filter( suburbObj => suburbMatchRegex.test(suburbObj.suburb) )
+    .filter(suburbObj => suburbMatchRegex.test(suburbObj.suburb))
     .sort( (suburbObj1, suburbObj2) =>
       suburbObj1.suburb.toLowerCase().indexOf(lowercasedInput) -
       suburbObj2.suburb.toLowerCase().indexOf(lowercasedInput)
     )
     .slice(0, 7)
-    .map( suburbObj => suburbObj.suburb );
+    .map(suburbObj => suburbObj.suburb);
 
   // 'suggestions' will be an array of strings, e.g.:
   //   ['Mentone', 'Mill Park', 'Mordialloc']

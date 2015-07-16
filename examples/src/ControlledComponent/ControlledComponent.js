@@ -11,18 +11,44 @@ function getSuggestions(input, callback) {
   const lowercasedInput = input.trim().toLowerCase();
   const suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
   const suggestions = suburbs
-    .filter( suburbObj => suburbMatchRegex.test(suburbObj.suburb) )
+    .filter( suburbObj => suburbMatchRegex.test(suburbObj.suburb + ' VIC ' + suburbObj.postcode) )
     .sort( (suburbObj1, suburbObj2) =>
       suburbObj1.suburb.toLowerCase().indexOf(lowercasedInput) -
       suburbObj2.suburb.toLowerCase().indexOf(lowercasedInput)
     )
-    .slice(0, 7)
-    .map( suburbObj => suburbObj.suburb );
+    .slice(0, 7);
 
-  // 'suggestions' will be an array of strings, e.g.:
-  //   ['Mentone', 'Mill Park', 'Mordialloc']
+  // 'suggestions' will be an array of objects, e.g.:
+  //   [{ suburb: 'Mordialloc', postcode: '3195' },
+  //    { suburb: 'Mentone', postcode: '3194' },
+  //    { suburb: 'Mill Park', postcode: '3082' }]
 
-  setTimeout(() => callback(null, suggestions), 300);
+  callback(null, suggestions);
+}
+
+function renderSuggestion(suggestionObj, input) {
+  const escapedInput = utils.escapeRegexCharacters(input);
+  const suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
+  const suggestion = suggestionObj.suburb + ' VIC ' + suggestionObj.postcode;
+  const firstMatchIndex = suggestion.search(suburbMatchRegex);
+
+  if (firstMatchIndex === -1) {
+    return suggestion;
+  }
+
+  const beforeMatch = suggestion.slice(0, firstMatchIndex);
+  const match = suggestion.slice(firstMatchIndex, firstMatchIndex + input.length);
+  const afterMatch = suggestion.slice(firstMatchIndex + input.length);
+
+  return (
+    <span>
+      {beforeMatch}<strong>{match}</strong>{afterMatch}
+    </span>
+  );
+}
+
+function getSuggestionValue(suggestionObj) {
+  return suggestionObj.suburb + ' VIC ' + suggestionObj.postcode;
 }
 
 export default class ControlledComponent extends Component {
@@ -68,6 +94,8 @@ export default class ControlledComponent extends Component {
           <button onClick={() => this.setFromValue('Home')}>Home</button>
           <button onClick={() => this.setFromValue('Work')}>Work</button>
           <Autosuggest suggestions={getSuggestions}
+                       suggestionRenderer={renderSuggestion}
+                       suggestionValue={getSuggestionValue}
                        inputAttributes={inputAttributesFrom}
                        value={this.state.fromValue}
                        id="from" />
@@ -79,6 +107,8 @@ export default class ControlledComponent extends Component {
           <button onClick={() => this.setToValue('Bank')}>Bank</button>
           <button onClick={() => this.setToValue('Airport')}>Airport</button>
           <Autosuggest suggestions={getSuggestions}
+                       suggestionRenderer={renderSuggestion}
+                       suggestionValue={getSuggestionValue}
                        inputAttributes={inputAttributesTo}
                        value={this.state.toValue}
                        id="to" />

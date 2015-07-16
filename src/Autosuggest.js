@@ -70,7 +70,7 @@ export default class Autosuggest extends Component {
 
   resetSectionIterator(suggestions) {
     if (this.isMultipleSections(suggestions)) {
-      sectionIterator.setData(suggestions.map( suggestion => suggestion.suggestions.length ));
+      sectionIterator.setData(suggestions.map(suggestion => suggestion.suggestions.length));
     } else {
       sectionIterator.setData(suggestions === null ? [] : suggestions.length);
     }
@@ -272,21 +272,18 @@ export default class Autosuggest extends Component {
   onInputChange(event) {
     const newValue = event.target.value;
 
+    this.onSuggestionUnfocused();
     this.handleValueChange(newValue);
     this.showSuggestions(newValue);
   }
 
   handleValueChange(newValue) {
-    this.onSuggestionUnfocused();
-
     if (newValue !== this.state.value) {
       this.onChange(newValue);
+      this.setState({
+        value: newValue
+      });
     }
-
-    this.setState({
-      value: newValue,
-      valueBeforeUpDown: null
-    });
   }
 
   onInputKeyDown(event) {
