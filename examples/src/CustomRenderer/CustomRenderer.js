@@ -18,7 +18,7 @@ function getSuggestions(input, callback) {
   const suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
   const suggestions = suburbs
     .filter(suburbObj => suburbMatchRegex.test(suburbObj.suburb + ' VIC ' + suburbObj.postcode))
-    .sort( (suburbObj1, suburbObj2) =>
+    .sort((suburbObj1, suburbObj2) =>
       suburbObj1.suburb.toLowerCase().indexOf(lowercasedInput) -
       suburbObj2.suburb.toLowerCase().indexOf(lowercasedInput)
     )

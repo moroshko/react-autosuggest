@@ -17,9 +17,9 @@ function getSuggestions(input, callback) {
   const firstSectionMatchRegex = new RegExp('^' + escapedInput, 'i');
   const secondSectionMatchRegex = new RegExp('^(?!' + escapedInput + ')\\w+ ' + escapedInput, 'i');
   const thirdSectionMatchRegex = new RegExp('^(?!' + escapedInput + ')\\w+ (?!' + escapedInput + ')\\w+ ' + escapedInput, 'i');
-  const firstSectionSuburbs = suburbs.filter( suburbObj => firstSectionMatchRegex.test(suburbObj.suburb) );
-  const secondSectionSuburbs = suburbs.filter( suburbObj => secondSectionMatchRegex.test(suburbObj.suburb) );
-  const thirdSectionSuburbs = suburbs.filter( suburbObj => thirdSectionMatchRegex.test(suburbObj.suburb) );
+  const firstSectionSuburbs = suburbs.filter(suburbObj => firstSectionMatchRegex.test(suburbObj.suburb));
+  const secondSectionSuburbs = suburbs.filter(suburbObj => secondSectionMatchRegex.test(suburbObj.suburb));
+  const thirdSectionSuburbs = suburbs.filter(suburbObj => thirdSectionMatchRegex.test(suburbObj.suburb));
   const suggestions = [];
   let firstSectionCount, secondSectionCount, thirdSectionCount;
 

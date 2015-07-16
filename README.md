@@ -17,6 +17,7 @@ To do:
 - [ ] Add tests for a controlled component using object suggestions
 - [ ] Update onChange to provide the `event` instead of the new value (update UPGRADE_GUIDE accordingly)
 - [ ] Implement onChange reason
+- [ ] Make sure that everything in README is right for controlled components
 
 # React Autosuggest
 
