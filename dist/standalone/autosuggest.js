@@ -107,6 +107,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // interaction in order to revert back if ESC hit.
 	      // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
 	    };
+	    this.isControlledComponent = typeof props.value !== 'undefined';
 	    this.suggestionsFn = (0, _debounce2['default'])(props.suggestions, 100);
 	    this.onChange = props.inputAttributes.onChange || function () {};
 	    this.onFocus = props.inputAttributes.onFocus || function () {};
@@ -128,8 +129,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Autosuggest, [{
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
-	      if (nextProps.value) {
-	        // If this component is controlled, then handle the value update
+	      if (this.isControlledComponent) {
 	        this.handleValueChange(nextProps.value);
 	      }
 	    }
@@ -359,22 +359,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'onInputChange',
 	    value: function onInputChange(event) {
 	      var newValue = event.target.value;
+
+	      this.onSuggestionUnfocused();
 	      this.handleValueChange(newValue);
 	      this.showSuggestions(newValue);
 	    }
 	  }, {
 	    key: 'handleValueChange',
 	    value: function handleValueChange(newValue) {
-	      this.onSuggestionUnfocused();
-
 	      if (newValue !== this.state.value) {
 	        this.onChange(newValue);
+	        this.setState({
+	          value: newValue
+	        });
 	      }
-
-	      this.setState({
-	        value: newValue,
-	        valueBeforeUpDown: null
-	      });
 	    }
 	  }, {
 	    key: 'onInputKeyDown',
@@ -624,20 +622,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var ariaActivedescendant = this.getSuggestionId(this.state.focusedSectionIndex, this.state.focusedSuggestionIndex);
+	      var _props = this.props;
+	      var id = _props.id;
+	      var inputAttributes = _props.inputAttributes;
+	      var _state = this.state;
+	      var value = _state.value;
+	      var suggestions = _state.suggestions;
+	      var focusedSectionIndex = _state.focusedSectionIndex;
+	      var focusedSuggestionIndex = _state.focusedSuggestionIndex;
 
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: 'react-autosuggest' },
-	        _react2['default'].createElement('input', _extends({}, this.props.inputAttributes, {
-	          type: this.props.inputAttributes.type || 'text',
-	          value: this.state.value,
+	        _react2['default'].createElement('input', _extends({}, inputAttributes, {
+	          type: inputAttributes.type || 'text',
+	          value: value,
 	          autoComplete: 'off',
 	          role: 'combobox',
 	          'aria-autocomplete': 'list',
-	          'aria-owns': 'react-autosuggest-' + this.props.id,
-	          'aria-expanded': this.state.suggestions !== null,
-	          'aria-activedescendant': ariaActivedescendant,
+	          'aria-owns': 'react-autosuggest-' + id,
+	          'aria-expanded': suggestions !== null,
+	          'aria-activedescendant': this.getSuggestionId(focusedSectionIndex, focusedSuggestionIndex),
 	          ref: 'input',
 	          onChange: this.onInputChange,
 	          onKeyDown: this.onInputKeyDown,
