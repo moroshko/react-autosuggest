@@ -21,7 +21,9 @@
   },
   "dependencies": {
     "react": "^0.14.0-beta3",
-    "react-autowhatever": "^0.1.2"
+    "react-autowhatever": "^0.2.0",
+    "react-redux": "^0.8.2",
+    "redux": "^1.0.1"
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",
@@ -38,8 +40,6 @@
     "mocha": "^2.2.5",
     "react-dom": "^0.14.0-beta3",
     "react-hot-loader": "^1.2.8",
-    "react-redux": "^0.8.2",
-    "redux": "^1.0.0",
     "style-loader": "^0.12.3",
     "webpack": "^1.11.0",
     "webpack-dev-server": "^1.10.1"
