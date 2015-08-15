@@ -3,22 +3,16 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  entry: [
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
-    './demo/src/index'
-  ],
+  entry: './demo/src/index',
 
   output: {
-    path: path.join(__dirname, 'dist'), // Must be an absolute path
-    filename: 'index.js',
-    publicPath: '/demo/dist'
+    filename: './demo/dist/index.js'
   },
 
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['react-hot', 'babel'],
+      loaders: ['babel'],
       include: [
         path.join(__dirname, 'src'), // Must be an absolute path
         path.join(__dirname, 'demo', 'src') // Must be an absolute path
@@ -35,7 +29,19 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin('app.css')
+    new ExtractTextPlugin('./demo/dist/app.css'),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      output: {
+        comments: false
+      },
+      compress: {
+        warnings: false
+      }
+    })
   ]
 };
