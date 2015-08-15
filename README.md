@@ -1,7 +1,5 @@
 [![Build Status][status-image]][status-url]
 
-<a href="http://moroshko.github.io/react-autosuggest" target="_blank">Live Examples</a>
-
 **TODO:**
 
 * Write tests
