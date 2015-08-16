@@ -36,7 +36,12 @@ class Example extends Component {
 
   render() {
     const { value, suggestions, onChange } = this.props;
-    const inputProps = { value, onChange };
+    const inputProps = {
+      value,
+      onChange,
+      onBlur: () => console.log('Blurred'),
+      onFocus: () => console.log('Focused')
+    };
 
     return (
       <div>

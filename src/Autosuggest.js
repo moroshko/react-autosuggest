@@ -33,6 +33,14 @@ class Autosuggest extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.shouldRenderSuggestions === this.props.shouldRenderSuggestions &&
+        nextProps.suggestions === this.props.suggestions &&
+        nextProps.renderSuggestion === this.props.renderSuggestion &&
+        nextProps.inputProps === this.props.inputProps &&
+        nextProps.theme === this.props.theme) {
+      return;
+    }
+
     const { shouldRenderSuggestions, suggestions, inputProps, updateIsOpen } = nextProps;
     const isOpen = shouldRenderSuggestions(inputProps.value) && suggestions.length > 0;
 
@@ -40,15 +48,32 @@ class Autosuggest extends Component {
   }
 
   render() {
-    const { suggestions, renderSuggestion, inputProps, theme,
-            isOpen, focusedSectionIndex, focusedSuggestionIndex } = this.props;
+    const { shouldRenderSuggestions, suggestions, renderSuggestion, inputProps, theme,
+            isOpen, focusedSectionIndex, focusedSuggestionIndex, updateIsOpen } = this.props;
+    const { value, onBlur, onFocus } = inputProps;
+    const autowhateverInputProps = {
+      ...inputProps,
+      onBlur: event => {
+        updateIsOpen(false);
+        onBlur && onBlur(event);
+      },
+      onFocus: event => {
+        const isOpen = shouldRenderSuggestions(value) && suggestions.length > 0;
+
+        updateIsOpen(isOpen);
+        onFocus && onFocus(event);
+      },
+      onKeyDown: event => {
+        console.log(typeof event.key, event.key);
+      }
+    };
 
     return (
       <Autowhatever items={isOpen ? suggestions : []}
                     renderItem={renderSuggestion}
                     focusedSectionIndex={focusedSectionIndex}
                     focusedItemIndex={focusedSuggestionIndex}
-                    inputProps={inputProps}
+                    inputProps={autowhateverInputProps}
                     theme={theme} />
     );
   }
