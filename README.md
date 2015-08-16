@@ -1,7 +1,19 @@
 [![Build Status][status-image]][status-url]
 
+## Under heavy development
+
 **TODO:**
 
+* Reset focused item on blur
+* Up Arrow
+* Add valueBeforeUpDown to Autosuggest's state
+* ESC
+* Mouse interactions (add 'mouse-click' reason)
+* onSelected hook
+* Make sure onChange is called only when value changes
+* Create minimal API to Autosuggest
+* Add more examples
+* Add support for scrollbar
 * Write tests
 * Write docs
 
