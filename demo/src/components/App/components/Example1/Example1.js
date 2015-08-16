@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { updateInputValue } from 'flux/actionCreators/app';
 import Autosuggest from 'AutosuggestContainer';
 
-const exampleId = '0';
+const exampleId = '1';
 
 function mapStateToProps(state) {
   return {
@@ -26,6 +26,16 @@ function renderSuggestion(suggestion) {
   );
 }
 
+function renderSectionTitle(section) {
+  return (
+    <strong>{section.title}</strong>
+  );
+}
+
+function getSectionSuggestions(section) {
+  return section.suggestions;
+}
+
 class Example extends Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
@@ -36,7 +46,7 @@ class Example extends Component {
   render() {
     const { value, suggestions, onChange } = this.props;
     const inputProps = {
-      placeholder: 'Pick a fruit',
+      placeholder: 'Pick another fruit',
       value,
       onChange,
       onBlur: () => console.log(`Example ${exampleId}: Blurred`),
@@ -45,8 +55,11 @@ class Example extends Component {
 
     return (
       <div>
-        <Autosuggest suggestions={suggestions}
+        <Autosuggest multiSection={true}
+                     suggestions={suggestions}
                      renderSuggestion={renderSuggestion}
+                     renderSectionTitle={renderSectionTitle}
+                     getSectionSuggestions={getSectionSuggestions}
                      inputProps={inputProps}
                      theme={theme} />
       </div>

@@ -1,37 +1,23 @@
 import { UPDATE_INPUT_VALUE } from 'flux/constants/actionTypes/app';
-import { escapeRegexCharacters } from 'utils/utils';
 
-const allSuggestions = [{
-  text: 'Apple'
-}, {
-  text: 'Banana'
-}, {
-  text: 'Cherry'
-}, {
-  text: 'Grapefruit'
-}, {
-  text: 'Lemon'
-}];
+const reducers = [
+  require('./example0'),
+  require('./example1')
+];
 
 const initialState = {
-  0: {
-    value: '',
-    suggestions: allSuggestions
-  }
+  0: reducers[0](),
+  1: reducers[1]()
 };
 
 export default function(state = initialState, action) {
-  switch (action.type) {
-    case UPDATE_INPUT_VALUE:
-      const escapedInput = escapeRegexCharacters(action.value.trim());
-      const regex = new RegExp(escapedInput, 'i');
+  const { type, exampleNumber } = action;
 
+  switch (type) {
+    case UPDATE_INPUT_VALUE:
       return {
         ...state,
-        [action.exampleNumber]: {
-          value: action.value,
-          suggestions: allSuggestions.filter(suggestion => regex.test(suggestion.text))
-        }
+        [exampleNumber]: reducers[exampleNumber](state[exampleNumber], action)
       };
 
     default:

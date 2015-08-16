@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { updateIsOpen } from './flux/actionCreators';
 import { connect } from 'react-redux';
 import Autowhatever from 'react-autowhatever';
+import sectionIterator from 'section-iterator';
 
 function mapStateToProps(state) {
   return {
@@ -19,9 +20,12 @@ function mapDispatchToProps(dispatch) {
 
 class Autosuggest extends Component {
   static propTypes = {
+    multiSection: PropTypes.bool.isRequired,
     shouldRenderSuggestions: PropTypes.func.isRequired,
     suggestions: PropTypes.array.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
+    renderSectionTitle: PropTypes.func.isRequired,
+    getSectionSuggestions: PropTypes.func.isRequired,
     inputProps: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
 
@@ -33,9 +37,12 @@ class Autosuggest extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.shouldRenderSuggestions === this.props.shouldRenderSuggestions &&
+    if (nextProps.multiSection === this.props.multiSection &&
+        nextProps.shouldRenderSuggestions === this.props.shouldRenderSuggestions &&
         nextProps.suggestions === this.props.suggestions &&
         nextProps.renderSuggestion === this.props.renderSuggestion &&
+        nextProps.renderSectionTitle === this.props.renderSectionTitle &&
+        nextProps.getSectionSuggestions === this.props.getSectionSuggestions &&
         nextProps.inputProps === this.props.inputProps &&
         nextProps.theme === this.props.theme) {
       return;
@@ -48,8 +55,11 @@ class Autosuggest extends Component {
   }
 
   render() {
-    const { shouldRenderSuggestions, suggestions, renderSuggestion, inputProps, theme,
-            isOpen, focusedSectionIndex, focusedSuggestionIndex, updateIsOpen } = this.props;
+    const { multiSection, shouldRenderSuggestions, suggestions,
+            renderSuggestion, renderSectionTitle, getSectionSuggestions,
+            inputProps, theme, isOpen, focusedSectionIndex,
+            focusedSuggestionIndex, updateIsOpen } = this.props;
+    const items = (isOpen ? suggestions : []);
     const { value, onBlur, onFocus } = inputProps;
     const autowhateverInputProps = {
       ...inputProps,
@@ -69,8 +79,11 @@ class Autosuggest extends Component {
     };
 
     return (
-      <Autowhatever items={isOpen ? suggestions : []}
+      <Autowhatever multiSection={multiSection}
+                    items={items}
                     renderItem={renderSuggestion}
+                    renderSectionTitle={renderSectionTitle}
+                    getSectionItems={getSectionSuggestions}
                     focusedSectionIndex={focusedSectionIndex}
                     focusedItemIndex={focusedSuggestionIndex}
                     inputProps={autowhateverInputProps}
