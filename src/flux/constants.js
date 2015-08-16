@@ -1,1 +1,1 @@
-export const UPDATE_VALUE = 'UPDATE_VALUE';
+export const UPDATE_IS_OPEN = 'UPDATE_IS_OPEN';

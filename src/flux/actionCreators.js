@@ -1,8 +1,8 @@
-import { UPDATE_VALUE } from './constants';
+import { UPDATE_IS_OPEN } from './constants';
 
-export function updateValue(value) {
+export function updateIsOpen(value) {
   return {
-    type: UPDATE_VALUE,
+    type: UPDATE_IS_OPEN,
     value
   };
 }

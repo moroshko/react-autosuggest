@@ -6,25 +6,43 @@ import Autosuggest from 'Autosuggest';
 
 export default class AutosuggestContainer extends Component {
   static propTypes = {
-    items: PropTypes.array.isRequired,
-    renderItem: PropTypes.func.isRequired,
+    shouldRenderSuggestions: PropTypes.func,
+    suggestions: PropTypes.array.isRequired,
+    renderSuggestion: PropTypes.func.isRequired,
     inputProps: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    shouldRenderSuggestions: value => value.trim().length > 0
   };
 
   constructor(props) {
     super(props);
 
-    const { items, renderItem, inputProps, theme } = props;
-    const initialState = { items, renderItem, inputProps, theme };
+    const { shouldRenderSuggestions, suggestions, inputProps } = props;
+    const initialState = {
+      isOpen: shouldRenderSuggestions(inputProps.value) && suggestions.length > 0,
+      focusedSectionIndex: null,
+      focusedSuggestionIndex: null
+    };
 
     this.store = createStore(reducer, initialState);
   }
 
   render() {
+    const { shouldRenderSuggestions, suggestions,
+            renderSuggestion, inputProps, theme } = this.props;
+
     return (
       <Provider store={this.store}>
-        {() => <Autosuggest />}
+        {
+          () => <Autosuggest shouldRenderSuggestions={shouldRenderSuggestions}
+                             suggestions={suggestions}
+                             renderSuggestion={renderSuggestion}
+                             inputProps={inputProps}
+                             theme={theme} />
+        }
       </Provider>
     );
   }

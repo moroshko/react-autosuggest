@@ -10,7 +10,8 @@ const file = `demo/src/components/App/components/Example${exampleId}/Example${ex
 
 function mapStateToProps(state) {
   return {
-    value: state[exampleId].value
+    value: state[exampleId].value,
+    suggestions: state[exampleId].suggestions
   };
 }
 
@@ -20,38 +21,27 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const items = [{
-  text: 'Apple'
-}, {
-  text: 'Banana'
-}, {
-  text: 'Cherry'
-}, {
-  text: 'Grapefruit'
-}, {
-  text: 'Lemon'
-}];
-
-function renderItem(item) {
+function renderSuggestion(suggestion) {
   return (
-    <span>{item.text}</span>
+    <span>{suggestion.text}</span>
   );
 }
 
 class Example extends Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
+    suggestions: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired
   };
 
   render() {
-    const { value, onChange } = this.props;
+    const { value, suggestions, onChange } = this.props;
     const inputProps = { value, onChange };
 
     return (
       <div>
-        <Autosuggest items={items}
-                     renderItem={renderItem}
+        <Autosuggest suggestions={suggestions}
+                     renderSuggestion={renderSuggestion}
                      inputProps={inputProps}
                      theme={theme} />
       </div>

@@ -1,42 +1,53 @@
 import React, { Component, PropTypes } from 'react';
-import { updateValue } from './flux/actionCreators';
+import { updateIsOpen } from './flux/actionCreators';
 import { connect } from 'react-redux';
 import Autowhatever from 'react-autowhatever';
 
 function mapStateToProps(state) {
   return {
-    items: state.items,
-    renderItem: state.renderItem,
-    inputProps: state.inputProps,
-    theme: state.theme
+    isOpen: state.isOpen,
+    focusedSectionIndex: state.focusedSectionIndex,
+    focusedSuggestionIndex: state.focusedSuggestionIndex
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onChange: event => dispatch(updateValue(event.target.value))
+    updateIsOpen: isOpen => dispatch(updateIsOpen(isOpen))
   };
 }
 
 class Autosuggest extends Component {
   static propTypes = {
-    items: PropTypes.array.isRequired,
-    renderItem: PropTypes.func.isRequired,
+    shouldRenderSuggestions: PropTypes.func.isRequired,
+    suggestions: PropTypes.array.isRequired,
+    renderSuggestion: PropTypes.func.isRequired,
     inputProps: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired
+
+    isOpen: PropTypes.bool.isRequired,
+    focusedSectionIndex: PropTypes.number,
+    focusedSuggestionIndex: PropTypes.number,
+
+    updateIsOpen: PropTypes.func.isRequired
   };
 
+  componentWillReceiveProps(nextProps) {
+    const { shouldRenderSuggestions, suggestions, inputProps, updateIsOpen } = nextProps;
+    const isOpen = shouldRenderSuggestions(inputProps.value) && suggestions.length > 0;
+
+    updateIsOpen(isOpen);
+  }
+
   render() {
-    const { items, renderItem, theme, onChange } = this.props;
-    const inputProps = {
-      ...this.props.inputProps,
-      onChange
-    };
+    const { suggestions, renderSuggestion, inputProps, theme,
+            isOpen, focusedSectionIndex, focusedSuggestionIndex } = this.props;
 
     return (
-      <Autowhatever items={items}
-                    renderItem={renderItem}
+      <Autowhatever items={isOpen ? suggestions : []}
+                    renderItem={renderSuggestion}
+                    focusedSectionIndex={focusedSectionIndex}
+                    focusedItemIndex={focusedSuggestionIndex}
                     inputProps={inputProps}
                     theme={theme} />
     );

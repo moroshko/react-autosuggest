@@ -1,14 +1,11 @@
-import { UPDATE_VALUE } from './constants';
+import { UPDATE_IS_OPEN } from './constants';
 
 export default function(state, action) {
   switch (action.type) {
-    case UPDATE_VALUE:
+    case UPDATE_IS_OPEN:
       return {
         ...state,
-        inputProps: {
-          ...state.inputProps,
-          value: action.value
-        }
+        isOpen: action.value
       };
 
     default:
