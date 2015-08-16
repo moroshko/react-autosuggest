@@ -24,7 +24,7 @@
     "react-autowhatever": "^0.2.2",
     "react-redux": "^0.8.2",
     "redux": "^1.0.1",
-    "section-iterator": "^1.0.1"
+    "section-iterator": "^1.1.0"
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",

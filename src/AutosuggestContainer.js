@@ -9,6 +9,7 @@ export default class AutosuggestContainer extends Component {
     multiSection: PropTypes.bool,
     shouldRenderSuggestions: PropTypes.func,
     suggestions: PropTypes.array.isRequired,
+    getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func,
     renderSectionTitle: PropTypes.func,
     getSectionSuggestions: PropTypes.func,
@@ -19,13 +20,13 @@ export default class AutosuggestContainer extends Component {
   static defaultProps = {
     multiSection: false,
     shouldRenderSuggestions: value => value.trim().length > 0,
-    renderSuggestion: () => {
+    renderSuggestion() {
       throw new Error('`renderSuggestion` must be provided');
     },
-    renderSectionTitle: () => {
+    renderSectionTitle() {
       throw new Error('`renderSectionTitle` must be provided');
     },
-    getSectionSuggestions: () => {
+    getSectionSuggestions() {
       throw new Error('`getSectionSuggestions` must be provided');
     },
     inputProps: {},
@@ -57,8 +58,8 @@ export default class AutosuggestContainer extends Component {
 
   render() {
     const { multiSection, shouldRenderSuggestions, suggestions,
-            renderSuggestion, renderSectionTitle, getSectionSuggestions,
-            inputProps, theme } = this.props;
+            getSuggestionValue, renderSuggestion, renderSectionTitle,
+            getSectionSuggestions, inputProps, theme } = this.props;
 
     return (
       <Provider store={this.store}>
@@ -66,6 +67,7 @@ export default class AutosuggestContainer extends Component {
           () => <Autosuggest multiSection={multiSection}
                              shouldRenderSuggestions={shouldRenderSuggestions}
                              suggestions={suggestions}
+                             getSuggestionValue={getSuggestionValue}
                              renderSuggestion={renderSuggestion}
                              renderSectionTitle={renderSectionTitle}
                              getSectionSuggestions={getSectionSuggestions}

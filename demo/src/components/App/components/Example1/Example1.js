@@ -16,8 +16,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onChange: event => dispatch(updateInputValue(exampleId, event.target.value))
+    onChange: (value, reason) => dispatch(updateInputValue(exampleId, value, reason))
   };
+}
+
+function getSuggestionValue(suggestion) {
+  return suggestion.text;
 }
 
 function renderSuggestion(suggestion) {
@@ -48,15 +52,20 @@ class Example extends Component {
     const inputProps = {
       placeholder: 'Pick another fruit',
       value,
-      onChange,
+      onChange: (event, value, reason) => {
+        console.log(`Example ${exampleId}: Changed value = ${value}, reason = ${reason}`);
+        onChange(value, reason);
+      },
       onBlur: () => console.log(`Example ${exampleId}: Blurred`),
-      onFocus: () => console.log(`Example ${exampleId}: Focused`)
+      onFocus: () => console.log(`Example ${exampleId}: Focused`),
+      onKeyDown: event => console.log(`Example ${exampleId}: keyCode = ${event.keyCode}`)
     };
 
     return (
       <div>
         <Autosuggest multiSection={true}
                      suggestions={suggestions}
+                     getSuggestionValue={getSuggestionValue}
                      renderSuggestion={renderSuggestion}
                      renderSectionTitle={renderSectionTitle}
                      getSectionSuggestions={getSectionSuggestions}

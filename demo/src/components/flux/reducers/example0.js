@@ -23,17 +23,30 @@ export default function(state = initialState, action) {
     return state;
   }
 
-  const { type, value } = action;
+  const { type, value, reason } = action;
 
   switch (type) {
     case UPDATE_INPUT_VALUE:
-      const escapedInput = escapeRegexCharacters(value.trim());
-      const regex = new RegExp(escapedInput, 'i');
+      switch (reason) {
+        case 'type':
+          const escapedInput = escapeRegexCharacters(value.trim());
+          const regex = new RegExp(escapedInput, 'i');
 
-      return {
-        value,
-        suggestions: allSuggestions.filter(suggestion => regex.test(suggestion.text))
-      };
+          return {
+            ...state,
+            value,
+            suggestions: allSuggestions.filter(suggestion => regex.test(suggestion.text))
+          };
+
+        case 'up-down':
+          return {
+            ...state,
+            value
+          };
+
+        default:
+          return state;
+      }
 
     default:
       return state;

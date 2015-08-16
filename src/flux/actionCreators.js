@@ -1,8 +1,16 @@
-import { UPDATE_IS_OPEN } from './constants';
+import { UPDATE_IS_OPEN, UPDATE_FOCUSED_SUGGESTION } from './constants';
 
-export function updateIsOpen(value) {
+export function updateIsOpen(isOpen) {
   return {
     type: UPDATE_IS_OPEN,
-    value
+    isOpen
+  };
+}
+
+export function updateFocusedSuggestion(sectionIndex, suggestionIndex) {
+  return {
+    type: UPDATE_FOCUSED_SUGGESTION,
+    sectionIndex,
+    suggestionIndex
   };
 }
