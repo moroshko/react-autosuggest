@@ -72,7 +72,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var _react = __webpack_require__(1);
 
@@ -91,6 +91,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _sectionIterator2 = _interopRequireDefault(_sectionIterator);
 
 	var Autosuggest = (function (_Component) {
+	  _inherits(Autosuggest, _Component);
+
+	  _createClass(Autosuggest, null, [{
+	    key: 'propTypes',
+	    value: {
+	      value: _react.PropTypes.string, // Controlled value of the selected suggestion
+	      defaultValue: _react.PropTypes.string, // Initial value of the text
+	      suggestions: _react.PropTypes.func.isRequired, // Function to get the suggestions
+	      suggestionRenderer: _react.PropTypes.func, // Function that renders a given suggestion (must be implemented when suggestions are objects)
+	      suggestionValue: _react.PropTypes.func, // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
+	      showWhen: _react.PropTypes.func, // Function that determines whether to show suggestions or not
+	      onSuggestionSelected: _react.PropTypes.func, // This function is called when suggestion is selected via mouse click or Enter
+	      onSuggestionFocused: _react.PropTypes.func, // This function is called when suggestion is focused via mouse hover or Up/Down keys
+	      onSuggestionUnfocused: _react.PropTypes.func, // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
+	      inputAttributes: _react.PropTypes.object, // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
+	      cache: _react.PropTypes.bool, // Set it to false to disable in-memory caching
+	      id: _react.PropTypes.string, // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
+	      scrollBar: _react.PropTypes.bool // Set it to true when the suggestions container can have a scroll bar
+	    },
+	    enumerable: true
+	  }, {
+	    key: 'defaultProps',
+	    value: {
+	      showWhen: function showWhen(input) {
+	        return input.trim().length > 0;
+	      },
+	      onSuggestionSelected: function onSuggestionSelected() {},
+	      onSuggestionFocused: function onSuggestionFocused() {},
+	      onSuggestionUnfocused: function onSuggestionUnfocused() {},
+	      inputAttributes: {},
+	      cache: true,
+	      id: '1',
+	      scrollBar: false
+	    },
+	    enumerable: true
+	  }]);
+
 	  function Autosuggest(props) {
 	    _classCallCheck(this, Autosuggest);
 
@@ -116,21 +153,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
 	    // twice when mouse is moving between suggestions
 	    this.justClickedOnSuggestion = false; // Helps not to call inputAttributes.onBlur
-	    // and showSuggestions() when suggestion is clicked
-
+	    // and showSuggestions() when suggestion is clicked.
+	    // Also helps not to call handleValueChange() in
+	    // componentWillReceiveProps() when suggestion is clicked.
+	    this.justPressedUpDown = false; // Helps not to call handleValueChange() in
+	    // componentWillReceiveProps() when Up or Down is pressed.
 	    this.onInputChange = this.onInputChange.bind(this);
 	    this.onInputKeyDown = this.onInputKeyDown.bind(this);
 	    this.onInputFocus = this.onInputFocus.bind(this);
 	    this.onInputBlur = this.onInputBlur.bind(this);
 	  }
 
-	  _inherits(Autosuggest, _Component);
-
 	  _createClass(Autosuggest, [{
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
 	      if (this.isControlledComponent) {
-	        this.handleValueChange(nextProps.value);
+	        var inputValue = (0, _react.findDOMNode)(this.refs.input).value;
+
+	        if (nextProps.value !== inputValue && !this.justClickedOnSuggestion && !this.justPressedUpDown) {
+	          this.handleValueChange(nextProps.value);
+	        }
 	      }
 	    }
 	  }, {
@@ -315,6 +357,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'focusOnSuggestionUsingKeyboard',
 	    value: function focusOnSuggestionUsingKeyboard(direction, suggestionPosition) {
+	      var _this2 = this;
+
 	      var _suggestionPosition = _slicedToArray(suggestionPosition, 2);
 
 	      var sectionIndex = _suggestionPosition[0];
@@ -325,6 +369,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        focusedSuggestionIndex: suggestionIndex,
 	        value: suggestionIndex === null ? this.state.valueBeforeUpDown : this.getSuggestionValue(sectionIndex, suggestionIndex)
 	      };
+
+	      this.justPressedUpDown = true;
 
 	      // When users starts to interact with Up/Down keys, remember input's value.
 	      if (this.state.valueBeforeUpDown === null) {
@@ -346,6 +392,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 
 	      this.setState(newState);
+
+	      setTimeout(function () {
+	        return _this2.justPressedUpDown = false;
+	      });
 	    }
 	  }, {
 	    key: 'onSuggestionSelected',
@@ -487,7 +537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onSuggestionMouseDown',
 	    value: function onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      var suggestionValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
 
@@ -508,8 +558,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }, function () {
 	        // This code executes after the component is re-rendered
 	        setTimeout(function () {
-	          (0, _react.findDOMNode)(_this2.refs.input).focus();
-	          _this2.justClickedOnSuggestion = false;
+	          (0, _react.findDOMNode)(_this3.refs.input).focus();
+	          _this3.justClickedOnSuggestion = false;
 	        });
 	      });
 	    }
@@ -543,39 +593,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'renderSuggestionsList',
 	    value: function renderSuggestionsList(suggestions, sectionIndex) {
-	      var _this3 = this;
+	      var _this4 = this;
 
 	      return suggestions.map(function (suggestion, suggestionIndex) {
 	        var classes = (0, _classnames2['default'])({
 	          'react-autosuggest__suggestion': true,
-	          'react-autosuggest__suggestion--focused': sectionIndex === _this3.state.focusedSectionIndex && suggestionIndex === _this3.state.focusedSuggestionIndex
+	          'react-autosuggest__suggestion--focused': sectionIndex === _this4.state.focusedSectionIndex && suggestionIndex === _this4.state.focusedSuggestionIndex
 	        });
-	        var suggestionRef = _this3.getSuggestionRef(sectionIndex, suggestionIndex);
+	        var suggestionRef = _this4.getSuggestionRef(sectionIndex, suggestionIndex);
 
 	        return _react2['default'].createElement(
 	          'li',
-	          { id: _this3.getSuggestionId(sectionIndex, suggestionIndex),
+	          { id: _this4.getSuggestionId(sectionIndex, suggestionIndex),
 	            className: classes,
 	            role: 'option',
 	            ref: suggestionRef,
 	            key: suggestionRef,
 	            onMouseEnter: function () {
-	              return _this3.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
+	              return _this4.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
 	            },
 	            onMouseLeave: function () {
-	              return _this3.onSuggestionMouseLeave(sectionIndex, suggestionIndex);
+	              return _this4.onSuggestionMouseLeave(sectionIndex, suggestionIndex);
 	            },
 	            onMouseDown: function (event) {
-	              return _this3.onSuggestionMouseDown(sectionIndex, suggestionIndex, event);
+	              return _this4.onSuggestionMouseDown(sectionIndex, suggestionIndex, event);
 	            } },
-	          _this3.renderSuggestionContent(suggestion)
+	          _this4.renderSuggestionContent(suggestion)
 	        );
 	      });
 	    }
 	  }, {
 	    key: 'renderSuggestions',
 	    value: function renderSuggestions() {
-	      var _this4 = this;
+	      var _this5 = this;
 
 	      if (this.state.suggestions === null) {
 	        return null;
@@ -603,7 +653,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              _react2['default'].createElement(
 	                'ul',
 	                { className: 'react-autosuggest__suggestions-section-suggestions' },
-	                _this4.renderSuggestionsList(section.suggestions, sectionIndex)
+	                _this5.renderSuggestionsList(section.suggestions, sectionIndex)
 	              )
 	            );
 	          })
@@ -651,39 +701,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.renderSuggestions()
 	      );
 	    }
-	  }], [{
-	    key: 'propTypes',
-	    value: {
-	      value: _react.PropTypes.string, // Controlled value of the selected suggestion
-	      defaultValue: _react.PropTypes.string, // Initial value of the text
-	      suggestions: _react.PropTypes.func.isRequired, // Function to get the suggestions
-	      suggestionRenderer: _react.PropTypes.func, // Function that renders a given suggestion (must be implemented when suggestions are objects)
-	      suggestionValue: _react.PropTypes.func, // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
-	      showWhen: _react.PropTypes.func, // Function that determines whether to show suggestions or not
-	      onSuggestionSelected: _react.PropTypes.func, // This function is called when suggestion is selected via mouse click or Enter
-	      onSuggestionFocused: _react.PropTypes.func, // This function is called when suggestion is focused via mouse hover or Up/Down keys
-	      onSuggestionUnfocused: _react.PropTypes.func, // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
-	      inputAttributes: _react.PropTypes.object, // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
-	      cache: _react.PropTypes.bool, // Set it to false to disable in-memory caching
-	      id: _react.PropTypes.string, // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
-	      scrollBar: _react.PropTypes.bool // Set it to true when the suggestions container can have a scroll bar
-	    },
-	    enumerable: true
-	  }, {
-	    key: 'defaultProps',
-	    value: {
-	      showWhen: function showWhen(input) {
-	        return input.trim().length > 0;
-	      },
-	      onSuggestionSelected: function onSuggestionSelected() {},
-	      onSuggestionFocused: function onSuggestionFocused() {},
-	      onSuggestionUnfocused: function onSuggestionUnfocused() {},
-	      inputAttributes: {},
-	      cache: true,
-	      id: '1',
-	      scrollBar: false
-	    },
-	    enumerable: true
 	  }]);
 
 	  return Autosuggest;

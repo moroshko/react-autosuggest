@@ -54,8 +54,11 @@ export default class Autosuggest extends Component {
     this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
                                 // twice when mouse is moving between suggestions
     this.justClickedOnSuggestion = false; // Helps not to call inputAttributes.onBlur
-                                          // and showSuggestions() when suggestion is clicked
-
+                                          // and showSuggestions() when suggestion is clicked.
+                                          // Also helps not to call handleValueChange() in
+                                          // componentWillReceiveProps() when suggestion is clicked.
+    this.justPressedUpDown = false; // Helps not to call handleValueChange() in
+                                    // componentWillReceiveProps() when Up or Down is pressed.
     this.onInputChange = ::this.onInputChange;
     this.onInputKeyDown = ::this.onInputKeyDown;
     this.onInputFocus = ::this.onInputFocus;
@@ -64,7 +67,12 @@ export default class Autosuggest extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.isControlledComponent) {
-      this.handleValueChange(nextProps.value);
+      const inputValue = findDOMNode(this.refs.input).value;
+
+      if (nextProps.value !== inputValue &&
+          !this.justClickedOnSuggestion && !this.justPressedUpDown) {
+        this.handleValueChange(nextProps.value);
+      }
     }
   }
 
@@ -240,6 +248,8 @@ export default class Autosuggest extends Component {
                : this.getSuggestionValue(sectionIndex, suggestionIndex)
     };
 
+    this.justPressedUpDown = true;
+
     // When users starts to interact with Up/Down keys, remember input's value.
     if (this.state.valueBeforeUpDown === null) {
       newState.valueBeforeUpDown = this.state.value;
@@ -260,6 +270,8 @@ export default class Autosuggest extends Component {
     }
 
     this.setState(newState);
+
+    setTimeout(() => this.justPressedUpDown = false);
   }
 
   onSuggestionSelected(event) {

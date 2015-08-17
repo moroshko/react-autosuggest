@@ -16,7 +16,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _react = require('react');
 
@@ -97,8 +97,11 @@ var Autosuggest = (function (_Component) {
     this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
     // twice when mouse is moving between suggestions
     this.justClickedOnSuggestion = false; // Helps not to call inputAttributes.onBlur
-    // and showSuggestions() when suggestion is clicked
-
+    // and showSuggestions() when suggestion is clicked.
+    // Also helps not to call handleValueChange() in
+    // componentWillReceiveProps() when suggestion is clicked.
+    this.justPressedUpDown = false; // Helps not to call handleValueChange() in
+    // componentWillReceiveProps() when Up or Down is pressed.
     this.onInputChange = this.onInputChange.bind(this);
     this.onInputKeyDown = this.onInputKeyDown.bind(this);
     this.onInputFocus = this.onInputFocus.bind(this);
@@ -109,7 +112,11 @@ var Autosuggest = (function (_Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
       if (this.isControlledComponent) {
-        this.handleValueChange(nextProps.value);
+        var inputValue = (0, _react.findDOMNode)(this.refs.input).value;
+
+        if (nextProps.value !== inputValue && !this.justClickedOnSuggestion && !this.justPressedUpDown) {
+          this.handleValueChange(nextProps.value);
+        }
       }
     }
   }, {
@@ -294,6 +301,8 @@ var Autosuggest = (function (_Component) {
   }, {
     key: 'focusOnSuggestionUsingKeyboard',
     value: function focusOnSuggestionUsingKeyboard(direction, suggestionPosition) {
+      var _this2 = this;
+
       var _suggestionPosition = _slicedToArray(suggestionPosition, 2);
 
       var sectionIndex = _suggestionPosition[0];
@@ -304,6 +313,8 @@ var Autosuggest = (function (_Component) {
         focusedSuggestionIndex: suggestionIndex,
         value: suggestionIndex === null ? this.state.valueBeforeUpDown : this.getSuggestionValue(sectionIndex, suggestionIndex)
       };
+
+      this.justPressedUpDown = true;
 
       // When users starts to interact with Up/Down keys, remember input's value.
       if (this.state.valueBeforeUpDown === null) {
@@ -325,6 +336,10 @@ var Autosuggest = (function (_Component) {
       }
 
       this.setState(newState);
+
+      setTimeout(function () {
+        return _this2.justPressedUpDown = false;
+      });
     }
   }, {
     key: 'onSuggestionSelected',
@@ -466,7 +481,7 @@ var Autosuggest = (function (_Component) {
   }, {
     key: 'onSuggestionMouseDown',
     value: function onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
-      var _this2 = this;
+      var _this3 = this;
 
       var suggestionValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
 
@@ -487,8 +502,8 @@ var Autosuggest = (function (_Component) {
       }, function () {
         // This code executes after the component is re-rendered
         setTimeout(function () {
-          (0, _react.findDOMNode)(_this2.refs.input).focus();
-          _this2.justClickedOnSuggestion = false;
+          (0, _react.findDOMNode)(_this3.refs.input).focus();
+          _this3.justClickedOnSuggestion = false;
         });
       });
     }
@@ -522,39 +537,39 @@ var Autosuggest = (function (_Component) {
   }, {
     key: 'renderSuggestionsList',
     value: function renderSuggestionsList(suggestions, sectionIndex) {
-      var _this3 = this;
+      var _this4 = this;
 
       return suggestions.map(function (suggestion, suggestionIndex) {
         var classes = (0, _classnames2['default'])({
           'react-autosuggest__suggestion': true,
-          'react-autosuggest__suggestion--focused': sectionIndex === _this3.state.focusedSectionIndex && suggestionIndex === _this3.state.focusedSuggestionIndex
+          'react-autosuggest__suggestion--focused': sectionIndex === _this4.state.focusedSectionIndex && suggestionIndex === _this4.state.focusedSuggestionIndex
         });
-        var suggestionRef = _this3.getSuggestionRef(sectionIndex, suggestionIndex);
+        var suggestionRef = _this4.getSuggestionRef(sectionIndex, suggestionIndex);
 
         return _react2['default'].createElement(
           'li',
-          { id: _this3.getSuggestionId(sectionIndex, suggestionIndex),
+          { id: _this4.getSuggestionId(sectionIndex, suggestionIndex),
             className: classes,
             role: 'option',
             ref: suggestionRef,
             key: suggestionRef,
             onMouseEnter: function () {
-              return _this3.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
+              return _this4.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
             },
             onMouseLeave: function () {
-              return _this3.onSuggestionMouseLeave(sectionIndex, suggestionIndex);
+              return _this4.onSuggestionMouseLeave(sectionIndex, suggestionIndex);
             },
             onMouseDown: function (event) {
-              return _this3.onSuggestionMouseDown(sectionIndex, suggestionIndex, event);
+              return _this4.onSuggestionMouseDown(sectionIndex, suggestionIndex, event);
             } },
-          _this3.renderSuggestionContent(suggestion)
+          _this4.renderSuggestionContent(suggestion)
         );
       });
     }
   }, {
     key: 'renderSuggestions',
     value: function renderSuggestions() {
-      var _this4 = this;
+      var _this5 = this;
 
       if (this.state.suggestions === null) {
         return null;
@@ -582,7 +597,7 @@ var Autosuggest = (function (_Component) {
               _react2['default'].createElement(
                 'ul',
                 { className: 'react-autosuggest__suggestions-section-suggestions' },
-                _this4.renderSuggestionsList(section.suggestions, sectionIndex)
+                _this5.renderSuggestionsList(section.suggestions, sectionIndex)
               )
             );
           })

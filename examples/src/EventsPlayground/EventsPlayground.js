@@ -26,6 +26,14 @@ function getSuggestions(input, callback) {
 export default class EventsPlayground extends Component {
   static propTypes = {
     onEventAdded: PropTypes.func.isRequired
+  };
+
+  constructor() {
+    super();
+
+    this.state = {
+      value: ''
+    };
   }
 
   onSuggestionSelected(suggestion, event) {
@@ -51,6 +59,10 @@ export default class EventsPlayground extends Component {
   }
 
   onInputChanged(value) {
+    this.setState({
+      value: value
+    });
+
     this.props.onEventAdded({
       type: 'input-changed',
       value: value
@@ -77,7 +89,8 @@ export default class EventsPlayground extends Component {
                      onSuggestionSelected={::this.onSuggestionSelected}
                      onSuggestionFocused={::this.onSuggestionFocused}
                      onSuggestionUnfocused={::this.onSuggestionUnfocused}
-                     inputAttributes={inputAttributes} />
+                     inputAttributes={inputAttributes}
+                     value={this.state.value} />
         <SourceCodeLink file="examples/src/EventsPlayground/EventsPlayground.js" />
       </div>
     );
