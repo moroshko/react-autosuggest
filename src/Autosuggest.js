@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { inputFocused, inputBlurred, inputChanged, updateFocusedSuggestion,
-         revealSuggestions, selectSuggestion } from './flux/actionCreators';
+         revealSuggestions, closeSuggestions } from './flux/actionCreators';
 import { connect } from 'react-redux';
 import Autowhatever from 'react-autowhatever';
 import createSectionIterator from 'section-iterator';
@@ -32,8 +32,8 @@ function mapDispatchToProps(dispatch) {
     revealSuggestions: () => {
       dispatch(revealSuggestions());
     },
-    selectSuggestion: () => {
-      dispatch(selectSuggestion());
+    closeSuggestions: () => {
+      dispatch(closeSuggestions());
     }
   };
 }
@@ -62,7 +62,7 @@ class Autosuggest extends Component {
     inputChanged: PropTypes.func.isRequired,
     updateFocusedSuggestion: PropTypes.func.isRequired,
     revealSuggestions: PropTypes.func.isRequired,
-    selectSuggestion: PropTypes.func.isRequired
+    closeSuggestions: PropTypes.func.isRequired
   };
 
   getSuggestion(sectionIndex, suggestionIndex) {
@@ -91,13 +91,21 @@ class Autosuggest extends Component {
     return getSuggestionValue(this.getSuggestion(sectionIndex, suggestionIndex));
   }
 
+  maybeEmitOnChange(event, newValue, reason) {
+    const { value, onChange } = this.props.inputProps;
+
+    if (newValue !== value) {
+      onChange && onChange(event, newValue, reason);
+    }
+  }
+
   render() {
     const { multiSection, shouldRenderSuggestions, suggestions,
             renderSuggestion, renderSectionTitle, getSectionSuggestions,
             inputProps, onSuggestionSelected, theme, isFocused, isCollapsed,
             focusedSectionIndex, focusedSuggestionIndex, valueBeforeUpDown,
             inputFocused, inputBlurred, inputChanged, updateFocusedSuggestion,
-            revealSuggestions, selectSuggestion } = this.props;
+            revealSuggestions, closeSuggestions } = this.props;
     const { value, onBlur, onFocus, onKeyDown, onChange } = inputProps;
     const isOpen = isFocused && !isCollapsed &&
                    shouldRenderSuggestions(value) && suggestions.length > 0;
@@ -122,7 +130,7 @@ class Autosuggest extends Component {
         const { value } = event.target;
 
         inputChanged(!shouldRenderSuggestions(value));
-        onChange && onChange(event, value, 'type');
+        this.maybeEmitOnChange(event, value, 'type');
       },
       onKeyDown: event => {
         switch (event.key) {
@@ -141,7 +149,7 @@ class Autosuggest extends Component {
                 this.getSuggestionValue(nextFocusedSectionIndex, nextFocusedSuggestionIndex);
 
               updateFocusedSuggestion(nextFocusedSectionIndex, nextFocusedSuggestionIndex, value);
-              onChange && onChange(event, newValue, 'up-down');
+              this.maybeEmitOnChange(event, newValue, 'up-down');
             }
             event.preventDefault();
             break;
@@ -150,13 +158,20 @@ class Autosuggest extends Component {
             const focusedSuggestion = this.getFocusedSuggestion();
 
             if (focusedSuggestion !== null) {
-              selectSuggestion();
+              closeSuggestions();
               onSuggestionSelected(event, focusedSuggestion);
             }
             break;
           }
 
           case 'Escape':
+            if (valueBeforeUpDown !== null) {
+              this.maybeEmitOnChange(event, valueBeforeUpDown, 'escape');
+            } else if (isCollapsed) {
+              this.maybeEmitOnChange(event, '', 'escape');
+            }
+
+            closeSuggestions();
             break;
         }
 

@@ -45,6 +45,7 @@ export default function(state = initialState, action) {
           };
 
         case 'up-down':
+        case 'escape':
           return {
             ...state,
             value
