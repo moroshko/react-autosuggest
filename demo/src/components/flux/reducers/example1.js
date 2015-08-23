@@ -1,4 +1,4 @@
-import { UPDATE_INPUT_VALUE } from 'flux/constants/actionTypes/app';
+import { UPDATE_INPUT_VALUE, SUGGESTION_SELECTED } from 'flux/constants/actionTypes';
 import { escapeRegexCharacters } from 'utils/utils';
 
 const allSuggestions = [{
@@ -25,29 +25,35 @@ const initialState = {
   suggestions: allSuggestions
 };
 
+function getSuggestions(value) {
+  const escapedInput = escapeRegexCharacters(value.trim());
+  const regex = new RegExp(escapedInput, 'i');
+
+  return allSuggestions.map(section => {
+    return {
+      title: section.title,
+      suggestions: section.suggestions.filter(suggestion => regex.test(suggestion.text))
+    };
+  }).filter(section => section.suggestions.length > 0);
+}
+
 export default function(state = initialState, action) {
   if (!action) {
     return state;
   }
 
-  const { type, value, reason } = action;
+  const { type } = action;
 
   switch (type) {
     case UPDATE_INPUT_VALUE:
+      const { value, reason } = action;
+
       switch (reason) {
         case 'type':
-          const escapedInput = escapeRegexCharacters(value.trim());
-          const regex = new RegExp(escapedInput, 'i');
-
           return {
             ...state,
             value,
-            suggestions: allSuggestions.map(section => {
-              return {
-                title: section.title,
-                suggestions: section.suggestions.filter(suggestion => regex.test(suggestion.text))
-              };
-            }).filter(section => section.suggestions.length > 0)
+            suggestions: getSuggestions(value)
           };
 
         case 'up-down':
@@ -59,6 +65,14 @@ export default function(state = initialState, action) {
         default:
           return state;
       }
+
+    case SUGGESTION_SELECTED:
+      const { suggestionValue } = action;
+
+      return {
+        ...state,
+        suggestions: getSuggestions(suggestionValue)
+      };
 
     default:
       return state;

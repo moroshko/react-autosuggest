@@ -1,5 +1,5 @@
-import { INPUT_FOCUSED, INPUT_BLURRED, INPUT_CHANGED,
-         UPDATE_FOCUSED_SUGGESTION, REVEAL_SUGGESTIONS } from './constants';
+import { INPUT_FOCUSED, INPUT_BLURRED, INPUT_CHANGED, UPDATE_FOCUSED_SUGGESTION,
+         REVEAL_SUGGESTIONS, SELECT_SUGGESTION } from './constants';
 
 export default function(state, action) {
   switch (action.type) {
@@ -20,18 +20,21 @@ export default function(state, action) {
     case INPUT_CHANGED:
       return {
         ...state,
+        focusedSectionIndex: null,
+        focusedSuggestionIndex: null,
         valueBeforeUpDown: null,
-        isCollapsed: false
+        isCollapsed: action.shouldCollapse
       };
 
     case UPDATE_FOCUSED_SUGGESTION: {
+      const { value, sectionIndex, suggestionIndex } = action;
       const valueBeforeUpDown =
-        state.valueBeforeUpDown === null ? action.value : state.valueBeforeUpDown;
+        state.valueBeforeUpDown === null ? value : state.valueBeforeUpDown;
 
       return {
         ...state,
-        focusedSectionIndex: action.sectionIndex,
-        focusedSuggestionIndex: action.suggestionIndex,
+        focusedSectionIndex: sectionIndex,
+        focusedSuggestionIndex: suggestionIndex,
         valueBeforeUpDown
       };
     }
@@ -40,6 +43,15 @@ export default function(state, action) {
       return {
         ...state,
         isCollapsed: false
+      };
+
+    case SELECT_SUGGESTION:
+      return {
+        ...state,
+        focusedSectionIndex: null,
+        focusedSuggestionIndex: null,
+        valueBeforeUpDown: null,
+        isCollapsed: true
       };
 
     default:

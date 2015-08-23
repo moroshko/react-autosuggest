@@ -4,15 +4,15 @@
 
 **TODO:**
 
-* ENTER
 * ESC
 * Mouse interactions (add 'mouse-click' reason)
-* onSelected hook
+* Call onSelected() when suggestion is clicked using a mouse
 * Make sure onChange is called only when value changes
 * Create minimal API to Autosuggest
-* Add more examples
-* Add support for scrollbar
 * Write tests
+* Add more examples
+* Add more themes
+* Add support for scrollbar
 * Write docs
 
 [status-image]: https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/3.0.svg

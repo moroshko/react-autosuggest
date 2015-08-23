@@ -2,7 +2,7 @@ import theme from 'theme.less';
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { updateInputValue } from 'flux/actionCreators/app';
+import { updateInputValue, suggestionSelected } from 'flux/actionCreators/app';
 import Autosuggest from 'AutosuggestContainer';
 
 const exampleId = '0';
@@ -16,8 +16,18 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onChange: (value, reason) => dispatch(updateInputValue(exampleId, value, reason))
+    onChange: (value, reason) => {
+      dispatch(updateInputValue(exampleId, value, reason));
+    },
+    onSuggestionSelected: (event, suggestion) => {
+      console.log(`Example ${exampleId}: Suggestion selected:`, suggestion);
+      dispatch(suggestionSelected(exampleId, getSuggestionValue(suggestion)));
+    }
   };
+}
+
+function shouldRenderSuggestions(value) {
+  return true;
 }
 
 function getSuggestionValue(suggestion) {
@@ -34,11 +44,13 @@ class Example extends Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
     suggestions: PropTypes.array.isRequired,
-    onChange: PropTypes.func.isRequired
+
+    onChange: PropTypes.func.isRequired,
+    onSuggestionSelected: PropTypes.func.isRequired
   };
 
   render() {
-    const { value, suggestions, onChange } = this.props;
+    const { value, suggestions, onChange, onSuggestionSelected } = this.props;
     const inputProps = {
       placeholder: 'Pick a fruit',
       value,
@@ -53,10 +65,12 @@ class Example extends Component {
 
     return (
       <div>
-        <Autosuggest suggestions={suggestions}
+        <Autosuggest shouldRenderSuggestions={shouldRenderSuggestions}
+                     suggestions={suggestions}
                      getSuggestionValue={getSuggestionValue}
                      renderSuggestion={renderSuggestion}
                      inputProps={inputProps}
+                     onSuggestionSelected={onSuggestionSelected}
                      theme={theme} />
       </div>
     );

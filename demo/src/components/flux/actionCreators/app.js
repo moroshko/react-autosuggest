@@ -1,4 +1,4 @@
-import { UPDATE_INPUT_VALUE } from 'flux/constants/actionTypes/app';
+import { UPDATE_INPUT_VALUE, SUGGESTION_SELECTED } from 'flux/constants/actionTypes';
 
 export function updateInputValue(exampleNumber, value, reason) {
   return {
@@ -6,5 +6,13 @@ export function updateInputValue(exampleNumber, value, reason) {
     exampleNumber,
     value,
     reason
+  };
+}
+
+export function suggestionSelected(exampleNumber, suggestionValue) {
+  return {
+    type: SUGGESTION_SELECTED,
+    exampleNumber,
+    suggestionValue
   };
 }

@@ -1,4 +1,4 @@
-import { UPDATE_INPUT_VALUE } from 'flux/constants/actionTypes/app';
+import { UPDATE_INPUT_VALUE, SUGGESTION_SELECTED } from 'flux/constants/actionTypes';
 
 const reducers = [
   require('./example0'),
@@ -15,6 +15,12 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case UPDATE_INPUT_VALUE:
+      return {
+        ...state,
+        [exampleNumber]: reducers[exampleNumber](state[exampleNumber], action)
+      };
+
+    case SUGGESTION_SELECTED:
       return {
         ...state,
         [exampleNumber]: reducers[exampleNumber](state[exampleNumber], action)

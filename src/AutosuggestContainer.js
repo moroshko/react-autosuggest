@@ -14,6 +14,7 @@ export default class AutosuggestContainer extends Component {
     renderSectionTitle: PropTypes.func,
     getSectionSuggestions: PropTypes.func,
     inputProps: PropTypes.object,
+    onSuggestionSelected: PropTypes.func,
     theme: PropTypes.object
   };
 
@@ -30,6 +31,7 @@ export default class AutosuggestContainer extends Component {
       throw new Error('`getSectionSuggestions` must be provided');
     },
     inputProps: {},
+    onSuggestionSelected: () => {},
     theme: {
       container: 'react-autosuggest__container',
       input: 'react-autosuggest__input',
@@ -61,7 +63,7 @@ export default class AutosuggestContainer extends Component {
   render() {
     const { multiSection, shouldRenderSuggestions, suggestions,
             getSuggestionValue, renderSuggestion, renderSectionTitle,
-            getSectionSuggestions, inputProps, theme } = this.props;
+            getSectionSuggestions, inputProps, onSuggestionSelected, theme } = this.props;
 
     return (
       <Provider store={this.store}>
@@ -74,6 +76,7 @@ export default class AutosuggestContainer extends Component {
                              renderSectionTitle={renderSectionTitle}
                              getSectionSuggestions={getSectionSuggestions}
                              inputProps={inputProps}
+                             onSuggestionSelected={onSuggestionSelected}
                              theme={theme} />
         }
       </Provider>
