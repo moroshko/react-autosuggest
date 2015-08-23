@@ -24,7 +24,7 @@ function getSuggestionValue(suggestion) {
   return suggestion.text;
 }
 
-function renderSuggestion(suggestion) {
+function renderSuggestion(suggestion, value, valueBeforeUpDown) {
   return (
     <span>{suggestion.text}</span>
   );

@@ -1,4 +1,5 @@
-import { INPUT_FOCUSED, INPUT_BLURRED, UPDATE_FOCUSED_SUGGESTION } from './constants';
+import { INPUT_FOCUSED, INPUT_BLURRED, INPUT_CHANGED,
+         UPDATE_FOCUSED_SUGGESTION } from './constants';
 
 export function inputFocused() {
   return {
@@ -12,10 +13,17 @@ export function inputBlurred() {
   };
 }
 
-export function updateFocusedSuggestion(sectionIndex, suggestionIndex) {
+export function inputChanged() {
+  return {
+    type: INPUT_CHANGED
+  };
+}
+
+export function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
   return {
     type: UPDATE_FOCUSED_SUGGESTION,
     sectionIndex,
-    suggestionIndex
+    suggestionIndex,
+    value
   };
 }
