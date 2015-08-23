@@ -1,5 +1,5 @@
 import { INPUT_FOCUSED, INPUT_BLURRED, INPUT_CHANGED,
-         UPDATE_FOCUSED_SUGGESTION } from './constants';
+         UPDATE_FOCUSED_SUGGESTION, REVEAL_SUGGESTIONS } from './constants';
 
 export function inputFocused() {
   return {
@@ -25,5 +25,11 @@ export function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
     sectionIndex,
     suggestionIndex,
     value
+  };
+}
+
+export function revealSuggestions() {
+  return {
+    type: REVEAL_SUGGESTIONS
   };
 }

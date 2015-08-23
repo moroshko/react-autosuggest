@@ -1,5 +1,5 @@
 import { INPUT_FOCUSED, INPUT_BLURRED, INPUT_CHANGED,
-         UPDATE_FOCUSED_SUGGESTION } from './constants';
+         UPDATE_FOCUSED_SUGGESTION, REVEAL_SUGGESTIONS } from './constants';
 
 export default function(state, action) {
   switch (action.type) {
@@ -20,7 +20,8 @@ export default function(state, action) {
     case INPUT_CHANGED:
       return {
         ...state,
-        valueBeforeUpDown: null
+        valueBeforeUpDown: null,
+        isCollapsed: false
       };
 
     case UPDATE_FOCUSED_SUGGESTION: {
@@ -34,6 +35,12 @@ export default function(state, action) {
         valueBeforeUpDown
       };
     }
+
+    case REVEAL_SUGGESTIONS:
+      return {
+        ...state,
+        isCollapsed: false
+      };
 
     default:
       return state;

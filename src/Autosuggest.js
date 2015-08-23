@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { inputFocused, inputBlurred, inputChanged,
-         updateFocusedSuggestion } from './flux/actionCreators';
+         updateFocusedSuggestion, revealSuggestions } from './flux/actionCreators';
 import { connect } from 'react-redux';
 import Autowhatever from 'react-autowhatever';
 import createSectionIterator from 'section-iterator';
@@ -8,6 +8,7 @@ import createSectionIterator from 'section-iterator';
 function mapStateToProps(state) {
   return {
     isFocused: state.isFocused,
+    isCollapsed: state.isCollapsed,
     focusedSectionIndex: state.focusedSectionIndex,
     focusedSuggestionIndex: state.focusedSuggestionIndex,
     valueBeforeUpDown: state.valueBeforeUpDown
@@ -27,6 +28,9 @@ function mapDispatchToProps(dispatch) {
     },
     updateFocusedSuggestion: (sectionIndex, suggestionIndex, value) => {
       dispatch(updateFocusedSuggestion(sectionIndex, suggestionIndex, value));
+    },
+    revealSuggestions: () => {
+      dispatch(revealSuggestions());
     }
   };
 }
@@ -44,6 +48,7 @@ class Autosuggest extends Component {
     theme: PropTypes.object.isRequired,
 
     isFocused: PropTypes.bool.isRequired,
+    isCollapsed: PropTypes.bool.isRequired,
     focusedSectionIndex: PropTypes.number,
     focusedSuggestionIndex: PropTypes.number,
     valueBeforeUpDown: PropTypes.string,
@@ -51,7 +56,8 @@ class Autosuggest extends Component {
     inputFocused: PropTypes.func.isRequired,
     inputBlurred: PropTypes.func.isRequired,
     inputChanged: PropTypes.func.isRequired,
-    updateFocusedSuggestion: PropTypes.func.isRequired
+    updateFocusedSuggestion: PropTypes.func.isRequired,
+    revealSuggestions: PropTypes.func.isRequired
   };
 
   getSuggestion(sectionIndex, suggestionIndex) {
@@ -73,11 +79,13 @@ class Autosuggest extends Component {
   render() {
     const { multiSection, shouldRenderSuggestions, suggestions,
             renderSuggestion, renderSectionTitle, getSectionSuggestions,
-            inputProps, theme, isFocused, focusedSectionIndex,
+            inputProps, theme, isFocused, isCollapsed, focusedSectionIndex,
             focusedSuggestionIndex, valueBeforeUpDown, inputFocused,
-            inputBlurred, inputChanged, updateFocusedSuggestion } = this.props;
+            inputBlurred, inputChanged, updateFocusedSuggestion,
+            revealSuggestions } = this.props;
     const { value, onBlur, onFocus, onKeyDown, onChange } = inputProps;
-    const isOpen = isFocused && shouldRenderSuggestions(value) && suggestions.length > 0;
+    const isOpen = isFocused && !isCollapsed &&
+                   shouldRenderSuggestions(value) && suggestions.length > 0;
     const items = (isOpen ? suggestions : []);
     const sectionIterator = createSectionIterator({
       multiSection,
@@ -102,19 +110,22 @@ class Autosuggest extends Component {
       onKeyDown: event => {
         switch (event.key) {
           case 'ArrowDown':
-          case 'ArrowUp': {
-            const nextPrev = (event.key === 'ArrowDown' ? 'next' : 'prev');
-            const [nextFocusedSectionIndex, nextFocusedSuggestionIndex] =
-              sectionIterator[nextPrev]([focusedSectionIndex, focusedSuggestionIndex]);
-            const newValue = nextFocusedSuggestionIndex === null ?
-              valueBeforeUpDown :
-              this.getSuggestionValue(nextFocusedSectionIndex, nextFocusedSuggestionIndex);
+          case 'ArrowUp':
+            if (isCollapsed) {
+              revealSuggestions();
+            } else {
+              const nextPrev = (event.key === 'ArrowDown' ? 'next' : 'prev');
+              const [nextFocusedSectionIndex, nextFocusedSuggestionIndex] =
+                sectionIterator[nextPrev]([focusedSectionIndex, focusedSuggestionIndex]);
+              const newValue = nextFocusedSuggestionIndex === null ?
+                valueBeforeUpDown :
+                this.getSuggestionValue(nextFocusedSectionIndex, nextFocusedSuggestionIndex);
 
-            updateFocusedSuggestion(nextFocusedSectionIndex, nextFocusedSuggestionIndex, value);
-            onChange && onChange(event, newValue, 'up-down');
-            event.preventDefault();
+              updateFocusedSuggestion(nextFocusedSectionIndex, nextFocusedSuggestionIndex, value);
+              onChange && onChange(event, newValue, 'up-down');
+              event.preventDefault();
+            }
             break;
-          }
         }
 
         onKeyDown && onKeyDown(event);

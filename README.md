@@ -4,9 +4,6 @@
 
 **TODO:**
 
-* Just open suggestions when Up/Down is pressed. Don't focus on first suggestion.
-* BUG: When pressing Down to open suggestions, and then navigating to the last item
-       and click Down, suggestions are closed.
 * ENTER
 * ESC
 * Mouse interactions (add 'mouse-click' reason)
