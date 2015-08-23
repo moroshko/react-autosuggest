@@ -1,11 +1,19 @@
-import { UPDATE_IS_OPEN, UPDATE_FOCUSED_SUGGESTION } from './constants';
+import { INPUT_FOCUSED, INPUT_BLURRED, UPDATE_FOCUSED_SUGGESTION } from './constants';
 
 export default function(state, action) {
   switch (action.type) {
-    case UPDATE_IS_OPEN:
+    case INPUT_FOCUSED:
       return {
         ...state,
-        isOpen: action.isOpen
+        isFocused: true
+      };
+
+    case INPUT_BLURRED:
+      return {
+        ...state,
+        isFocused: false,
+        focusedSectionIndex: null,
+        focusedSuggestionIndex: null
       };
 
     case UPDATE_FOCUSED_SUGGESTION:

@@ -48,7 +48,7 @@ export default class AutosuggestContainer extends Component {
 
     const { shouldRenderSuggestions, suggestions, inputProps } = props;
     const initialState = {
-      isOpen: shouldRenderSuggestions(inputProps.value) && suggestions.length > 0,
+      isFocused: false,
       focusedSectionIndex: null,
       focusedSuggestionIndex: null
     };

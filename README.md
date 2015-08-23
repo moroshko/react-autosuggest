@@ -4,9 +4,8 @@
 
 **TODO:**
 
-* Reset focused item on blur
-* Up Arrow
 * Add valueBeforeUpDown to Autosuggest's state
+* Just open suggestions when Up/Down is pressed. Don't focus on first suggestion.
 * ESC
 * Mouse interactions (add 'mouse-click' reason)
 * onSelected hook

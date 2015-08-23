@@ -1,9 +1,14 @@
-import { UPDATE_IS_OPEN, UPDATE_FOCUSED_SUGGESTION } from './constants';
+import { INPUT_FOCUSED, INPUT_BLURRED, UPDATE_FOCUSED_SUGGESTION } from './constants';
 
-export function updateIsOpen(isOpen) {
+export function inputFocused() {
   return {
-    type: UPDATE_IS_OPEN,
-    isOpen
+    type: INPUT_FOCUSED
+  };
+}
+
+export function inputBlurred() {
+  return {
+    type: INPUT_BLURRED
   };
 }
 
