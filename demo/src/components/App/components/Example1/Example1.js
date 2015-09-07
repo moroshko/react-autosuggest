@@ -16,11 +16,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onChange: (value, reason) => {
-      dispatch(updateInputValue(exampleId, value, reason));
+    onChange: (value, method) => {
+      dispatch(updateInputValue(exampleId, value, method));
     },
-    onSuggestionSelected: (event, suggestion) => {
-      console.log(`Example ${exampleId}: Suggestion selected:`, suggestion);
+    onSuggestionSelected: (event, { suggestion, method }) => {
+      console.log(`Example ${exampleId}: Suggestion selected:`, suggestion, `method = ${method}`);
       dispatch(suggestionSelected(exampleId, getSuggestionValue(suggestion)));
     }
   };
@@ -60,9 +60,9 @@ class Example extends Component {
     const inputProps = {
       placeholder: 'Pick another fruit',
       value,
-      onChange: (event, value, reason) => {
-        console.log(`Example ${exampleId}: Changed value = ${value}, reason = ${reason}`);
-        onChange(value, reason);
+      onChange: (event, { newValue, method }) => {
+        console.log(`Example ${exampleId}: Changed value = ${newValue}, method = ${method}`);
+        onChange(newValue, method);
       },
       onBlur: () => console.log(`Example ${exampleId}: Blurred`),
       onFocus: () => console.log(`Example ${exampleId}: Focused`),

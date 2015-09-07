@@ -29,7 +29,9 @@ export default function(state, action) {
     case UPDATE_FOCUSED_SUGGESTION: {
       const { value, sectionIndex, suggestionIndex } = action;
       const valueBeforeUpDown =
-        state.valueBeforeUpDown === null ? value : state.valueBeforeUpDown;
+        state.valueBeforeUpDown === null && typeof value !== 'undefined'
+          ? value
+          : state.valueBeforeUpDown;
 
       return {
         ...state,

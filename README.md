@@ -4,8 +4,7 @@
 
 **TODO:**
 
-* Mouse interactions (add 'mouse-click' reason)
-* Call onSelected() when suggestion is clicked using a mouse
+* Add example with readonly suggestionId
 * Create minimal API to Autosuggest
 * Write tests
 * Add more examples

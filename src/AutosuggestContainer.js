@@ -67,18 +67,16 @@ export default class AutosuggestContainer extends Component {
 
     return (
       <Provider store={this.store}>
-        {
-          () => <Autosuggest multiSection={multiSection}
-                             shouldRenderSuggestions={shouldRenderSuggestions}
-                             suggestions={suggestions}
-                             getSuggestionValue={getSuggestionValue}
-                             renderSuggestion={renderSuggestion}
-                             renderSectionTitle={renderSectionTitle}
-                             getSectionSuggestions={getSectionSuggestions}
-                             inputProps={inputProps}
-                             onSuggestionSelected={onSuggestionSelected}
-                             theme={theme} />
-        }
+        <Autosuggest multiSection={multiSection}
+                     shouldRenderSuggestions={shouldRenderSuggestions}
+                     suggestions={suggestions}
+                     getSuggestionValue={getSuggestionValue}
+                     renderSuggestion={renderSuggestion}
+                     renderSectionTitle={renderSectionTitle}
+                     getSectionSuggestions={getSectionSuggestions}
+                     inputProps={inputProps}
+                     onSuggestionSelected={onSuggestionSelected}
+                     theme={theme} />
       </Provider>
     );
   }

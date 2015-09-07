@@ -5,17 +5,13 @@ import { Provider } from 'react-redux';
 import appReducer from 'flux/reducers/app';
 import App from 'App/App';
 
+const store = createStore(appReducer);
+
 class Demo extends Component {
-  constructor() {
-    super();
-
-    this.store = createStore(appReducer);
-  }
-
   render() {
     return (
-      <Provider store={this.store}>
-        {() => <App />}
+      <Provider store={store}>
+        <App />
       </Provider>
     );
   }

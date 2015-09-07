@@ -46,9 +46,9 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case UPDATE_INPUT_VALUE:
-      const { value, reason } = action;
+      const { value, method } = action;
 
-      switch (reason) {
+      switch (method) {
         case 'type':
           return {
             ...state,
@@ -56,8 +56,10 @@ export default function(state = initialState, action) {
             suggestions: getSuggestions(value)
           };
 
-        case 'up-down':
+        case 'down':
+        case 'up':
         case 'escape':
+        case 'click':
           return {
             ...state,
             value
