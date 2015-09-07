@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { inputFocused, inputBlurred, inputChanged, updateFocusedSuggestion,
-         revealSuggestions, closeSuggestions } from './flux/actionCreators';
+         revealSuggestions, closeSuggestions } from './redux';
 import { connect } from 'react-redux';
 import Autowhatever from 'react-autowhatever';
 
