@@ -22,8 +22,8 @@ function mapDispatchToProps(dispatch) {
     inputBlurred: () => {
       dispatch(inputBlurred());
     },
-    inputChanged: shouldCollapse => {
-      dispatch(inputChanged(shouldCollapse));
+    inputChanged: shouldRenderSuggestions => {
+      dispatch(inputChanged(shouldRenderSuggestions));
     },
     updateFocusedSuggestion: (sectionIndex, suggestionIndex, value) => {
       dispatch(updateFocusedSuggestion(sectionIndex, suggestionIndex, value));
@@ -98,16 +98,22 @@ class Autosuggest extends Component {
     }
   }
 
+  shouldRenderSuggestions() {
+    const { suggestions, shouldRenderSuggestions, inputProps } = this.props;
+    const { value } = inputProps;
+
+    return shouldRenderSuggestions(value) && suggestions.length > 0;
+  }
+
   render() {
-    const { multiSection, shouldRenderSuggestions, suggestions,
+    const { multiSection, suggestions, shouldRenderSuggestions,
             renderSuggestion, renderSectionTitle, getSectionSuggestions,
             inputProps, onSuggestionSelected, theme, isFocused, isCollapsed,
             focusedSectionIndex, focusedSuggestionIndex, valueBeforeUpDown,
             inputFocused, inputBlurred, inputChanged, updateFocusedSuggestion,
             revealSuggestions, closeSuggestions } = this.props;
     const { value, onBlur, onFocus, onKeyDown, onChange } = inputProps;
-    const isOpen = isFocused && !isCollapsed &&
-                   shouldRenderSuggestions(value) && suggestions.length > 0;
+    const isOpen = isFocused && !isCollapsed && this.shouldRenderSuggestions();
     const items = (isOpen ? suggestions : []);
     const autowhateverInputProps = {
       ...inputProps,
@@ -126,7 +132,7 @@ class Autosuggest extends Component {
       onChange: event => {
         const { value } = event.target;
 
-        inputChanged(!shouldRenderSuggestions(value));
+        inputChanged(shouldRenderSuggestions(value));
         this.maybeEmitOnChange(event, value, 'type');
       },
       onKeyDown: (event, data) => {
@@ -134,10 +140,10 @@ class Autosuggest extends Component {
           case 'ArrowDown':
           case 'ArrowUp':
             if (isCollapsed) {
-              if (shouldRenderSuggestions(value) && suggestions.length > 0) {
+              if (this.shouldRenderSuggestions()) {
                 revealSuggestions();
               }
-            } else {
+            } else if (suggestions.length > 0) {
               const { newFocusedSectionIndex, newFocusedItemIndex } = data;
               const newValue = newFocusedItemIndex === null ?
                 valueBeforeUpDown :

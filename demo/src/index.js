@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import appReducer from 'flux/reducers/app';
 import App from 'App/App';
 
-const store = createStore(appReducer);
+const store = applyMiddleware(thunk)(createStore)(appReducer);
 
 class Demo extends Component {
   render() {

@@ -4,6 +4,7 @@ import theme from 'theme.less';
 import React, { Component } from 'react';
 import Example0 from 'Example0/Example0';
 import Example1 from 'Example1/Example1';
+import Example2 from 'Example2/Example2';
 
 export default class App extends Component {
   render() {
@@ -23,6 +24,9 @@ export default class App extends Component {
           </div>
           <div className={styles.exampleContainer}>
             <Example1 />
+          </div>
+          <div className={styles.exampleContainer}>
+            <Example2 />
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@
 
 **TODO:**
 
+* Add async example
 * Add example with caching
 * Add example with debounce
 * Create minimal API to Autosuggest
