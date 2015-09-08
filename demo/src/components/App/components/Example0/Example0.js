@@ -59,8 +59,7 @@ class Example extends Component {
         onChange(newValue, method);
       },
       onBlur: () => console.log(`Example ${exampleId}: Blurred`),
-      onFocus: () => console.log(`Example ${exampleId}: Focused`),
-      onKeyDown: event => console.log(`Example ${exampleId}: keyCode = ${event.keyCode}`)
+      onFocus: () => console.log(`Example ${exampleId}: Focused`)
     };
 
     return (
