@@ -1,4 +1,5 @@
 import theme from 'theme.less';
+import styles from './Example1.less';
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
@@ -10,7 +11,8 @@ const exampleId = '1';
 function mapStateToProps(state) {
   return {
     value: state[exampleId].value,
-    suggestions: state[exampleId].suggestions
+    suggestions: state[exampleId].suggestions,
+    selectedSuggestionId: state[exampleId].selectedSuggestionId
   };
 }
 
@@ -21,7 +23,7 @@ function mapDispatchToProps(dispatch) {
     },
     onSuggestionSelected: (event, { suggestion, method }) => {
       console.log(`Example ${exampleId}: Suggestion selected:`, suggestion, `method = ${method}`);
-      dispatch(suggestionSelected(exampleId, getSuggestionValue(suggestion)));
+      dispatch(suggestionSelected(exampleId, getSuggestionValue(suggestion), suggestion.id));
     }
   };
 }
@@ -50,13 +52,15 @@ class Example extends Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
     suggestions: PropTypes.array.isRequired,
+    selectedSuggestionId: PropTypes.string.isRequired,
 
     onChange: PropTypes.func.isRequired,
     onSuggestionSelected: PropTypes.func.isRequired
   };
 
   render() {
-    const { value, suggestions, onChange, onSuggestionSelected } = this.props;
+    const { value, suggestions, selectedSuggestionId,
+            onChange, onSuggestionSelected } = this.props;
     const inputProps = {
       placeholder: 'Pick another fruit',
       value,
@@ -70,7 +74,10 @@ class Example extends Component {
     };
 
     return (
-      <div>
+      <div className={styles.container}>
+        <div className={styles.selectedSuggestionIdContainer}>
+          Selected suggestion id: {selectedSuggestionId}
+        </div>
         <Autosuggest multiSection={true}
                      suggestions={suggestions}
                      getSuggestionValue={getSuggestionValue}

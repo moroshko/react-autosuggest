@@ -4,25 +4,30 @@ import { escapeRegexCharacters } from 'utils/utils';
 const allSuggestions = [{
   title: 'A',
   suggestions: [{
+    id: '100',
     text: 'Apple'
   }, {
+    id: '101',
     text: 'Apricot'
   }]
 }, {
   title: 'B',
   suggestions: [{
+    id: '102',
     text: 'Banana'
   }]
 }, {
   title: 'C',
   suggestions: [{
+    id: '103',
     text: 'Cherry'
   }]
 }];
 
 const initialState = {
   value: '',
-  suggestions: allSuggestions
+  suggestions: allSuggestions,
+  selectedSuggestionId: ''
 };
 
 function getSuggestions(value) {
@@ -53,16 +58,23 @@ export default function(state = initialState, action) {
           return {
             ...state,
             value,
-            suggestions: getSuggestions(value)
+            suggestions: getSuggestions(value),
+            selectedSuggestionId: ''
           };
 
         case 'down':
         case 'up':
-        case 'escape':
         case 'click':
           return {
             ...state,
             value
+          };
+
+        case 'escape':
+          return {
+            ...state,
+            value,
+            selectedSuggestionId: ''
           };
 
         default:
@@ -70,11 +82,12 @@ export default function(state = initialState, action) {
       }
 
     case SUGGESTION_SELECTED:
-      const { suggestionValue } = action;
+      const { suggestionValue, suggestionId } = action;
 
       return {
         ...state,
-        suggestions: getSuggestions(suggestionValue)
+        suggestions: getSuggestions(suggestionValue),
+        selectedSuggestionId: suggestionId
       };
 
     default:

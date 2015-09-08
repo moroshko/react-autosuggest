@@ -9,10 +9,11 @@ export function updateInputValue(exampleNumber, value, method) {
   };
 }
 
-export function suggestionSelected(exampleNumber, suggestionValue) {
+export function suggestionSelected(exampleNumber, suggestionValue, suggestionId) {
   return {
     type: SUGGESTION_SELECTED,
     exampleNumber,
-    suggestionValue
+    suggestionValue,
+    suggestionId
   };
 }
