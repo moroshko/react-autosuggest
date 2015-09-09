@@ -1,4 +1,3 @@
-import groupby from 'lodash.groupby';
 import countries from './countries';
 import { escapeRegexCharacters } from 'utils/utils';
 
@@ -12,12 +11,9 @@ const initialState = {
 
 function getSuggestions(value) {
   const escapedInput = escapeRegexCharacters(value.trim());
-  const regex = new RegExp(escapedInput, 'i');
-  const matchedCountries = countries.filter(country => regex.test(country.name));
+  const regex = new RegExp('^' + escapedInput, 'i');
 
-  return groupby(matchedCountries, country => {
-    return country.name.charAt(0).toUpperCase();
-  });
+  return countries.filter(country => regex.test(country.name));
 }
 
 export function updateInputValue(exampleNumber, value, method) {
@@ -29,15 +25,19 @@ export function updateInputValue(exampleNumber, value, method) {
   };
 }
 
-export function getCountries(value) {
+export function updateSuggestions(exampleNumber, suggestions) {
+  return {
+    type: UPDATE_SUGGESTIONS,
+    exampleNumber,
+    suggestions
+  };
+}
+
+export function getCountries(exampleNumber, value) {
   return dispatch => {
     setTimeout(() => {
-      console.log(getSuggestions(value));
-      dispatch({
-        type: UPDATE_SUGGESTIONS,
-        suggestions: getSuggestions(value)
-      });
-    }, 300);
+      dispatch(updateSuggestions(exampleNumber, getSuggestions(value)));
+    }, 100);
   };
 }
 
@@ -68,9 +68,10 @@ export default function reducer(state = initialState, action) {
       }
 
     case UPDATE_SUGGESTIONS:
-      console.log(action.suggestions);
-
-      return state;
+      return {
+        ...state,
+        suggestions: action.suggestions
+      };
 
     default:
       return state;

@@ -5,6 +5,8 @@
 **TODO:**
 
 * Add async example
+* Add example that ignores case
+* Add example with delayed requests
 * Add example with caching
 * Add example with debounce
 * Create minimal API to Autosuggest

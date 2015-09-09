@@ -2,7 +2,7 @@ import theme from 'theme.less';
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { updateInputValue, getCountries } from 'Example2/redux';
+import { updateInputValue, updateSuggestions, getCountries } from 'Example2/redux';
 import Autosuggest from 'AutosuggestContainer';
 
 const exampleId = '2';
@@ -18,29 +18,29 @@ function mapDispatchToProps(dispatch) {
   return {
     onChange: (value, method) => {
       dispatch(updateInputValue(exampleId, value, method));
-      dispatch(getCountries(value));
+
+      value = value.trim();
+
+      if (value === '') {
+        dispatch(updateSuggestions(exampleId, []));
+      } else if (method === 'type') {
+        dispatch(getCountries(exampleId, value));
+      }
+    },
+    onSuggestionSelected: (event, { suggestion, method }) => {
+      dispatch(getCountries(exampleId, suggestion.name));
     }
   };
 }
 
 function getSuggestionValue(suggestion) {
-  return suggestion.text;
+  return suggestion.name;
 }
 
 function renderSuggestion(suggestion) {
   return (
-    <span>{suggestion.text}</span>
+    <span>{suggestion.name}</span>
   );
-}
-
-function renderSectionTitle(section) {
-  return (
-    <strong>{section.title}</strong>
-  );
-}
-
-function getSectionSuggestions(section) {
-  return section.suggestions;
 }
 
 class Example extends Component {
@@ -48,29 +48,27 @@ class Example extends Component {
     value: PropTypes.string.isRequired,
     suggestions: PropTypes.array.isRequired,
 
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    onSuggestionSelected: PropTypes.func.isRequired
   };
 
   render() {
-    const { value, suggestions, onChange } = this.props;
+    const { value, suggestions, onChange, onSuggestionSelected } = this.props;
     const inputProps = {
       placeholder: 'Pick a country',
       value,
       onChange: (event, { newValue, method }) => {
-        console.log(`Example ${exampleId}: Changed value = ${newValue}, method = ${method}`);
         onChange(newValue, method);
       }
     };
 
     return (
       <div>
-        <Autosuggest multiSection={true}
-                     suggestions={suggestions}
+        <Autosuggest suggestions={suggestions}
                      getSuggestionValue={getSuggestionValue}
                      renderSuggestion={renderSuggestion}
-                     renderSectionTitle={renderSectionTitle}
-                     getSectionSuggestions={getSectionSuggestions}
                      inputProps={inputProps}
+                     onSuggestionSelected={onSuggestionSelected}
                      theme={theme} />
       </div>
     );
