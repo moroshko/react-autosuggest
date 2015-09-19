@@ -20,12 +20,14 @@
 * <a href="https://moroshko.github.io/react-autosuggest" target="_blank">Basic example</a><br>
 * <a href="https://moroshko.github.io/react-autosuggest#Custom renderer" target="_blank">Custom renderer</a><br>
 * <a href="https://moroshko.github.io/react-autosuggest#Multiple sections" target="_blank">Multiple sections</a>
+* <a href="https://moroshko.github.io/react-autosuggest#Controlled Component" target="_blank">Controlled Component</a>
 * <a href="https://moroshko.github.io/react-autosuggest#Events playground" target="_blank">Events playground</a>
 
 ## Features
 
 * [WAI-ARIA accessible][wai-aria] (including ARIA attributes and keyboard interactions)
 * Supports [controlled](https://facebook.github.io/react/docs/forms.html#controlled-components) and  [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) state
+* Supports [react-themeable](https://github.com/markdalgleish/react-themeable) for flexible styling
 * Supports [multiple sections][multiple-sections] as well as [plain list of suggestions][basic-example]
 * Supports delayed requests (if request comes back after user types another letter, it will be ignored)
 * Full control over [suggestion rendering](#suggestionRendererOption) (you can display extra data, images, whatever you want)
@@ -33,7 +35,6 @@
 * Various hooks: [onSuggestionSelected](#onSuggestionSelectedOption), [onSuggestionFocused](#onSuggestionFocusedOption), [onSuggestionUnfocused](#onSuggestionUnfocusedOption)
 * Ability to [pass props to the input field](#inputAttributesOption) (e.g. initial value, placeholder, type, onChange, onBlur)
 * In-memory caching (suggestions for a given input are retrieved only once). Can be disabled.
-* Comes with no styles. [Only classes are provided.](#styling)
 * Thoroughly tested (over 120 tests)
 
 ## Installation
@@ -87,11 +88,12 @@ Check out the [standalone example](https://github.com/moroshko/react-autosuggest
 * [`cache`](#cacheOption)
 * [`id`](#idOption)
 * [`scrollBar`](#scrollBarOption)
+* [`theme`](#themeOption)
 
 <a name="suggestionsOption"></a>
 #### suggestions (required)
 
-Implement this function to tell `<Autosuggest />` which suggestions to display.
+Implement this function to tell Autosuggest which suggestions to display.
 
 ```js
 function(input, callback) {
@@ -177,48 +179,35 @@ function getSuggestionValue(suggestionObj) {
 <a name="defaultValueOption"></a>
 #### defaultValue (optional)
 
-This string sets the initial value of the text. The default is an empty string.
+You may use `defaultValue` only if you want Autosuggest to behave in an [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) manner (the component keeps track of its state internally). In this case you cannot use [`value`](#valueOption).
 
-Set this value if you want to use the component in an [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) manner (the component keeps track of its state internally).
+`defaultValue` is simply the initial value of the input.
 
 For example:
 
 ```xml
 <Autosuggest suggestions={getSuggestions}
-             defaultValue="Mordialloc" />
+             defaultValue="Mordialloc"
+             ... />
 ```
-
-Note: if you specify this option then you should not include a [`value`](#valueOption).
 
 <a name="valueOption"></a>
 #### value (optional)
 
-This string determines the value of the currently-selected suggestion.
+When specified, Autosuggest behaves in a [controlled](https://facebook.github.io/react/docs/forms.html#controlled-components) manner (the component uses an outside source of state).
 
-Set this value if you want to use the component in a [controlled](https://facebook.github.io/react/docs/forms.html#controlled-components) manner (the component uses an outside source of state). The currently-selected suggestion text will update whenever this option is updated, so it is recommended that you use a combination of `value` and [`onSuggestionSelected`](#onSuggestionSelectedOption) to keep track of the selected state inside a parent component.
+`value` is simply the value of the input.
 
 For example:
 
-```js
-// Inside a React component...
-function getInitialState() {
-  return { activeSuggestion: 'one' };
-}
-function getActiveSuggestion() {
-  return this.state.activeSuggestion;
-}
-function setActiveSuggestion(suggestion) {
-  this.setState({ activeSuggestion: suggestion });
-}
-```
-
 ```xml
 <Autosuggest suggestions={getSuggestions}
-             value={getActiveSuggestion()}
-             onSuggestionSelected={setActiveSuggestion} />
+             value={this.state.autosuggestValue}
+             ... />
 ```
 
-Note: if you specify this option then you should not include a [defaultValue](#defaultValueOption).
+When `value` is not specified, Autosuggest behaves in an [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) manner (the component keeps track of its state internally).
+
 
 <a name="showWhenOption"></a>
 #### showWhen (optional)
@@ -250,7 +239,7 @@ function(suggestion, event) {
 ```
 
 * [`suggestion`](#suggestion) - The selected suggestion
-* [`event`][event] - It can be used to call `event.preventDefault()` if the `<Autosuggest />` is inside a form and you don't want to submit the form once user selected a suggestion using Enter.
+* [`event`][event] - It can be used to call `event.preventDefault()` if the Autosuggest is inside a form and you don't want to submit the form once user selected a suggestion using Enter.
 
 For example:
 
@@ -355,9 +344,9 @@ Set `cache={false}` to disable this behaviour.
 
 The only reason `id` exists, is to set ARIA attributes (they require a unique id).
 
-When rendering a single `<Autosuggest />`, don't set the `id` (it will be set to `'1'`, by default).
+When rendering a single Autosuggest, don't set the `id` (it will be set to `'1'`, by default).
 
-When rendering multiple `<Autosuggest />`s, make sure to give them unique `id`s. For example:
+When rendering multiple Autosuggests, make sure to give them unique `id`s. For example:
 
 ```xml
 <Autosuggest id="source" suggestions={getSourceSuggestions} />
@@ -371,20 +360,49 @@ Set it to `true` only if suggestions container (`react-autosuggest__suggestions`
 
 Defaults to `false`.
 
-<a name="styling"></a>
-## Styling
+<a name="themeOption"></a>
+#### theme (optional)
 
-`<Autosuggest />` comes with no styles. You can use the following classes to style it:
+Autosuggest comes with no styles, and it supports [react-themeable](https://github.com/markdalgleish/react-themeable).
 
-* `react-autosuggest`
-* `react-autosuggest__suggestions`
-* `react-autosuggest__suggestion`
-* `react-autosuggest__suggestion--focused`
-* `react-autosuggest__suggestions-section`
-* `react-autosuggest__suggestions-section-name`
-* `react-autosuggest__suggestions-section-suggestions`
+This means you can use [CSS Modules](https://github.com/css-modules/css-modules), [Radium](http://projects.formidablelabs.com/radium), [React Style](https://github.com/js-next/react-style), [JSS](https://github.com/jsstyles/jss), inline styles, or even global CSS to style your Autosugest component.
 
-An example can be found in [`examples/src/Autosuggest.less`](https://github.com/moroshko/react-autosuggest/blob/master/examples/src/Autosuggest.less)
+For example, to style the Autosuggest using CSS Modules, do:
+
+```css
+/* theme.css */
+
+.root { ... }
+.suggestions { ... }
+.suggestion { ... }
+.suggestion_isFocused { ... }
+.section { ... }
+.sectionName { ... }
+.sectionSuggestions { ... }
+```
+
+```js
+import theme from 'theme.css';
+```
+```xml
+<Autosuggest theme={theme} ... />
+```
+
+When not specified, `theme` defaults to:
+
+```js
+{
+  'root': 'react-autosuggest',
+  'suggestions': 'react-autosuggest__suggestions',
+  'suggestion': 'react-autosuggest__suggestion',
+  'suggestion_isFocused': 'react-autosuggest__suggestion--focused',
+  'section': 'react-autosuggest__suggestions-section',
+  'sectionName': 'react-autosuggest__suggestions-section-name',
+  'sectionSuggestions': 'react-autosuggest__suggestions-section-suggestions'
+}
+```
+
+An example of styling the Autosuggest using these global classes can be found in [`examples/src/Autosuggest.less`](https://github.com/moroshko/react-autosuggest/blob/master/examples/src/Autosuggest.less)
 
 The following diagrams explain the classes above.
 
