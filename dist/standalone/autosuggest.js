@@ -82,11 +82,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _debounce2 = _interopRequireDefault(_debounce);
 
-	var _classnames = __webpack_require__(4);
+	var _reactThemeable = __webpack_require__(4);
 
-	var _classnames2 = _interopRequireDefault(_classnames);
+	var _reactThemeable2 = _interopRequireDefault(_reactThemeable);
 
-	var _sectionIterator = __webpack_require__(5);
+	var _sectionIterator = __webpack_require__(6);
 
 	var _sectionIterator2 = _interopRequireDefault(_sectionIterator);
 
@@ -108,7 +108,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      inputAttributes: _react.PropTypes.object, // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
 	      cache: _react.PropTypes.bool, // Set it to false to disable in-memory caching
 	      id: _react.PropTypes.string, // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
-	      scrollBar: _react.PropTypes.bool // Set it to true when the suggestions container can have a scroll bar
+	      scrollBar: _react.PropTypes.bool, // Set it to true when the suggestions container can have a scroll bar
+	      theme: _react.PropTypes.object // Custom theme. See: https://github.com/markdalgleish/react-themeable
 	    },
 	    enumerable: true
 	  }, {
@@ -123,7 +124,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      inputAttributes: {},
 	      cache: true,
 	      id: '1',
-	      scrollBar: false
+	      scrollBar: false,
+	      theme: {
+	        root: 'react-autosuggest',
+	        suggestions: 'react-autosuggest__suggestions',
+	        suggestion: 'react-autosuggest__suggestion',
+	        suggestionIsFocused: 'react-autosuggest__suggestion--focused',
+	        section: 'react-autosuggest__suggestions-section',
+	        sectionName: 'react-autosuggest__suggestions-section-name',
+	        sectionSuggestions: 'react-autosuggest__suggestions-section-suggestions'
+	      }
 	    },
 	    enumerable: true
 	  }]);
@@ -158,6 +168,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // componentWillReceiveProps() when suggestion is clicked.
 	    this.justPressedUpDown = false; // Helps not to call handleValueChange() in
 	    // componentWillReceiveProps() when Up or Down is pressed.
+	    this.justPressedEsc = false; // Helps not to call handleValueChange() in
+	    // componentWillReceiveProps() when ESC is pressed.
 	    this.onInputChange = this.onInputChange.bind(this);
 	    this.onInputKeyDown = this.onInputKeyDown.bind(this);
 	    this.onInputFocus = this.onInputFocus.bind(this);
@@ -170,7 +182,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.isControlledComponent) {
 	        var inputValue = (0, _react.findDOMNode)(this.refs.input).value;
 
-	        if (nextProps.value !== inputValue && !this.justClickedOnSuggestion && !this.justPressedUpDown) {
+	        if (nextProps.value !== inputValue && !this.justClickedOnSuggestion && !this.justPressedUpDown && !this.justPressedEsc) {
 	          this.handleValueChange(nextProps.value);
 	        }
 	      }
@@ -427,6 +439,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onInputKeyDown',
 	    value: function onInputKeyDown(event) {
+	      var _this3 = this;
+
 	      var newState = undefined;
 
 	      switch (event.keyCode) {
@@ -455,12 +469,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 
 	          this.onSuggestionUnfocused();
+	          this.justPressedEsc = true;
 
 	          if (typeof newState.value === 'string' && newState.value !== this.state.value) {
 	            this.onChange(newState.value);
 	          }
 
 	          this.setState(newState);
+
+	          setTimeout(function () {
+	            return _this3.justPressedEsc = false;
+	          });
 	          break;
 
 	        case 38:
@@ -537,7 +556,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onSuggestionMouseDown',
 	    value: function onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
-	      var _this3 = this;
+	      var _this4 = this;
 
 	      var suggestionValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
 
@@ -558,8 +577,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }, function () {
 	        // This code executes after the component is re-rendered
 	        setTimeout(function () {
-	          (0, _react.findDOMNode)(_this3.refs.input).focus();
-	          _this3.justClickedOnSuggestion = false;
+	          (0, _react.findDOMNode)(_this4.refs.input).focus();
+	          _this4.justClickedOnSuggestion = false;
 	        });
 	      });
 	    }
@@ -592,40 +611,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'renderSuggestionsList',
-	    value: function renderSuggestionsList(suggestions, sectionIndex) {
-	      var _this4 = this;
+	    value: function renderSuggestionsList(theme, suggestions, sectionIndex) {
+	      var _this5 = this;
 
 	      return suggestions.map(function (suggestion, suggestionIndex) {
-	        var classes = (0, _classnames2['default'])({
-	          'react-autosuggest__suggestion': true,
-	          'react-autosuggest__suggestion--focused': sectionIndex === _this4.state.focusedSectionIndex && suggestionIndex === _this4.state.focusedSuggestionIndex
-	        });
-	        var suggestionRef = _this4.getSuggestionRef(sectionIndex, suggestionIndex);
+	        var styles = theme(suggestionIndex, 'suggestion', sectionIndex === _this5.state.focusedSectionIndex && suggestionIndex === _this5.state.focusedSuggestionIndex && 'suggestionIsFocused');
+	        var suggestionRef = _this5.getSuggestionRef(sectionIndex, suggestionIndex);
 
 	        return _react2['default'].createElement(
 	          'li',
-	          { id: _this4.getSuggestionId(sectionIndex, suggestionIndex),
-	            className: classes,
+	          _extends({ id: _this5.getSuggestionId(sectionIndex, suggestionIndex)
+	          }, styles, {
 	            role: 'option',
 	            ref: suggestionRef,
 	            key: suggestionRef,
 	            onMouseEnter: function () {
-	              return _this4.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
+	              return _this5.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
 	            },
 	            onMouseLeave: function () {
-	              return _this4.onSuggestionMouseLeave(sectionIndex, suggestionIndex);
+	              return _this5.onSuggestionMouseLeave(sectionIndex, suggestionIndex);
 	            },
 	            onMouseDown: function (event) {
-	              return _this4.onSuggestionMouseDown(sectionIndex, suggestionIndex, event);
-	            } },
-	          _this4.renderSuggestionContent(suggestion)
+	              return _this5.onSuggestionMouseDown(sectionIndex, suggestionIndex, event);
+	            } }),
+	          _this5.renderSuggestionContent(suggestion)
 	        );
 	      });
 	    }
 	  }, {
 	    key: 'renderSuggestions',
-	    value: function renderSuggestions() {
-	      var _this5 = this;
+	    value: function renderSuggestions(theme) {
+	      var _this6 = this;
 
 	      if (this.state.suggestions === null) {
 	        return null;
@@ -634,26 +650,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.isMultipleSections(this.state.suggestions)) {
 	        return _react2['default'].createElement(
 	          'div',
-	          { id: 'react-autosuggest-' + this.props.id,
-	            className: 'react-autosuggest__suggestions',
+	          _extends({ id: 'react-autosuggest-' + this.props.id
+	          }, theme('suggestions', 'suggestions'), {
 	            ref: 'suggestions',
-	            role: 'listbox' },
+	            role: 'listbox' }),
 	          this.state.suggestions.map(function (section, sectionIndex) {
 	            var sectionName = section.sectionName ? _react2['default'].createElement(
 	              'div',
-	              { className: 'react-autosuggest__suggestions-section-name' },
+	              theme('sectionName-' + sectionIndex, 'sectionName'),
 	              section.sectionName
 	            ) : null;
 
 	            return section.suggestions.length === 0 ? null : _react2['default'].createElement(
 	              'div',
-	              { className: 'react-autosuggest__suggestions-section',
-	                key: 'section-' + sectionIndex },
+	              _extends({}, theme('section-' + sectionIndex, 'section'), {
+	                key: 'section-' + sectionIndex }),
 	              sectionName,
 	              _react2['default'].createElement(
 	                'ul',
-	                { className: 'react-autosuggest__suggestions-section-suggestions' },
-	                _this5.renderSuggestionsList(section.suggestions, sectionIndex)
+	                theme('sectionSuggestions-' + sectionIndex, 'sectionSuggestions'),
+	                _this6.renderSuggestionsList(theme, section.suggestions, sectionIndex)
 	              )
 	            );
 	          })
@@ -662,11 +678,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      return _react2['default'].createElement(
 	        'ul',
-	        { id: 'react-autosuggest-' + this.props.id,
-	          className: 'react-autosuggest__suggestions',
+	        _extends({ id: 'react-autosuggest-' + this.props.id
+	        }, theme('suggestions', 'suggestions'), {
 	          ref: 'suggestions',
-	          role: 'listbox' },
-	        this.renderSuggestionsList(this.state.suggestions, null)
+	          role: 'listbox' }),
+	        this.renderSuggestionsList(theme, this.state.suggestions, null)
 	      );
 	    }
 	  }, {
@@ -681,9 +697,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var focusedSectionIndex = _state.focusedSectionIndex;
 	      var focusedSuggestionIndex = _state.focusedSuggestionIndex;
 
+	      var theme = (0, _reactThemeable2['default'])(this.props.theme);
+	      var ariaActivedescendant = this.getSuggestionId(focusedSectionIndex, focusedSuggestionIndex);
+
 	      return _react2['default'].createElement(
 	        'div',
-	        { className: 'react-autosuggest' },
+	        theme('root', 'root'),
 	        _react2['default'].createElement('input', _extends({}, inputAttributes, {
 	          type: inputAttributes.type || 'text',
 	          value: value,
@@ -692,13 +711,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	          'aria-autocomplete': 'list',
 	          'aria-owns': 'react-autosuggest-' + id,
 	          'aria-expanded': suggestions !== null,
-	          'aria-activedescendant': this.getSuggestionId(focusedSectionIndex, focusedSuggestionIndex),
+	          'aria-activedescendant': ariaActivedescendant,
 	          ref: 'input',
 	          onChange: this.onInputChange,
 	          onKeyDown: this.onInputKeyDown,
 	          onFocus: this.onInputFocus,
 	          onBlur: this.onInputBlur })),
-	        this.renderSuggestions()
+	        this.renderSuggestions(theme)
 	      );
 	    }
 	  }]);
@@ -789,59 +808,87 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2015 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
+	'use strict';
 
-	(function () {
-		'use strict';
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
 
-		function classNames () {
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-			var classes = '';
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
 
-			for (var i = 0; i < arguments.length; i++) {
-				var arg = arguments[i];
-				if (!arg) continue;
+	var _objectAssign = __webpack_require__(5);
 
-				var argType = typeof arg;
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
-				if ('string' === argType || 'number' === argType) {
-					classes += ' ' + arg;
+	var truthy = function truthy(x) {
+	  return x;
+	};
 
-				} else if (Array.isArray(arg)) {
-					classes += ' ' + classNames.apply(null, arg);
+	exports['default'] = function (theme) {
+	  return function (key) {
+	    for (var _len = arguments.length, names = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	      names[_key - 1] = arguments[_key];
+	    }
 
-				} else if ('object' === argType) {
-					for (var key in arg) {
-						if (arg.hasOwnProperty(key) && arg[key]) {
-							classes += ' ' + key;
-						}
-					}
-				}
-			}
+	    var styles = names.map(function (name) {
+	      return theme[name];
+	    }).filter(truthy);
 
-			return classes.substr(1);
-		}
+	    return typeof styles[0] === 'string' ? { key: key, className: styles.join(' ') } : { key: key, style: _objectAssign2['default'].apply(undefined, [{}].concat(_toConsumableArray(styles))) };
+	  };
+	};
 
-		if (typeof module !== 'undefined' && module.exports) {
-			module.exports = classNames;
-		} else if (true){
-			// AMD. Register as an anonymous module.
-			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
-				return classNames;
-			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else {
-			window.classNames = classNames;
-		}
-
-	}());
-
+	module.exports = exports['default'];
 
 /***/ },
 /* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function ToObject(val) {
+		if (val == null) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	function ownEnumerableKeys(obj) {
+		var keys = Object.getOwnPropertyNames(obj);
+
+		if (Object.getOwnPropertySymbols) {
+			keys = keys.concat(Object.getOwnPropertySymbols(obj));
+		}
+
+		return keys.filter(function (key) {
+			return propIsEnumerable.call(obj, key);
+		});
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var keys;
+		var to = ToObject(target);
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = arguments[s];
+			keys = ownEnumerableKeys(Object(from));
+
+			for (var i = 0; i < keys.length; i++) {
+				to[keys[i]] = from[keys[i]];
+			}
+		}
+
+		return to;
+	};
+
+
+/***/ },
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';

@@ -26,9 +26,9 @@ var _debounce = require('debounce');
 
 var _debounce2 = _interopRequireDefault(_debounce);
 
-var _classnames = require('classnames');
+var _reactThemeable = require('react-themeable');
 
-var _classnames2 = _interopRequireDefault(_classnames);
+var _reactThemeable2 = _interopRequireDefault(_reactThemeable);
 
 var _sectionIterator = require('./sectionIterator');
 
@@ -52,7 +52,8 @@ var Autosuggest = (function (_Component) {
       inputAttributes: _react.PropTypes.object, // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
       cache: _react.PropTypes.bool, // Set it to false to disable in-memory caching
       id: _react.PropTypes.string, // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
-      scrollBar: _react.PropTypes.bool // Set it to true when the suggestions container can have a scroll bar
+      scrollBar: _react.PropTypes.bool, // Set it to true when the suggestions container can have a scroll bar
+      theme: _react.PropTypes.object // Custom theme. See: https://github.com/markdalgleish/react-themeable
     },
     enumerable: true
   }, {
@@ -67,7 +68,16 @@ var Autosuggest = (function (_Component) {
       inputAttributes: {},
       cache: true,
       id: '1',
-      scrollBar: false
+      scrollBar: false,
+      theme: {
+        root: 'react-autosuggest',
+        suggestions: 'react-autosuggest__suggestions',
+        suggestion: 'react-autosuggest__suggestion',
+        suggestionIsFocused: 'react-autosuggest__suggestion--focused',
+        section: 'react-autosuggest__suggestions-section',
+        sectionName: 'react-autosuggest__suggestions-section-name',
+        sectionSuggestions: 'react-autosuggest__suggestions-section-suggestions'
+      }
     },
     enumerable: true
   }]);
@@ -102,6 +112,8 @@ var Autosuggest = (function (_Component) {
     // componentWillReceiveProps() when suggestion is clicked.
     this.justPressedUpDown = false; // Helps not to call handleValueChange() in
     // componentWillReceiveProps() when Up or Down is pressed.
+    this.justPressedEsc = false; // Helps not to call handleValueChange() in
+    // componentWillReceiveProps() when ESC is pressed.
     this.onInputChange = this.onInputChange.bind(this);
     this.onInputKeyDown = this.onInputKeyDown.bind(this);
     this.onInputFocus = this.onInputFocus.bind(this);
@@ -114,7 +126,7 @@ var Autosuggest = (function (_Component) {
       if (this.isControlledComponent) {
         var inputValue = (0, _react.findDOMNode)(this.refs.input).value;
 
-        if (nextProps.value !== inputValue && !this.justClickedOnSuggestion && !this.justPressedUpDown) {
+        if (nextProps.value !== inputValue && !this.justClickedOnSuggestion && !this.justPressedUpDown && !this.justPressedEsc) {
           this.handleValueChange(nextProps.value);
         }
       }
@@ -371,6 +383,8 @@ var Autosuggest = (function (_Component) {
   }, {
     key: 'onInputKeyDown',
     value: function onInputKeyDown(event) {
+      var _this3 = this;
+
       var newState = undefined;
 
       switch (event.keyCode) {
@@ -399,12 +413,17 @@ var Autosuggest = (function (_Component) {
           }
 
           this.onSuggestionUnfocused();
+          this.justPressedEsc = true;
 
           if (typeof newState.value === 'string' && newState.value !== this.state.value) {
             this.onChange(newState.value);
           }
 
           this.setState(newState);
+
+          setTimeout(function () {
+            return _this3.justPressedEsc = false;
+          });
           break;
 
         case 38:
@@ -481,7 +500,7 @@ var Autosuggest = (function (_Component) {
   }, {
     key: 'onSuggestionMouseDown',
     value: function onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
-      var _this3 = this;
+      var _this4 = this;
 
       var suggestionValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
 
@@ -502,8 +521,8 @@ var Autosuggest = (function (_Component) {
       }, function () {
         // This code executes after the component is re-rendered
         setTimeout(function () {
-          (0, _react.findDOMNode)(_this3.refs.input).focus();
-          _this3.justClickedOnSuggestion = false;
+          (0, _react.findDOMNode)(_this4.refs.input).focus();
+          _this4.justClickedOnSuggestion = false;
         });
       });
     }
@@ -536,40 +555,37 @@ var Autosuggest = (function (_Component) {
     }
   }, {
     key: 'renderSuggestionsList',
-    value: function renderSuggestionsList(suggestions, sectionIndex) {
-      var _this4 = this;
+    value: function renderSuggestionsList(theme, suggestions, sectionIndex) {
+      var _this5 = this;
 
       return suggestions.map(function (suggestion, suggestionIndex) {
-        var classes = (0, _classnames2['default'])({
-          'react-autosuggest__suggestion': true,
-          'react-autosuggest__suggestion--focused': sectionIndex === _this4.state.focusedSectionIndex && suggestionIndex === _this4.state.focusedSuggestionIndex
-        });
-        var suggestionRef = _this4.getSuggestionRef(sectionIndex, suggestionIndex);
+        var styles = theme(suggestionIndex, 'suggestion', sectionIndex === _this5.state.focusedSectionIndex && suggestionIndex === _this5.state.focusedSuggestionIndex && 'suggestionIsFocused');
+        var suggestionRef = _this5.getSuggestionRef(sectionIndex, suggestionIndex);
 
         return _react2['default'].createElement(
           'li',
-          { id: _this4.getSuggestionId(sectionIndex, suggestionIndex),
-            className: classes,
+          _extends({ id: _this5.getSuggestionId(sectionIndex, suggestionIndex)
+          }, styles, {
             role: 'option',
             ref: suggestionRef,
             key: suggestionRef,
             onMouseEnter: function () {
-              return _this4.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
+              return _this5.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
             },
             onMouseLeave: function () {
-              return _this4.onSuggestionMouseLeave(sectionIndex, suggestionIndex);
+              return _this5.onSuggestionMouseLeave(sectionIndex, suggestionIndex);
             },
             onMouseDown: function (event) {
-              return _this4.onSuggestionMouseDown(sectionIndex, suggestionIndex, event);
-            } },
-          _this4.renderSuggestionContent(suggestion)
+              return _this5.onSuggestionMouseDown(sectionIndex, suggestionIndex, event);
+            } }),
+          _this5.renderSuggestionContent(suggestion)
         );
       });
     }
   }, {
     key: 'renderSuggestions',
-    value: function renderSuggestions() {
-      var _this5 = this;
+    value: function renderSuggestions(theme) {
+      var _this6 = this;
 
       if (this.state.suggestions === null) {
         return null;
@@ -578,26 +594,26 @@ var Autosuggest = (function (_Component) {
       if (this.isMultipleSections(this.state.suggestions)) {
         return _react2['default'].createElement(
           'div',
-          { id: 'react-autosuggest-' + this.props.id,
-            className: 'react-autosuggest__suggestions',
+          _extends({ id: 'react-autosuggest-' + this.props.id
+          }, theme('suggestions', 'suggestions'), {
             ref: 'suggestions',
-            role: 'listbox' },
+            role: 'listbox' }),
           this.state.suggestions.map(function (section, sectionIndex) {
             var sectionName = section.sectionName ? _react2['default'].createElement(
               'div',
-              { className: 'react-autosuggest__suggestions-section-name' },
+              theme('sectionName-' + sectionIndex, 'sectionName'),
               section.sectionName
             ) : null;
 
             return section.suggestions.length === 0 ? null : _react2['default'].createElement(
               'div',
-              { className: 'react-autosuggest__suggestions-section',
-                key: 'section-' + sectionIndex },
+              _extends({}, theme('section-' + sectionIndex, 'section'), {
+                key: 'section-' + sectionIndex }),
               sectionName,
               _react2['default'].createElement(
                 'ul',
-                { className: 'react-autosuggest__suggestions-section-suggestions' },
-                _this5.renderSuggestionsList(section.suggestions, sectionIndex)
+                theme('sectionSuggestions-' + sectionIndex, 'sectionSuggestions'),
+                _this6.renderSuggestionsList(theme, section.suggestions, sectionIndex)
               )
             );
           })
@@ -606,11 +622,11 @@ var Autosuggest = (function (_Component) {
 
       return _react2['default'].createElement(
         'ul',
-        { id: 'react-autosuggest-' + this.props.id,
-          className: 'react-autosuggest__suggestions',
+        _extends({ id: 'react-autosuggest-' + this.props.id
+        }, theme('suggestions', 'suggestions'), {
           ref: 'suggestions',
-          role: 'listbox' },
-        this.renderSuggestionsList(this.state.suggestions, null)
+          role: 'listbox' }),
+        this.renderSuggestionsList(theme, this.state.suggestions, null)
       );
     }
   }, {
@@ -625,9 +641,12 @@ var Autosuggest = (function (_Component) {
       var focusedSectionIndex = _state.focusedSectionIndex;
       var focusedSuggestionIndex = _state.focusedSuggestionIndex;
 
+      var theme = (0, _reactThemeable2['default'])(this.props.theme);
+      var ariaActivedescendant = this.getSuggestionId(focusedSectionIndex, focusedSuggestionIndex);
+
       return _react2['default'].createElement(
         'div',
-        { className: 'react-autosuggest' },
+        theme('root', 'root'),
         _react2['default'].createElement('input', _extends({}, inputAttributes, {
           type: inputAttributes.type || 'text',
           value: value,
@@ -636,13 +655,13 @@ var Autosuggest = (function (_Component) {
           'aria-autocomplete': 'list',
           'aria-owns': 'react-autosuggest-' + id,
           'aria-expanded': suggestions !== null,
-          'aria-activedescendant': this.getSuggestionId(focusedSectionIndex, focusedSuggestionIndex),
+          'aria-activedescendant': ariaActivedescendant,
           ref: 'input',
           onChange: this.onInputChange,
           onKeyDown: this.onInputKeyDown,
           onFocus: this.onInputFocus,
           onBlur: this.onInputBlur })),
-        this.renderSuggestions()
+        this.renderSuggestions(theme)
       );
     }
   }]);
