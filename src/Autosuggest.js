@@ -59,6 +59,8 @@ export default class Autosuggest extends Component {
                                           // componentWillReceiveProps() when suggestion is clicked.
     this.justPressedUpDown = false; // Helps not to call handleValueChange() in
                                     // componentWillReceiveProps() when Up or Down is pressed.
+    this.justPressedEsc = false; // Helps not to call handleValueChange() in
+                                 // componentWillReceiveProps() when ESC is pressed.
     this.onInputChange = ::this.onInputChange;
     this.onInputKeyDown = ::this.onInputKeyDown;
     this.onInputFocus = ::this.onInputFocus;
@@ -70,7 +72,7 @@ export default class Autosuggest extends Component {
       const inputValue = findDOMNode(this.refs.input).value;
 
       if (nextProps.value !== inputValue &&
-          !this.justClickedOnSuggestion && !this.justPressedUpDown) {
+          !this.justClickedOnSuggestion && !this.justPressedUpDown && !this.justPressedEsc) {
         this.handleValueChange(nextProps.value);
       }
     }
@@ -325,12 +327,15 @@ export default class Autosuggest extends Component {
         }
 
         this.onSuggestionUnfocused();
+        this.justPressedEsc = true;
 
         if (typeof newState.value === 'string' && newState.value !== this.state.value) {
           this.onChange(newState.value);
         }
 
         this.setState(newState);
+
+        setTimeout(() => this.justPressedEsc = false);
         break;
 
       case 38: // Up
