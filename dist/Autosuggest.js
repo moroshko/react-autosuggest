@@ -22,6 +22,8 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactDom = require('react-dom');
+
 var _debounce = require('debounce');
 
 var _debounce2 = _interopRequireDefault(_debounce);
@@ -124,7 +126,7 @@ var Autosuggest = (function (_Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
       if (this.isControlledComponent) {
-        var inputValue = (0, _react.findDOMNode)(this.refs.input).value;
+        var inputValue = (0, _reactDom.findDOMNode)(this.refs.input).value;
 
         if (nextProps.value !== inputValue && !this.justClickedOnSuggestion && !this.justPressedUpDown && !this.justPressedEsc) {
           this.handleValueChange(nextProps.value);
@@ -304,9 +306,9 @@ var Autosuggest = (function (_Component) {
         }
       }
 
-      var suggestions = (0, _react.findDOMNode)(this.refs.suggestions);
+      var suggestions = (0, _reactDom.findDOMNode)(this.refs.suggestions);
       var suggestionRef = this.getSuggestionRef(sectionIndex, suggestionIndex);
-      var suggestion = (0, _react.findDOMNode)(this.refs[suggestionRef]);
+      var suggestion = (0, _reactDom.findDOMNode)(this.refs[suggestionRef]);
 
       this.scrollToElement(suggestions, suggestion, alignTo);
     }
@@ -521,7 +523,7 @@ var Autosuggest = (function (_Component) {
       }, function () {
         // This code executes after the component is re-rendered
         setTimeout(function () {
-          (0, _react.findDOMNode)(_this4.refs.input).focus();
+          (0, _reactDom.findDOMNode)(_this4.refs.input).focus();
           _this4.justClickedOnSuggestion = false;
         });
       });

@@ -2,13 +2,14 @@ import proxyquire from 'proxyquire';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
+import { findDOMNode } from 'react-dom';
 import SyntheticEvent from 'react/lib/SyntheticEvent';
 
 chai.use(sinonChai);
 
 const Autosuggest = proxyquire('../src/Autosuggest', { debounce: fn => fn });
-const TestUtils = React.addons.TestUtils;
 const Simulate = TestUtils.Simulate;
 const SimulateNative = TestUtils.SimulateNative;
 const suburbObjects = [
@@ -89,7 +90,7 @@ function setInputValue(value) {
 
 function mouseDownSuggestion(suggestionIndex) {
   suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-  Simulate.mouseDown(React.findDOMNode(suggestions[suggestionIndex]));
+  Simulate.mouseDown(findDOMNode(suggestions[suggestionIndex]));
 }
 
 // See: https://github.com/facebook/react/issues/1297
@@ -100,18 +101,18 @@ function mouseOver(from, to) {
 
 function mouseOverFromInputToSuggestion(suggestionIndex) {
   suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-  mouseOver(input, React.findDOMNode(suggestions[suggestionIndex]));
+  mouseOver(input, findDOMNode(suggestions[suggestionIndex]));
 }
 
 function mouseOverFromSuggestionToInput(suggestionIndex) {
   suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-  mouseOver(React.findDOMNode(suggestions[suggestionIndex]), input);
+  mouseOver(findDOMNode(suggestions[suggestionIndex]), input);
 }
 
 function mouseOverBetweenSuggestions(suggestionIndex1, suggestionIndex2) {
   const suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-  const suggestion1 = React.findDOMNode(suggestions[suggestionIndex1]);
-  const suggestion2 = React.findDOMNode(suggestions[suggestionIndex2]);
+  const suggestion1 = findDOMNode(suggestions[suggestionIndex1]);
+  const suggestion2 = findDOMNode(suggestions[suggestionIndex2]);
 
   mouseOver(suggestion1, suggestion2);
 }
@@ -149,7 +150,7 @@ function expectSuggestions(expectedSuggestions) {
   expect(suggestions).to.have.length(expectedSuggestions.length);
 
   for (let i = 0; i < expectedSuggestions.length; i++) {
-    expect(React.findDOMNode(suggestions[i]).textContent).to.equal(expectedSuggestions[i]);
+    expect(findDOMNode(suggestions[i]).textContent).to.equal(expectedSuggestions[i]);
   }
 }
 
@@ -160,7 +161,7 @@ function expectFocusedSuggestion(suggestion) {
     expect(focusedSuggestions).to.be.empty;
   } else {
     expect(focusedSuggestions).to.have.length(1);
-    expect(React.findDOMNode(focusedSuggestions[0]).textContent).to.equal(suggestion);
+    expect(findDOMNode(focusedSuggestions[0]).textContent).to.equal(suggestion);
   }
 }
 
@@ -170,20 +171,20 @@ function expectSections(expectedSections) {
   expect(sections).to.have.length(expectedSections.length);
 
   for (let i = 0; i < sections.length; i++) {
-    const sectionName = TestUtils.scryRenderedDOMComponentsWithClass(sections[i], 'react-autosuggest__suggestions-section-name');
+    const sectionName = sections[i].getElementsByClassName('react-autosuggest__suggestions-section-name');
 
     if (expectedSections[i] === null) {
       expect(sectionName).to.be.empty;
     } else {
       expect(sectionName).to.have.length(1);
-      expect(React.findDOMNode(sectionName[0]).textContent).to.equal(expectedSections[i]);
+      expect(findDOMNode(sectionName[0]).textContent).to.equal(expectedSections[i]);
     }
   }
 }
 
 function createAutosuggest(Autosuggest) {
   autosuggest = TestUtils.renderIntoDocument(Autosuggest);
-  input = React.findDOMNode(TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input'));
+  input = findDOMNode(TestUtils.findRenderedDOMComponentWithTag(autosuggest, 'input'));
 }
 
 describe('Autosuggest', () => {
@@ -386,10 +387,10 @@ describe('Autosuggest', () => {
       mouseDownSuggestion(1);
       expectSuggestions([]);
       expectInputValue('Mordialloc');
-      let val = React.findDOMNode(TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'result')).innerHTML;
+      let val = findDOMNode(TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'result')).innerHTML;
       expect(val).to.equal('Mordialloc');
       setInputValue('some other invalid value');
-      val = React.findDOMNode(TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'result')).innerHTML;
+      val = findDOMNode(TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'result')).innerHTML;
       expect(val).to.equal('Mordialloc');
     });
   });
@@ -426,7 +427,7 @@ describe('Autosuggest', () => {
 
       it('should use the specified suggestionRenderer function', () => {
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(stripReactAttributes(React.findDOMNode(suggestions[0]).innerHTML)).to.equal('<span><strong>M</strong><span>ill Park</span></span>');
+        expect(stripReactAttributes(findDOMNode(suggestions[0]).innerHTML)).to.equal('<span><strong>M</strong><span>ill Park</span></span>');
       });
     });
 
@@ -442,7 +443,7 @@ describe('Autosuggest', () => {
 
       it('should use the specified suggestionRenderer function', () => {
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(stripReactAttributes(React.findDOMNode(suggestions[0]).innerHTML)).to.equal('<span><strong>M</strong><span>ill Park</span><span> VIC </span><span>3083</span></span>');
+        expect(stripReactAttributes(findDOMNode(suggestions[0]).innerHTML)).to.equal('<span><strong>M</strong><span>ill Park</span><span> VIC </span><span>3083</span></span>');
       });
     });
   });
@@ -1053,29 +1054,29 @@ describe('Autosuggest', () => {
       it('input\'s aria-activedescendant should be the id of the focused suggestion when using keyboard', () => {
         clickDown();
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(input.getAttribute('aria-activedescendant')).to.equal(React.findDOMNode(suggestions[0]).id);
+        expect(input.getAttribute('aria-activedescendant')).to.equal(findDOMNode(suggestions[0]).id);
       });
 
       it('input\'s aria-activedescendant should be the id of the focused suggestion when using mouse', () => {
         mouseOverFromInputToSuggestion(0);
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(input.getAttribute('aria-activedescendant')).to.equal(React.findDOMNode(suggestions[0]).id);
+        expect(input.getAttribute('aria-activedescendant')).to.equal(findDOMNode(suggestions[0]).id);
       });
 
       it('suggestion\'s role should be option', () => {
         clickDown();
         suggestions = TestUtils.scryRenderedDOMComponentsWithClass(autosuggest, 'react-autosuggest__suggestion');
-        expect(React.findDOMNode(suggestions[0]).getAttribute('role')).to.equal('option');
+        expect(findDOMNode(suggestions[0]).getAttribute('role')).to.equal('option');
       });
 
       it('input\'s aria-owns should be equal to suggestions list\'s id', () => {
         const suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
-        expect(input.getAttribute('aria-owns')).to.equal(React.findDOMNode(suggestionsList).id);
+        expect(input.getAttribute('aria-owns')).to.equal(findDOMNode(suggestionsList).id);
       });
 
       it('suggestions list\'s role should be listbox', () => {
         const suggestionsList = TestUtils.findRenderedDOMComponentWithClass(autosuggest, 'react-autosuggest__suggestions');
-        expect(React.findDOMNode(suggestionsList).getAttribute('role')).to.equal('listbox');
+        expect(findDOMNode(suggestionsList).getAttribute('role')).to.equal('listbox');
       });
     });
   });

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes, findDOMNode } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { findDOMNode } from 'react-dom';
 import debounce from 'debounce';
 import themeable from 'react-themeable';
 import sectionIterator from './sectionIterator';
