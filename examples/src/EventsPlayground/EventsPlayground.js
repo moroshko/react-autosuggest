@@ -9,13 +9,13 @@ function getSuggestions(input, callback) {
   const lowercasedInput = input.trim().toLowerCase();
   const suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
   const suggestions = suburbs
-    .filter( suburbObj => suburbMatchRegex.test(suburbObj.suburb) )
-    .sort( (suburbObj1, suburbObj2) =>
+    .filter(suburbObj => suburbMatchRegex.test(suburbObj.suburb))
+    .sort((suburbObj1, suburbObj2) =>
       suburbObj1.suburb.toLowerCase().indexOf(lowercasedInput) -
       suburbObj2.suburb.toLowerCase().indexOf(lowercasedInput)
     )
     .slice(0, 7)
-    .map( suburbObj => suburbObj.suburb );
+    .map(suburbObj => suburbObj.suburb);
 
   // 'suggestions' will be an array of strings, e.g.:
   //   ['Mentone', 'Mill Park', 'Mordialloc']
@@ -23,13 +23,17 @@ function getSuggestions(input, callback) {
   setTimeout(() => callback(null, suggestions), 300);
 }
 
-export default class EventsPlayground extends Component { // eslint-disable-line no-shadow
+export default class EventsPlayground extends Component {
   static propTypes = {
     onEventAdded: PropTypes.func.isRequired
-  }
+  };
 
-  componentDidMount() {
-    document.getElementById('events-playground').focus();
+  constructor() {
+    super();
+
+    this.state = {
+      value: ''
+    };
   }
 
   onSuggestionSelected(suggestion, event) {
@@ -55,6 +59,10 @@ export default class EventsPlayground extends Component { // eslint-disable-line
   }
 
   onInputChanged(value) {
+    this.setState({
+      value: value
+    });
+
     this.props.onEventAdded({
       type: 'input-changed',
       value: value
@@ -81,7 +89,8 @@ export default class EventsPlayground extends Component { // eslint-disable-line
                      onSuggestionSelected={::this.onSuggestionSelected}
                      onSuggestionFocused={::this.onSuggestionFocused}
                      onSuggestionUnfocused={::this.onSuggestionUnfocused}
-                     inputAttributes={inputAttributes} />
+                     inputAttributes={inputAttributes}
+                     value={this.state.value} />
         <SourceCodeLink file="examples/src/EventsPlayground/EventsPlayground.js" />
       </div>
     );

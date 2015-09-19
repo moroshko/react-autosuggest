@@ -1,15 +1,16 @@
 require('./Examples.less');
 require('./Autosuggest.less');
 
-import React, { Component, findDOMNode } from 'react';
-import classnames from 'classnames';
+import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
 import BasicExample from './BasicExample/BasicExample';
 import CustomRenderer from './CustomRenderer/CustomRenderer';
 import MultipleSections from './MultipleSections/MultipleSections';
+import ControlledComponent from './ControlledComponent/ControlledComponent';
 import EventsPlayground from './EventsPlayground/EventsPlayground';
 import EventsLog from './EventsLog/EventsLog';
 
-export default class Examples extends Component { // eslint-disable-line no-shadow
+export default class Examples extends Component {
   constructor() {
     super();
 
@@ -17,6 +18,7 @@ export default class Examples extends Component { // eslint-disable-line no-shad
       'Basic example',
       'Custom renderer',
       'Multiple sections',
+      'Controlled Component',
       'Events playground'
     ];
 
@@ -43,10 +45,8 @@ export default class Examples extends Component { // eslint-disable-line no-shad
     return (
       <div className="examples__menu" role="menu">
         {this.examples.map(example => {
-          const classes = classnames({
-            'examples__menu-item': true,
-            'examples__menu-item--active': example === this.state.activeExample
-          });
+          const classes = 'examples__menu-item' +
+           (example === this.state.activeExample ? ' examples__menu-item--active' : '');
 
           return (
             <div className={classes}
@@ -116,12 +116,26 @@ export default class Examples extends Component { // eslint-disable-line no-shad
     }
   }
 
+  focusOn(id) {
+    document.getElementById(id).focus();
+  }
+
   renderExample() {
     switch (this.state.activeExample) {
-      case 'Basic example': return <BasicExample />;
-      case 'Custom renderer': return <CustomRenderer />;
-      case 'Multiple sections': return <MultipleSections />;
-      case 'Events playground': return <EventsPlayground onEventAdded={::this.onEventAdded} />;
+      case 'Basic example':
+        return <BasicExample ref={() => this.focusOn('basic-example')} />;
+
+      case 'Custom renderer':
+        return <CustomRenderer ref={() => this.focusOn('custom-renderer')} />;
+
+      case 'Multiple sections':
+        return <MultipleSections ref={() => this.focusOn('multiple-sections')} />;
+
+      case 'Controlled Component':
+        return <ControlledComponent ref={() => this.focusOn('controlled-component-from')} />;
+
+      case 'Events playground':
+        return <EventsPlayground onEventAdded={::this.onEventAdded} ref={() => this.focusOn('events-playground')} />;
     }
   }
 

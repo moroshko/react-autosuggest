@@ -1,12 +1,13 @@
 require('./app.less');
 
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import Badges from './Badges/Badges';
 import Examples from './Examples';
 import Footer from './Footer/Footer';
 import ForkMeOnGitHub from './ForkMeOnGitHub/ForkMeOnGitHub';
 
-class App extends Component { // eslint-disable-line no-shadow
+class App extends Component {
   render() {
     return (
       <div>
@@ -20,4 +21,4 @@ class App extends Component { // eslint-disable-line no-shadow
   }
 }
 
-React.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app'));

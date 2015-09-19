@@ -17,17 +17,17 @@ function getSuggestions(input, callback) {
   const lowercasedInput = input.trim().toLowerCase();
   const suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
   const suggestions = suburbs
-    .filter( suburbObj => suburbMatchRegex.test(suburbObj.suburb + ' VIC ' + suburbObj.postcode) )
-    .sort( (suburbObj1, suburbObj2) =>
+    .filter(suburbObj => suburbMatchRegex.test(suburbObj.suburb + ' VIC ' + suburbObj.postcode))
+    .sort((suburbObj1, suburbObj2) =>
       suburbObj1.suburb.toLowerCase().indexOf(lowercasedInput) -
       suburbObj2.suburb.toLowerCase().indexOf(lowercasedInput)
     )
     .slice(0, 7)
-    .map( suburbObj => {
+    .map(suburbObj => {
       suburbObj.population = population(suburbObj);
       return suburbObj;
-    } )
-    .sort( (suburbObj1, suburbObj2) => suburbObj2.population - suburbObj1.population );
+    })
+    .sort((suburbObj1, suburbObj2) => suburbObj2.population - suburbObj1.population);
 
   // 'suggestions' will be an array of objects, e.g.:
   //   [{ suburb: 'Mordialloc', postcode: '3195', population: 6943 },
@@ -63,7 +63,7 @@ function getSuggestionValue(suggestionObj) {
   return suggestionObj.suburb + ' VIC ' + suggestionObj.postcode;
 }
 
-export default class CustomRenderer extends Component { // eslint-disable-line no-shadow
+export default class CustomRenderer extends Component {
   render() {
     const inputAttributes = {
       id: 'custom-renderer',
@@ -76,8 +76,7 @@ export default class CustomRenderer extends Component { // eslint-disable-line n
                      suggestionRenderer={renderSuggestion}
                      suggestionValue={getSuggestionValue}
                      inputAttributes={inputAttributes}
-                     scrollBar={true}
-                     ref={ () => { document.getElementById('custom-renderer').focus(); } } />
+                     scrollBar={true} />
         <SourceCodeLink file="examples/src/CustomRenderer/CustomRenderer.js" />
       </div>
     );

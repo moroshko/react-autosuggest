@@ -9,7 +9,7 @@ function getSuggestions(input, callback) {
   callback(null, suggestions);
 }
 
-React.render(
+ReactDOM.render(
   React.createElement(Autosuggest, {
     suggestions: getSuggestions,
     inputAttributes: {

@@ -2,7 +2,7 @@ require('./EventsLog.less');
 
 import React, { Component, PropTypes } from 'react';
 
-export default class EventsLog extends Component { // eslint-disable-line no-shadow
+export default class EventsLog extends Component {
   static propTypes = {
     events: PropTypes.array.isRequired
   }

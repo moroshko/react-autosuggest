@@ -17,9 +17,9 @@ function getSuggestions(input, callback) {
   const firstSectionMatchRegex = new RegExp('^' + escapedInput, 'i');
   const secondSectionMatchRegex = new RegExp('^(?!' + escapedInput + ')\\w+ ' + escapedInput, 'i');
   const thirdSectionMatchRegex = new RegExp('^(?!' + escapedInput + ')\\w+ (?!' + escapedInput + ')\\w+ ' + escapedInput, 'i');
-  const firstSectionSuburbs = suburbs.filter( suburbObj => firstSectionMatchRegex.test(suburbObj.suburb) );
-  const secondSectionSuburbs = suburbs.filter( suburbObj => secondSectionMatchRegex.test(suburbObj.suburb) );
-  const thirdSectionSuburbs = suburbs.filter( suburbObj => thirdSectionMatchRegex.test(suburbObj.suburb) );
+  const firstSectionSuburbs = suburbs.filter(suburbObj => firstSectionMatchRegex.test(suburbObj.suburb));
+  const secondSectionSuburbs = suburbs.filter(suburbObj => secondSectionMatchRegex.test(suburbObj.suburb));
+  const thirdSectionSuburbs = suburbs.filter(suburbObj => thirdSectionMatchRegex.test(suburbObj.suburb));
   const suggestions = [];
   let firstSectionCount, secondSectionCount, thirdSectionCount;
 
@@ -59,7 +59,7 @@ function getSuggestions(input, callback) {
   setTimeout(() => callback(null, suggestions), 300);
 }
 
-export default class MultipleSections extends Component { // eslint-disable-line no-shadow
+export default class MultipleSections extends Component {
   render() {
     const inputAttributes = {
       id: 'multiple-sections',
@@ -69,8 +69,7 @@ export default class MultipleSections extends Component { // eslint-disable-line
     return (
       <div>
         <Autosuggest suggestions={getSuggestions}
-                     inputAttributes={inputAttributes}
-                     ref={ () => document.getElementById('multiple-sections').focus() } />
+                     inputAttributes={inputAttributes} />
         <SourceCodeLink file="examples/src/MultipleSections/MultipleSections.js" />
       </div>
     );

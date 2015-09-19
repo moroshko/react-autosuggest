@@ -9,13 +9,13 @@ function getSuggestions(input, callback) {
   const lowercasedInput = input.trim().toLowerCase();
   const suburbMatchRegex = new RegExp('\\b' + escapedInput, 'i');
   const suggestions = suburbs
-    .filter( suburbObj => suburbMatchRegex.test(suburbObj.suburb) )
-    .sort( (suburbObj1, suburbObj2) =>
+    .filter(suburbObj => suburbMatchRegex.test(suburbObj.suburb))
+    .sort((suburbObj1, suburbObj2) =>
       suburbObj1.suburb.toLowerCase().indexOf(lowercasedInput) -
       suburbObj2.suburb.toLowerCase().indexOf(lowercasedInput)
     )
     .slice(0, 7)
-    .map( suburbObj => suburbObj.suburb );
+    .map(suburbObj => suburbObj.suburb);
 
   // 'suggestions' will be an array of strings, e.g.:
   //   ['Mentone', 'Mill Park', 'Mordialloc']
@@ -23,7 +23,7 @@ function getSuggestions(input, callback) {
   setTimeout(() => callback(null, suggestions), 300);
 }
 
-export default class BasicExample extends Component { // eslint-disable-line no-shadow
+export default class BasicExample extends Component {
   render() {
     const inputAttributes = {
       id: 'basic-example',
@@ -33,8 +33,7 @@ export default class BasicExample extends Component { // eslint-disable-line no-
     return (
       <div>
         <Autosuggest suggestions={getSuggestions}
-                     inputAttributes={inputAttributes}
-                     ref={ () => { document.getElementById('basic-example').focus(); } } />
+                     inputAttributes={inputAttributes} />
         <SourceCodeLink file="examples/src/BasicExample/BasicExample.js" />
       </div>
     );

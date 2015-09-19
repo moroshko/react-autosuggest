@@ -1,3 +1,10 @@
+.badges {
+  flex-shrink: 0;
+  margin-bottom: 50px;
+}
+.badges a {
+  margin-right: 5px;
+}
 .source-code-link {
   float: right;
   text-decoration: none;
@@ -9,6 +16,25 @@
 .custom-renderer-example .react-autosuggest__suggestions {
   height: 240px;
   overflow: auto;
+}
+.controlled-component-example button {
+  font-size: 16px;
+  padding: 4px 10px;
+  margin-right: 5px;
+}
+.controlled-component-example .react-autosuggest {
+  margin-top: 5px;
+}
+.controlled-component-example .reverse-container {
+  height: 60px;
+  line-height: 60px;
+}
+.controlled-component-example .reverse-container button {
+  float: right;
+  margin-top: 50px;
+}
+.controlled-component-example .to-container {
+  margin-top: 40px;
 }
 .examples__events-log {
   width: 300px;
@@ -138,13 +164,6 @@
 }
 .react-autosuggest__suggestion--focused {
   background-color: #ddd;
-}
-.badges {
-  flex-shrink: 0;
-  margin-bottom: 50px;
-}
-.badges a {
-  margin-right: 5px;
 }
 .footer {
   display: flex;
