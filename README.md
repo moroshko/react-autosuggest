@@ -406,7 +406,7 @@ An example of styling the Autosuggest using these global classes can be found in
 
 The following diagrams explain the classes above.
 
-#### No sections
+##### No sections
 
     +---| react-autosuggest |-------------------------+
     |                                                 |
@@ -423,7 +423,7 @@ The following diagrams explain the classes above.
     +-------------------------------------------------+
 
 
-#### Multiple sections
+##### Multiple sections
 
 
     +---| react-autosuggest |----------------------------------------------------+
