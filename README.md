@@ -11,13 +11,6 @@
        alt="NPM Downloads" />
 </a>
 
-To do:
-- [ ] Test controlled component with multiple sections
-- [ ] Add tests for a controlled component using object suggestions
-- [ ] Update onChange to provide the `event` instead of the new value (update UPGRADE_GUIDE accordingly)
-- [ ] Implement onChange reason
-- [ ] Make sure that everything in README is right for controlled components
-
 # React Autosuggest
 
 [WAI-ARIA compliant][wai-aria] React autosuggest component.
@@ -32,9 +25,9 @@ To do:
 ## Features
 
 * [WAI-ARIA accessible][wai-aria] (including ARIA attributes and keyboard interactions)
+* Supports [controlled](https://facebook.github.io/react/docs/forms.html#controlled-components) and  [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) state
 * Supports [multiple sections][multiple-sections] as well as [plain list of suggestions][basic-example]
 * Supports delayed requests (if request comes back after user types another letter, it will be ignored)
-* Support for [controlled](https://facebook.github.io/react/docs/forms.html#controlled-components) as well as [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) state
 * Full control over [suggestion rendering](#suggestionRendererOption) (you can display extra data, images, whatever you want)
 * Full control over [when to show the suggestions](#showWhenOption) (e.g. when user types 2 or more characters)
 * Various hooks: [onSuggestionSelected](#onSuggestionSelectedOption), [onSuggestionFocused](#onSuggestionFocusedOption), [onSuggestionUnfocused](#onSuggestionUnfocusedOption)

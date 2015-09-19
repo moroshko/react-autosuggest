@@ -16,7 +16,7 @@
     "space-after-keywords": [2, "always"],
     "quotes": [2, "single"],
 
-    "react/jsx-boolean-value": 2,
+    "react/jsx-boolean-value": [2, "always"],
     "react/jsx-quotes": [2, "double"],
     "react/jsx-no-undef": 2,
     "react/jsx-uses-react": 2,
