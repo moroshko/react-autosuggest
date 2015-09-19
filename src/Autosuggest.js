@@ -31,13 +31,13 @@ export default class Autosuggest extends Component {
     id: '1',
     scrollBar: false,
     theme: {
-      'root': 'react-autosuggest',
-      'suggestions': 'react-autosuggest__suggestions',
-      'suggestion': 'react-autosuggest__suggestion',
-      'suggestion_isFocused': 'react-autosuggest__suggestion--focused',
-      'section': 'react-autosuggest__suggestions-section',
-      'sectionName': 'react-autosuggest__suggestions-section-name',
-      'sectionSuggestions': 'react-autosuggest__suggestions-section-suggestions'
+      root: 'react-autosuggest',
+      suggestions: 'react-autosuggest__suggestions',
+      suggestion: 'react-autosuggest__suggestion',
+      suggestionIsFocused: 'react-autosuggest__suggestion--focused',
+      section: 'react-autosuggest__suggestions-section',
+      sectionName: 'react-autosuggest__suggestions-section-name',
+      sectionSuggestions: 'react-autosuggest__suggestions-section-suggestions'
     }
   }
 
@@ -482,7 +482,7 @@ export default class Autosuggest extends Component {
       const styles = theme(suggestionIndex, 'suggestion',
         sectionIndex === this.state.focusedSectionIndex &&
         suggestionIndex === this.state.focusedSuggestionIndex &&
-        'suggestion_isFocused'
+        'suggestionIsFocused'
       );
       const suggestionRef =
         this.getSuggestionRef(sectionIndex, suggestionIndex);

@@ -375,7 +375,7 @@ For example, to style the Autosuggest using CSS Modules, do:
 .root { ... }
 .suggestions { ... }
 .suggestion { ... }
-.suggestion_isFocused { ... }
+.suggestionIsFocused { ... }
 .section { ... }
 .sectionName { ... }
 .sectionSuggestions { ... }
@@ -392,13 +392,13 @@ When not specified, `theme` defaults to:
 
 ```js
 {
-  'root': 'react-autosuggest',
-  'suggestions': 'react-autosuggest__suggestions',
-  'suggestion': 'react-autosuggest__suggestion',
-  'suggestion_isFocused': 'react-autosuggest__suggestion--focused',
-  'section': 'react-autosuggest__suggestions-section',
-  'sectionName': 'react-autosuggest__suggestions-section-name',
-  'sectionSuggestions': 'react-autosuggest__suggestions-section-suggestions'
+  root: 'react-autosuggest',
+  suggestions: 'react-autosuggest__suggestions',
+  suggestion: 'react-autosuggest__suggestion',
+  suggestionIsFocused: 'react-autosuggest__suggestion--focused',
+  section: 'react-autosuggest__suggestions-section',
+  sectionName: 'react-autosuggest__suggestions-section-name',
+  sectionSuggestions: 'react-autosuggest__suggestions-section-suggestions'
 }
 ```
 
