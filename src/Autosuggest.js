@@ -1,6 +1,6 @@
 import React, { Component, PropTypes, findDOMNode } from 'react';
 import debounce from 'debounce';
-import classnames from 'classnames';
+import themeable from 'react-themeable';
 import sectionIterator from './sectionIterator';
 
 export default class Autosuggest extends Component {
@@ -17,7 +17,8 @@ export default class Autosuggest extends Component {
     inputAttributes: PropTypes.object,      // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
     cache: PropTypes.bool,                  // Set it to false to disable in-memory caching
     id: PropTypes.string,                   // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
-    scrollBar: PropTypes.bool               // Set it to true when the suggestions container can have a scroll bar
+    scrollBar: PropTypes.bool,              // Set it to true when the suggestions container can have a scroll bar
+    theme: PropTypes.object                 // Custom theme. See: https://github.com/markdalgleish/react-themeable
   }
 
   static defaultProps = {
@@ -28,7 +29,16 @@ export default class Autosuggest extends Component {
     inputAttributes: {},
     cache: true,
     id: '1',
-    scrollBar: false
+    scrollBar: false,
+    theme: {
+      'root': 'react-autosuggest',
+      'suggestions': 'react-autosuggest__suggestions',
+      'suggestion': 'react-autosuggest__suggestion',
+      'suggestion_isFocused': 'react-autosuggest__suggestion--focused',
+      'section': 'react-autosuggest__suggestions-section',
+      'sectionName': 'react-autosuggest__suggestions-section-name',
+      'sectionSuggestions': 'react-autosuggest__suggestions-section-suggestions'
+    }
   }
 
   constructor(props) {
@@ -467,20 +477,19 @@ export default class Autosuggest extends Component {
     }
   }
 
-  renderSuggestionsList(suggestions, sectionIndex) {
+  renderSuggestionsList(theme, suggestions, sectionIndex) {
     return suggestions.map((suggestion, suggestionIndex) => {
-      const classes = classnames({
-        'react-autosuggest__suggestion': true,
-        'react-autosuggest__suggestion--focused':
-          sectionIndex === this.state.focusedSectionIndex &&
-          suggestionIndex === this.state.focusedSuggestionIndex
-      });
+      const styles = theme(suggestionIndex, 'suggestion',
+        sectionIndex === this.state.focusedSectionIndex &&
+        suggestionIndex === this.state.focusedSuggestionIndex &&
+        'suggestion_isFocused'
+      );
       const suggestionRef =
         this.getSuggestionRef(sectionIndex, suggestionIndex);
 
       return (
         <li id={this.getSuggestionId(sectionIndex, suggestionIndex)}
-            className={classes}
+            { ...styles }
             role="option"
             ref={suggestionRef}
             key={suggestionRef}
@@ -493,7 +502,7 @@ export default class Autosuggest extends Component {
     });
   }
 
-  renderSuggestions() {
+  renderSuggestions(theme) {
     if (this.state.suggestions === null) {
       return null;
     }
@@ -501,22 +510,22 @@ export default class Autosuggest extends Component {
     if (this.isMultipleSections(this.state.suggestions)) {
       return (
         <div id={'react-autosuggest-' + this.props.id}
-             className="react-autosuggest__suggestions"
+             {...theme('suggestions', 'suggestions')}
              ref="suggestions"
              role="listbox">
           {this.state.suggestions.map((section, sectionIndex) => {
             const sectionName = section.sectionName ? (
-              <div className="react-autosuggest__suggestions-section-name">
+              <div {...theme('sectionName-' + sectionIndex, 'sectionName')}>
                 {section.sectionName}
               </div>
             ) : null;
 
             return section.suggestions.length === 0 ? null : (
-              <div className="react-autosuggest__suggestions-section"
+              <div {...theme('section-' + sectionIndex, 'section')}
                    key={'section-' + sectionIndex}>
                 {sectionName}
-                <ul className="react-autosuggest__suggestions-section-suggestions">
-                  {this.renderSuggestionsList(section.suggestions, sectionIndex)}
+                <ul {...theme('sectionSuggestions-' + sectionIndex, 'sectionSuggestions')}>
+                  {this.renderSuggestionsList(theme, section.suggestions, sectionIndex)}
                 </ul>
               </div>
             );
@@ -527,10 +536,10 @@ export default class Autosuggest extends Component {
 
     return (
       <ul id={'react-autosuggest-' + this.props.id}
-          className="react-autosuggest__suggestions"
+          {...theme('suggestions', 'suggestions')}
           ref="suggestions"
           role="listbox">
-        {this.renderSuggestionsList(this.state.suggestions, null)}
+        {this.renderSuggestionsList(theme, this.state.suggestions, null)}
       </ul>
     );
   }
@@ -538,9 +547,11 @@ export default class Autosuggest extends Component {
   render() {
     const { id, inputAttributes } = this.props;
     const { value, suggestions, focusedSectionIndex, focusedSuggestionIndex } = this.state;
+    const theme = themeable(this.props.theme);
+    const ariaActivedescendant = this.getSuggestionId(focusedSectionIndex, focusedSuggestionIndex);
 
     return (
-      <div className="react-autosuggest">
+      <div {...theme('root', 'root')}>
         <input {...inputAttributes}
                type={inputAttributes.type || 'text'}
                value={value}
@@ -549,13 +560,13 @@ export default class Autosuggest extends Component {
                aria-autocomplete="list"
                aria-owns={'react-autosuggest-' + id}
                aria-expanded={suggestions !== null}
-               aria-activedescendant={this.getSuggestionId(focusedSectionIndex, focusedSuggestionIndex)}
+               aria-activedescendant={ariaActivedescendant}
                ref="input"
                onChange={this.onInputChange}
                onKeyDown={this.onInputKeyDown}
                onFocus={this.onInputFocus}
                onBlur={this.onInputBlur} />
-        {this.renderSuggestions()}
+        {this.renderSuggestions(theme)}
       </div>
     );
   }
