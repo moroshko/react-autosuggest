@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "1c4b7ab592034a15f72a"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "dfdb1dce610f5fb88a62"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -9448,7 +9448,11 @@
 
 	var _ForkMeOnGitHubForkMeOnGitHub2 = _interopRequireDefault(_ForkMeOnGitHubForkMeOnGitHub);
 
-	__webpack_require__(261);
+	var _TrackLinksTrackLinks = __webpack_require__(261);
+
+	var _TrackLinksTrackLinks2 = _interopRequireDefault(_TrackLinksTrackLinks);
+
+	__webpack_require__(262);
 
 	var App = (function (_Component) {
 	  _inherits(App, _Component);
@@ -9463,7 +9467,7 @@
 	    key: 'render',
 	    value: function render() {
 	      return _react2['default'].createElement(
-	        'div',
+	        _TrackLinksTrackLinks2['default'],
 	        null,
 	        _react2['default'].createElement(
 	          'h1',
@@ -29310,19 +29314,22 @@
 	        { className: 'badges' },
 	        _react2['default'].createElement(
 	          'a',
-	          { href: '//codeship.com/projects/67868', target: '_blank' },
+	          { href: '//codeship.com/projects/67868', target: '_blank',
+	            'data-link-name': 'Badge - build status' },
 	          _react2['default'].createElement('img', { src: '//img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg',
 	            alt: 'build status' })
 	        ),
 	        _react2['default'].createElement(
 	          'a',
-	          { href: '//npmjs.org/package/react-autosuggest', target: '_blank' },
+	          { href: '//npmjs.org/package/react-autosuggest', target: '_blank',
+	            'data-link-name': 'Badge - npm version' },
 	          _react2['default'].createElement('img', { src: '//img.shields.io/npm/v/react-autosuggest.svg',
 	            alt: 'npm version' })
 	        ),
 	        _react2['default'].createElement(
 	          'a',
-	          { href: '//npmjs.org/package/react-autosuggest', target: '_blank' },
+	          { href: '//npmjs.org/package/react-autosuggest', target: '_blank',
+	            'data-link-name': 'Badge - npm downloads' },
 	          _react2['default'].createElement('img', { src: '//img.shields.io/npm/dm/react-autosuggest.svg',
 	            alt: 'npm downloads' })
 	        )
@@ -29535,7 +29542,7 @@
 
 	    _get(Object.getPrototypeOf(Examples.prototype), 'constructor', this).call(this);
 
-	    this.examples = ['Basic example', 'Custom renderer', 'Multiple sections', 'Controlled Component', 'Events playground'];
+	    this.examples = ['Basic example', 'Custom renderer', 'Multiple sections', 'Controlled component', 'Events playground'];
 
 	    this.eventsPlaceholder = {
 	      type: 'placeholder',
@@ -29672,7 +29679,7 @@
 	              return _this3.focusOn('multiple-sections');
 	            } });
 
-	        case 'Controlled Component':
+	        case 'Controlled component':
 	          return _react2['default'].createElement(_ControlledComponentControlledComponent2['default'], { ref: function () {
 	              return _this3.focusOn('controlled-component-from');
 	            } });
@@ -30836,11 +30843,16 @@
 	  _createClass(SourceCodeLink, [{
 	    key: 'render',
 	    value: function render() {
+	      var file = this.props.file;
+
+	      var linkName = 'Source code - ' + file.split('/')[2];
+
 	      return _react2['default'].createElement(
 	        'a',
 	        { className: 'source-code-link',
-	          href: '//github.com/moroshko/react-autosuggest/tree/master/' + this.props.file,
-	          target: '_blank' },
+	          href: '//github.com/moroshko/react-autosuggest/tree/master/' + file,
+	          target: '_blank',
+	          'data-link-name': linkName },
 	        'Source code'
 	      );
 	    }
@@ -45466,7 +45478,8 @@
 	          _react2['default'].createElement(
 	            'a',
 	            { href: 'https://twitter.com/moroshko',
-	              target: '_blank' },
+	              target: '_blank',
+	              'data-link-name': 'Footer - @moroshko' },
 	            '@moroshko'
 	          )
 	        )
@@ -45536,7 +45549,9 @@
 	    value: function render() {
 	      return _react2['default'].createElement(
 	        'a',
-	        { href: '//github.com/' + this.props.user + '/' + this.props.repo, target: '_blank' },
+	        { href: '//github.com/' + this.props.user + '/' + this.props.repo,
+	          target: '_blank',
+	          'data-link-name': 'Fork me on GitHub' },
 	        _react2['default'].createElement('img', { style: style, src: '//camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67', alt: 'Fork me on GitHub', 'data-canonical-src': 'https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png' })
 	      );
 	    }
@@ -45560,6 +45575,81 @@
 
 /***/ },
 /* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(64), RootInstanceProvider = __webpack_require__(72), ReactMount = __webpack_require__(74), React = __webpack_require__(126); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(126);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var TrackLinks = (function (_Component) {
+	  _inherits(TrackLinks, _Component);
+
+	  function TrackLinks() {
+	    _classCallCheck(this, TrackLinks);
+
+	    _get(Object.getPrototypeOf(TrackLinks.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _createClass(TrackLinks, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      if (typeof analytics !== 'object') {
+	        return;
+	      }
+
+	      var links = this.refs.children.querySelectorAll('a');
+	      var linksCount = links.length;
+
+	      for (var i = 0; i < linksCount; i++) {
+	        var link = links[i];
+	        var linkName = link.dataset.linkName;
+	        var _event = 'Clicked [' + linkName + '] link';
+
+	        analytics.trackLink(link, _event);
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var children = this.props.children;
+
+	      return _react2['default'].createElement(
+	        'div',
+	        { ref: 'children' },
+	        children
+	      );
+	    }
+	  }]);
+
+	  return TrackLinks;
+	})(_react.Component);
+
+	exports['default'] = TrackLinks;
+	module.exports = exports['default'];
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(233); if (makeExportsHot(module, __webpack_require__(126))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "TrackLinks.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
+
+/***/ },
+/* 262 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

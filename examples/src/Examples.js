@@ -18,7 +18,7 @@ export default class Examples extends Component {
       'Basic example',
       'Custom renderer',
       'Multiple sections',
-      'Controlled Component',
+      'Controlled component',
       'Events playground'
     ];
 
@@ -131,7 +131,7 @@ export default class Examples extends Component {
       case 'Multiple sections':
         return <MultipleSections ref={() => this.focusOn('multiple-sections')} />;
 
-      case 'Controlled Component':
+      case 'Controlled component':
         return <ControlledComponent ref={() => this.focusOn('controlled-component-from')} />;
 
       case 'Events playground':

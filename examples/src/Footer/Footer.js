@@ -11,7 +11,8 @@ export default class Footer extends Component {
         <span>
           Crafted with <strong>love</strong> by
           {' '}<a href="https://twitter.com/moroshko"
-                  target="_blank">@moroshko</a>
+                  target="_blank"
+                  data-link-name="Footer - @moroshko">@moroshko</a>
         </span>
       </div>
     );
