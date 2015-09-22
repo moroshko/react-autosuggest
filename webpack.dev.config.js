@@ -5,7 +5,6 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
   entry: [
     'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
     './demo/src/index'
   ],
 
@@ -18,7 +17,7 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['react-hot', 'babel'],
+      loaders: ['babel'],
       include: [
         path.join(__dirname, 'src'), // Must be an absolute path
         path.join(__dirname, 'demo', 'src') // Must be an absolute path
