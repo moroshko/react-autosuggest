@@ -1,4 +1,5 @@
-import { UPDATE_INPUT_VALUE, SUGGESTION_SELECTED } from 'flux/constants/actionTypes';
+export const UPDATE_INPUT_VALUE = 'UPDATE_INPUT_VALUE';
+export const SUGGESTION_SELECTED = 'SUGGESTION_SELECTED';
 
 export function updateInputValue(exampleNumber, value, method) {
   return {

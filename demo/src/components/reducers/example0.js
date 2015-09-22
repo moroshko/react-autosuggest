@@ -1,4 +1,4 @@
-import { UPDATE_INPUT_VALUE, SUGGESTION_SELECTED } from 'flux/constants/actionTypes';
+import { UPDATE_INPUT_VALUE, SUGGESTION_SELECTED } from 'actions/app';
 import { escapeRegexCharacters } from 'utils/utils';
 
 const allSuggestions = [{

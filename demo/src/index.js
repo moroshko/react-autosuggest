@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import appReducer from 'flux/reducers/app';
+import appReducer from 'reducers/app';
 import App from 'App/App';
 
 const store = applyMiddleware(thunk)(createStore)(appReducer);

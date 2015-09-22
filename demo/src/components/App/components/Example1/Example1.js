@@ -3,7 +3,7 @@ import styles from './Example1.less';
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { updateInputValue, suggestionSelected } from 'flux/actionCreators/app';
+import { updateInputValue, suggestionSelected } from 'actions/app';
 import Autosuggest from 'AutosuggestContainer';
 
 const exampleId = '1';
