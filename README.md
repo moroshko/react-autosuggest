@@ -89,6 +89,7 @@ Check out the [standalone example](https://github.com/moroshko/react-autosuggest
 * [`id`](#idOption)
 * [`scrollBar`](#scrollBarOption)
 * [`theme`](#themeOption)
+* [`focusAfterSuggestionSelected`](#focusAfterSuggestionSelected)
 
 <a name="suggestionsOption"></a>
 #### suggestions (required)
@@ -451,6 +452,15 @@ The following diagrams explain the classes above.
     |  +----------------------------------------------------------------------+  |
     |                                                                            |
     +----------------------------------------------------------------------------+
+
+<a name="focusAfterSuggestionSelectedOption"></a>
+#### focusAfterSuggestionSelected (optional)
+
+Defaults to `true`
+
+Input will receive focus after a suggestion is selected
+
+Set `focusAfterSuggestionSelected={false}` to disable this behaviour.
 
 ## Development
 
