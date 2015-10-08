@@ -119,7 +119,7 @@
   height: 30px;
   padding: 10px 20px;
   font-size: 18px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #aaa;
   border-radius: 4px;
 }
 .react-autosuggest input[aria-expanded="true"] {
@@ -136,7 +136,7 @@
   margin: 0;
   padding: 0;
   list-style-type: none;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #aaa;
   background-color: #fff;
   font-size: 18px;
   border-bottom-left-radius: 4px;

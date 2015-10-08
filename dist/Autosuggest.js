@@ -358,7 +358,16 @@ var Autosuggest = (function (_Component) {
   }, {
     key: 'onSuggestionSelected',
     value: function onSuggestionSelected(event) {
-      var focusedSuggestion = this.getFocusedSuggestion();
+      var focusedSuggestion = this.getFocusedSuggestion(); // Required when Enter is pressed
+
+      if (focusedSuggestion === null) {
+        // We are on a mobile device
+        var sectionIndex = event.target.getAttribute('data-section-index');
+        var touchedSectionIndex = typeof sectionIndex === 'string' ? +sectionIndex : null;
+        var touchedSuggestionIndex = +event.target.getAttribute('data-suggestion-index');
+
+        focusedSuggestion = this.getSuggestion(touchedSectionIndex, touchedSuggestionIndex);
+      }
 
       this.props.onSuggestionUnfocused(focusedSuggestion);
       this.props.onSuggestionSelected(focusedSuggestion, event);
@@ -500,8 +509,8 @@ var Autosuggest = (function (_Component) {
       });
     }
   }, {
-    key: 'onSuggestionMouseDown',
-    value: function onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
+    key: 'onSuggestionClick',
+    value: function onSuggestionClick(sectionIndex, suggestionIndex, event) {
       var _this4 = this;
 
       var suggestionValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
@@ -563,6 +572,9 @@ var Autosuggest = (function (_Component) {
       return suggestions.map(function (suggestion, suggestionIndex) {
         var styles = theme(suggestionIndex, 'suggestion', sectionIndex === _this5.state.focusedSectionIndex && suggestionIndex === _this5.state.focusedSuggestionIndex && 'suggestionIsFocused');
         var suggestionRef = _this5.getSuggestionRef(sectionIndex, suggestionIndex);
+        var onSuggestionClick = function onSuggestionClick(event) {
+          return _this5.onSuggestionClick(sectionIndex, suggestionIndex, event);
+        };
 
         return _react2['default'].createElement(
           'li',
@@ -571,15 +583,16 @@ var Autosuggest = (function (_Component) {
             role: 'option',
             ref: suggestionRef,
             key: suggestionRef,
+            'data-section-index': sectionIndex,
+            'data-suggestion-index': suggestionIndex,
             onMouseEnter: function () {
               return _this5.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
             },
             onMouseLeave: function () {
               return _this5.onSuggestionMouseLeave(sectionIndex, suggestionIndex);
             },
-            onMouseDown: function (event) {
-              return _this5.onSuggestionMouseDown(sectionIndex, suggestionIndex, event);
-            } }),
+            onMouseDown: onSuggestionClick,
+            onTouchStart: onSuggestionClick }),
           _this5.renderSuggestionContent(suggestion)
         );
       });
