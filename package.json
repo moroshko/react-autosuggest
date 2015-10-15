@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "debounce": "^1.0.0",
+    "react-tap-event-plugin": "^0.2.1",
     "react-themeable": "^1.0.1"
   },
   "peerDependencies": {

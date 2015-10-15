@@ -3,6 +3,8 @@ import { findDOMNode } from 'react-dom';
 import debounce from 'debounce';
 import themeable from 'react-themeable';
 import sectionIterator from './sectionIterator';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 
 export default class Autosuggest extends Component {
   static propTypes = {
@@ -511,7 +513,7 @@ export default class Autosuggest extends Component {
             onMouseEnter={() => this.onSuggestionMouseEnter(sectionIndex, suggestionIndex)}
             onMouseLeave={() => this.onSuggestionMouseLeave(sectionIndex, suggestionIndex)}
             onMouseDown={onSuggestionClick}
-            onTouchStart={onSuggestionClick}>
+            onTouchTap={onSuggestionClick}>
           {this.renderSuggestionContent(suggestion)}
         </li>
       );
