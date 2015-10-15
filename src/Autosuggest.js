@@ -4,6 +4,7 @@ import debounce from 'debounce';
 import themeable from 'react-themeable';
 import sectionIterator from './sectionIterator';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+
 injectTapEventPlugin();
 
 export default class Autosuggest extends Component {
