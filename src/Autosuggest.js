@@ -22,7 +22,8 @@ export default class Autosuggest extends Component {
     cache: PropTypes.bool,                  // Set it to false to disable in-memory caching
     id: PropTypes.string,                   // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
     scrollBar: PropTypes.bool,              // Set it to true when the suggestions container can have a scroll bar
-    theme: PropTypes.object                 // Custom theme. See: https://github.com/markdalgleish/react-themeable
+    theme: PropTypes.object,                // Custom theme. See: https://github.com/markdalgleish/react-themeable
+    focusAfterSuggestionSelected: PropTypes.bool  // Set it to false to prevent input focus after selection
   }
 
   static defaultProps = {
@@ -34,6 +35,7 @@ export default class Autosuggest extends Component {
     cache: true,
     id: '1',
     scrollBar: false,
+    focusAfterSuggestionSelected: true,
     theme: {
       root: 'react-autosuggest',
       suggestions: 'react-autosuggest__suggestions',
@@ -456,7 +458,9 @@ export default class Autosuggest extends Component {
     }, () => {
       // This code executes after the component is re-rendered
       setTimeout(() => {
-        findDOMNode(this.refs.input).focus();
+        if( this.props.focusAfterSuggestionSelected ){
+          findDOMNode(this.refs.input).focus();
+        }
         this.justClickedOnSuggestion = false;
       });
     });
