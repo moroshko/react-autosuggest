@@ -26,6 +26,7 @@
 ## Features
 
 * [WAI-ARIA accessible][wai-aria] (including ARIA attributes and keyboard interactions)
+* Mobile friendly
 * Supports [controlled](https://facebook.github.io/react/docs/forms.html#controlled-components) and  [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) state
 * Supports [react-themeable](https://github.com/markdalgleish/react-themeable) for flexible styling
 * Supports [multiple sections][multiple-sections] as well as [plain list of suggestions][basic-example]
