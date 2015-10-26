@@ -62,7 +62,7 @@ export default class Autosuggest extends Component {
                                     // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
     this.isControlledComponent = (typeof props.value !== 'undefined');
-    this.suggestionsFn = debounce(props.suggestions, props.suggestions, props.debounce);
+    this.updateSuggestionsFn(props);
     this.onChange = props.inputAttributes.onChange || (() => {});
     this.onFocus = props.inputAttributes.onFocus || (() => {});
     this.onBlur = props.inputAttributes.onBlur || (() => {});
@@ -92,9 +92,15 @@ export default class Autosuggest extends Component {
         this.handleValueChange(nextProps.value);
       }
     }
-    if (nextProps.debounce !== this.props.debounce) {
-      this.suggestionsFn = debounce(this.props.suggestions, nextProps.debounce);
+    if (nextProps.debounce !== this.props.debounce || nextProps.suggestions !== this.props.suggestions) {
+      this.updateSuggestionsFn(nextProps);
     }
+  }
+
+  updateSuggestionsFn = (nextProps) => {
+    const fn = nextProps.suggestions || this.props.suggestions;
+    const delay = nextProps.debounce || this.props.debounce;
+    this.suggestionsFn = debounce(fn, delay);
   }
 
   resetSectionIterator(suggestions) {
