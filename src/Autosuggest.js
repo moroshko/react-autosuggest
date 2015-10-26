@@ -92,6 +92,9 @@ export default class Autosuggest extends Component {
         this.handleValueChange(nextProps.value);
       }
     }
+    if (nextProps.debounce !== this.props.debounce) {
+      this.suggestionsFn = debounce(this.props.suggestions, nextProps.debounce);
+    }
   }
 
   resetSectionIterator(suggestions) {
