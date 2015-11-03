@@ -21,7 +21,8 @@ module.exports = [{
   },
 
   externals: {
-    react: 'React'
+    'react': 'React',
+    'react-dom': 'React'
   }
 }, {
   entry: './src/Autosuggest.js',
@@ -43,7 +44,8 @@ module.exports = [{
   },
 
   externals: {
-    react: 'React'
+    'react': 'React',
+    'react-dom': 'React'
   },
 
   plugins: [
