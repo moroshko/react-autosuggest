@@ -14,7 +14,7 @@ export default function App() {
           React Autosuggest
         </h1>
         <h2 className={styles.subHeader}>
-          Accessible and flexible React Autosuggest component
+          Accessible and flexible React autosuggest component
         </h2>
       </div>
       <div className={styles.examplesContainer}>
