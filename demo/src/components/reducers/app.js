@@ -1,8 +1,10 @@
+import reducer0 from 'App/components/Example0/redux';
+import reducer1 from 'App/components/Example1/redux';
 import reducer2 from 'App/components/Example2/redux';
 
 const reducers = [
-  require('./example0'),
-  require('./example1'),
+  reducer0,
+  reducer1,
   reducer2
 ];
 

@@ -2,7 +2,7 @@ import theme from 'theme.less';
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { updateInputValue, suggestionSelected } from 'actions/app';
+import { updateInputValue, suggestionSelected } from 'Example1/redux';
 import Autosuggest from 'AutosuggestContainer';
 
 const exampleId = '0';

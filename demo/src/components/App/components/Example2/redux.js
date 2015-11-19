@@ -41,11 +41,7 @@ export function getCountries(exampleNumber, value) {
   };
 }
 
-export default function reducer(state = initialState, action) {
-  if (!action) {
-    return state;
-  }
-
+export default function reducer(state = initialState, action = {}) {
   const { type } = action;
 
   switch (type) {

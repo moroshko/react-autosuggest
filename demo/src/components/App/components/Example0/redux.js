@@ -1,5 +1,7 @@
-import { UPDATE_INPUT_VALUE, SUGGESTION_SELECTED } from 'actions/app';
 import { escapeRegexCharacters } from 'utils/utils';
+
+const UPDATE_INPUT_VALUE = 'UPDATE_INPUT_VALUE';
+const SUGGESTION_SELECTED = 'SUGGESTION_SELECTED';
 
 const allSuggestions = [{
   text: 'Apple'
@@ -25,11 +27,25 @@ function getSuggestions(value) {
   return allSuggestions.filter(suggestion => regex.test(suggestion.text));
 }
 
-export default function(state = initialState, action) {
-  if (!action) {
-    return state;
-  }
+export function updateInputValue(exampleNumber, value, method) {
+  return {
+    type: UPDATE_INPUT_VALUE,
+    exampleNumber,
+    value,
+    method
+  };
+}
 
+export function suggestionSelected(exampleNumber, suggestionValue, suggestionId) {
+  return {
+    type: SUGGESTION_SELECTED,
+    exampleNumber,
+    suggestionValue,
+    suggestionId
+  };
+}
+
+export default function reducer(state = initialState, action = {}) {
   const { type } = action;
 
   switch (type) {
