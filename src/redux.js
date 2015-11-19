@@ -5,9 +5,10 @@ const UPDATE_FOCUSED_SUGGESTION = 'UPDATE_FOCUSED_SUGGESTION';
 const REVEAL_SUGGESTIONS = 'REVEAL_SUGGESTIONS';
 const CLOSE_SUGGESTIONS = 'CLOSE_SUGGESTIONS';
 
-export function inputFocused() {
+export function inputFocused(shouldRenderSuggestions) {
   return {
-    type: INPUT_FOCUSED
+    type: INPUT_FOCUSED,
+    shouldRenderSuggestions
   };
 }
 
@@ -50,7 +51,8 @@ export default function reducer(state, action) {
     case INPUT_FOCUSED:
       return {
         ...state,
-        isFocused: true
+        isFocused: true,
+        isCollapsed: !action.shouldRenderSuggestions
       };
 
     case INPUT_BLURRED:

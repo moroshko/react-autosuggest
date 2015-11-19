@@ -16,8 +16,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    inputFocused: () => {
-      dispatch(inputFocused());
+    inputFocused: shouldRenderSuggestions => {
+      dispatch(inputFocused(shouldRenderSuggestions));
     },
     inputBlurred: () => {
       dispatch(inputBlurred());
@@ -119,7 +119,7 @@ class Autosuggest extends Component {
       ...inputProps,
       onFocus: event => {
         if (!this.justClickedOnSuggestion) {
-          inputFocused();
+          inputFocused(shouldRenderSuggestions(value));
           onFocus && onFocus(event);
         }
       },
