@@ -5,30 +5,30 @@ import { connect } from 'react-redux';
 import { updateInputValue, updateSuggestions, getCountries } from 'Example2/redux';
 import Autosuggest from 'AutosuggestContainer';
 
-const exampleId = '2';
-
 function mapStateToProps(state) {
+  const { value, suggestions } = state[2];
+
   return {
-    value: state[exampleId].value,
-    suggestions: state[exampleId].suggestions
+    value,
+    suggestions
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     onChange: (value, method) => {
-      dispatch(updateInputValue(exampleId, value, method));
+      dispatch(updateInputValue(value, method));
 
       value = value.trim();
 
       if (value === '') {
-        dispatch(updateSuggestions(exampleId, []));
+        dispatch(updateSuggestions([]));
       } else if (method === 'type') {
-        dispatch(getCountries(exampleId, value));
+        dispatch(getCountries(value));
       }
     },
     onSuggestionSelected: (event, { suggestion, method }) => {
-      dispatch(getCountries(exampleId, suggestion.name));
+      dispatch(getCountries(suggestion.name));
     }
   };
 }

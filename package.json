@@ -20,10 +20,10 @@
     "deploy": "echo 'Not yet'"
   },
   "dependencies": {
-    "react": "^0.14.0-rc1",
+    "react": "^0.14.3",
     "react-autowhatever": "^1.1.0",
-    "react-redux": "^2.1.2",
-    "redux": "^3.0.0"
+    "react-redux": "^4.0.0",
+    "redux": "^3.0.4"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.1.0",
@@ -39,7 +39,7 @@
     "less": "^2.5.1",
     "less-loader": "^2.2.1",
     "mocha": "^2.3.3",
-    "react-dom": "^0.14.0-rc1",
+    "react-dom": "^0.14.3",
     "react-transform-hmr": "^1.0.0",
     "redux-thunk": "^1.0.0",
     "style-loader": "^0.12.4",

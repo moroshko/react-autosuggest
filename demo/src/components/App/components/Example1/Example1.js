@@ -6,24 +6,24 @@ import { connect } from 'react-redux';
 import { updateInputValue, suggestionSelected } from 'Example1/redux';
 import Autosuggest from 'AutosuggestContainer';
 
-const exampleId = '1';
-
 function mapStateToProps(state) {
+  const { value, suggestions, selectedSuggestionId } = state[1];
+
   return {
-    value: state[exampleId].value,
-    suggestions: state[exampleId].suggestions,
-    selectedSuggestionId: state[exampleId].selectedSuggestionId
+    value,
+    suggestions,
+    selectedSuggestionId
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     onChange: (value, method) => {
-      dispatch(updateInputValue(exampleId, value, method));
+      dispatch(updateInputValue(value, method));
     },
     onSuggestionSelected: (event, { suggestion, method }) => {
-      console.log(`Example ${exampleId}: Suggestion selected:`, suggestion, `method = ${method}`);
-      dispatch(suggestionSelected(exampleId, getSuggestionValue(suggestion), suggestion.id));
+      console.log('Example 1: Suggestion selected:', suggestion, `method = ${method}`);
+      dispatch(suggestionSelected(getSuggestionValue(suggestion), suggestion.id));
     }
   };
 }
@@ -65,11 +65,11 @@ class Example extends Component {
       placeholder: 'Pick another fruit',
       value,
       onChange: (event, { newValue, method }) => {
-        console.log(`Example ${exampleId}: Changed value = ${newValue}, method = ${method}`);
+        console.log(`Example 1: Changed value = ${newValue}, method = ${method}`);
         onChange(newValue, method);
       },
-      onBlur: () => console.log(`Example ${exampleId}: Blurred`),
-      onFocus: () => console.log(`Example ${exampleId}: Focused`)
+      onBlur: () => console.log('Example 1: Blurred'),
+      onFocus: () => console.log('Example 1: Focused')
     };
 
     return (

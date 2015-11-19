@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { combineReducers, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import appReducer from 'reducers/app';
+import reducer0 from 'App/components/Example0/redux';
+import reducer1 from 'App/components/Example1/redux';
+import reducer2 from 'App/components/Example2/redux';
 import App from 'App/App';
+
+const appReducer = combineReducers({
+  0: reducer0,
+  1: reducer1,
+  2: reducer2
+});
 
 const store = applyMiddleware(thunk)(createStore)(appReducer);
 

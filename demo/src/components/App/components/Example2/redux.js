@@ -1,8 +1,8 @@
 import countries from './countries';
 import { escapeRegexCharacters } from 'utils/utils';
 
-const UPDATE_INPUT_VALUE = 'UPDATE_INPUT_VALUE';
-const UPDATE_SUGGESTIONS = 'UPDATE_SUGGESTIONS';
+const UPDATE_INPUT_VALUE = 'EXAMPLE2_UPDATE_INPUT_VALUE';
+const UPDATE_SUGGESTIONS = 'EXAMPLE2_UPDATE_SUGGESTIONS';
 
 const initialState = {
   value: '',
@@ -16,27 +16,25 @@ function getSuggestions(value) {
   return countries.filter(country => regex.test(country.name));
 }
 
-export function updateInputValue(exampleNumber, value, method) {
+export function updateInputValue(value, method) {
   return {
     type: UPDATE_INPUT_VALUE,
-    exampleNumber,
     value,
     method
   };
 }
 
-export function updateSuggestions(exampleNumber, suggestions) {
+export function updateSuggestions(suggestions) {
   return {
     type: UPDATE_SUGGESTIONS,
-    exampleNumber,
     suggestions
   };
 }
 
-export function getCountries(exampleNumber, value) {
+export function getCountries(value) {
   return dispatch => {
     setTimeout(() => {
-      dispatch(updateSuggestions(exampleNumber, getSuggestions(value)));
+      dispatch(updateSuggestions(getSuggestions(value)));
     }, 100);
   };
 }

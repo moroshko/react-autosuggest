@@ -1,7 +1,7 @@
 import { escapeRegexCharacters } from 'utils/utils';
 
-const UPDATE_INPUT_VALUE = 'UPDATE_INPUT_VALUE';
-const SUGGESTION_SELECTED = 'SUGGESTION_SELECTED';
+const UPDATE_INPUT_VALUE = 'EXAMPLE1_UPDATE_INPUT_VALUE';
+const SUGGESTION_SELECTED = 'EXAMPLE1_SUGGESTION_SELECTED';
 
 const allSuggestions = [{
   title: 'A',
@@ -44,19 +44,17 @@ function getSuggestions(value) {
   }).filter(section => section.suggestions.length > 0);
 }
 
-export function updateInputValue(exampleNumber, value, method) {
+export function updateInputValue(value, method) {
   return {
     type: UPDATE_INPUT_VALUE,
-    exampleNumber,
     value,
     method
   };
 }
 
-export function suggestionSelected(exampleNumber, suggestionValue, suggestionId) {
+export function suggestionSelected(suggestionValue, suggestionId) {
   return {
     type: SUGGESTION_SELECTED,
-    exampleNumber,
     suggestionValue,
     suggestionId
   };
