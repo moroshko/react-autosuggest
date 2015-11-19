@@ -43,36 +43,34 @@ function renderSuggestion(suggestion) {
   );
 }
 
-class Example extends Component {
-  static propTypes = {
-    value: PropTypes.string.isRequired,
-    suggestions: PropTypes.array.isRequired,
-
-    onChange: PropTypes.func.isRequired,
-    onSuggestionSelected: PropTypes.func.isRequired
+function Example(props) {
+  const { value, suggestions, onChange, onSuggestionSelected } = props;
+  const inputProps = {
+    placeholder: 'Pick a country',
+    value,
+    onChange: (event, { newValue, method }) => {
+      onChange(newValue, method);
+    }
   };
 
-  render() {
-    const { value, suggestions, onChange, onSuggestionSelected } = this.props;
-    const inputProps = {
-      placeholder: 'Pick a country',
-      value,
-      onChange: (event, { newValue, method }) => {
-        onChange(newValue, method);
-      }
-    };
-
-    return (
-      <div>
-        <Autosuggest suggestions={suggestions}
-                     getSuggestionValue={getSuggestionValue}
-                     renderSuggestion={renderSuggestion}
-                     inputProps={inputProps}
-                     onSuggestionSelected={onSuggestionSelected}
-                     theme={theme} />
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Autosuggest suggestions={suggestions}
+                   getSuggestionValue={getSuggestionValue}
+                   renderSuggestion={renderSuggestion}
+                   inputProps={inputProps}
+                   onSuggestionSelected={onSuggestionSelected}
+                   theme={theme} />
+    </div>
+  );
 }
+
+Example.propTypes = {
+  value: PropTypes.string.isRequired,
+  suggestions: PropTypes.array.isRequired,
+
+  onChange: PropTypes.func.isRequired,
+  onSuggestionSelected: PropTypes.func.isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Example);

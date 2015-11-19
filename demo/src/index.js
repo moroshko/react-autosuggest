@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -16,14 +16,12 @@ const appReducer = combineReducers({
 
 const store = applyMiddleware(thunk)(createStore)(appReducer);
 
-class Demo extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <App />
-      </Provider>
-    );
-  }
+function Demo() {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
 }
 
 ReactDOM.render(
