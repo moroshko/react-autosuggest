@@ -2,9 +2,9 @@ import styles from './App.less';
 import theme from 'theme.less';
 
 import React from 'react';
-import Example0 from 'Example0/Example0';
-import Example1 from 'Example1/Example1';
-import Example2 from 'Example2/Example2';
+import MinimalSetup from 'MinimalSetup/MinimalSetup';
+import MultipleSections from 'MultipleSections/MultipleSections';
+import AsyncExample from 'AsyncExample/AsyncExample';
 
 export default function App() {
   return (
@@ -26,9 +26,9 @@ export default function App() {
         </ul>
       </div>
       <div className={styles.examplesContainer}>
-        <Example0 />
-        <Example1 />
-        <Example2 />
+        <MinimalSetup />
+        <MultipleSections />
+        <AsyncExample />
       </div>
     </div>
   );

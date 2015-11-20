@@ -1,17 +1,18 @@
 import theme from 'theme.less';
-import styles from './Example0.less';
+import styles from './MultipleSections.less';
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { updateInputValue, suggestionSelected } from 'Example0/redux';
+import { updateInputValue, suggestionSelected } from 'MultipleSections/redux';
 import Autosuggest from 'AutosuggestContainer';
 
-function mapStateToProps(state) {
-  const { value, suggestions } = state[0];
+function mapStateToProps({ multipleSections }) {
+  const { value, suggestions, selectedSuggestionId } = multipleSections;
 
   return {
     value,
-    suggestions
+    suggestions,
+    selectedSuggestionId
   };
 }
 
@@ -21,25 +22,40 @@ function mapDispatchToProps(dispatch) {
       dispatch(updateInputValue(value, method));
     },
     onSuggestionSelected: (event, { suggestion, method }) => {
-      dispatch(suggestionSelected(getSuggestionValue(suggestion)));
+      dispatch(suggestionSelected(getSuggestionValue(suggestion), suggestion.id));
     }
   };
+}
+
+function shouldRenderSuggestions(value) {
+  return true;
 }
 
 function getSuggestionValue(suggestion) {
   return suggestion.text;
 }
 
-function renderSuggestion(suggestion, value, valueBeforeUpDown) {
+function renderSuggestion(suggestion) {
   return (
     <span>{suggestion.text}</span>
   );
 }
 
+function renderSectionTitle(section) {
+  return (
+    <strong>{section.title}</strong>
+  );
+}
+
+function getSectionSuggestions(section) {
+  return section.suggestions;
+}
+
 function Example(props) {
-  const { value, suggestions, onChange, onSuggestionSelected } = props;
+  const { value, suggestions, selectedSuggestionId,
+          onChange, onSuggestionSelected } = props;
   const inputProps = {
-    placeholder: 'Pick a fruit',
+    placeholder: 'Pick another fruit',
     value,
     onChange: (event, { newValue, method }) => {
       onChange(newValue, method);
@@ -48,14 +64,20 @@ function Example(props) {
 
   return (
     <div className={styles.container}>
-      <h3 id="minimal-setup">Minimal setup</h3>
+      <h3 id="multiple-sections">Multiple sections</h3>
       <div className={styles.content}>
         <ul className={styles.info}>
-          <li>Plain list of suggestions</li>
+          <li>Multi section list of suggestions</li>
+          <li>Show suggestions when input is empty</li>
+          <li>Track selected suggestion id: {selectedSuggestionId || '(none)'}</li>
         </ul>
-        <Autosuggest suggestions={suggestions}
+        <Autosuggest multiSection={true}
+                     shouldRenderSuggestions={shouldRenderSuggestions}
+                     suggestions={suggestions}
                      getSuggestionValue={getSuggestionValue}
                      renderSuggestion={renderSuggestion}
+                     renderSectionTitle={renderSectionTitle}
+                     getSectionSuggestions={getSectionSuggestions}
                      inputProps={inputProps}
                      onSuggestionSelected={onSuggestionSelected}
                      theme={theme} />
@@ -67,6 +89,7 @@ function Example(props) {
 Example.propTypes = {
   value: PropTypes.string.isRequired,
   suggestions: PropTypes.array.isRequired,
+  selectedSuggestionId: PropTypes.string.isRequired,
 
   onChange: PropTypes.func.isRequired,
   onSuggestionSelected: PropTypes.func.isRequired

@@ -1,7 +1,7 @@
 import { escapeRegexCharacters } from 'utils/utils';
 
-const UPDATE_INPUT_VALUE = 'EXAMPLE0_UPDATE_INPUT_VALUE';
-const SUGGESTION_SELECTED = 'EXAMPLE0_SUGGESTION_SELECTED';
+const UPDATE_INPUT_VALUE = 'MINIMAL_SETUP_UPDATE_INPUT_VALUE';
+const SUGGESTION_SELECTED = 'MINIMAL_SETUP_SUGGESTION_SELECTED';
 
 const allSuggestions = [{
   text: 'Apple'

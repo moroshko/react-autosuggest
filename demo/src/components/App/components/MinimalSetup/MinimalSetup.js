@@ -1,13 +1,13 @@
 import theme from 'theme.less';
-import styles from './Example2.less';
+import styles from './MinimalSetup.less';
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { updateInputValue, clearSuggestions, getCountries } from 'Example2/redux';
+import { updateInputValue, suggestionSelected } from 'MinimalSetup/redux';
 import Autosuggest from 'AutosuggestContainer';
 
-function mapStateToProps(state) {
-  const { value, suggestions } = state[2];
+function mapStateToProps({ minimalSetup }) {
+  const { value, suggestions } = minimalSetup;
 
   return {
     value,
@@ -19,35 +19,27 @@ function mapDispatchToProps(dispatch) {
   return {
     onChange: (value, method) => {
       dispatch(updateInputValue(value, method));
-
-      value = value.trim();
-
-      if (value === '') {
-        dispatch(clearSuggestions());
-      } else if (method === 'type') {
-        dispatch(getCountries(value));
-      }
     },
     onSuggestionSelected: (event, { suggestion, method }) => {
-      dispatch(getCountries(suggestion.name));
+      dispatch(suggestionSelected(getSuggestionValue(suggestion)));
     }
   };
 }
 
 function getSuggestionValue(suggestion) {
-  return suggestion.name;
+  return suggestion.text;
 }
 
-function renderSuggestion(suggestion) {
+function renderSuggestion(suggestion, value, valueBeforeUpDown) {
   return (
-    <span>{suggestion.name}</span>
+    <span>{suggestion.text}</span>
   );
 }
 
 function Example(props) {
   const { value, suggestions, onChange, onSuggestionSelected } = props;
   const inputProps = {
-    placeholder: 'Pick a country',
+    placeholder: 'Pick a fruit',
     value,
     onChange: (event, { newValue, method }) => {
       onChange(newValue, method);
@@ -56,10 +48,10 @@ function Example(props) {
 
   return (
     <div className={styles.container}>
-      <h3 id="async-example">Async example</h3>
+      <h3 id="minimal-setup">Minimal setup</h3>
       <div className={styles.content}>
         <ul className={styles.info}>
-          <li>Retrieve suggestions asynchronously</li>
+          <li>Plain list of suggestions</li>
         </ul>
         <Autosuggest suggestions={suggestions}
                      getSuggestionValue={getSuggestionValue}
