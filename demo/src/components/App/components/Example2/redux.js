@@ -2,7 +2,8 @@ import countries from './countries';
 import { escapeRegexCharacters } from 'utils/utils';
 
 const UPDATE_INPUT_VALUE = 'EXAMPLE2_UPDATE_INPUT_VALUE';
-const UPDATE_SUGGESTIONS = 'EXAMPLE2_UPDATE_SUGGESTIONS';
+const CLEAR_SUGGESTIONS = 'EXAMPLE2_CLEAR_SUGGESTIONS';
+const MAYBE_UPDATE_SUGGESTIONS = 'EXAMPLE2_MAYBE_UPDATE_SUGGESTIONS';
 
 const initialState = {
   value: '',
@@ -24,18 +25,29 @@ export function updateInputValue(value, method) {
   };
 }
 
-export function updateSuggestions(suggestions) {
+export function clearSuggestions() {
   return {
-    type: UPDATE_SUGGESTIONS,
-    suggestions
+    type: CLEAR_SUGGESTIONS
+  };
+}
+
+export function maybeUpdateSuggestions(suggestions, value) {
+  return {
+    type: MAYBE_UPDATE_SUGGESTIONS,
+    suggestions,
+    value
   };
 }
 
 export function getCountries(value) {
   return dispatch => {
     setTimeout(() => {
-      dispatch(updateSuggestions(getSuggestions(value)));
-    }, 100);
+      const suggestions = getSuggestions(value);
+
+      console.log(`Example 2: Set ${suggestions.length} suggestion${suggestions.length === 1 ? '' : 's'}`);
+
+      dispatch(maybeUpdateSuggestions(suggestions, value));
+    }, Math.random() * 1000);
   };
 }
 
@@ -61,7 +73,18 @@ export default function reducer(state = initialState, action = {}) {
           return state;
       }
 
-    case UPDATE_SUGGESTIONS:
+    case CLEAR_SUGGESTIONS:
+      return {
+        ...state,
+        suggestions: []
+      };
+
+    case MAYBE_UPDATE_SUGGESTIONS:
+      // Ignore suggestions if input value changed
+      if (action.value !== state.value) {
+        return state;
+      }
+
       return {
         ...state,
         suggestions: action.suggestions

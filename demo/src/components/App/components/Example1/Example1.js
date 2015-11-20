@@ -28,6 +28,10 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
+function shouldRenderSuggestions(value) {
+  return true;
+}
+
 function getSuggestionValue(suggestion) {
   return suggestion.text;
 }
@@ -68,6 +72,7 @@ function Example(props) {
         Selected suggestion id: {selectedSuggestionId}
       </div>
       <Autosuggest multiSection={true}
+                   shouldRenderSuggestions={shouldRenderSuggestions}
                    suggestions={suggestions}
                    getSuggestionValue={getSuggestionValue}
                    renderSuggestion={renderSuggestion}

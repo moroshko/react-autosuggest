@@ -2,7 +2,7 @@ import theme from 'theme.less';
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { updateInputValue, updateSuggestions, getCountries } from 'Example2/redux';
+import { updateInputValue, clearSuggestions, getCountries } from 'Example2/redux';
 import Autosuggest from 'AutosuggestContainer';
 
 function mapStateToProps(state) {
@@ -22,7 +22,7 @@ function mapDispatchToProps(dispatch) {
       value = value.trim();
 
       if (value === '') {
-        dispatch(updateSuggestions([]));
+        dispatch(clearSuggestions());
       } else if (method === 'type') {
         dispatch(getCountries(value));
       }
