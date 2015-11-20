@@ -1,4 +1,5 @@
 import theme from 'theme.less';
+import styles from './Example2.less';
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
@@ -54,13 +55,19 @@ function Example(props) {
   };
 
   return (
-    <div>
-      <Autosuggest suggestions={suggestions}
-                   getSuggestionValue={getSuggestionValue}
-                   renderSuggestion={renderSuggestion}
-                   inputProps={inputProps}
-                   onSuggestionSelected={onSuggestionSelected}
-                   theme={theme} />
+    <div className={styles.container}>
+      <h3 id="async-example">Async example</h3>
+      <div className={styles.content}>
+        <ul className={styles.info}>
+          <li>Retrieve suggestions asynchronously</li>
+        </ul>
+        <Autosuggest suggestions={suggestions}
+                     getSuggestionValue={getSuggestionValue}
+                     renderSuggestion={renderSuggestion}
+                     inputProps={inputProps}
+                     onSuggestionSelected={onSuggestionSelected}
+                     theme={theme} />
+      </div>
     </div>
   );
 }

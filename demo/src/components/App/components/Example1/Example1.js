@@ -22,7 +22,6 @@ function mapDispatchToProps(dispatch) {
       dispatch(updateInputValue(value, method));
     },
     onSuggestionSelected: (event, { suggestion, method }) => {
-      console.log('Example 1: Suggestion selected:', suggestion, `method = ${method}`);
       dispatch(suggestionSelected(getSuggestionValue(suggestion), suggestion.id));
     }
   };
@@ -59,28 +58,30 @@ function Example(props) {
     placeholder: 'Pick another fruit',
     value,
     onChange: (event, { newValue, method }) => {
-      console.log(`Example 1: Changed value = ${newValue}, method = ${method}`);
       onChange(newValue, method);
-    },
-    onBlur: () => console.log('Example 1: Blurred'),
-    onFocus: () => console.log('Example 1: Focused')
+    }
   };
 
   return (
     <div className={styles.container}>
-      <div className={styles.selectedSuggestionIdContainer}>
-        Selected suggestion id: {selectedSuggestionId}
+      <h3 id="multiple-sections">Multiple sections</h3>
+      <div className={styles.content}>
+        <ul className={styles.info}>
+          <li>Multi section list of suggestions</li>
+          <li>Show suggestions when input is empty</li>
+          <li>Track selected suggestion id: {selectedSuggestionId || '(none)'}</li>
+        </ul>
+        <Autosuggest multiSection={true}
+                     shouldRenderSuggestions={shouldRenderSuggestions}
+                     suggestions={suggestions}
+                     getSuggestionValue={getSuggestionValue}
+                     renderSuggestion={renderSuggestion}
+                     renderSectionTitle={renderSectionTitle}
+                     getSectionSuggestions={getSectionSuggestions}
+                     inputProps={inputProps}
+                     onSuggestionSelected={onSuggestionSelected}
+                     theme={theme} />
       </div>
-      <Autosuggest multiSection={true}
-                   shouldRenderSuggestions={shouldRenderSuggestions}
-                   suggestions={suggestions}
-                   getSuggestionValue={getSuggestionValue}
-                   renderSuggestion={renderSuggestion}
-                   renderSectionTitle={renderSectionTitle}
-                   getSectionSuggestions={getSectionSuggestions}
-                   inputProps={inputProps}
-                   onSuggestionSelected={onSuggestionSelected}
-                   theme={theme} />
     </div>
   );
 }

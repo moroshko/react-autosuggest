@@ -1,4 +1,5 @@
 import theme from 'theme.less';
+import styles from './Example0.less';
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
@@ -20,7 +21,6 @@ function mapDispatchToProps(dispatch) {
       dispatch(updateInputValue(value, method));
     },
     onSuggestionSelected: (event, { suggestion, method }) => {
-      console.log('Example 0: Suggestion selected:', suggestion, `method = ${method}`);
       dispatch(suggestionSelected(getSuggestionValue(suggestion)));
     }
   };
@@ -42,21 +42,24 @@ function Example(props) {
     placeholder: 'Pick a fruit',
     value,
     onChange: (event, { newValue, method }) => {
-      console.log(`Example 0: Changed value = ${newValue}, method = ${method}`);
       onChange(newValue, method);
-    },
-    onBlur: () => console.log('Example 0: Blurred'),
-    onFocus: () => console.log('Example 0: Focused')
+    }
   };
 
   return (
-    <div>
-      <Autosuggest suggestions={suggestions}
-                   getSuggestionValue={getSuggestionValue}
-                   renderSuggestion={renderSuggestion}
-                   inputProps={inputProps}
-                   onSuggestionSelected={onSuggestionSelected}
-                   theme={theme} />
+    <div className={styles.container}>
+      <h3 id="minimal-setup">Minimal setup</h3>
+      <div className={styles.content}>
+        <ul className={styles.info}>
+          <li>Plain list of suggestions</li>
+        </ul>
+        <Autosuggest suggestions={suggestions}
+                     getSuggestionValue={getSuggestionValue}
+                     renderSuggestion={renderSuggestion}
+                     inputProps={inputProps}
+                     onSuggestionSelected={onSuggestionSelected}
+                     theme={theme} />
+      </div>
     </div>
   );
 }

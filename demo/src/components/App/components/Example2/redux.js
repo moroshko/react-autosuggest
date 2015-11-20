@@ -42,11 +42,7 @@ export function maybeUpdateSuggestions(suggestions, value) {
 export function getCountries(value) {
   return dispatch => {
     setTimeout(() => {
-      const suggestions = getSuggestions(value);
-
-      console.log(`Example 2: Set ${suggestions.length} suggestion${suggestions.length === 1 ? '' : 's'}`);
-
-      dispatch(maybeUpdateSuggestions(suggestions, value));
+      dispatch(maybeUpdateSuggestions(getSuggestions(value), value));
     }, Math.random() * 1000);
   };
 }

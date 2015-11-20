@@ -17,16 +17,18 @@ export default function App() {
           Accessible and flexible React autosuggest component
         </h2>
       </div>
+      <div>
+        <h2>Examples</h2>
+        <ul>
+          <li><a href="#minimal-setup">Minimal setup</a></li>
+          <li><a href="#multiple-sections">Multiple sections</a></li>
+          <li><a href="#async-example">Async example</a></li>
+        </ul>
+      </div>
       <div className={styles.examplesContainer}>
-        <div className={styles.exampleContainer}>
-          <Example0 />
-        </div>
-        <div className={styles.exampleContainer}>
-          <Example1 />
-        </div>
-        <div className={styles.exampleContainer}>
-          <Example2 />
-        </div>
+        <Example0 />
+        <Example1 />
+        <Example2 />
       </div>
     </div>
   );
