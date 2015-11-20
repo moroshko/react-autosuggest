@@ -60,6 +60,7 @@ function Example(props) {
       <div className={styles.content}>
         <ul className={styles.info}>
           <li>Retrieve suggestions asynchronously</li>
+          <li>Delayed requests are ignored</li>
         </ul>
         <Autosuggest suggestions={suggestions}
                      getSuggestionValue={getSuggestionValue}
