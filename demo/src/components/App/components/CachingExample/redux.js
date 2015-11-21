@@ -1,11 +1,10 @@
-import debounce from 'lodash.debounce';
 import countries from 'data/countries';
 import { escapeRegexCharacters, randomDelay } from 'utils/utils';
 
-const UPDATE_INPUT_VALUE = 'DEBOUNCED_EXAMPLE_UPDATE_INPUT_VALUE';
-const CLEAR_SUGGESTIONS = 'DEBOUNCED_EXAMPLE_CLEAR_SUGGESTIONS';
-const MAYBE_UPDATE_SUGGESTIONS = 'DEBOUNCED_EXAMPLE_MAYBE_UPDATE_SUGGESTIONS';
-const LOAD_SUGGESTIONS = 'DEBOUNCED_EXAMPLE_LOAD_SUGGESTIONS';
+const UPDATE_INPUT_VALUE = 'CACHING_EXAMPLE_UPDATE_INPUT_VALUE';
+const CLEAR_SUGGESTIONS = 'CACHING_EXAMPLE_CLEAR_SUGGESTIONS';
+const MAYBE_UPDATE_SUGGESTIONS = 'CACHING_EXAMPLE_MAYBE_UPDATE_SUGGESTIONS';
+const LOAD_SUGGESTIONS = 'CACHING_EXAMPLE_LOAD_SUGGESTIONS';
 
 const initialState = {
   value: '',
@@ -13,15 +12,7 @@ const initialState = {
   isLoading: false
 };
 
-function loadCountries(value, dispatch) {
-  dispatch(loadSuggestions());
-
-  setTimeout(() => {
-    dispatch(maybeUpdateSuggestions(getSuggestions(value), value));
-  }, randomDelay());
-}
-
-const debouncedLoadCountries = debounce(loadCountries, 1000);
+let cache = {};
 
 function getSuggestions(value) {
   const escapedInput = escapeRegexCharacters(value.trim());
@@ -30,12 +21,22 @@ function getSuggestions(value) {
   return countries.filter(country => regex.test(country.name));
 }
 
-export function getCountries(value, { debounce } = {}) {
+export function getCountries(value) {
+  const cacheKey = value.trim().toLowerCase();
+
   return dispatch => {
-    if (debounce === true) {
-      debouncedLoadCountries(value, dispatch);
+    if (cache[cacheKey]) {
+      dispatch(maybeUpdateSuggestions(cache[cacheKey], value));
     } else {
-      loadCountries(value, dispatch);
+      dispatch(loadSuggestions());
+
+      setTimeout(() => {
+        const suggestions = getSuggestions(value);
+
+        cache[cacheKey] = suggestions;
+
+        dispatch(maybeUpdateSuggestions(suggestions, value));
+      }, randomDelay());
     }
   };
 }

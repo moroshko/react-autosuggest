@@ -4,7 +4,7 @@
 
 **TODO:**
 
-* Add example with caching
+* No results
 * Create minimal API to Autosuggest
 * Write tests
 * Write docs

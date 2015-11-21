@@ -6,6 +6,7 @@ import MinimalSetup from 'MinimalSetup/MinimalSetup';
 import MultipleSections from 'MultipleSections/MultipleSections';
 import AsyncExample from 'AsyncExample/AsyncExample';
 import DebouncedExample from 'DebouncedExample/DebouncedExample';
+import CachingExample from 'CachingExample/CachingExample';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           <li><a href="#multiple-sections">Multiple sections</a></li>
           <li><a href="#async-example">Async example</a></li>
           <li><a href="#debounced-example">Debounced example</a></li>
+          <li><a href="#caching-example">Caching example</a></li>
         </ul>
       </div>
       <div className={styles.examplesContainer}>
@@ -32,6 +34,7 @@ export default function App() {
         <MultipleSections />
         <AsyncExample />
         <DebouncedExample />
+        <CachingExample />
       </div>
     </div>
   );

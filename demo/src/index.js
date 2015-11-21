@@ -7,13 +7,15 @@ import minimalSetup from 'App/components/MinimalSetup/redux';
 import multipleSections from 'App/components/MultipleSections/redux';
 import asyncExample from 'App/components/AsyncExample/redux';
 import debouncedExample from 'App/components/DebouncedExample/redux';
+import cachingExample from 'App/components/CachingExample/redux';
 import App from 'App/App';
 
 const appReducer = combineReducers({
   minimalSetup,
   multipleSections,
   asyncExample,
-  debouncedExample
+  debouncedExample,
+  cachingExample
 });
 
 const store = applyMiddleware(thunk)(createStore)(appReducer);

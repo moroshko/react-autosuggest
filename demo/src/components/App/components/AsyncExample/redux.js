@@ -1,5 +1,5 @@
 import countries from 'data/countries';
-import { escapeRegexCharacters } from 'utils/utils';
+import { escapeRegexCharacters, randomDelay } from 'utils/utils';
 
 const UPDATE_INPUT_VALUE = 'ASYNC_EXAMPLE_UPDATE_INPUT_VALUE';
 const CLEAR_SUGGESTIONS = 'ASYNC_EXAMPLE_CLEAR_SUGGESTIONS';
@@ -25,7 +25,7 @@ export function getCountries(value) {
 
     setTimeout(() => {
       dispatch(maybeUpdateSuggestions(getSuggestions(value), value));
-    }, 100 + Math.random() * 2000);
+    }, randomDelay());
   };
 }
 

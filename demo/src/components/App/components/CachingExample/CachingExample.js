@@ -1,13 +1,13 @@
 import theme from 'theme.less';
-import styles from './DebouncedExample.less';
+import styles from './CachingExample.less';
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { updateInputValue, clearSuggestions, getCountries } from 'DebouncedExample/redux';
+import { updateInputValue, clearSuggestions, getCountries } from 'CachingExample/redux';
 import Autosuggest from 'AutosuggestContainer';
 
-function mapStateToProps({ debouncedExample }) {
-  const { value, suggestions, isLoading } = debouncedExample;
+function mapStateToProps({ cachingExample }) {
+  const { value, suggestions, isLoading } = cachingExample;
 
   return {
     value,
@@ -26,7 +26,7 @@ function mapDispatchToProps(dispatch) {
       if (value === '') {
         dispatch(clearSuggestions());
       } else if (method === 'type') {
-        dispatch(getCountries(value, { debounce: true }));
+        dispatch(getCountries(value));
       }
     },
     onSuggestionSelected: (event, { suggestion, method }) => {
@@ -58,11 +58,11 @@ function Example(props) {
 
   return (
     <div className={styles.container}>
-      <h3 id="debounced-example">Debounced example</h3>
+      <h3 id="caching-example">Caching example</h3>
       <div className={styles.content}>
         <ul className={styles.info}>
           <li>
-            Retrieve suggestions asynchronously with 200ms debounce<br />
+            Suggestions for a given input are retrieved only once<br />
             Status: {status}
           </li>
         </ul>

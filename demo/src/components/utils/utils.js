@@ -3,6 +3,11 @@ function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+function randomDelay() {
+  return 100 + Math.random() * 1000;
+}
+
 export default {
-  escapeRegexCharacters
+  escapeRegexCharacters,
+  randomDelay
 };
