@@ -5,10 +5,10 @@
 **TODO:**
 
 * Add example with caching
-* Add example with debounce
 * Create minimal API to Autosuggest
 * Write tests
 * Write docs
+* Release 3.0
 * Add more themes
 * Add support for scrollbar
 

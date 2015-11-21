@@ -1,13 +1,13 @@
 import theme from 'theme.less';
-import styles from './AsyncExample.less';
+import styles from './DebouncedExample.less';
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { updateInputValue, clearSuggestions, getCountries } from 'AsyncExample/redux';
+import { updateInputValue, clearSuggestions, getCountries } from 'DebouncedExample/redux';
 import Autosuggest from 'AutosuggestContainer';
 
-function mapStateToProps({ asyncExample }) {
-  const { value, suggestions, isLoading } = asyncExample;
+function mapStateToProps({ debouncedExample }) {
+  const { value, suggestions, isLoading } = debouncedExample;
 
   return {
     value,
@@ -26,7 +26,7 @@ function mapDispatchToProps(dispatch) {
       if (value === '') {
         dispatch(clearSuggestions());
       } else if (method === 'type') {
-        dispatch(getCountries(value));
+        dispatch(getCountries(value, { debounce: true }));
       }
     },
     onSuggestionSelected: (event, { suggestion, method }) => {
@@ -58,11 +58,11 @@ function Example(props) {
 
   return (
     <div className={styles.container}>
-      <h3 id="async-example">Async example</h3>
+      <h3 id="debounced-example">Debounced example</h3>
       <div className={styles.content}>
         <ul className={styles.info}>
           <li>
-            Retrieve suggestions asynchronously<br />
+            Retrieve suggestions asynchronously with 200ms debounce<br />
             Status: {status}
           </li>
           <li>Delayed requests are ignored</li>

@@ -6,12 +6,14 @@ import { Provider } from 'react-redux';
 import minimalSetup from 'App/components/MinimalSetup/redux';
 import multipleSections from 'App/components/MultipleSections/redux';
 import asyncExample from 'App/components/AsyncExample/redux';
+import debouncedExample from 'App/components/DebouncedExample/redux';
 import App from 'App/App';
 
 const appReducer = combineReducers({
   minimalSetup,
   multipleSections,
-  asyncExample
+  asyncExample,
+  debouncedExample
 });
 
 const store = applyMiddleware(thunk)(createStore)(appReducer);

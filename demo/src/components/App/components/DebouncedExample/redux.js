@@ -1,16 +1,27 @@
+import debounce from 'lodash.debounce';
 import countries from 'data/countries';
 import { escapeRegexCharacters } from 'utils/utils';
 
-const UPDATE_INPUT_VALUE = 'ASYNC_EXAMPLE_UPDATE_INPUT_VALUE';
-const CLEAR_SUGGESTIONS = 'ASYNC_EXAMPLE_CLEAR_SUGGESTIONS';
-const MAYBE_UPDATE_SUGGESTIONS = 'ASYNC_EXAMPLE_MAYBE_UPDATE_SUGGESTIONS';
-const LOAD_SUGGESTIONS = 'ASYNC_EXAMPLE_LOAD_SUGGESTIONS';
+const UPDATE_INPUT_VALUE = 'DEBOUNCED_EXAMPLE_UPDATE_INPUT_VALUE';
+const CLEAR_SUGGESTIONS = 'DEBOUNCED_EXAMPLE_CLEAR_SUGGESTIONS';
+const MAYBE_UPDATE_SUGGESTIONS = 'DEBOUNCED_EXAMPLE_MAYBE_UPDATE_SUGGESTIONS';
+const LOAD_SUGGESTIONS = 'DEBOUNCED_EXAMPLE_LOAD_SUGGESTIONS';
 
 const initialState = {
   value: '',
   suggestions: [],
   isLoading: false
 };
+
+function loadCountries(value, dispatch) {
+  dispatch(loadSuggestions());
+
+  setTimeout(() => {
+    dispatch(maybeUpdateSuggestions(getSuggestions(value), value));
+  }, 100 + Math.random() * 2000);
+}
+
+const debouncedLoadCountries = debounce(loadCountries, 1000);
 
 function getSuggestions(value) {
   const escapedInput = escapeRegexCharacters(value.trim());
@@ -19,13 +30,13 @@ function getSuggestions(value) {
   return countries.filter(country => regex.test(country.name));
 }
 
-export function getCountries(value) {
+export function getCountries(value, { debounce } = {}) {
   return dispatch => {
-    dispatch(loadSuggestions());
-
-    setTimeout(() => {
-      dispatch(maybeUpdateSuggestions(getSuggestions(value), value));
-    }, 100 + Math.random() * 2000);
+    if (debounce === true) {
+      debouncedLoadCountries(value, dispatch);
+    } else {
+      loadCountries(value, dispatch);
+    }
   };
 }
 
