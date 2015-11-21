@@ -3,7 +3,7 @@ import theme from 'theme.less';
 
 import React from 'react';
 import GitHub from 'GitHub/GitHub';
-import MinimalSetup from 'MinimalSetup/MinimalSetup';
+import BasicUsage from 'BasicUsage/BasicUsage';
 import MultipleSections from 'MultipleSections/MultipleSections';
 import AsyncExample from 'AsyncExample/AsyncExample';
 import DebouncedExample from 'DebouncedExample/DebouncedExample';
@@ -26,7 +26,7 @@ export default function App() {
       <div>
         <h2>Examples</h2>
         <ul>
-          <li><a href="#minimal-setup">Minimal setup</a></li>
+          <li><a href="#basic-usage">Basic usage</a></li>
           <li><a href="#multiple-sections">Multiple sections</a></li>
           <li><a href="#async-example">Async example</a></li>
           <li><a href="#debounced-example">Debounced example</a></li>
@@ -34,7 +34,7 @@ export default function App() {
         </ul>
       </div>
       <div className={styles.examplesContainer}>
-        <MinimalSetup />
+        <BasicUsage />
         <MultipleSections />
         <AsyncExample />
         <DebouncedExample />

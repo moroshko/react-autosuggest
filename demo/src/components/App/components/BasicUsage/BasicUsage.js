@@ -1,13 +1,13 @@
 import theme from 'theme.less';
-import styles from './MinimalSetup.less';
+import styles from './BasicUsage.less';
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { updateInputValue, suggestionSelected } from 'MinimalSetup/redux';
+import { updateInputValue, suggestionSelected } from 'BasicUsage/redux';
 import Autosuggest from 'AutosuggestContainer';
 
-function mapStateToProps({ minimalSetup }) {
-  const { value, suggestions } = minimalSetup;
+function mapStateToProps({ basicUsage }) {
+  const { value, suggestions } = basicUsage;
 
   return {
     value,
@@ -30,7 +30,7 @@ function getSuggestionValue(suggestion) {
   return suggestion.text;
 }
 
-function renderSuggestion(suggestion, value, valueBeforeUpDown) {
+function renderSuggestion(suggestion) {
   return (
     <span>{suggestion.text}</span>
   );
@@ -48,7 +48,7 @@ function Example(props) {
 
   return (
     <div className={styles.container}>
-      <h3 id="minimal-setup">Minimal setup</h3>
+      <h3 id="basic-usage">Basic usage</h3>
       <div className={styles.content}>
         <ul className={styles.info}>
           <li>Plain list of suggestions</li>
