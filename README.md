@@ -4,10 +4,9 @@
 
 **TODO:**
 
-* No results
-* Create minimal API to Autosuggest
-* Write tests
 * Write docs
+* Write tests
+* No results example
 * Release 3.0
 * Add more themes
 * Add support for scrollbar
