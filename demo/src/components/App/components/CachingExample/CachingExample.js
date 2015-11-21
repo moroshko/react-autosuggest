@@ -1,7 +1,7 @@
 import theme from 'theme.less';
 import styles from './CachingExample.less';
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { updateInputValue, clearSuggestions, getCountries } from 'CachingExample/redux';
 import Autosuggest from 'AutosuggestContainer';

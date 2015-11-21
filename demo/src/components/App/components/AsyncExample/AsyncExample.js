@@ -1,7 +1,7 @@
 import theme from 'theme.less';
 import styles from './AsyncExample.less';
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { updateInputValue, clearSuggestions, getCountries } from 'AsyncExample/redux';
 import Autosuggest from 'AutosuggestContainer';
