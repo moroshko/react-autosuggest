@@ -55,7 +55,7 @@ function Example(props) {
   const { value, suggestions, selectedSuggestionId,
           onChange, onSuggestionSelected } = props;
   const inputProps = {
-    placeholder: 'Pick another fruit',
+    placeholder: 'Type a fruit',
     value,
     onChange: (event, { newValue, method }) => {
       onChange(newValue, method);

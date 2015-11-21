@@ -48,7 +48,7 @@ function renderSuggestion(suggestion) {
 function Example(props) {
   const { value, suggestions, onChange, onSuggestionSelected, isLoading } = props;
   const inputProps = {
-    placeholder: 'Pick a country',
+    placeholder: 'Type a country',
     value,
     onChange: (event, { newValue, method }) => {
       onChange(newValue, method);

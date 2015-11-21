@@ -39,7 +39,7 @@ function renderSuggestion(suggestion, value, valueBeforeUpDown) {
 function Example(props) {
   const { value, suggestions, onChange, onSuggestionSelected } = props;
   const inputProps = {
-    placeholder: 'Pick a fruit',
+    placeholder: 'Type a fruit',
     value,
     onChange: (event, { newValue, method }) => {
       onChange(newValue, method);
