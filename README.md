@@ -26,7 +26,6 @@
 
 ## Features
 
-* Thoroughly tested (over 120 tests)
 * Supports flux architecture (see [redux examples](https://github.com/moroshko/react-autosuggest/tree/master/demo/src/components/App/components))
 * [WAI-ARIA accessible][wai-aria] (including ARIA attributes and keyboard interactions)
 * Mobile friendly
@@ -36,6 +35,7 @@
 * Full control over [when to show the suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Pass through props to the input field](#inputPropsProp) (e.g. placeholder, type, onChange, onBlur)
 * [onSuggestionSelected](#onSuggestionSelectedProp) hook
+* Thoroughly tested
 
 The following are not part of react-autosuggest, but can be easily implemented:
 
@@ -90,16 +90,66 @@ const inputProps = {
 
 ## Props
 
-* [`multiSection`](#multiSectionProp)
-* [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp)
 * [`suggestions`](#suggestionsProp)
 * [`getSuggestionValue`](#getSuggestionValueProp)
 * [`renderSuggestion`](#renderSuggestionProp)
-* [`renderSectionTitle`](#renderSectionTitleProp)
-* [`getSectionSuggestions`](#getSectionSuggestionsProp)
 * [`inputProps`](#inputPropsProp)
+* [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp)
+* [`multiSection`](#multiSectionProp)
+* [`getSectionSuggestions`](#getSectionSuggestionsProp)
+* [`renderSectionTitle`](#renderSectionTitleProp)
 * [`onSuggestionSelected`](#onSuggestionSelectedProp)
 * [`theme`](#themeProp)
+
+<a name="suggestionsProp"></a>
+#### suggestions (required)
+
+Arbitrary array of suggestions to display. It's up to you what shape every suggestion takes. Normally, it would be an object or a string.
+
+<a name="getSuggestionValueProp"></a>
+#### getSuggestionValue (required)
+
+When user navigates the suggestions using the Up and Down keys, [the input should display the highlighted suggestion][wai-aria]. You design how suggestion is modelled. Therefore, it's your responsibility to tell Autosuggest how to map suggestions to input values.
+
+This function gets:
+
+* `suggestion` - The suggestion in question
+
+It should return a string. For example:
+
+```js
+function getSuggestionValue(suggestion) {
+  return suggestion.text;
+}
+```
+
+<a name="renderSuggestionProp"></a>
+#### renderSuggestion (required)
+
+It's up to you to define how to render suggestions.
+
+This function gets:
+
+* `suggestion` - The suggestion to render
+* `value` - The current value of the input
+* `valueBeforeUpDown` - The value of the input prior to Up/Down interactions. It is useful if you want to highlight input's value in the suggestion (a.k.a the match), for example.
+
+It should return a `ReactElement`. For example:
+
+```js
+function renderSuggestion(suggestion, value, valueBeforeUpDown) {
+  return (
+    <span>{suggestion.text}</span>
+  );
+}
+```
+
+<a name="inputPropsProp"></a>
+#### inputProps (required)
+
+Autosuggest is a [controlled component][controlled-component]. Therefore, you should pass at least a `value` and an `onChange` callback to the input field.
+
+
 
 ## Running Tests
 
@@ -112,6 +162,7 @@ npm test
 [MIT](http://moroshko.mit-license.org)
 
 [wai-aria]: https://www.w3.org/TR/wai-aria-practices/#autocomplete
+[controlled-component]: https://facebook.github.io/react/docs/forms.html#controlled-components
 [basic-usage]: https://moroshko.github.io/react-autosuggest#basic-usage
 [multiple-sections]: https://moroshko.github.io/react-autosuggest#multiple-sections
 [async-example]: https://moroshko.github.io/react-autosuggest#async-example

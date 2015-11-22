@@ -39,15 +39,15 @@ function mapDispatchToProps(dispatch) {
 
 class Autosuggest extends Component {
   static propTypes = {
-    multiSection: PropTypes.bool.isRequired,
-    shouldRenderSuggestions: PropTypes.func.isRequired,
     suggestions: PropTypes.array.isRequired,
     getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
+    inputProps: PropTypes.object.isRequired,
+    shouldRenderSuggestions: PropTypes.func.isRequired,
+    onSuggestionSelected: PropTypes.func.isRequired,
+    multiSection: PropTypes.bool.isRequired,
     renderSectionTitle: PropTypes.func.isRequired,
     getSectionSuggestions: PropTypes.func.isRequired,
-    inputProps: PropTypes.object.isRequired,
-    onSuggestionSelected: PropTypes.func.isRequired,
     theme: PropTypes.object.isRequired,
 
     isFocused: PropTypes.bool.isRequired,
@@ -65,7 +65,7 @@ class Autosuggest extends Component {
   };
 
   getSuggestion(sectionIndex, suggestionIndex) {
-    const { multiSection, suggestions, getSectionSuggestions } = this.props;
+    const { suggestions, multiSection, getSectionSuggestions } = this.props;
 
     if (multiSection) {
       return getSectionSuggestions(suggestions[sectionIndex])[suggestionIndex];
@@ -99,16 +99,16 @@ class Autosuggest extends Component {
   }
 
   shouldRenderSuggestions() {
-    const { suggestions, shouldRenderSuggestions, inputProps } = this.props;
+    const { suggestions, inputProps, shouldRenderSuggestions } = this.props;
     const { value } = inputProps;
 
     return shouldRenderSuggestions(value) && suggestions.length > 0;
   }
 
   render() {
-    const { multiSection, suggestions, shouldRenderSuggestions,
-            renderSuggestion, renderSectionTitle, getSectionSuggestions,
-            inputProps, onSuggestionSelected, theme, isFocused, isCollapsed,
+    const { suggestions, renderSuggestion, inputProps, shouldRenderSuggestions,
+            onSuggestionSelected, multiSection, renderSectionTitle,
+            getSectionSuggestions, theme, isFocused, isCollapsed,
             focusedSectionIndex, focusedSuggestionIndex, valueBeforeUpDown,
             inputFocused, inputBlurred, inputChanged, updateFocusedSuggestion,
             revealSuggestions, closeSuggestions } = this.props;

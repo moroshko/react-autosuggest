@@ -6,32 +6,38 @@ import Autosuggest from 'Autosuggest';
 
 export default class AutosuggestContainer extends Component {
   static propTypes = {
-    multiSection: PropTypes.bool,
-    shouldRenderSuggestions: PropTypes.func,
     suggestions: PropTypes.array.isRequired,
     getSuggestionValue: PropTypes.func.isRequired,
-    renderSuggestion: PropTypes.func,
+    renderSuggestion: PropTypes.func.isRequired,
+    inputProps: (props, propName, componentName) => {
+      const inputProps = props[propName];
+
+      if (!('value' in inputProps)) {
+        return new Error('\'inputProps\' must have \'value\'.');
+      }
+
+      if (!('onChange' in inputProps)) {
+        return new Error('\'inputProps\' must have \'onChange\'.');
+      }
+    },
+    shouldRenderSuggestions: PropTypes.func,
+    onSuggestionSelected: PropTypes.func,
+    multiSection: PropTypes.bool,
     renderSectionTitle: PropTypes.func,
     getSectionSuggestions: PropTypes.func,
-    inputProps: PropTypes.object,
-    onSuggestionSelected: PropTypes.func,
     theme: PropTypes.object
   };
 
   static defaultProps = {
-    multiSection: false,
     shouldRenderSuggestions: value => value.trim().length > 0,
-    renderSuggestion() {
-      throw new Error('`renderSuggestion` must be provided');
-    },
+    onSuggestionSelected: () => {},
+    multiSection: false,
     renderSectionTitle() {
       throw new Error('`renderSectionTitle` must be provided');
     },
     getSectionSuggestions() {
       throw new Error('`getSectionSuggestions` must be provided');
     },
-    inputProps: {},
-    onSuggestionSelected: () => {},
     theme: {
       container: 'react-autosuggest__container',
       input: 'react-autosuggest__input',
