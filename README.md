@@ -96,15 +96,60 @@ const inputProps = {
 * [`inputProps`](#inputPropsProp)
 * [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp)
 * [`multiSection`](#multiSectionProp)
-* [`getSectionSuggestions`](#getSectionSuggestionsProp)
 * [`renderSectionTitle`](#renderSectionTitleProp)
+* [`getSectionSuggestions`](#getSectionSuggestionsProp)
 * [`onSuggestionSelected`](#onSuggestionSelectedProp)
 * [`theme`](#themeProp)
 
 <a name="suggestionsProp"></a>
 #### suggestions (required)
 
-Arbitrary array of suggestions to display. It's up to you what shape every suggestion takes. Normally, it would be an object or a string.
+Arbitrary array of suggestions to display.
+
+For plain list of suggestions, you could have:
+
+```js
+const suggestions = [{
+  text: 'Apple'
+}, {
+  text: 'Banana'
+}, {
+  text: 'Cherry'
+}, {
+  text: 'Grapefruit'
+}, {
+  text: 'Lemon'
+}];
+```
+
+You could also have [multiple sections](#multiSectionProp), in which case `suggestions` would be an array of sections. For example:
+
+```js
+const suggestions = [{
+  title: 'A',
+  suggestions: [{
+    id: '100',
+    text: 'Apple'
+  }, {
+    id: '101',
+    text: 'Apricot'
+  }]
+}, {
+  title: 'B',
+  suggestions: [{
+    id: '102',
+    text: 'Banana'
+  }]
+}, {
+  title: 'C',
+  suggestions: [{
+    id: '103',
+    text: 'Cherry'
+  }]
+}];
+```
+
+**Note:** It's totally up to you what shape suggestions take!
 
 <a name="getSuggestionValueProp"></a>
 #### getSuggestionValue (required)
@@ -147,8 +192,86 @@ function renderSuggestion(suggestion, value, valueBeforeUpDown) {
 <a name="inputPropsProp"></a>
 #### inputProps (required)
 
-Autosuggest is a [controlled component][controlled-component]. Therefore, you should pass at least a `value` and an `onChange` callback to the input field.
+Autosuggest is a [controlled component][controlled-component]. Therefore, you should pass at least a `value` and an `onChange` callback to the input field. You can pass additional props as well. For example:
 
+```js
+const inputProps = {
+  value: inputValue,   // `inputValue` usually comes from application state
+  onChange: onChange   // `onChange` will be called when input value changes
+  type: 'search',
+  placeholder: 'Enter city or postcode'
+};
+```
+
+<a name="shouldRenderSuggestionsProp"></a>
+#### shouldRenderSuggestions (optional)
+
+By default, suggestions are rendered when input field isn't blank. Feel free to override this behaviour.
+
+This function gets:
+
+* `value` - The current value of the input
+
+It should return a boolean.
+
+For example, to display suggestions only when input is at least 3 characters long, do:
+
+```js
+function shouldRenderSuggestions(value) {
+  return value.trim().length > 2;
+} 
+```
+
+<a name="multiSectionProp"></a>
+#### multiSection (optional)
+
+By default, Autosuggest renders a plain list of suggestions.
+
+If you'd like to have multiple sections (with optional titles), set `multiSection={true}`.
+
+<a name="renderSectionTitleProp"></a>
+#### renderSectionTitle (optional)
+
+When rendering [multiple sections](#multiSectionProp), you need to tell Autosuggest how to render a section title.
+
+This function gets:
+
+* `section` - The section to render (this would be an item in the [suggestions](#suggestionsProp) array
+
+
+It should return a `ReactElement`. For example:
+
+```js
+function renderSectionTitle(section) {
+  return (
+    <strong>{section.title}</strong>
+  );
+}
+```
+
+<a name="getSectionSuggestionsProp"></a>
+#### getSectionSuggestions (optional)
+
+When rendering [multiple sections](#multiSectionProp), you need to tell Autosuggest where to find the suggestions for a given section.
+
+This function gets:
+
+* `section` - The section to render (this would be an item in the [suggestions](#suggestionsProp) array
+
+
+It should return an array of suggestions to render in the given section. For example:
+
+```js
+function getSectionSuggestions(section) {
+  return section.suggestions;
+}
+```
+
+<a name="onSuggestionSelectedProp"></a>
+#### onSuggestionSelected (optional)
+
+<a name="themeProp"></a>
+#### theme (optional)
 
 
 ## Running Tests
@@ -178,10 +301,11 @@ npm test
   * Highlight matches (autosuggest-highlight)
   * Create list (remove selected item from suggestions)
   * No results
-  * Mobile example
+* Add section in docs about mobile
 * Write tests
 * Write upgrade guide
 * Release 3.0
+  * Update deps
   * Publish to npm
   * Publish to gh-pages
 * Add support for scrollbar
