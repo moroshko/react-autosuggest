@@ -1,30 +1,19 @@
-import { escapeRegexCharacters } from 'utils/utils';
+import countries from 'data/countries';
+import { escapeRegexCharacters, randomDelay } from 'utils/utils';
 
-const UPDATE_INPUT_VALUE = 'BASIC_USAGE_UPDATE_INPUT_VALUE';
-const SUGGESTION_SELECTED = 'BASIC_USAGE_SUGGESTION_SELECTED';
-
-const allSuggestions = [{
-  text: 'Apple'
-}, {
-  text: 'Banana'
-}, {
-  text: 'Cherry'
-}, {
-  text: 'Grapefruit'
-}, {
-  text: 'Lemon'
-}];
+const UPDATE_INPUT_VALUE = 'HIGHLIGHT_MATCHES_UPDATE_INPUT_VALUE';
+const SUGGESTION_SELECTED = 'HIGHLIGHT_MATCHES_SUGGESTION_SELECTED';
 
 const initialState = {
   value: '',
-  suggestions: allSuggestions
+  suggestions: countries
 };
 
 function getSuggestions(value) {
   const escapedInput = escapeRegexCharacters(value.trim());
-  const regex = new RegExp(escapedInput, 'i');
+  const regex = new RegExp('^' + escapedInput, 'i');
 
-  return allSuggestions.filter(suggestion => regex.test(suggestion.text));
+  return countries.filter(country => regex.test(country.name));
 }
 
 export function updateInputValue(value, method) {

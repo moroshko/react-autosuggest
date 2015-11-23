@@ -176,7 +176,7 @@ This function gets:
 
 * `suggestion` - The suggestion to render
 * `value` - The current value of the input
-* `valueBeforeUpDown` - The value of the input prior to Up/Down interactions. It is useful if you want to highlight input's value in the suggestion (a.k.a the match), for example.
+* `valueBeforeUpDown` - The value of the input prior to Up/Down interactions. If user didn't interact with Up/Down yet, it will be `null`. It is useful if you want to highlight input's value in the suggestion (a.k.a the match), for example.
 
 It should return a `ReactElement`. For example:
 
@@ -305,8 +305,6 @@ npm test
 
 * Write docs
 * Examples:
-  * Custom renderer (country flags)
-  * Highlight matches (autosuggest-highlight)
   * Create list (remove selected item from suggestions)
   * No results
 * Add section in docs about mobile
