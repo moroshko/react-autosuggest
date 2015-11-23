@@ -28,7 +28,6 @@
 
 * Supports flux architecture (see [redux examples](https://github.com/moroshko/react-autosuggest/tree/master/demo/src/components/App/components))
 * [WAI-ARIA accessible][wai-aria] (including ARIA attributes and keyboard interactions)
-* Mobile friendly
 * Supports [react-themeable](https://github.com/markdalgleish/react-themeable) for flexible styling
 * Supports [multiple sections][multiple-sections] as well as [plain list][basic-usage] of suggestions
 * Full control over [suggestion rendering](#renderSuggestionProp) (you can display extra data, images, whatever you want)
@@ -273,6 +272,15 @@ function getSectionSuggestions(section) {
 <a name="themeProp"></a>
 #### theme (optional)
 
+
+## Development
+
+```shell
+npm install
+npm start
+```
+
+Now, open `http://localhost:3000/demo/dist/index.html` and start hacking!
 
 ## Running Tests
 
