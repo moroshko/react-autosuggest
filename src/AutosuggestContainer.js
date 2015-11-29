@@ -13,11 +13,11 @@ export default class AutosuggestContainer extends Component {
       const inputProps = props[propName];
 
       if (!('value' in inputProps)) {
-        return new Error('\'inputProps\' must have \'value\'.');
+        throw new Error('\'inputProps\' must have \'value\'.');
       }
 
       if (!('onChange' in inputProps)) {
-        return new Error('\'inputProps\' must have \'onChange\'.');
+        throw new Error('\'inputProps\' must have \'onChange\'.');
       }
     },
     shouldRenderSuggestions: PropTypes.func,

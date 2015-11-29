@@ -186,20 +186,18 @@ class Autosuggest extends Component {
       onMouseLeave: () => {
         updateFocusedSuggestion(null, null);
       },
-      onMouseDown: (event, { sectionIndex, itemIndex }) => {
+      onMouseDown: () => {
+        this.justClickedOnSuggestion = true;
+      },
+      onClick: (event, { sectionIndex, itemIndex }) => {
         const focusedSuggestion = this.getFocusedSuggestion();
         const suggestionValue = this.getSuggestionValue(sectionIndex, itemIndex);
 
         onSuggestionSelected(event, { suggestion: focusedSuggestion, method: 'click' });
         this.maybeEmitOnChange(event, suggestionValue, 'click');
         closeSuggestions();
-
-        this.justClickedOnSuggestion = true;
-
-        setTimeout(() => {
-          this.input.focus();
-          this.justClickedOnSuggestion = false;
-        });
+        this.input.focus();
+        this.justClickedOnSuggestion = false;
       }
     };
     const renderItem = item => renderSuggestion(item, value, valueBeforeUpDown);

@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "react": "^0.14.3",
-    "react-autowhatever": "^1.1.2",
+    "react-autowhatever": "^1.2.1",
     "react-redux": "^4.0.0",
     "redux": "^3.0.4"
   },
