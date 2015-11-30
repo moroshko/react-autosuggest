@@ -1,11 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { findDOMNode } from 'react-dom';
 import debounce from 'debounce';
 import themeable from 'react-themeable';
 import sectionIterator from './sectionIterator';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-
-injectTapEventPlugin();
 
 export default class Autosuggest extends Component {
   static propTypes = {
@@ -83,7 +79,7 @@ export default class Autosuggest extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.isControlledComponent) {
-      const inputValue = findDOMNode(this.refs.input).value;
+      const inputValue = this.refs.input.value;
 
       if (nextProps.value !== inputValue &&
           !this.justClickedOnSuggestion && !this.justPressedUpDown && !this.justPressedEsc) {
@@ -247,9 +243,9 @@ export default class Autosuggest extends Component {
       }
     }
 
-    const suggestions = findDOMNode(this.refs.suggestions);
+    const suggestions = this.refs.suggestions;
     const suggestionRef = this.getSuggestionRef(sectionIndex, suggestionIndex);
-    const suggestion = findDOMNode(this.refs[suggestionRef]);
+    const suggestion = this.refs[suggestionRef];
 
     this.scrollToElement(suggestions, suggestion, alignTo);
   }
@@ -291,17 +287,7 @@ export default class Autosuggest extends Component {
   }
 
   onSuggestionSelected(event) {
-    let focusedSuggestion = this.getFocusedSuggestion(); // Required when Enter is pressed
-
-    if (focusedSuggestion === null) {
-      // We are on a mobile device
-      const sectionIndex = event.target.getAttribute('data-section-index');
-      const touchedSectionIndex = (typeof sectionIndex === 'string' ? +sectionIndex : null);
-      const touchedSuggestionIndex = +event.target.getAttribute('data-suggestion-index');
-
-      focusedSuggestion =
-        this.getSuggestion(touchedSectionIndex, touchedSuggestionIndex);
-    }
+    const focusedSuggestion = this.getFocusedSuggestion();
 
     this.props.onSuggestionUnfocused(focusedSuggestion);
     this.props.onSuggestionSelected(focusedSuggestion, event);
@@ -436,7 +422,7 @@ export default class Autosuggest extends Component {
     });
   }
 
-  onSuggestionClick(sectionIndex, suggestionIndex, event) {
+  onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
     const suggestionValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
 
     this.justClickedOnSuggestion = true;
@@ -456,7 +442,7 @@ export default class Autosuggest extends Component {
     }, () => {
       // This code executes after the component is re-rendered
       setTimeout(() => {
-        findDOMNode(this.refs.input).focus();
+        this.refs.input.focus();
         this.justClickedOnSuggestion = false;
       });
     });
@@ -500,8 +486,6 @@ export default class Autosuggest extends Component {
       );
       const suggestionRef =
         this.getSuggestionRef(sectionIndex, suggestionIndex);
-      const onSuggestionClick = event =>
-        this.onSuggestionClick(sectionIndex, suggestionIndex, event);
 
       return (
         <li id={this.getSuggestionId(sectionIndex, suggestionIndex)}
@@ -509,12 +493,9 @@ export default class Autosuggest extends Component {
             role="option"
             ref={suggestionRef}
             key={suggestionRef}
-            data-section-index={sectionIndex}
-            data-suggestion-index={suggestionIndex}
             onMouseEnter={() => this.onSuggestionMouseEnter(sectionIndex, suggestionIndex)}
             onMouseLeave={() => this.onSuggestionMouseLeave(sectionIndex, suggestionIndex)}
-            onMouseDown={onSuggestionClick}
-            onTouchTap={onSuggestionClick}>
+            onMouseDown={event => this.onSuggestionMouseDown(sectionIndex, suggestionIndex, event)}>
           {this.renderSuggestionContent(suggestion)}
         </li>
       );

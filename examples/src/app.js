@@ -1,7 +1,7 @@
 require('./app.less');
 
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 import Badges from './Badges/Badges';
 import Examples from './Examples';
 import Footer from './Footer/Footer';
@@ -22,4 +22,4 @@ class App extends Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+render(<App />, document.getElementById('app'));

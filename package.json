@@ -24,12 +24,10 @@
   },
   "dependencies": {
     "debounce": "^1.0.0",
-    "react-tap-event-plugin": "^0.2.1",
     "react-themeable": "^1.0.1"
   },
   "peerDependencies": {
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0"
+    "react": "^0.14.0"
   },
   "devDependencies": {
     "babel": "^5.8.23",

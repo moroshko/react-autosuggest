@@ -59,6 +59,14 @@ function getSuggestions(input, callback) {
   setTimeout(() => callback(null, suggestions), 300);
 }
 
+function renderSuggestion(suggestion) {
+  return (
+    <span>
+      <a href="https://google.com" target="_blank">{suggestion}</a>
+    </span>
+  );
+}
+
 export default class MultipleSections extends Component {
   render() {
     const inputAttributes = {
@@ -69,7 +77,8 @@ export default class MultipleSections extends Component {
     return (
       <div>
         <Autosuggest suggestions={getSuggestions}
-                     inputAttributes={inputAttributes} />
+                     inputAttributes={inputAttributes}
+                     suggestionRenderer={renderSuggestion} />
         <SourceCodeLink file="examples/src/MultipleSections/MultipleSections.js" />
       </div>
     );
