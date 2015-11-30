@@ -295,7 +295,7 @@ export default class Autosuggest extends Component {
 
     if (focusedSuggestion === null) {
       // We are on a mobile device
-      const sectionIndex = event.target.getAttribute('data-section-index');
+      const sectionIndex = event.currentTarget.getAttribute('data-section-index');
       const touchedSectionIndex = (typeof sectionIndex === 'string' ? +sectionIndex : null);
       const touchedSuggestionIndex = +event.target.getAttribute('data-suggestion-index');
 
