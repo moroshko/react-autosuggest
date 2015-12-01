@@ -25,6 +25,7 @@
 
 ## Features
 
+* **Coming soon:** support for flux architecture, including redux. Check out the [redux examples](https://github.com/moroshko/react-autosuggest/tree/3.0/demo/src/components/App/components) for now.
 * [WAI-ARIA accessible][wai-aria] (including ARIA attributes and keyboard interactions)
 * Mobile friendly
 * Supports [controlled](https://facebook.github.io/react/docs/forms.html#controlled-components) and  [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) state

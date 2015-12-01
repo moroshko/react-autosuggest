@@ -2,7 +2,6 @@ require('./Examples.less');
 require('./Autosuggest.less');
 
 import React, { Component } from 'react';
-import { findDOMNode } from 'react-dom';
 import BasicExample from './BasicExample/BasicExample';
 import CustomRenderer from './CustomRenderer/CustomRenderer';
 import MultipleSections from './MultipleSections/MultipleSections';
@@ -102,7 +101,7 @@ export default class Examples extends Component {
       this.eventQueue.shift();
       this.processEvents();
       // Scroll to the bottom
-      findDOMNode(this.refs.eventsLog.refs.eventsLogWrapper).scrollTop = Number.MAX_SAFE_INTEGER;
+      this.refs.eventsLog.refs.eventsLogWrapper.scrollTop = Number.MAX_SAFE_INTEGER;
     });
   }
 
