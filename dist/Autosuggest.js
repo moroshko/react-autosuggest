@@ -10,7 +10,7 @@ var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = 
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -21,8 +21,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = require('react-dom');
 
 var _debounce = require('debounce');
 
@@ -35,12 +33,6 @@ var _reactThemeable2 = _interopRequireDefault(_reactThemeable);
 var _sectionIterator = require('./sectionIterator');
 
 var _sectionIterator2 = _interopRequireDefault(_sectionIterator);
-
-var _reactTapEventPlugin = require('react-tap-event-plugin');
-
-var _reactTapEventPlugin2 = _interopRequireDefault(_reactTapEventPlugin);
-
-(0, _reactTapEventPlugin2['default'])();
 
 var Autosuggest = (function (_Component) {
   _inherits(Autosuggest, _Component);
@@ -132,7 +124,7 @@ var Autosuggest = (function (_Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
       if (this.isControlledComponent) {
-        var inputValue = (0, _reactDom.findDOMNode)(this.refs.input).value;
+        var inputValue = this.refs.input.value;
 
         if (nextProps.value !== inputValue && !this.justClickedOnSuggestion && !this.justPressedUpDown && !this.justPressedEsc) {
           this.handleValueChange(nextProps.value);
@@ -312,9 +304,9 @@ var Autosuggest = (function (_Component) {
         }
       }
 
-      var suggestions = (0, _reactDom.findDOMNode)(this.refs.suggestions);
+      var suggestions = this.refs.suggestions;
       var suggestionRef = this.getSuggestionRef(sectionIndex, suggestionIndex);
-      var suggestion = (0, _reactDom.findDOMNode)(this.refs[suggestionRef]);
+      var suggestion = this.refs[suggestionRef];
 
       this.scrollToElement(suggestions, suggestion, alignTo);
     }
@@ -364,16 +356,7 @@ var Autosuggest = (function (_Component) {
   }, {
     key: 'onSuggestionSelected',
     value: function onSuggestionSelected(event) {
-      var focusedSuggestion = this.getFocusedSuggestion(); // Required when Enter is pressed
-
-      if (focusedSuggestion === null) {
-        // We are on a mobile device
-        var sectionIndex = event.target.getAttribute('data-section-index');
-        var touchedSectionIndex = typeof sectionIndex === 'string' ? +sectionIndex : null;
-        var touchedSuggestionIndex = +event.target.getAttribute('data-suggestion-index');
-
-        focusedSuggestion = this.getSuggestion(touchedSectionIndex, touchedSuggestionIndex);
-      }
+      var focusedSuggestion = this.getFocusedSuggestion();
 
       this.props.onSuggestionUnfocused(focusedSuggestion);
       this.props.onSuggestionSelected(focusedSuggestion, event);
@@ -515,8 +498,8 @@ var Autosuggest = (function (_Component) {
       });
     }
   }, {
-    key: 'onSuggestionClick',
-    value: function onSuggestionClick(sectionIndex, suggestionIndex, event) {
+    key: 'onSuggestionMouseDown',
+    value: function onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
       var _this4 = this;
 
       var suggestionValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
@@ -538,7 +521,7 @@ var Autosuggest = (function (_Component) {
       }, function () {
         // This code executes after the component is re-rendered
         setTimeout(function () {
-          (0, _reactDom.findDOMNode)(_this4.refs.input).focus();
+          _this4.refs.input.focus();
           _this4.justClickedOnSuggestion = false;
         });
       });
@@ -578,9 +561,6 @@ var Autosuggest = (function (_Component) {
       return suggestions.map(function (suggestion, suggestionIndex) {
         var styles = theme(suggestionIndex, 'suggestion', sectionIndex === _this5.state.focusedSectionIndex && suggestionIndex === _this5.state.focusedSuggestionIndex && 'suggestionIsFocused');
         var suggestionRef = _this5.getSuggestionRef(sectionIndex, suggestionIndex);
-        var onSuggestionClick = function onSuggestionClick(event) {
-          return _this5.onSuggestionClick(sectionIndex, suggestionIndex, event);
-        };
 
         return _react2['default'].createElement(
           'li',
@@ -589,16 +569,15 @@ var Autosuggest = (function (_Component) {
             role: 'option',
             ref: suggestionRef,
             key: suggestionRef,
-            'data-section-index': sectionIndex,
-            'data-suggestion-index': suggestionIndex,
             onMouseEnter: function () {
               return _this5.onSuggestionMouseEnter(sectionIndex, suggestionIndex);
             },
             onMouseLeave: function () {
               return _this5.onSuggestionMouseLeave(sectionIndex, suggestionIndex);
             },
-            onMouseDown: onSuggestionClick,
-            onTouchTap: onSuggestionClick }),
+            onMouseDown: function (event) {
+              return _this5.onSuggestionMouseDown(sectionIndex, suggestionIndex, event);
+            } }),
           _this5.renderSuggestionContent(suggestion)
         );
       });
