@@ -1,0 +1,333 @@
+'use strict';
+
+var _reactTransformHmr2 = require('react-transform-hmr');
+
+var _reactTransformHmr3 = _interopRequireDefault(_reactTransformHmr2);
+
+var _react = require('react');
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react2 = _interopRequireDefault(_react);
+
+var _redux = require('./redux');
+
+var _reactRedux = require('react-redux');
+
+var _reactAutowhatever = require('react-autowhatever');
+
+var _reactAutowhatever2 = _interopRequireDefault(_reactAutowhatever);
+
+var _components = {
+  _$Autosuggest: {
+    displayName: 'Autosuggest'
+  }
+};
+
+var _reactComponentWrapper = (0, _reactTransformHmr3['default'])({
+  filename: 'src/Autosuggest.js',
+  components: _components,
+  locals: [module],
+  imports: [_react]
+});
+
+function _wrapComponent(uniqueId) {
+  return function (ReactClass) {
+    return _reactComponentWrapper(ReactClass, uniqueId);
+  };
+}
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function mapStateToProps(state) {
+  return {
+    isFocused: state.isFocused,
+    isCollapsed: state.isCollapsed,
+    focusedSectionIndex: state.focusedSectionIndex,
+    focusedSuggestionIndex: state.focusedSuggestionIndex,
+    valueBeforeUpDown: state.valueBeforeUpDown
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    inputFocused: function inputFocused(shouldRenderSuggestions) {
+      dispatch((0, _redux.inputFocused)(shouldRenderSuggestions));
+    },
+    inputBlurred: function inputBlurred() {
+      dispatch((0, _redux.inputBlurred)());
+    },
+    inputChanged: function inputChanged(shouldRenderSuggestions) {
+      dispatch((0, _redux.inputChanged)(shouldRenderSuggestions));
+    },
+    updateFocusedSuggestion: function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
+      dispatch((0, _redux.updateFocusedSuggestion)(sectionIndex, suggestionIndex, value));
+    },
+    revealSuggestions: function revealSuggestions() {
+      dispatch((0, _redux.revealSuggestions)());
+    },
+    closeSuggestions: function closeSuggestions() {
+      dispatch((0, _redux.closeSuggestions)());
+    }
+  };
+}
+
+var Autosuggest = (function (_Component) {
+  _inherits(Autosuggest, _Component);
+
+  function Autosuggest() {
+    _classCallCheck(this, _Autosuggest);
+
+    _get(Object.getPrototypeOf(_Autosuggest.prototype), 'constructor', this).apply(this, arguments);
+  }
+
+  _createClass(Autosuggest, [{
+    key: 'getSuggestion',
+    value: function getSuggestion(sectionIndex, suggestionIndex) {
+      var _props = this.props;
+      var suggestions = _props.suggestions;
+      var multiSection = _props.multiSection;
+      var getSectionSuggestions = _props.getSectionSuggestions;
+
+      if (multiSection) {
+        return getSectionSuggestions(suggestions[sectionIndex])[suggestionIndex];
+      }
+
+      return suggestions[suggestionIndex];
+    }
+  }, {
+    key: 'getFocusedSuggestion',
+    value: function getFocusedSuggestion() {
+      var _props2 = this.props;
+      var focusedSectionIndex = _props2.focusedSectionIndex;
+      var focusedSuggestionIndex = _props2.focusedSuggestionIndex;
+
+      if (focusedSuggestionIndex === null) {
+        return null;
+      }
+
+      return this.getSuggestion(focusedSectionIndex, focusedSuggestionIndex);
+    }
+  }, {
+    key: 'getSuggestionValue',
+    value: function getSuggestionValue(sectionIndex, suggestionIndex) {
+      var getSuggestionValue = this.props.getSuggestionValue;
+
+      return getSuggestionValue(this.getSuggestion(sectionIndex, suggestionIndex));
+    }
+  }, {
+    key: 'maybeEmitOnChange',
+    value: function maybeEmitOnChange(event, newValue, method) {
+      var _props$inputProps = this.props.inputProps;
+      var value = _props$inputProps.value;
+      var onChange = _props$inputProps.onChange;
+
+      if (newValue !== value) {
+        onChange && onChange(event, { newValue: newValue, method: method });
+      }
+    }
+  }, {
+    key: 'shouldRenderSuggestions',
+    value: function shouldRenderSuggestions() {
+      var _props3 = this.props;
+      var suggestions = _props3.suggestions;
+      var inputProps = _props3.inputProps;
+      var shouldRenderSuggestions = _props3.shouldRenderSuggestions;
+      var value = inputProps.value;
+
+      return shouldRenderSuggestions(value) && suggestions.length > 0;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this = this;
+
+      var _props4 = this.props;
+      var suggestions = _props4.suggestions;
+      var renderSuggestion = _props4.renderSuggestion;
+      var inputProps = _props4.inputProps;
+      var shouldRenderSuggestions = _props4.shouldRenderSuggestions;
+      var onSuggestionSelected = _props4.onSuggestionSelected;
+      var multiSection = _props4.multiSection;
+      var renderSectionTitle = _props4.renderSectionTitle;
+      var getSectionSuggestions = _props4.getSectionSuggestions;
+      var theme = _props4.theme;
+      var isFocused = _props4.isFocused;
+      var isCollapsed = _props4.isCollapsed;
+      var focusedSectionIndex = _props4.focusedSectionIndex;
+      var focusedSuggestionIndex = _props4.focusedSuggestionIndex;
+      var valueBeforeUpDown = _props4.valueBeforeUpDown;
+      var inputFocused = _props4.inputFocused;
+      var inputBlurred = _props4.inputBlurred;
+      var inputChanged = _props4.inputChanged;
+      var updateFocusedSuggestion = _props4.updateFocusedSuggestion;
+      var revealSuggestions = _props4.revealSuggestions;
+      var closeSuggestions = _props4.closeSuggestions;
+      var value = inputProps.value;
+      var _onBlur = inputProps.onBlur;
+      var _onFocus = inputProps.onFocus;
+      var _onKeyDown = inputProps.onKeyDown;
+      var onChange = inputProps.onChange;
+
+      var isOpen = isFocused && !isCollapsed && this.shouldRenderSuggestions();
+      var items = isOpen ? suggestions : [];
+      var autowhateverInputProps = _extends({}, inputProps, {
+        onFocus: function onFocus(event) {
+          if (!_this.justClickedOnSuggestion) {
+            inputFocused(shouldRenderSuggestions(value));
+            _onFocus && _onFocus(event);
+          }
+        },
+        onBlur: function onBlur(event) {
+          if (!_this.justClickedOnSuggestion) {
+            inputBlurred();
+            _onBlur && _onBlur(event);
+          }
+        },
+        onChange: function onChange(event) {
+          var value = event.target.value;
+
+          inputChanged(shouldRenderSuggestions(value));
+          _this.maybeEmitOnChange(event, value, 'type');
+        },
+        onKeyDown: function onKeyDown(event, data) {
+          switch (event.key) {
+            case 'ArrowDown':
+            case 'ArrowUp':
+              if (isCollapsed) {
+                if (_this.shouldRenderSuggestions()) {
+                  revealSuggestions();
+                }
+              } else if (suggestions.length > 0) {
+                var newFocusedSectionIndex = data.newFocusedSectionIndex;
+                var newFocusedItemIndex = data.newFocusedItemIndex;
+
+                var newValue = newFocusedItemIndex === null ? valueBeforeUpDown : _this.getSuggestionValue(newFocusedSectionIndex, newFocusedItemIndex);
+
+                updateFocusedSuggestion(newFocusedSectionIndex, newFocusedItemIndex, value);
+                _this.maybeEmitOnChange(event, newValue, event.key === 'ArrowDown' ? 'down' : 'up');
+              }
+              event.preventDefault();
+              break;
+
+            case 'Enter':
+              {
+                var focusedSuggestion = _this.getFocusedSuggestion();
+
+                if (focusedSuggestion !== null) {
+                  closeSuggestions();
+                  onSuggestionSelected(event, { suggestion: focusedSuggestion, method: 'enter' });
+                }
+                break;
+              }
+
+            case 'Escape':
+              if (valueBeforeUpDown !== null) {
+                _this.maybeEmitOnChange(event, valueBeforeUpDown, 'escape');
+              } else if (isCollapsed) {
+                _this.maybeEmitOnChange(event, '', 'escape');
+              }
+
+              closeSuggestions();
+              break;
+          }
+
+          _onKeyDown && _onKeyDown(event);
+        }
+      });
+      var itemProps = {
+        onMouseEnter: function onMouseEnter(event, _ref) {
+          var sectionIndex = _ref.sectionIndex;
+          var itemIndex = _ref.itemIndex;
+
+          updateFocusedSuggestion(sectionIndex, itemIndex);
+        },
+        onMouseLeave: function onMouseLeave() {
+          updateFocusedSuggestion(null, null);
+        },
+        onMouseDown: function onMouseDown() {
+          _this.justClickedOnSuggestion = true;
+        },
+        onClick: function onClick(event, _ref2) {
+          var sectionIndex = _ref2.sectionIndex;
+          var itemIndex = _ref2.itemIndex;
+
+          var focusedSuggestion = _this.getFocusedSuggestion();
+          var suggestionValue = _this.getSuggestionValue(sectionIndex, itemIndex);
+
+          onSuggestionSelected(event, { suggestion: focusedSuggestion, method: 'click' });
+          _this.maybeEmitOnChange(event, suggestionValue, 'click');
+          closeSuggestions();
+          _this.input.focus();
+          _this.justClickedOnSuggestion = false;
+        }
+      };
+      var renderItem = function renderItem(item) {
+        return renderSuggestion(item, value, valueBeforeUpDown);
+      };
+
+      return _react2['default'].createElement(_reactAutowhatever2['default'], { multiSection: multiSection,
+        items: items,
+        renderItem: renderItem,
+        renderSectionTitle: renderSectionTitle,
+        getSectionItems: getSectionSuggestions,
+        focusedSectionIndex: focusedSectionIndex,
+        focusedItemIndex: focusedSuggestionIndex,
+        inputProps: autowhateverInputProps,
+        itemProps: itemProps,
+        theme: theme,
+        ref: function (autowhatever) {
+          if (autowhatever !== null) {
+            _this.input = autowhatever.refs.input;
+          }
+        } });
+    }
+  }], [{
+    key: 'propTypes',
+    value: {
+      suggestions: _react.PropTypes.array.isRequired,
+      getSuggestionValue: _react.PropTypes.func.isRequired,
+      renderSuggestion: _react.PropTypes.func.isRequired,
+      inputProps: _react.PropTypes.object.isRequired,
+      shouldRenderSuggestions: _react.PropTypes.func.isRequired,
+      onSuggestionSelected: _react.PropTypes.func.isRequired,
+      multiSection: _react.PropTypes.bool.isRequired,
+      renderSectionTitle: _react.PropTypes.func.isRequired,
+      getSectionSuggestions: _react.PropTypes.func.isRequired,
+      theme: _react.PropTypes.object.isRequired,
+
+      isFocused: _react.PropTypes.bool.isRequired,
+      isCollapsed: _react.PropTypes.bool.isRequired,
+      focusedSectionIndex: _react.PropTypes.number,
+      focusedSuggestionIndex: _react.PropTypes.number,
+      valueBeforeUpDown: _react.PropTypes.string,
+
+      inputFocused: _react.PropTypes.func.isRequired,
+      inputBlurred: _react.PropTypes.func.isRequired,
+      inputChanged: _react.PropTypes.func.isRequired,
+      updateFocusedSuggestion: _react.PropTypes.func.isRequired,
+      revealSuggestions: _react.PropTypes.func.isRequired,
+      closeSuggestions: _react.PropTypes.func.isRequired
+    },
+    enumerable: true
+  }]);
+
+  var _Autosuggest = Autosuggest;
+  Autosuggest = _wrapComponent('_$Autosuggest')(Autosuggest) || Autosuggest;
+  return Autosuggest;
+})(_react.Component);
+
+exports['default'] = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Autosuggest);
+module.exports = exports['default'];
