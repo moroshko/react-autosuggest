@@ -19,15 +19,16 @@
 ## Demo
 
 * <a href="https://moroshko.github.io/react-autosuggest#basic-usage" target="_blank">Basic usage</a>
-* <a href="https://moroshko.github.io/react-autosuggest#multiple-sections" target="_blank">Multiple sections</a>
+* <a href="https://moroshko.github.io/react-autosuggest#highlight-matches" target="_blank">Highlight matches</a>
 * <a href="https://moroshko.github.io/react-autosuggest#async-example" target="_blank">Async example</a>
+* <a href="https://moroshko.github.io/react-autosuggest#multiple-sections" target="_blank">Multiple sections</a>
 * <a href="https://moroshko.github.io/react-autosuggest#debounced-example" target="_blank">Debounced example</a>
 * <a href="https://moroshko.github.io/react-autosuggest#caching-example" target="_blank">Caching example</a>
 
 ## Features
 
-* Supports flux architecture (see [redux examples](https://github.com/moroshko/react-autosuggest/tree/master/demo/src/components/App/components))
 * [WAI-ARIA accessible][wai-aria] (including ARIA attributes and keyboard interactions)
+* Supports flux architecture (see [redux examples](https://github.com/moroshko/react-autosuggest/tree/master/demo/src/components/App/components))
 * Supports [react-themeable](https://github.com/markdalgleish/react-themeable) for flexible styling
 * Supports [multiple sections][multiple-sections] as well as [plain list][basic-usage] of suggestions
 * Full control over [suggestion rendering](#renderSuggestionProp) (you can display extra data, images, whatever you want)
@@ -170,7 +171,7 @@ function getSuggestionValue(suggestion) {
 <a name="renderSuggestionProp"></a>
 #### renderSuggestion (required)
 
-It's up to you to define how to render suggestions.
+Use your imagination to define how suggestions are rendered.
 
 This function gets:
 
@@ -201,6 +202,22 @@ const inputProps = {
   placeholder: 'Enter city or postcode'
 };
 ```
+
+`onChange` has the following signature:
+
+```js
+function onChange(event, { newValue, method })
+```
+
+where:
+
+* `newValue` - the new value of the input field
+* `method` - string describing how the change occurred. The possible values are:
+  * `'down'` - user pressed Down
+  * `'up'` - user pressed Up
+  * `'escape'` - user pressed Esc
+  * `'click'` - user clicked on suggestion
+  * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
 
 <a name="shouldRenderSuggestionsProp"></a>
 #### shouldRenderSuggestions (optional)
@@ -269,9 +286,115 @@ function getSectionSuggestions(section) {
 <a name="onSuggestionSelectedProp"></a>
 #### onSuggestionSelected (optional)
 
+This function is called when suggestion is selected. It has the following signature:
+
+```js
+function onSuggestionSelected(event, { suggestion, method })
+```
+
+where:
+
+* `suggestion` - the selected suggestion
+* `method` - string describing how user selected the suggestion. The possible values are:
+  * `'click'` - user clicked on the suggestion
+  * `'enter'` - user selected the suggestion using Enter
+
 <a name="themeProp"></a>
 #### theme (optional)
 
+Autosuggest comes with no styles, and it supports [react-themeable](https://github.com/markdalgleish/react-themeable).
+
+This means you can use [CSS Modules](https://github.com/css-modules/css-modules), [Radium](http://projects.formidablelabs.com/radium), [React Style](https://github.com/js-next/react-style), [JSS](https://github.com/jsstyles/jss), inline styles, or even global CSS to style your Autosugest component.
+
+For example, to style the Autosuggest using CSS Modules, do:
+
+```css
+/* theme.css */
+
+.container { ... }
+.input { ... }
+.items-container { ... }
+.item { ... }
+.item--focused { ... }
+...
+```
+
+```js
+import theme from 'theme.css';
+```
+```xml
+<Autosuggest theme={theme} ... />
+```
+
+When not specified, `theme` defaults to:
+
+```js
+{
+  'container':               'react-autosuggest__container',
+  'container--open':         'react-autosuggest__container--open',
+  'input':                   'react-autosuggest__input',
+  'items-container':         'react-autosuggest__suggestions-container',
+  'item':                    'react-autosuggest__item',
+  'item--focused':           'react-autosuggest__item--focused',
+  'section-container':       'react-autosuggest__section-container',
+  'section-title':           'react-autosuggest__section-title',
+  'section-items-container': 'react-autosuggest__section-suggestions-container'
+}
+```
+
+An example of styling an Autosuggest using CSS Modules can be found [here](https://github.com/moroshko/react-autosuggest/blob/master/demo/src/components/theme.less).
+
+The following diagrams illustrate how `theme` is structured.
+
+##### No sections
+
+    +--| container |-----------------+
+    |                                |
+    |  +--| input |---------------+  |
+    |  |                          |  |
+    |  +--------------------------+  |
+    |                                |
+    |  +--| items-container |-----+  |
+    |  |                          |  |
+    |  |  +--| item |----------+  |  |
+    |  |  |                    |  |  |
+    |  |  +--------------------+  |  |
+    |  |                          |  |
+    |  +--------------------------+  |
+    |                                |
+    +--------------------------------+
+
+
+##### Multiple sections
+
+
+    +--| container |----------------------------------+
+    |                                                 |
+    |  +--| input |--------------------------------+  |
+    |  |                                           |  |
+    |  +-------------------------------------------+  |
+    |                                                 |
+    |  +--| items-container |----------------------+  |
+    |  |                                           |  |
+    |  |  +--| section-container |--------------+  |  |
+    |  |  |                                     |  |  |
+    |  |  |  +--| section-title |------------+  |  |  |
+    |  |  |  |                               |  |  |  |
+    |  |  |  +-------------------------------+  |  |  |
+    |  |  |                                     |  |  |
+    |  |  |  +--| section-items-container |--+  |  |  |
+    |  |  |  |                               |  |  |  |
+    |  |  |  |  +--| item |---------------+  |  |  |  |
+    |  |  |  |  |                         |  |  |  |  |
+    |  |  |  |  +-------------------------+  |  |  |  |
+    |  |  |  |                               |  |  |  |
+    |  |  |  +-------------------------------+  |  |  |
+    |  |  |                                     |  |  |
+    |  |  +-------------------------------------+  |  |
+    |  |                                           |  |
+    |  +-------------------------------------------+  |
+    |                                                 |
+    +-------------------------------------------------+
 
 ## Development
 
@@ -303,11 +426,11 @@ npm test
 
 **TODO:**
 
-* Write docs
 * Examples:
-  * Create list (remove selected item from suggestions)
   * No results
-* Add section in docs about mobile
+  * Loading indicator
+  * Create list (remove selected item from suggestions)
+  * Navigate on selection
 * Write tests
 * Write upgrade guide
 * Release 3.0

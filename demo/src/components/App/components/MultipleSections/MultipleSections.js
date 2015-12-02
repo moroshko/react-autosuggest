@@ -37,7 +37,9 @@ function getSuggestionValue(suggestion) {
 
 function renderSuggestion(suggestion) {
   return (
-    <span>{suggestion.text}</span>
+    <span>
+      {suggestion.text}
+    </span>
   );
 }
 

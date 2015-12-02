@@ -40,14 +40,14 @@ export default class AutosuggestContainer extends Component {
     },
     theme: {
       container: 'react-autosuggest__container',
+      'container--open': 'react-autosuggest__container--open',
       input: 'react-autosuggest__input',
-      'input--open': 'react-autosuggest__input--open',
-      'items-container': 'react-autosuggest__items-container',
+      'items-container': 'react-autosuggest__suggestions-container',
       item: 'react-autosuggest__item',
       'item--focused': 'react-autosuggest__item--focused',
       'section-container': 'react-autosuggest__section-container',
       'section-title': 'react-autosuggest__section-title',
-      'section-items-container': 'react-autosuggest__section-items-container'
+      'section-items-container': 'react-autosuggest__section-suggestions-container'
     }
   };
 

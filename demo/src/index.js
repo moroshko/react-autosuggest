@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
@@ -30,7 +30,7 @@ function Demo() {
   );
 }
 
-ReactDOM.render(
+render(
   <Demo />,
   document.getElementById('demo')
 );
