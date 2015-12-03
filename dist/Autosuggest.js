@@ -14,7 +14,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = require('react-redux');
 
-var _redux = require('./redux');
+var _reducerAndActions = require('./reducerAndActions');
 
 var _reactAutowhatever = require('react-autowhatever');
 
@@ -41,22 +41,22 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     inputFocused: function inputFocused(shouldRenderSuggestions) {
-      dispatch((0, _redux.inputFocused)(shouldRenderSuggestions));
+      dispatch((0, _reducerAndActions.inputFocused)(shouldRenderSuggestions));
     },
     inputBlurred: function inputBlurred() {
-      dispatch((0, _redux.inputBlurred)());
+      dispatch((0, _reducerAndActions.inputBlurred)());
     },
     inputChanged: function inputChanged(shouldRenderSuggestions) {
-      dispatch((0, _redux.inputChanged)(shouldRenderSuggestions));
+      dispatch((0, _reducerAndActions.inputChanged)(shouldRenderSuggestions));
     },
     updateFocusedSuggestion: function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
-      dispatch((0, _redux.updateFocusedSuggestion)(sectionIndex, suggestionIndex, value));
+      dispatch((0, _reducerAndActions.updateFocusedSuggestion)(sectionIndex, suggestionIndex, value));
     },
     revealSuggestions: function revealSuggestions() {
-      dispatch((0, _redux.revealSuggestions)());
+      dispatch((0, _reducerAndActions.revealSuggestions)());
     },
     closeSuggestions: function closeSuggestions() {
-      dispatch((0, _redux.closeSuggestions)());
+      dispatch((0, _reducerAndActions.closeSuggestions)());
     }
   };
 }

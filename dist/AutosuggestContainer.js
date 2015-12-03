@@ -14,9 +14,9 @@ var _redux = require('redux');
 
 var _reactRedux = require('react-redux');
 
-var _redux2 = require('./redux');
+var _reducerAndActions = require('./reducerAndActions');
 
-var _redux3 = _interopRequireDefault(_redux2);
+var _reducerAndActions2 = _interopRequireDefault(_reducerAndActions);
 
 var _Autosuggest = require('./Autosuggest');
 
@@ -50,7 +50,7 @@ var AutosuggestContainer = (function (_Component) {
       valueBeforeUpDown: null
     };
 
-    _this.store = (0, _redux.createStore)(_redux3.default, initialState);
+    _this.store = (0, _redux.createStore)(_reducerAndActions2.default, initialState);
     return _this;
   }
 

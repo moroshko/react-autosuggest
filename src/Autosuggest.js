@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { inputFocused, inputBlurred, inputChanged, updateFocusedSuggestion,
-         revealSuggestions, closeSuggestions } from './redux';
+         revealSuggestions, closeSuggestions } from './reducerAndActions';
 import Autowhatever from 'react-autowhatever';
 
 function mapStateToProps(state) {
