@@ -235,7 +235,7 @@ For example, to display suggestions only when input is at least 3 characters lon
 ```js
 function shouldRenderSuggestions(value) {
   return value.trim().length > 2;
-} 
+}
 ```
 
 <a name="multiSectionProp"></a>
@@ -428,7 +428,6 @@ npm test
 
 * Examples:
   * No results
-  * Loading indicator
   * Create list (remove selected item from suggestions)
   * Navigate on selection
 * Write tests
