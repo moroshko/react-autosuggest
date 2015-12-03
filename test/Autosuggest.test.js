@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 describe('Autosuggest', () => {
-  it('todo', function() {
+  it('todo', () => {
     expect('write tests').to.have.length(11);
   });
 });

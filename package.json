@@ -2,7 +2,7 @@
   "name": "react-autosuggest",
   "version": "3.0.0",
   "description": "WAI-ARIA compliant React autosuggest component",
-  "main": "dist/Autosuggest.js",
+  "main": "dist/AutosuggestContainer.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/moroshko/react-autosuggest.git"
@@ -11,9 +11,9 @@
   "scripts": {
     "start": "mkdir -p demo/dist && npm run copy-static-files && node server",
     "lint": "eslint demo/src src server.js webpack.dev.config.js webpack.gh-pages.config.js",
-    "test": "mocha src/Autosuggest.test --compilers js:babel-core/register",
+    "test": "mocha test --compilers js:babel-core/register",
     "copy-static-files": "cp demo/src/index.html demo/dist/",
-    "dist": "rm -rf dist && mkdir dist && babel src/Autosuggest.js --out-file dist/Autosuggest.js",
+    "dist": "rm -rf dist && mkdir dist && babel src -d dist",
     "demo-dist": "rm -rf demo/dist && mkdir demo/dist && npm run copy-static-files && webpack --config webpack.gh-pages.config.js",
     "ci-build": "npm run lint && npm test && npm run dist",
     "gh-pages-build": "npm run lint && npm test && npm run demo-dist",
@@ -28,6 +28,7 @@
   "devDependencies": {
     "autoprefixer-loader": "^3.1.0",
     "autosuggest-highlight": "^2.1.1",
+    "babel-cli": "^6.2.0",
     "babel-core": "^6.2.4",
     "babel-eslint": "^5.0.0-beta4",
     "babel-loader": "^6.2.0",
