@@ -84,7 +84,7 @@ class Autosuggest extends Component {
     return this.getSuggestion(focusedSectionIndex, focusedSuggestionIndex);
   }
 
-  getSuggestionValue(sectionIndex, suggestionIndex) {
+  getSuggestionValueByIndex(sectionIndex, suggestionIndex) {
     const { getSuggestionValue } = this.props;
 
     return getSuggestionValue(this.getSuggestion(sectionIndex, suggestionIndex));
@@ -98,7 +98,7 @@ class Autosuggest extends Component {
     }
   }
 
-  shouldRenderSuggestions() {
+  willRenderSuggestions() {
     const { suggestions, inputProps, shouldRenderSuggestions } = this.props;
     const { value } = inputProps;
 
@@ -113,7 +113,7 @@ class Autosuggest extends Component {
             inputFocused, inputBlurred, inputChanged, updateFocusedSuggestion,
             revealSuggestions, closeSuggestions } = this.props;
     const { value, onBlur, onFocus, onKeyDown, onChange } = inputProps;
-    const isOpen = isFocused && !isCollapsed && this.shouldRenderSuggestions();
+    const isOpen = isFocused && !isCollapsed && this.willRenderSuggestions();
     const items = (isOpen ? suggestions : []);
     const autowhateverInputProps = {
       ...inputProps,
@@ -140,14 +140,14 @@ class Autosuggest extends Component {
           case 'ArrowDown':
           case 'ArrowUp':
             if (isCollapsed) {
-              if (this.shouldRenderSuggestions()) {
+              if (this.willRenderSuggestions()) {
                 revealSuggestions();
               }
             } else if (suggestions.length > 0) {
               const { newFocusedSectionIndex, newFocusedItemIndex } = data;
               const newValue = newFocusedItemIndex === null ?
                 valueBeforeUpDown :
-                this.getSuggestionValue(newFocusedSectionIndex, newFocusedItemIndex);
+                this.getSuggestionValueByIndex(newFocusedSectionIndex, newFocusedItemIndex);
 
               updateFocusedSuggestion(newFocusedSectionIndex, newFocusedItemIndex, value);
               this.maybeEmitOnChange(event, newValue, event.key === 'ArrowDown' ? 'down' : 'up');
@@ -191,7 +191,7 @@ class Autosuggest extends Component {
       },
       onClick: (event, { sectionIndex, itemIndex }) => {
         const focusedSuggestion = this.getFocusedSuggestion();
-        const suggestionValue = this.getSuggestionValue(sectionIndex, itemIndex);
+        const suggestionValue = this.getSuggestionValueByIndex(sectionIndex, itemIndex);
 
         onSuggestionSelected(event, { suggestion: focusedSuggestion, method: 'click' });
         this.maybeEmitOnChange(event, suggestionValue, 'click');

@@ -7,7 +7,7 @@ function randomDelay() {
   return 100 + Math.random() * 1000;
 }
 
-export default {
+export {
   escapeRegexCharacters,
   randomDelay
 };
