@@ -18,7 +18,7 @@ var _redux2 = require('./redux');
 
 var _redux3 = _interopRequireDefault(_redux2);
 
-var _Autosuggest = require('Autosuggest');
+var _Autosuggest = require('./Autosuggest');
 
 var _Autosuggest2 = _interopRequireDefault(_Autosuggest);
 

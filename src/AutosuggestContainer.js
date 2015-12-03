@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from './redux';
-import Autosuggest from 'Autosuggest';
+import Autosuggest from './Autosuggest';
 
 export default class AutosuggestContainer extends Component {
   static propTypes = {
