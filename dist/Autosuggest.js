@@ -12,9 +12,9 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _redux = require('./redux');
-
 var _reactRedux = require('react-redux');
+
+var _redux = require('./redux');
 
 var _reactAutowhatever = require('react-autowhatever');
 
