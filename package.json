@@ -2,7 +2,7 @@
   "name": "react-autosuggest",
   "version": "3.0.0",
   "description": "WAI-ARIA compliant React autosuggest component",
-  "main": "dist/Autosuggest.js",
+  "main": "dist/AutosuggestContainer.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/moroshko/react-autosuggest.git"
@@ -10,10 +10,10 @@
   "author": "Misha Moroshko <michael.moroshko@gmail.com>",
   "scripts": {
     "start": "mkdir -p demo/dist && npm run copy-static-files && node server",
-    "lint": "eslint demo/src src server.js webpack.dev.config.js webpack.dist.config.js webpack.gh-pages.config.js",
+    "lint": "eslint demo/src src server.js webpack.dev.config.js webpack.gh-pages.config.js",
     "test": "mocha test --compilers js:babel-core/register",
     "copy-static-files": "cp demo/src/index.html demo/dist/",
-    "dist": "rm -rf dist && mkdir dist && webpack --config webpack.dist.config.js",
+    "dist": "rm -rf dist && mkdir dist && babel src -d dist",
     "demo-dist": "rm -rf demo/dist && mkdir demo/dist && npm run copy-static-files && webpack --config webpack.gh-pages.config.js",
     "ci-build": "npm run lint && npm test && npm run dist",
     "gh-pages-build": "npm run lint && npm test && npm run demo-dist",
