@@ -1,75 +1,86 @@
 import theme from 'theme.less';
 import styles from './BasicUsage.less';
 
-import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { updateInputValue, suggestionSelected } from 'BasicUsage/redux';
+import React, { Component, PropTypes } from 'react';
 import Autosuggest from 'AutosuggestContainer';
+import languages from './languages';
+import { escapeRegexCharacters } from 'utils/utils';
 
-function mapStateToProps({ basicUsage }) {
-  const { value, suggestions } = basicUsage;
+function getMatchingLanguages(value) {
+  const escapedValue = escapeRegexCharacters(value.trim());
+  const regex = new RegExp('^' + escapedValue, 'i');
 
-  return {
-    value,
-    suggestions
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onChange: (value, method) => {
-      dispatch(updateInputValue(value, method));
-    },
-    onSuggestionSelected: (event, { suggestion, method }) => {
-      dispatch(suggestionSelected(getSuggestionValue(suggestion)));
-    }
-  };
+  return languages.filter(language => regex.test(language.name));
 }
 
 function getSuggestionValue(suggestion) {
-  return suggestion.text;
+  return suggestion.name;
 }
 
 function renderSuggestion(suggestion) {
   return (
-    <span>{suggestion.text}</span>
+    <span>{suggestion.name}</span>
   );
 }
 
-function Example(props) {
-  const { value, suggestions, onChange, onSuggestionSelected } = props;
-  const inputProps = {
-    placeholder: 'Type a fruit',
-    value,
-    onChange: (event, { newValue, method }) => {
-      onChange(newValue, method);
+export default class Example extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      value: '',
+      suggestions: languages
+    };
+
+    this.onChange = this.onChange.bind(this);
+    this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
+  }
+
+  onChange(event, { newValue, method }) {
+    if (method === 'type') {
+      this.setState({
+        value: newValue,
+        suggestions: getMatchingLanguages(newValue)
+      });
+    } else {
+      this.setState({
+        value: newValue
+      });
     }
-  };
+  }
 
-  return (
-    <div className={styles.container}>
-      <h3 id="basic-usage">Basic usage</h3>
-      <div className={styles.content}>
-        <ul className={styles.info}>
-          <li>Plain list of suggestions</li>
-        </ul>
-        <Autosuggest suggestions={suggestions}
-                     getSuggestionValue={getSuggestionValue}
-                     renderSuggestion={renderSuggestion}
-                     inputProps={inputProps}
-                     onSuggestionSelected={onSuggestionSelected}
-                     theme={theme} />
+  // When suggestion is selected, we need to update `suggestions` so that if
+  // user presses Up or Down to reveal suggestions, they would see the updated
+  // list of suggestions.
+  onSuggestionSelected(event, { suggestionValue }) {
+    this.setState({
+      suggestions: getMatchingLanguages(suggestionValue)
+    });
+  }
+
+  render() {
+    const { value, suggestions } = this.state;
+    const inputProps = {
+      placeholder: 'Type a programming language',
+      value,
+      onChange: this.onChange
+    };
+
+    return (
+      <div className={styles.container}>
+        <h3 id="basic-usage">Basic usage</h3>
+        <div className={styles.content}>
+          <ul className={styles.info}>
+            <li>Plain list of suggestions</li>
+          </ul>
+          <Autosuggest suggestions={suggestions}
+                       getSuggestionValue={getSuggestionValue}
+                       renderSuggestion={renderSuggestion}
+                       inputProps={inputProps}
+                       onSuggestionSelected={this.onSuggestionSelected}
+                       theme={theme} />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
-
-Example.propTypes = {
-  value: PropTypes.string.isRequired,
-  suggestions: PropTypes.array.isRequired,
-
-  onChange: PropTypes.func.isRequired,
-  onSuggestionSelected: PropTypes.func.isRequired
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Example);

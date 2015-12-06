@@ -21,8 +21,8 @@ function mapDispatchToProps(dispatch) {
     onChange: (value, method) => {
       dispatch(updateInputValue(value, method));
     },
-    onSuggestionSelected: (event, { suggestion, method }) => {
-      dispatch(suggestionSelected(getSuggestionValue(suggestion)));
+    onSuggestionSelected: (event, { suggestionValue }) => {
+      dispatch(suggestionSelected(suggestionValue));
     }
   };
 }

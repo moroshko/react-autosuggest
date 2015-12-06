@@ -15,8 +15,8 @@ const initialState = {
 let cache = {};
 
 function getSuggestions(value) {
-  const escapedInput = escapeRegexCharacters(value.trim());
-  const regex = new RegExp('^' + escapedInput, 'i');
+  const escapedValue = escapeRegexCharacters(value.trim());
+  const regex = new RegExp('^' + escapedValue, 'i');
 
   return countries.filter(country => regex.test(country.name));
 }

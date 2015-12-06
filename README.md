@@ -28,7 +28,7 @@
 ## Features
 
 * [WAI-ARIA accessible][wai-aria] (including ARIA attributes and keyboard interactions)
-* Supports flux architecture (see [redux examples](https://github.com/moroshko/react-autosuggest/tree/master/demo/src/components/App/components))
+* Supports flux architecture (see [redux examples][examples])
 * Supports [react-themeable](https://github.com/markdalgleish/react-themeable) for flexible styling
 * Supports [multiple sections][multiple-sections] as well as [plain list][basic-usage] of suggestions
 * Full control over [suggestion rendering](#renderSuggestionProp) (you can display extra data, images, whatever you want)
@@ -39,7 +39,7 @@
 
 The following are not part of react-autosuggest, but can be easily implemented:
 
-* Support for delayed requests (if request comes back after user types another letter, it will be ignored). [Example][async-example]
+* Delayed requests management (if request comes back after user types another letter, it will be ignored). [Example][async-example]
 * In-memory caching (suggestions for a given input are retrieved only once). [Example][caching-example]
 
 ## Installation
@@ -50,42 +50,94 @@ npm install react-autosuggest --save
 
 ## Basic Usage
 
+This example doesn't use flux architecture. If you would like to connect Autosuggest to your redux app, check out the [redux examples][examples].
+
 ```js
 import Autosuggest from 'react-autosuggest';
 
-const suggestions = [{
-  text: 'Apple'
+const languages = [{
+  name: 'C',
+  year: 1972
 }, {
-  text: 'Banana'
+  name: 'Elm',
+  year: 2012
 }, {
-  text: 'Cherry'
+  name: 'Javascript',
+  year: 1995
 }, {
-  text: 'Grapefruit'
-}, {
-  text: 'Lemon'
+  name: 'Python',
+  year: 1991
 }];
 
+function getMatchingLanguages(value) {
+  const escapedValue = escapeRegexCharacters(value.trim()); // See: https://github.com/moroshko/react-autosuggest/blob/master/demo/src/components/utils/utils.js#L2-L4
+  const regex = new RegExp('^' + escapedValue, 'i');
+
+  return languages.filter(language => regex.test(language.name));
+}
+
 function getSuggestionValue(suggestion) { // when suggestion selected, this function tells
-  return suggestion.text;                 // what should be the value of the input
+  return suggestion.name;                 // what should be the value of the input
 }
 
 function renderSuggestion(suggestion) {
   return (
-    <span>{suggestion.text}</span>
+    <span>{suggestion.name}</span>
   );
 }
 
-const inputProps = {
-  value: inputValue,   // `inputValue` usually comes from application state
-  onChange: onChange   // `onChange` will be called when input value changes
-};
+class Example extends React.Component {
+  constructor() {
+    super();
 
-```
-```xml
-<Autosuggest suggestions={suggestions}
-             getSuggestionValue={getSuggestionValue}
-             renderSuggestion={renderSuggestion}
-             inputProps={inputProps} />
+    this.state = {
+      value: '',
+      suggestions: languages
+    };
+
+    this.onChange = this.onChange.bind(this);
+    this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
+  }
+
+  onChange(event, { newValue, method }) {
+    if (method === 'type') {
+      this.setState({
+        value: newValue,
+        suggestions: getMatchingLanguages(newValue)
+      });
+    } else {
+      this.setState({
+        value: newValue
+      });
+    }
+  }
+
+  // When suggestion is selected, we need to update `suggestions` so that if
+  // user presses Up or Down to reveal suggestions, they would see the updated
+  // list of suggestions.
+  onSuggestionSelected(event, { suggestionValue }) {
+    this.setState({
+      suggestions: getMatchingLanguages(suggestionValue)
+    });
+  }
+
+  render() {
+    const { value, suggestions } = this.state;
+    const inputProps = {
+      placeholder: 'Type a programming language',
+      value,
+      onChange: this.onChange
+    };
+
+    return (
+      <Autosuggest suggestions={suggestions}
+                   getSuggestionValue={getSuggestionValue}
+                   renderSuggestion={renderSuggestion}
+                   inputProps={inputProps}
+                   onSuggestionSelected={this.onSuggestionSelected} />
+    );
+  }
+}
 ```
 
 ## Props
@@ -289,12 +341,13 @@ function getSectionSuggestions(section) {
 This function is called when suggestion is selected. It has the following signature:
 
 ```js
-function onSuggestionSelected(event, { suggestion, method })
+function onSuggestionSelected(event, { suggestion, suggestionValue, method })
 ```
 
 where:
 
 * `suggestion` - the selected suggestion
+* `suggestionValue` - the value of the selected suggestion (equivalent to `getSuggestionValue(suggestion)`)
 * `method` - string describing how user selected the suggestion. The possible values are:
   * `'click'` - user clicked on the suggestion
   * `'enter'` - user selected the suggestion using Enter
@@ -417,6 +470,7 @@ npm test
 
 [wai-aria]: https://www.w3.org/TR/wai-aria-practices/#autocomplete
 [controlled-component]: https://facebook.github.io/react/docs/forms.html#controlled-components
+[examples]: https://github.com/moroshko/react-autosuggest/tree/master/demo/src/components/App/components
 [basic-usage]: https://moroshko.github.io/react-autosuggest#basic-usage
 [multiple-sections]: https://moroshko.github.io/react-autosuggest#multiple-sections
 [async-example]: https://moroshko.github.io/react-autosuggest#async-example

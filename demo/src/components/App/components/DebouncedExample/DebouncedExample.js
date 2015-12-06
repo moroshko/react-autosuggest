@@ -29,8 +29,8 @@ function mapDispatchToProps(dispatch) {
         dispatch(getCountries(value, { debounce: true }));
       }
     },
-    onSuggestionSelected: (event, { suggestion, method }) => {
-      dispatch(getCountries(suggestion.name));
+    onSuggestionSelected: (event, { suggestionValue }) => {
+      dispatch(getCountries(suggestionValue));
     }
   };
 }

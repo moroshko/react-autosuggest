@@ -106,12 +106,12 @@ class Autosuggest extends Component {
   }
 
   render() {
-    const { suggestions, renderSuggestion, inputProps, shouldRenderSuggestions,
-            onSuggestionSelected, multiSection, renderSectionTitle,
-            getSectionSuggestions, theme, isFocused, isCollapsed,
-            focusedSectionIndex, focusedSuggestionIndex, valueBeforeUpDown,
-            inputFocused, inputBlurred, inputChanged, updateFocusedSuggestion,
-            revealSuggestions, closeSuggestions } = this.props;
+    const { suggestions, getSuggestionValue, renderSuggestion, inputProps,
+            shouldRenderSuggestions, onSuggestionSelected, multiSection,
+            renderSectionTitle, getSectionSuggestions, theme, isFocused,
+            isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
+            valueBeforeUpDown, inputFocused, inputBlurred, inputChanged,
+            updateFocusedSuggestion, revealSuggestions, closeSuggestions } = this.props;
     const { value, onBlur, onFocus, onKeyDown, onChange } = inputProps;
     const isOpen = isFocused && !isCollapsed && this.willRenderSuggestions();
     const items = (isOpen ? suggestions : []);
@@ -160,7 +160,11 @@ class Autosuggest extends Component {
 
             if (focusedSuggestion !== null) {
               closeSuggestions();
-              onSuggestionSelected(event, { suggestion: focusedSuggestion, method: 'enter' });
+              onSuggestionSelected(event, {
+                suggestion: focusedSuggestion,
+                suggestionValue: getSuggestionValue(focusedSuggestion),
+                method: 'enter'
+              });
             }
             break;
           }
@@ -193,7 +197,11 @@ class Autosuggest extends Component {
         const focusedSuggestion = this.getFocusedSuggestion();
         const suggestionValue = this.getSuggestionValueByIndex(sectionIndex, itemIndex);
 
-        onSuggestionSelected(event, { suggestion: focusedSuggestion, method: 'click' });
+        onSuggestionSelected(event, {
+          suggestion: focusedSuggestion,
+          suggestionValue: suggestionValue,
+          method: 'click'
+        });
         this.maybeEmitOnChange(event, suggestionValue, 'click');
         closeSuggestions();
         this.input.focus();
