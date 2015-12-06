@@ -133,6 +133,7 @@ var Autosuggest = (function (_Component) {
 
       var _props4 = this.props;
       var suggestions = _props4.suggestions;
+      var getSuggestionValue = _props4.getSuggestionValue;
       var renderSuggestion = _props4.renderSuggestion;
       var inputProps = _props4.inputProps;
       var shouldRenderSuggestions = _props4.shouldRenderSuggestions;
@@ -205,7 +206,11 @@ var Autosuggest = (function (_Component) {
 
                 if (focusedSuggestion !== null) {
                   closeSuggestions();
-                  onSuggestionSelected(event, { suggestion: focusedSuggestion, method: 'enter' });
+                  onSuggestionSelected(event, {
+                    suggestion: focusedSuggestion,
+                    suggestionValue: getSuggestionValue(focusedSuggestion),
+                    method: 'enter'
+                  });
                 }
                 break;
               }
@@ -244,7 +249,11 @@ var Autosuggest = (function (_Component) {
           var focusedSuggestion = _this2.getFocusedSuggestion();
           var suggestionValue = _this2.getSuggestionValueByIndex(sectionIndex, itemIndex);
 
-          onSuggestionSelected(event, { suggestion: focusedSuggestion, method: 'click' });
+          onSuggestionSelected(event, {
+            suggestion: focusedSuggestion,
+            suggestionValue: suggestionValue,
+            method: 'click'
+          });
           _this2.maybeEmitOnChange(event, suggestionValue, 'click');
           closeSuggestions();
           _this2.input.focus();
