@@ -10,7 +10,7 @@
   "author": "Misha Moroshko <michael.moroshko@gmail.com>",
   "scripts": {
     "start": "mkdir -p demo/dist && npm run copy-static-files && node server",
-    "lint": "eslint demo/src src server.js webpack.dev.config.js webpack.gh-pages.config.js",
+    "lint": "eslint demo/src src test server.js webpack.dev.config.js webpack.gh-pages.config.js",
     "test": "mocha test/index.js --compilers js:babel-core/register",
     "copy-static-files": "cp demo/src/index.html demo/dist/",
     "dist": "rm -rf dist && mkdir dist && babel src -d dist",
