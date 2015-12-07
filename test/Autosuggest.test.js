@@ -47,12 +47,16 @@ function clickEnter() {
   Simulate.keyDown(input, { key: 'Enter' });
 }
 
-function clickDown() {
-  Simulate.keyDown(input, { key: 'ArrowDown' });
+function clickDown(count = 1) {
+  for (let i = 0; i < count; i++) {
+    Simulate.keyDown(input, { key: 'ArrowDown' });
+  }
 }
 
-function clickUp() {
-  Simulate.keyDown(input, { key: 'ArrowUp' });
+function clickUp(count = 1) {
+  for (let i = 0; i < count; i++) {
+    Simulate.keyDown(input, { key: 'ArrowUp' });
+  }
 }
 
 function type(value) {
@@ -140,6 +144,74 @@ describe('Autosuggest', () => {
 
     it('should not show suggestions', () => {
       expectSuggestions([]);
+    });
+  });
+
+  describe('when pressing Down', () => {
+    beforeEach(() => {
+      focusInput();
+      type('p');
+    });
+
+    it('should show suggestions with no focussed suggestion, if they are hidden', () => {
+      clickEscape();
+      clickDown();
+      expectSuggestions(['Perl', 'PHP', 'Python']);
+      expectFocusedSuggestion(null);
+    });
+
+    it('should focus on the first suggestion', () => {
+      clickDown();
+      expectFocusedSuggestion('Perl');
+    });
+
+    it('should focus on the next suggestion', () => {
+      clickDown(2);
+      expectFocusedSuggestion('PHP');
+    });
+
+    it('should not focus on any suggestion after reaching the last suggestion', () => {
+      clickDown(4);
+      expectFocusedSuggestion(null);
+    });
+
+    it('should focus on the first suggestion again', () => {
+      clickDown(5);
+      expectFocusedSuggestion('Perl');
+    });
+  });
+
+  describe('when pressing Up', () => {
+    beforeEach(() => {
+      focusInput();
+      type('p');
+    });
+
+    it('should show suggestions with no focussed suggestion, if they are hidden', () => {
+      clickEscape();
+      clickUp();
+      expectSuggestions(['Perl', 'PHP', 'Python']);
+      expectFocusedSuggestion(null);
+    });
+
+    it('should focus on the last suggestion', () => {
+      clickUp();
+      expectFocusedSuggestion('Python');
+    });
+
+    it('should focus on the second last suggestion', () => {
+      clickUp(2);
+      expectFocusedSuggestion('PHP');
+    });
+
+    it('should not focus on any suggestion after reaching the first suggestion', () => {
+      clickUp(4);
+      expectFocusedSuggestion(null);
+    });
+
+    it('should focus on the last suggestion again', () => {
+      clickUp(5);
+      expectFocusedSuggestion('Python');
     });
   });
 });
