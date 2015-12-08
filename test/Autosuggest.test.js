@@ -1,7 +1,16 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import { expect } from 'chai';
-import AppWithAutosuggest from './AppWithAutosuggest';
+import chai, { expect } from 'chai';
+import sinonChai from 'sinon-chai';
+import { stripReactAttributes } from './utils';
+import AppWithAutosuggest, {
+  getSuggestionValue,
+  renderSuggestion,
+  onChange,
+  onSuggestionSelected
+} from './AppWithAutosuggest';
+
+chai.use(sinonChai);
 
 const { Simulate } = TestUtils;
 
@@ -11,10 +20,12 @@ function expectInputValue(expectedValue) {
   expect(input.value).to.equal(expectedValue);
 }
 
+function getSuggestions() {
+  return TestUtils.scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__item')
+}
+
 function expectSuggestions(expectedSuggestions) {
-  const suggestions = TestUtils
-    .scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__item')
-    .map(suggestion => suggestion.textContent);
+  const suggestions = getSuggestions().map(suggestion => suggestion.textContent);
 
   expect(suggestions).to.deep.equal(expectedSuggestions);
 }
@@ -212,6 +223,28 @@ describe('Autosuggest', () => {
     it('should focus on the last suggestion again', () => {
       clickUp(5);
       expectFocusedSuggestion('Python');
+    });
+  });
+
+  describe('renderSuggestion', () => {
+    beforeEach(() => {
+      renderSuggestion.reset();
+      focusInput();
+      type('r');
+    });
+
+    it('return value should be used to render suggestions', () => {
+      const suggestions = getSuggestions();
+
+      expect(stripReactAttributes(suggestions[0].innerHTML)).to.equal('<strong>R</strong><span>uby</span>');
+    });
+
+    it.only('should be called with the right parameters', () => {
+      expect(renderSuggestion).to.have.been.calledWith(
+        { name: 'Ruby', year: 1995 },
+        'Ruby',
+        'r'
+      );
     });
   });
 });
