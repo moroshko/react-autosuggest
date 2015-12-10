@@ -15,7 +15,7 @@
     "copy-static-files": "cp demo/src/index.html demo/dist/",
     "dist": "rm -rf dist && mkdir dist && babel src -d dist",
     "demo-dist": "rm -rf demo/dist && mkdir demo/dist && npm run copy-static-files && webpack --config webpack.gh-pages.config.js",
-    "ci-build": "npm run lint && npm test && npm run dist",
+    "build": "npm run lint && npm test && npm run dist",
     "gh-pages-build": "npm run lint && npm test && npm run demo-dist",
     "deploy": "echo 'Not yet'"
   },
