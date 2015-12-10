@@ -6,7 +6,7 @@ const SUGGESTION_SELECTED = 'HIGHLIGHT_MATCHES_SUGGESTION_SELECTED';
 
 const initialState = {
   value: '',
-  suggestions: countries
+  suggestions: getSuggestions('')
 };
 
 function getSuggestions(value) {

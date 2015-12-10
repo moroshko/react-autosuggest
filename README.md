@@ -92,7 +92,7 @@ class Example extends React.Component {
 
     this.state = {
       value: '',
-      suggestions: languages
+      suggestions: getMatchingLanguages('')
     };
 
     this.onChange = this.onChange.bind(this);
@@ -201,7 +201,10 @@ const suggestions = [{
 }];
 ```
 
-**Note:** It's totally up to you what shape suggestions take!
+**Note:**
+
+* It's totally up to you what shape suggestions take!
+* The initial value of `suggestions` should match the initial value of `inputProps.value`. This is to make sure that, if input has a non-empty initial value, and it's focused, the right suggestions are displayed.
 
 <a name="getSuggestionValueProp"></a>
 #### getSuggestionValue (required)

@@ -21,7 +21,7 @@ function expectInputValue(expectedValue) {
 }
 
 function getSuggestions() {
-  return TestUtils.scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__item')
+  return TestUtils.scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__item');
 }
 
 function expectSuggestions(expectedSuggestions) {
@@ -239,12 +239,11 @@ describe('Autosuggest', () => {
       expect(stripReactAttributes(suggestions[0].innerHTML)).to.equal('<strong>R</strong><span>uby</span>');
     });
 
-    it.only('should be called with the right parameters', () => {
-      expect(renderSuggestion).to.have.been.calledWith(
-        { name: 'Ruby', year: 1995 },
-        'Ruby',
-        'r'
-      );
+    it('should be called with the right parameters', () => {
+      expect(renderSuggestion).to.have.been.calledWith({ name: 'Ruby', year: 1995 }, 'r', null);
+      renderSuggestion.reset();
+      clickDown();
+      expect(renderSuggestion).to.have.been.calledWith({ name: 'Ruby', year: 1995 }, 'Ruby', 'r');
     });
   });
 });

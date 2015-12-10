@@ -28,7 +28,7 @@ const allSuggestions = [{
 
 const initialState = {
   value: '',
-  suggestions: allSuggestions,
+  suggestions: getSuggestions(''),
   selectedSuggestionId: ''
 };
 

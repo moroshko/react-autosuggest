@@ -9,7 +9,7 @@ const LOAD_SUGGESTIONS = 'DEBOUNCED_EXAMPLE_LOAD_SUGGESTIONS';
 
 const initialState = {
   value: '',
-  suggestions: [],
+  suggestions: getSuggestions(''),
   isLoading: false
 };
 

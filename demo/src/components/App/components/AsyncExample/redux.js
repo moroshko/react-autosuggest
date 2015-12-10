@@ -8,7 +8,7 @@ const LOAD_SUGGESTIONS = 'ASYNC_EXAMPLE_LOAD_SUGGESTIONS';
 
 const initialState = {
   value: '',
-  suggestions: [],
+  suggestions: getSuggestions(''),
   isLoading: false
 };
 

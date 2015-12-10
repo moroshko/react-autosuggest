@@ -18,7 +18,12 @@ export const getSuggestionValue = sinon.spy(suggestion => {
   return suggestion.name;
 });
 
-export const renderSuggestion = sinon.spy((suggestion, value, valueBeforeUpDown) => {
+export const renderSuggestion = sinon.spy();
+
+export const renderSuggestionFn = (suggestion, value, valueBeforeUpDown) => {
+  // See: https://github.com/sinonjs/sinon/issues/944
+  renderSuggestion(suggestion, value, valueBeforeUpDown);
+
   const query = (valueBeforeUpDown || value).trim();
   const matches = highlight.match(suggestion.name, query);
   const parts = highlight.parse(suggestion.name, matches);
@@ -28,7 +33,7 @@ export const renderSuggestion = sinon.spy((suggestion, value, valueBeforeUpDown)
       <strong key={index}>{part.text}</strong> :
       <span key={index}>{part.text}</span>;
   });
-});
+};
 
 export const onChange = sinon.spy((event, { newValue, method }) => {
   if (method === 'type') {
@@ -57,10 +62,9 @@ export default class AppWithAutosuggest extends Component {
 
     this.state = {
       value: 'initial value',
-      suggestions: languages
+      suggestions: getMatchingLanguages('initial value')
     };
   }
-
 
   render() {
     const { value, suggestions } = this.state;
@@ -75,7 +79,7 @@ export default class AppWithAutosuggest extends Component {
     return (
       <Autosuggest suggestions={suggestions}
                    getSuggestionValue={getSuggestionValue}
-                   renderSuggestion={renderSuggestion}
+                   renderSuggestion={renderSuggestionFn}
                    inputProps={inputProps}
                    onSuggestionSelected={onSuggestionSelected} />
     );
