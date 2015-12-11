@@ -42,6 +42,10 @@ function expectFocusedSuggestion(suggestion) {
   }
 }
 
+function clickSuggestion(suggestionIndex) {
+  Simulate.click(getSuggestions()[suggestionIndex]);
+}
+
 function focusInput() {
   Simulate.focus(input);
 }
@@ -226,6 +230,32 @@ describe('Autosuggest', () => {
     });
   });
 
+  describe('getSuggestionValue', () => {
+    beforeEach(() => {
+      getSuggestionValue.reset();
+      focusInput();
+      type('r');
+    });
+
+    it('should be called once with the right parameters when Up is pressed', () => {
+      clickUp();
+      expect(getSuggestionValue).to.have.been.calledOnce;
+      expect(getSuggestionValue).to.have.been.calledWith({ name: 'Ruby', year: 1995 });
+    });
+
+    it('should be called once with the right parameters when Down is pressed', () => {
+      clickDown();
+      expect(getSuggestionValue).to.have.been.calledOnce;
+      expect(getSuggestionValue).to.have.been.calledWith({ name: 'Ruby', year: 1995 });
+    });
+
+    it('should be called once with the right parameters when suggestion is clicked', () => {
+      clickSuggestion(0);
+      expect(getSuggestionValue).to.have.been.calledOnce;
+      expect(getSuggestionValue).to.have.been.calledWith({ name: 'Ruby', year: 1995 });
+    });
+  });
+
   describe('renderSuggestion', () => {
     beforeEach(() => {
       renderSuggestion.reset();
@@ -237,6 +267,10 @@ describe('Autosuggest', () => {
       const suggestions = getSuggestions();
 
       expect(stripReactAttributes(suggestions[0].innerHTML)).to.equal('<strong>R</strong><span>uby</span>');
+    });
+
+    it('should be called once per suggestion', () => {
+      expect(renderSuggestion).to.have.been.calledOnce;
     });
 
     it('should be called with the right parameters', () => {

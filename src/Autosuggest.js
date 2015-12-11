@@ -162,7 +162,7 @@ class Autosuggest extends Component {
               closeSuggestions();
               onSuggestionSelected(event, {
                 suggestion: focusedSuggestion,
-                suggestionValue: getSuggestionValue(focusedSuggestion),
+                suggestionValue: value,
                 method: 'enter'
               });
             }
