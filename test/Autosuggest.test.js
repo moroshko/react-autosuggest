@@ -9,6 +9,7 @@ import AppWithAutosuggest, {
   getSuggestionValue,
   renderSuggestion,
   onChange,
+  shouldRenderSuggestions,
   onSuggestionSelected
 } from './AppWithAutosuggest';
 
@@ -80,7 +81,8 @@ function clickUp(count = 1) {
   }
 }
 
-function type(value) {
+function focusAndSetInputValue(value) {
+  focusInput();
   input.value = value;
   Simulate.change(input);
 }
@@ -122,8 +124,7 @@ describe('Autosuggest', () => {
 
   describe('when typing and matches exist', () => {
     beforeEach(() => {
-      focusInput();
-      type('p');
+      focusAndSetInputValue('p');
     });
 
     it('should show suggestions', () => {
@@ -159,8 +160,7 @@ describe('Autosuggest', () => {
 
   describe('when typing and matches do not exist', () => {
     beforeEach(() => {
-      focusInput();
-      type('z');
+      focusAndSetInputValue('z');
     });
 
     it('should not show suggestions', () => {
@@ -170,8 +170,7 @@ describe('Autosuggest', () => {
 
   describe('when pressing Down', () => {
     beforeEach(() => {
-      focusInput();
-      type('p');
+      focusAndSetInputValue('p');
     });
 
     it('should show suggestions with no focussed suggestion, if they are hidden', () => {
@@ -204,8 +203,7 @@ describe('Autosuggest', () => {
 
   describe('when pressing Up', () => {
     beforeEach(() => {
-      focusInput();
-      type('p');
+      focusAndSetInputValue('p');
     });
 
     it('should show suggestions with no focussed suggestion, if they are hidden', () => {
@@ -239,8 +237,7 @@ describe('Autosuggest', () => {
   describe('getSuggestionValue', () => {
     beforeEach(() => {
       getSuggestionValue.reset();
-      focusInput();
-      type('r');
+      focusAndSetInputValue('r');
     });
 
     it('should be called once with the right parameters when Up is pressed', () => {
@@ -265,8 +262,7 @@ describe('Autosuggest', () => {
   describe('renderSuggestion', () => {
     beforeEach(() => {
       renderSuggestion.reset();
-      focusInput();
-      type('r');
+      focusAndSetInputValue('r');
     });
 
     it('return value should be used to render suggestions', () => {
@@ -287,11 +283,31 @@ describe('Autosuggest', () => {
     });
   });
 
+  describe('shouldRenderSuggestions', () => {
+    beforeEach(() => {
+      shouldRenderSuggestions.reset();
+    });
+
+    it('should be called with the right parameters', () => {
+      focusAndSetInputValue('e');
+      expect(shouldRenderSuggestions).to.be.calledWithExactly('e');
+    });
+
+    it('should show suggestions when `true` is returned', () => {
+      focusAndSetInputValue('e');
+      expectSuggestions(['Elm']);
+    });
+
+    it('should hide suggestions when `false` is returned', () => {
+      focusAndSetInputValue(' e');
+      expectSuggestions([]);
+    });
+  });
+
   describe('onSuggestionSelected', () => {
     beforeEach(() => {
       onSuggestionSelected.reset();
-      focusInput();
-      type('j');
+      focusAndSetInputValue('j');
     });
 
     it('should be called once with the right parameters when suggestion is clicked', () => {
