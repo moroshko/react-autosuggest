@@ -1,6 +1,8 @@
 import React from 'react';
+import SyntheticEvent from 'react/lib/SyntheticEvent';
 import TestUtils from 'react-addons-test-utils';
 import chai, { expect } from 'chai';
+import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { stripReactAttributes } from './utils';
 import AppWithAutosuggest, {
@@ -13,6 +15,7 @@ import AppWithAutosuggest, {
 chai.use(sinonChai);
 
 const { Simulate } = TestUtils;
+const eventInstance = sinon.match.instanceOf(SyntheticEvent);
 
 let app, container, input;
 
@@ -43,7 +46,10 @@ function expectFocusedSuggestion(suggestion) {
 }
 
 function clickSuggestion(suggestionIndex) {
-  Simulate.click(getSuggestions()[suggestionIndex]);
+  const suggestion = getSuggestions()[suggestionIndex];
+
+  Simulate.mouseEnter(suggestion);
+  Simulate.click(suggestion);
 }
 
 function focusInput() {
@@ -240,19 +246,19 @@ describe('Autosuggest', () => {
     it('should be called once with the right parameters when Up is pressed', () => {
       clickUp();
       expect(getSuggestionValue).to.have.been.calledOnce;
-      expect(getSuggestionValue).to.have.been.calledWith({ name: 'Ruby', year: 1995 });
+      expect(getSuggestionValue).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 });
     });
 
     it('should be called once with the right parameters when Down is pressed', () => {
       clickDown();
       expect(getSuggestionValue).to.have.been.calledOnce;
-      expect(getSuggestionValue).to.have.been.calledWith({ name: 'Ruby', year: 1995 });
+      expect(getSuggestionValue).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 });
     });
 
     it('should be called once with the right parameters when suggestion is clicked', () => {
       clickSuggestion(0);
       expect(getSuggestionValue).to.have.been.calledOnce;
-      expect(getSuggestionValue).to.have.been.calledWith({ name: 'Ruby', year: 1995 });
+      expect(getSuggestionValue).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 });
     });
   });
 
@@ -274,10 +280,44 @@ describe('Autosuggest', () => {
     });
 
     it('should be called with the right parameters', () => {
-      expect(renderSuggestion).to.have.been.calledWith({ name: 'Ruby', year: 1995 }, 'r', null);
+      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, 'r', null);
       renderSuggestion.reset();
       clickDown();
-      expect(renderSuggestion).to.have.been.calledWith({ name: 'Ruby', year: 1995 }, 'Ruby', 'r');
+      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, 'Ruby', 'r');
+    });
+  });
+
+  describe('onSuggestionSelected', () => {
+    beforeEach(() => {
+      onSuggestionSelected.reset();
+      focusInput();
+      type('j');
+    });
+
+    it('should be called once with the right parameters when suggestion is clicked', () => {
+      clickSuggestion(1);
+      expect(onSuggestionSelected).to.have.been.calledOnce;
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(eventInstance, {
+        suggestion: { name: 'Javascript', year: 1995 },
+        suggestionValue: 'Javascript',
+        method: 'click'
+      });
+    });
+
+    it('should be called once with the right parameters when Enter is pressed and suggestion is focused', () => {
+      clickDown();
+      clickEnter();
+      expect(onSuggestionSelected).to.have.been.calledOnce;
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(eventInstance, {
+        suggestion: { name: 'Java', year: 1995 },
+        suggestionValue: 'Java',
+        method: 'enter'
+      });
+    });
+
+    it('should not be called when Enter is pressed and there is no focused suggestion', () => {
+      clickEnter();
+      expect(onSuggestionSelected).not.to.have.been.called;
     });
   });
 });
