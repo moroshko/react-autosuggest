@@ -135,12 +135,12 @@ describe('Autosuggest', () => {
       expectFocusedSuggestion(null);
     });
 
-    it('should hide suggestions when ESC is pressed', () => {
+    it('should hide suggestions when Escape is pressed', () => {
       clickEscape();
       expectSuggestions([]);
     });
 
-    it('should clear the input when ESC is pressed again', () => {
+    it('should clear the input when Escape is pressed again', () => {
       clickEscape();
       clickEscape();
       expectInputValue('');
@@ -151,10 +151,16 @@ describe('Autosuggest', () => {
       expectSuggestions([]);
     });
 
-    it('should show suggestions when input is focussed again', () => {
+    it('should show suggestions when input is focused again', () => {
       blurInput();
       focusInput();
       expectSuggestions(['Perl', 'PHP', 'Python']);
+    });
+
+    it('should revert input value when Escape is pressed after Up/Down interaction', () => {
+      clickDown();
+      clickEscape();
+      expectInputValue('p');
     });
   });
 
@@ -173,7 +179,7 @@ describe('Autosuggest', () => {
       focusAndSetInputValue('p');
     });
 
-    it('should show suggestions with no focussed suggestion, if they are hidden', () => {
+    it('should show suggestions with no focused suggestion, if they are hidden', () => {
       clickEscape();
       clickDown();
       expectSuggestions(['Perl', 'PHP', 'Python']);
@@ -206,7 +212,7 @@ describe('Autosuggest', () => {
       focusAndSetInputValue('p');
     });
 
-    it('should show suggestions with no focussed suggestion, if they are hidden', () => {
+    it('should show suggestions with no focused suggestion, if they are hidden', () => {
       clickEscape();
       clickUp();
       expectSuggestions(['Perl', 'PHP', 'Python']);
@@ -280,6 +286,67 @@ describe('Autosuggest', () => {
       renderSuggestion.reset();
       clickDown();
       expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, 'Ruby', 'r');
+    });
+  });
+
+  describe('inputProps.onChange', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('c');
+      onChange.reset();
+    });
+
+    it('should be called once with the right parameters when Down is pressed and suggestions are shown', () => {
+      clickDown();
+      expect(onChange).to.have.been.calledOnce;
+      expect(onChange).to.be.calledWithExactly(eventInstance, {
+        newValue: 'C',
+        method: 'down'
+      });
+    });
+
+    it('should be called once with the right parameters when Up is pressed and suggestions are shown', () => {
+      clickUp();
+      expect(onChange).to.have.been.calledOnce;
+      expect(onChange).to.be.calledWithExactly(eventInstance, {
+        newValue: 'Clojure',
+        method: 'up'
+      });
+    });
+
+    it('should be called once with the right parameters when Escape is pressed to clear the input', () => {
+      clickEscape();
+      clickEscape();
+      expect(onChange).to.have.been.calledOnce;
+      expect(onChange).to.be.calledWithExactly(eventInstance, {
+        newValue: '',
+        method: 'escape'
+      });
+    });
+
+    it('should be called once with the right parameters when suggestion is clicked', () => {
+      clickSuggestion(2);
+      expect(onChange).to.have.been.calledOnce;
+      expect(onChange).to.be.calledWithExactly(eventInstance, {
+        newValue: 'C++',
+        method: 'click'
+      });
+    });
+
+    it('should not be called when Down is pressed and suggestions are hidden', () => {
+      clickEscape();
+      clickDown();
+      expect(onChange).not.to.have.been.called;
+    });
+
+    it('should not be called when Up is pressed and suggestions are hidden', () => {
+      clickEscape();
+      clickUp();
+      expect(onChange).not.to.have.been.called;
+    });
+
+    it('should not be called when Escape is pressed to hide suggestions', () => {
+      clickEscape();
+      expect(onChange).not.to.have.been.called;
     });
   });
 
