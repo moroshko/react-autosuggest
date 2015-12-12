@@ -47,7 +47,14 @@ function expectFocusedSuggestion(suggestion) {
 }
 
 function clickSuggestion(suggestionIndex) {
-  const suggestion = getSuggestions()[suggestionIndex];
+  const suggestions = getSuggestions();
+
+  if (suggestionIndex >= suggestions.length) {
+    throw Error(`Cannot find suggestion #${suggestionIndex} to click on`);
+    return;
+  }
+
+  const suggestion = suggestions[suggestionIndex];
 
   Simulate.mouseEnter(suggestion);
   Simulate.click(suggestion);
@@ -295,7 +302,16 @@ describe('Autosuggest', () => {
       onChange.reset();
     });
 
-    it('should be called once with the right parameters when Down is pressed and suggestions are shown', () => {
+    it('should be called once with the right parameters when user types', () => {
+      focusAndSetInputValue('c+');
+      expect(onChange).to.have.been.calledOnce;
+      expect(onChange).to.be.calledWithExactly(eventInstance, {
+        newValue: 'c+',
+        method: 'type'
+      });
+    });
+
+    it('should be called once with the right parameters when pressing Down focuses on a suggestion which differs from input value', () => {
       clickDown();
       expect(onChange).to.have.been.calledOnce;
       expect(onChange).to.be.calledWithExactly(eventInstance, {
@@ -304,7 +320,7 @@ describe('Autosuggest', () => {
       });
     });
 
-    it('should be called once with the right parameters when Up is pressed and suggestions are shown', () => {
+    it('should be called once with the right parameters when pressing Up focuses on a suggestion which differs from input value', () => {
       clickUp();
       expect(onChange).to.have.been.calledOnce;
       expect(onChange).to.be.calledWithExactly(eventInstance, {
@@ -313,7 +329,7 @@ describe('Autosuggest', () => {
       });
     });
 
-    it('should be called once with the right parameters when Escape is pressed to clear the input', () => {
+    it('should be called once with the right parameters when Escape is pressed and suggestions are hidden', () => {
       clickEscape();
       clickEscape();
       expect(onChange).to.have.been.calledOnce;
@@ -323,7 +339,7 @@ describe('Autosuggest', () => {
       });
     });
 
-    it('should be called once with the right parameters when suggestion is clicked', () => {
+    it('should be called once with the right parameters when suggestion which differs from input value is clicked', () => {
       clickSuggestion(2);
       expect(onChange).to.have.been.calledOnce;
       expect(onChange).to.be.calledWithExactly(eventInstance, {
@@ -338,14 +354,42 @@ describe('Autosuggest', () => {
       expect(onChange).not.to.have.been.called;
     });
 
+    it('should not be called when pressing Down focuses on suggestion which value equals to input value', () => {
+      focusAndSetInputValue('C++');
+      onChange.reset();
+      clickDown();
+      expect(onChange).not.to.have.been.called;
+    });
+
     it('should not be called when Up is pressed and suggestions are hidden', () => {
       clickEscape();
       clickUp();
       expect(onChange).not.to.have.been.called;
     });
 
-    it('should not be called when Escape is pressed to hide suggestions', () => {
+    it('should not be called when pressing Up focuses on suggestion which value equals to input value', () => {
+      focusAndSetInputValue('C++');
+      onChange.reset();
+      clickUp();
+      expect(onChange).not.to.have.been.called;
+    });
+
+    it('should not be called when Escape is pressed and suggestions are shown', () => {
       clickEscape();
+      expect(onChange).not.to.have.been.called;
+    });
+
+    it('should not be called when Escape is pressed, suggestions are hidden, and input is empty', () => {
+      focusAndSetInputValue('');
+      onChange.reset();
+      clickEscape();
+      expect(onChange).not.to.have.been.called;
+    });
+
+    it('should not be called when suggestion which value equals to input value is clicked', () => {
+      focusAndSetInputValue('C++');
+      onChange.reset();
+      clickSuggestion(0);
       expect(onChange).not.to.have.been.called;
     });
   });
@@ -399,6 +443,14 @@ describe('Autosuggest', () => {
     });
 
     it('should not be called when Enter is pressed and there is no focused suggestion', () => {
+      clickEnter();
+      expect(onSuggestionSelected).not.to.have.been.called;
+    });
+
+    it('should not be called when Enter is pressed and there is no focused suggestion after Up/Down interaction', () => {
+      clickDown();
+      clickDown();
+      clickDown();
       clickEnter();
       expect(onSuggestionSelected).not.to.have.been.called;
     });
