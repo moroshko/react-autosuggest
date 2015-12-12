@@ -28,6 +28,17 @@ function getSuggestions() {
   return TestUtils.scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__item');
 }
 
+function getSuggestion(suggestionIndex) {
+  const suggestions = getSuggestions();
+
+  if (suggestionIndex >= suggestions.length) {
+    throw Error(`Cannot find suggestion #${suggestionIndex}`);
+    return null;
+  }
+
+  return suggestions[suggestionIndex];
+};
+
 function expectSuggestions(expectedSuggestions) {
   const suggestions = getSuggestions().map(suggestion => suggestion.textContent);
 
@@ -47,17 +58,16 @@ function expectFocusedSuggestion(suggestion) {
 }
 
 function clickSuggestion(suggestionIndex) {
-  const suggestions = getSuggestions();
+  mouseEnterSuggestion(suggestionIndex);
+  Simulate.click(getSuggestion(suggestionIndex));
+}
 
-  if (suggestionIndex >= suggestions.length) {
-    throw Error(`Cannot find suggestion #${suggestionIndex} to click on`);
-    return;
-  }
+function mouseEnterSuggestion(suggestionIndex) {
+  Simulate.mouseEnter(getSuggestion(suggestionIndex));
+}
 
-  const suggestion = suggestions[suggestionIndex];
-
-  Simulate.mouseEnter(suggestion);
-  Simulate.click(suggestion);
+function mouseLeaveSuggestion(suggestionIndex) {
+  Simulate.mouseLeave(getSuggestion(suggestionIndex));
 }
 
 function focusInput() {
@@ -168,6 +178,22 @@ describe('Autosuggest', () => {
       clickDown();
       clickEscape();
       expectInputValue('p');
+    });
+
+    it('should update input value when suggestion is clicked', () => {
+      clickSuggestion(1);
+      expectInputValue('PHP');
+    });
+
+    it('should focus on suggestion when mouse enters it', () => {
+      mouseEnterSuggestion(2);
+      expectFocusedSuggestion('Python');
+    });
+
+    it('should not have focused suggestions when mouse leaves a suggestion', () => {
+      mouseEnterSuggestion(2);
+      mouseLeaveSuggestion(2);
+      expectFocusedSuggestion(null);
     });
   });
 
