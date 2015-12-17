@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "1895916d9d8547555194"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "a465d00357c5a7424ca4"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -28967,9 +28967,8 @@
 	          // Enter
 	          if (this.state.valueBeforeUpDown !== null && this.suggestionIsFocused()) {
 	            this.onSuggestionSelected(event);
+	            this.setSuggestionsState(null);
 	          }
-
-	          this.setSuggestionsState(null);
 	          break;
 
 	        case 27:
@@ -43571,18 +43570,6 @@
 	  }, 300);
 	}
 
-	function renderSuggestion(suggestion) {
-	  return _react2['default'].createElement(
-	    'span',
-	    null,
-	    _react2['default'].createElement(
-	      'a',
-	      { href: 'https://google.com', target: '_blank' },
-	      suggestion
-	    )
-	  );
-	}
-
 	var MultipleSections = (function (_Component) {
 	  _inherits(MultipleSections, _Component);
 
@@ -43604,8 +43591,7 @@
 	        'div',
 	        null,
 	        _react2['default'].createElement(_srcAutosuggest2['default'], { suggestions: getSuggestions,
-	          inputAttributes: inputAttributes,
-	          suggestionRenderer: renderSuggestion }),
+	          inputAttributes: inputAttributes }),
 	        _react2['default'].createElement(_SourceCodeLinkSourceCodeLink2['default'], { file: 'examples/src/MultipleSections/MultipleSections.js' })
 	      );
 	    }
