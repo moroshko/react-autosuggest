@@ -317,9 +317,8 @@ export default class Autosuggest extends Component {
       case 13: // Enter
         if (this.state.valueBeforeUpDown !== null && this.suggestionIsFocused()) {
           this.onSuggestionSelected(event);
+          this.setSuggestionsState(null);
         }
-
-        this.setSuggestionsState(null);
         break;
 
       case 27: // ESC
