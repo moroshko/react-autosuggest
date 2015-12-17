@@ -448,9 +448,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          // Enter
 	          if (this.state.valueBeforeUpDown !== null && this.suggestionIsFocused()) {
 	            this.onSuggestionSelected(event);
+	            this.setSuggestionsState(null);
 	          }
-
-	          this.setSuggestionsState(null);
 	          break;
 
 	        case 27:
