@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "4f30082d9a80c08f8932"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "a465d00357c5a7424ca4"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -28967,9 +28967,8 @@
 	          // Enter
 	          if (this.state.valueBeforeUpDown !== null && this.suggestionIsFocused()) {
 	            this.onSuggestionSelected(event);
+	            this.setSuggestionsState(null);
 	          }
-
-	          this.setSuggestionsState(null);
 	          break;
 
 	        case 27:
