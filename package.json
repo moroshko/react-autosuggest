@@ -12,7 +12,7 @@
     "start": "mkdir -p demo/dist && npm run copy-static-files && node server",
     "lint": "eslint src test server.js demo/standalone/app.js webpack.dev.config.js webpack.gh-pages.config.js webpack.standalone.config.js webpack.standalone-demo.config.js",
     "test": "mocha test/index.js --compilers js:babel-core/register",
-    "copy-static-files": "cp demo/src/index.html demo/dist/",
+    "copy-static-files": "cp demo/src/index.html demo/src/components/App/components/BasicUsage/autosuggest.css demo/dist/",
     "dist": "rm -rf dist && mkdir dist && babel src -d dist",
     "demo-dist": "rm -rf demo/dist && mkdir demo/dist && npm run copy-static-files && webpack --config webpack.gh-pages.config.js",
     "standalone": "webpack --config webpack.standalone.config.js",

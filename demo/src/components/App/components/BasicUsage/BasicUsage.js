@@ -1,4 +1,3 @@
-import theme from 'theme.less';
 import styles from './BasicUsage.less';
 
 import React, { Component, PropTypes } from 'react';
@@ -77,8 +76,7 @@ export default class Example extends Component {
                        getSuggestionValue={getSuggestionValue}
                        renderSuggestion={renderSuggestion}
                        inputProps={inputProps}
-                       onSuggestionSelected={this.onSuggestionSelected}
-                       theme={theme} />
+                       onSuggestionSelected={this.onSuggestionSelected} />
         </div>
       </div>
     );

@@ -24,6 +24,10 @@ function expectInputValue(expectedValue) {
   expect(input.value).to.equal(expectedValue);
 }
 
+function getSuggestionsContainer() {
+  return TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__suggestions-container');
+}
+
 function getSuggestions() {
   return TestUtils.scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__item');
 }
@@ -112,7 +116,7 @@ describe('Autosuggest', () => {
   });
 
   describe('initially', () => {
-    describe('should render a text box and set its:', () => {
+    describe('should render an input and set its:', () => {
       it('id', () => {
         expect(input.id).to.equal('my-awesome-autosuggest');
       });
@@ -479,6 +483,73 @@ describe('Autosuggest', () => {
       clickDown();
       clickEnter();
       expect(onSuggestionSelected).not.to.have.been.called;
+    });
+  });
+
+  describe('aria attributes', () => {
+    describe('initially', () => {
+      describe('should set input\'s', () => {
+        it('role to "combobox"', () => {
+          expect(input.getAttribute('role')).to.equal('combobox');
+        });
+
+        it('aria-autocomplete to "list"', () => {
+          expect(input.getAttribute('aria-autocomplete')).to.equal('list');
+        });
+
+        it('aria-expanded to "false"', () => {
+          expect(input.getAttribute('aria-expanded')).to.equal('false');
+        });
+
+        it('aria-owns', () => {
+          expect(input.getAttribute('aria-owns')).to.equal('react-whatever-1');
+        });
+      });
+
+      describe('should not set input\'s', () => {
+        it('aria-activedescendant', () => {
+          expect(input.getAttribute('aria-activedescendant')).to.be.null;
+        });
+      });
+    });
+
+    describe('when suggestions are shown', () => {
+      beforeEach(() => {
+        focusAndSetInputValue('J');
+      });
+
+      it('input\'s aria-expanded should be "true"', () => {
+        expect(input.getAttribute('aria-expanded')).to.equal('true');
+      });
+
+      it('input\'s aria-owns should be equal to suggestions container id', () => {
+        expect(input.getAttribute('aria-owns')).to.equal(getSuggestionsContainer().id);
+      });
+
+      it('input\'s aria-activedescendant should be equal to the focused suggestion id when using keyboard', () => {
+        clickDown();
+        expect(input.getAttribute('aria-activedescendant')).to.equal(getSuggestion(0).id);
+        clickDown();
+        expect(input.getAttribute('aria-activedescendant')).to.equal(getSuggestion(1).id);
+        clickDown();
+        expect(input.getAttribute('aria-activedescendant')).to.be.null;
+      });
+
+      it('input\'s aria-activedescendant should be equal to the focused suggestion id when using mouse', () => {
+        mouseEnterSuggestion(0);
+        expect(input.getAttribute('aria-activedescendant')).to.equal(getSuggestion(0).id);
+        mouseLeaveSuggestion(0);
+        expect(input.getAttribute('aria-activedescendant')).to.be.null;
+      });
+
+      it('suggestions container role should be "listbox"', () => {
+        expect(getSuggestionsContainer().getAttribute('role')).to.equal('listbox');
+      });
+
+      it('suggestions\' role should be "option"', () => {
+        expect(getSuggestion(0).getAttribute('role')).to.equal('option');
+        expect(getSuggestion(1).getAttribute('role')).to.equal('option');
+      });
     });
   });
 });
