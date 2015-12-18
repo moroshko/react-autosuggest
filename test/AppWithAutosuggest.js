@@ -60,8 +60,8 @@ export default class AppWithAutosuggest extends Component {
     app = this;
 
     this.state = {
-      value: 'initial value',
-      suggestions: getMatchingLanguages('initial value')
+      value: '',
+      suggestions: getMatchingLanguages('')
     };
   }
 

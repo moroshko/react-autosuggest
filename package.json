@@ -17,7 +17,7 @@
     "demo-dist": "rm -rf demo/dist && mkdir demo/dist && npm run copy-static-files && webpack --config webpack.gh-pages.config.js",
     "standalone": "webpack --config webpack.standalone.config.js",
     "standalone-demo": "webpack --config webpack.standalone-demo.config.js",
-    "build": "npm run lint && npm test && npm run dist",
+    "build": "npm run lint && npm test && npm run dist && npm run standalone",
     "gh-pages-build": "npm run lint && npm test && npm run demo-dist",
     "deploy": "echo 'Not yet'"
   },

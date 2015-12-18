@@ -112,9 +112,9 @@ class Example extends React.Component {
     }
   }
 
-  // When suggestion is selected, we need to update `suggestions` so that if
-  // user presses Up or Down to reveal suggestions, they would see the updated
-  // list of suggestions.
+  // When suggestion is selected, we need to update `suggestions` so that,
+  // if user presses Up or Down to reveal suggestions,
+  // they would see the updated list.
   onSuggestionSelected(event, { suggestionValue }) {
     this.setState({
       suggestions: getMatchingLanguages(suggestionValue)

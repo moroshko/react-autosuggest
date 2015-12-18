@@ -103,7 +103,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      isCollapsed: true,
 	      focusedSectionIndex: null,
 	      focusedSuggestionIndex: null,
-	      valueBeforeUpDown: null
+	      valueBeforeUpDown: null,
+	      lastAction: null
 	    };
 
 	    _this.store = (0, _redux.createStore)(_reducerAndActions2.default, initialState);
@@ -1486,10 +1487,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}
 
-	function inputChanged(shouldRenderSuggestions) {
+	function inputChanged(lastAction) {
 	  return {
 	    type: INPUT_CHANGED,
-	    shouldRenderSuggestions: shouldRenderSuggestions
+	    lastAction: lastAction
 	  };
 	}
 
@@ -1508,9 +1509,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}
 
-	function closeSuggestions() {
+	function closeSuggestions(lastAction) {
 	  return {
-	    type: CLOSE_SUGGESTIONS
+	    type: CLOSE_SUGGESTIONS,
+	    lastAction: lastAction
 	  };
 	}
 
@@ -1534,7 +1536,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        focusedSectionIndex: null,
 	        focusedSuggestionIndex: null,
 	        valueBeforeUpDown: null,
-	        isCollapsed: !action.shouldRenderSuggestions
+	        lastAction: action.lastAction
 	      });
 
 	    case UPDATE_FOCUSED_SUGGESTION:
@@ -1562,7 +1564,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        focusedSectionIndex: null,
 	        focusedSuggestionIndex: null,
 	        valueBeforeUpDown: null,
-	        isCollapsed: true
+	        isCollapsed: true,
+	        lastAction: action.lastAction
 	      });
 
 	    default:
@@ -1610,7 +1613,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    isCollapsed: state.isCollapsed,
 	    focusedSectionIndex: state.focusedSectionIndex,
 	    focusedSuggestionIndex: state.focusedSuggestionIndex,
-	    valueBeforeUpDown: state.valueBeforeUpDown
+	    valueBeforeUpDown: state.valueBeforeUpDown,
+	    lastAction: state.lastAction
 	  };
 	}
 
@@ -1622,8 +1626,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    inputBlurred: function inputBlurred() {
 	      dispatch((0, _reducerAndActions.inputBlurred)());
 	    },
-	    inputChanged: function inputChanged(shouldRenderSuggestions) {
-	      dispatch((0, _reducerAndActions.inputChanged)(shouldRenderSuggestions));
+	    inputChanged: function inputChanged(lastAction) {
+	      dispatch((0, _reducerAndActions.inputChanged)(lastAction));
 	    },
 	    updateFocusedSuggestion: function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
 	      dispatch((0, _reducerAndActions.updateFocusedSuggestion)(sectionIndex, suggestionIndex, value));
@@ -1631,8 +1635,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    revealSuggestions: function revealSuggestions() {
 	      dispatch((0, _reducerAndActions.revealSuggestions)());
 	    },
-	    closeSuggestions: function closeSuggestions() {
-	      dispatch((0, _reducerAndActions.closeSuggestions)());
+	    closeSuggestions: function closeSuggestions(lastAction) {
+	      dispatch((0, _reducerAndActions.closeSuggestions)(lastAction));
 	    }
 	  };
 	}
@@ -1647,6 +1651,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  _createClass(Autosuggest, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.suggestions !== this.props.suggestions) {
+	        var suggestions = nextProps.suggestions;
+	        var inputProps = nextProps.inputProps;
+	        var shouldRenderSuggestions = nextProps.shouldRenderSuggestions;
+	        var isCollapsed = nextProps.isCollapsed;
+	        var revealSuggestions = nextProps.revealSuggestions;
+	        var lastAction = nextProps.lastAction;
+	        var value = inputProps.value;
+
+	        if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter' && suggestions.length > 0 && shouldRenderSuggestions(value)) {
+	          revealSuggestions();
+	        }
+	      }
+	    }
+	  }, {
 	    key: 'getSuggestion',
 	    value: function getSuggestion(sectionIndex, suggestionIndex) {
 	      var _props = this.props;
@@ -1700,7 +1721,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var shouldRenderSuggestions = _props3.shouldRenderSuggestions;
 	      var value = inputProps.value;
 
-	      return shouldRenderSuggestions(value) && suggestions.length > 0;
+	      return suggestions.length > 0 && shouldRenderSuggestions(value);
 	    }
 	  }, {
 	    key: 'render',
@@ -1753,8 +1774,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        onChange: function onChange(event) {
 	          var value = event.target.value;
 
-	          inputChanged(shouldRenderSuggestions(value));
 	          _this2.maybeEmitOnChange(event, value, 'type');
+	          inputChanged('type');
 	        },
 	        onKeyDown: function onKeyDown(event, data) {
 	          switch (event.key) {
@@ -1781,7 +1802,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var focusedSuggestion = _this2.getFocusedSuggestion();
 
 	                if (focusedSuggestion !== null) {
-	                  closeSuggestions();
+	                  closeSuggestions('enter');
 	                  onSuggestionSelected(event, {
 	                    suggestion: focusedSuggestion,
 	                    suggestionValue: value,
@@ -1792,13 +1813,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	              }
 
 	            case 'Escape':
-	              if (valueBeforeUpDown !== null) {
+	              if (valueBeforeUpDown === null) {
+	                // Didn't interact with Up/Down
+	                if (isCollapsed) {
+	                  _this2.maybeEmitOnChange(event, '', 'escape');
+	                }
+	              } else {
+	                // Interacted with Up/Down
 	                _this2.maybeEmitOnChange(event, valueBeforeUpDown, 'escape');
-	              } else if (isCollapsed) {
-	                _this2.maybeEmitOnChange(event, '', 'escape');
 	              }
 
-	              closeSuggestions();
+	              closeSuggestions('escape');
 	              break;
 	          }
 
@@ -1831,7 +1856,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            method: 'click'
 	          });
 	          _this2.maybeEmitOnChange(event, suggestionValue, 'click');
-	          closeSuggestions();
+	          closeSuggestions('click');
 	          _this2.input.focus();
 	          _this2.justClickedOnSuggestion = false;
 	        }
@@ -1878,6 +1903,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  focusedSectionIndex: _react.PropTypes.number,
 	  focusedSuggestionIndex: _react.PropTypes.number,
 	  valueBeforeUpDown: _react.PropTypes.string,
+	  lastAction: _react.PropTypes.string,
 
 	  inputFocused: _react.PropTypes.func.isRequired,
 	  inputBlurred: _react.PropTypes.func.isRequired,

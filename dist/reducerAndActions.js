@@ -32,10 +32,10 @@ function inputBlurred() {
   };
 }
 
-function inputChanged(shouldRenderSuggestions) {
+function inputChanged(lastAction) {
   return {
     type: INPUT_CHANGED,
-    shouldRenderSuggestions: shouldRenderSuggestions
+    lastAction: lastAction
   };
 }
 
@@ -54,9 +54,10 @@ function revealSuggestions() {
   };
 }
 
-function closeSuggestions() {
+function closeSuggestions(lastAction) {
   return {
-    type: CLOSE_SUGGESTIONS
+    type: CLOSE_SUGGESTIONS,
+    lastAction: lastAction
   };
 }
 
@@ -80,7 +81,7 @@ function reducer(state, action) {
         focusedSectionIndex: null,
         focusedSuggestionIndex: null,
         valueBeforeUpDown: null,
-        isCollapsed: !action.shouldRenderSuggestions
+        lastAction: action.lastAction
       });
 
     case UPDATE_FOCUSED_SUGGESTION:
@@ -108,7 +109,8 @@ function reducer(state, action) {
         focusedSectionIndex: null,
         focusedSuggestionIndex: null,
         valueBeforeUpDown: null,
-        isCollapsed: true
+        isCollapsed: true,
+        lastAction: action.lastAction
       });
 
     default:

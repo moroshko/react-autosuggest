@@ -47,7 +47,8 @@ var AutosuggestContainer = (function (_Component) {
       isCollapsed: true,
       focusedSectionIndex: null,
       focusedSuggestionIndex: null,
-      valueBeforeUpDown: null
+      valueBeforeUpDown: null,
+      lastAction: null
     };
 
     _this.store = (0, _redux.createStore)(_reducerAndActions2.default, initialState);

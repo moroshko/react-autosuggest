@@ -134,7 +134,7 @@ describe('Autosuggest', () => {
       });
 
       it('value', () => {
-        expectInputValue('initial value');
+        expectInputValue('');
       });
     });
 
@@ -209,6 +209,11 @@ describe('Autosuggest', () => {
     it('should not show suggestions', () => {
       expectSuggestions([]);
     });
+
+    it('should clear the input when Escape is pressed', () => {
+      clickEscape();
+      expectInputValue('');
+    });
   });
 
   describe('when pressing Down', () => {
@@ -277,6 +282,34 @@ describe('Autosuggest', () => {
     });
   });
 
+  describe('when pressing Enter', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('p');
+    });
+
+    it('should hide suggestions if there is a focused suggestion', () => {
+      clickDown();
+      clickEnter();
+      expectSuggestions([]);
+    });
+
+    it('should not hide suggestions if there is no focused suggestion', () => {
+      clickEnter();
+      expectSuggestions(['Perl', 'PHP', 'Python']);
+    });
+  });
+
+  describe('when suggestion is clicked', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('p');
+      clickSuggestion(1);
+    });
+
+    it('should hide suggestions', () => {
+      expectSuggestions([]);
+    });
+  });
+
   describe('getSuggestionValue', () => {
     beforeEach(() => {
       getSuggestionValue.reset();
@@ -309,9 +342,9 @@ describe('Autosuggest', () => {
     });
 
     it('return value should be used to render suggestions', () => {
-      const suggestions = getSuggestions();
+      const firstSuggestion = getSuggestion(0);
 
-      expect(stripReactAttributes(suggestions[0].innerHTML)).to.equal('<strong>R</strong><span>uby</span>');
+      expect(stripReactAttributes(firstSuggestion.innerHTML)).to.equal('<strong>R</strong><span>uby</span>');
     });
 
     it('should be called once per suggestion', () => {

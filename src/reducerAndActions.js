@@ -18,10 +18,10 @@ export function inputBlurred() {
   };
 }
 
-export function inputChanged(shouldRenderSuggestions) {
+export function inputChanged(lastAction) {
   return {
     type: INPUT_CHANGED,
-    shouldRenderSuggestions
+    lastAction
   };
 }
 
@@ -40,9 +40,10 @@ export function revealSuggestions() {
   };
 }
 
-export function closeSuggestions() {
+export function closeSuggestions(lastAction) {
   return {
-    type: CLOSE_SUGGESTIONS
+    type: CLOSE_SUGGESTIONS,
+    lastAction
   };
 }
 
@@ -69,7 +70,7 @@ export default function reducer(state, action) {
         focusedSectionIndex: null,
         focusedSuggestionIndex: null,
         valueBeforeUpDown: null,
-        isCollapsed: !action.shouldRenderSuggestions
+        lastAction: action.lastAction
       };
 
     case UPDATE_FOCUSED_SUGGESTION: {
@@ -99,7 +100,8 @@ export default function reducer(state, action) {
         focusedSectionIndex: null,
         focusedSuggestionIndex: null,
         valueBeforeUpDown: null,
-        isCollapsed: true
+        isCollapsed: true,
+        lastAction: action.lastAction
       };
 
     default:
