@@ -68,9 +68,11 @@ export default class AutosuggestContainer extends Component {
   }
 
   render() {
-    const { multiSection, shouldRenderSuggestions, suggestions,
-            getSuggestionValue, renderSuggestion, renderSectionTitle,
-            getSectionSuggestions, inputProps, onSuggestionSelected, theme } = this.props;
+    const {
+      multiSection, shouldRenderSuggestions, suggestions, getSuggestionValue,
+      renderSuggestion, renderSectionTitle, getSectionSuggestions, inputProps,
+      onSuggestionSelected, theme
+    } = this.props;
 
     return (
       <Provider store={this.store}>

@@ -1744,6 +1744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var focusedSectionIndex = _props4.focusedSectionIndex;
 	      var focusedSuggestionIndex = _props4.focusedSuggestionIndex;
 	      var valueBeforeUpDown = _props4.valueBeforeUpDown;
+	      var lastAction = _props4.lastAction;
 	      var inputFocused = _props4.inputFocused;
 	      var inputBlurred = _props4.inputBlurred;
 	      var inputChanged = _props4.inputChanged;
