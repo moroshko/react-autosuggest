@@ -15,6 +15,12 @@
 
 [WAI-ARIA compliant][wai-aria] React autosuggest component.
 
+## Coming soon...
+
+Support for flux architecture, including redux.
+
+Check out the [redux examples](https://github.com/moroshko/react-autosuggest/tree/3.0/demo/src/components/App/components) and [Codepen playground][playground-3.0] for now.
+
 ## Live Examples
 
 * <a href="https://moroshko.github.io/react-autosuggest" target="_blank">Basic example</a><br>
@@ -25,7 +31,6 @@
 
 ## Features
 
-* **Coming soon:** support for flux architecture, including redux. Check out the [redux examples](https://github.com/moroshko/react-autosuggest/tree/3.0/demo/src/components/App/components) for now.
 * [WAI-ARIA accessible][wai-aria] (including ARIA attributes and keyboard interactions)
 * Mobile friendly
 * Supports [controlled](https://facebook.github.io/react/docs/forms.html#controlled-components) and  [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) state
@@ -476,3 +481,4 @@ npm test
 [event]: https://facebook.github.io/react/docs/events.html#syntheticevent
 [basic-example]: https://moroshko.github.io/react-autosuggest
 [multiple-sections]: https://moroshko.github.io/react-autosuggest/#Multiple%20sections
+[playground-3.0]: http://codepen.io/moroshko/pen/BjKmQL
