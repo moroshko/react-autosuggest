@@ -1815,7 +1815,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            case 'Escape':
 	              if (valueBeforeUpDown === null) {
 	                // Didn't interact with Up/Down
-	                if (isCollapsed) {
+	                if (!isOpen) {
 	                  _this2.maybeEmitOnChange(event, '', 'escape');
 	                }
 	              } else {

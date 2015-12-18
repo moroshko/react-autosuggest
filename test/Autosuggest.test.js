@@ -299,6 +299,21 @@ describe('Autosuggest', () => {
     });
   });
 
+  describe('when pressing Escape', () => {
+    it('should clear the input if suggestions are hidden and never been shown before', () => {
+      focusAndSetInputValue('z');
+      clickEscape();
+      expectInputValue('');
+    });
+
+    it('should clear the input if suggestions are hidden but were shown before', () => {
+      focusAndSetInputValue('p');
+      focusAndSetInputValue('pz');
+      clickEscape();
+      expectInputValue('');
+    });
+  });
+
   describe('when suggestion is clicked', () => {
     beforeEach(() => {
       focusAndSetInputValue('p');
