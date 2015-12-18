@@ -25,6 +25,10 @@
 * <a href="https://moroshko.github.io/react-autosuggest#debounced-example" target="_blank">Debounced example</a>
 * <a href="https://moroshko.github.io/react-autosuggest#caching-example" target="_blank">Caching example</a>
 
+## Playground
+
+[Codepen][playground]
+
 ## Features
 
 * [WAI-ARIA accessible][wai-aria] (including ARIA attributes and keyboard interactions)
@@ -478,6 +482,7 @@ npm test
 [multiple-sections]: https://moroshko.github.io/react-autosuggest#multiple-sections
 [async-example]: https://moroshko.github.io/react-autosuggest#async-example
 [caching-example]: https://moroshko.github.io/react-autosuggest#caching-example
+[playground]: http://codepen.io/moroshko/pen/BjKmQL
 
 ---
 
@@ -485,9 +490,7 @@ npm test
 
 * Examples:
   * No results
-  * Create list (remove selected item from suggestions)
   * Navigate on selection
-* Write tests
 * Write upgrade guide
 * Release 3.0
   * Update deps
