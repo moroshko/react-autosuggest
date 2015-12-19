@@ -1,5 +1,3 @@
-const Autosuggest = AutosuggestContainer.default;
-
 const languages = [
   {
     name: 'C',

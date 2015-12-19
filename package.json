@@ -2,7 +2,7 @@
   "name": "react-autosuggest",
   "version": "3.0.0",
   "description": "WAI-ARIA compliant React autosuggest component",
-  "main": "dist/AutosuggestContainer.js",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/moroshko/react-autosuggest.git"
@@ -17,7 +17,7 @@
     "demo-dist": "rm -rf demo/dist && mkdir demo/dist && npm run copy-static-files && webpack --config webpack.gh-pages.config.js",
     "standalone": "webpack --config webpack.standalone.config.js",
     "standalone-demo": "webpack --config webpack.standalone-demo.config.js",
-    "build": "npm run lint && npm test && npm run dist && npm run standalone",
+    "build": "npm run lint && npm test && npm run dist && npm run standalone && npm run standalone-demo",
     "gh-pages-build": "npm run lint && npm test && npm run demo-dist",
     "deploy": "echo 'Not yet'"
   },

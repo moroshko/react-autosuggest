@@ -2,12 +2,12 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = [{
-  entry: './src/AutosuggestContainer.js',
+  entry: './src/index.js',
 
   output: {
     filename: './dist/standalone/autosuggest.js',
     libraryTarget: 'umd',
-    library: 'AutosuggestContainer'
+    library: 'Autosuggest'
   },
 
   module: {
@@ -24,12 +24,12 @@ module.exports = [{
     react: 'React'
   }
 }, {
-  entry: './src/AutosuggestContainer.js',
+  entry: './src/index.js',
 
   output: {
     filename: './dist/standalone/autosuggest.min.js',
     libraryTarget: 'umd',
-    library: 'AutosuggestContainer'
+    library: 'Autosuggest'
   },
 
   module: {
