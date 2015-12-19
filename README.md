@@ -481,4 +481,4 @@ npm test
 [event]: https://facebook.github.io/react/docs/events.html#syntheticevent
 [basic-example]: https://moroshko.github.io/react-autosuggest
 [multiple-sections]: https://moroshko.github.io/react-autosuggest/#Multiple%20sections
-[playground-3.0]: http://codepen.io/moroshko/pen/BjKmQL
+[playground-3.0]: http://codepen.io/moroshko/pen/LGNJMy
