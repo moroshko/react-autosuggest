@@ -482,7 +482,7 @@ npm test
 [multiple-sections]: https://moroshko.github.io/react-autosuggest#multiple-sections
 [async-example]: https://moroshko.github.io/react-autosuggest#async-example
 [caching-example]: https://moroshko.github.io/react-autosuggest#caching-example
-[playground]: http://codepen.io/moroshko/pen/BjKmQL
+[playground]: http://codepen.io/moroshko/pen/LGNJMy
 
 ---
 
