@@ -1,136 +1,61 @@
 import React from 'react';
-import SyntheticEvent from 'react/lib/SyntheticEvent';
 import TestUtils from 'react-addons-test-utils';
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import { stripReactAttributes } from './utils';
-import AppWithAutosuggest, {
+import { expect } from 'chai';
+import {
+  init,
+  eventInstance,
+  getInnerHTML,
+  expectInputAttribute,
+  expectInputValue,
+  getSuggestionsContainer,
+  getSuggestions,
+  getSuggestion,
+  expectSuggestions,
+  expectFocusedSuggestion,
+  mouseEnterSuggestion,
+  mouseLeaveSuggestion,
+  clickSuggestion,
+  focusInput,
+  blurInput,
+  clickEscape,
+  clickEnter,
+  clickDown,
+  clickUp,
+  focusAndSetInputValue
+} from './helpers';
+import AutosuggestWithPlainList, {
   getSuggestionValue,
   renderSuggestion,
   onChange,
   shouldRenderSuggestions,
   onSuggestionSelected
-} from './AppWithAutosuggest';
-
-chai.use(sinonChai);
-
-const { Simulate } = TestUtils;
-const eventInstance = sinon.match.instanceOf(SyntheticEvent);
-
-let app, container, input;
-
-function expectInputValue(expectedValue) {
-  expect(input.value).to.equal(expectedValue);
-}
-
-function getSuggestionsContainer() {
-  return TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__suggestions-container');
-}
-
-function getSuggestions() {
-  return TestUtils.scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__item');
-}
-
-function getSuggestion(suggestionIndex) {
-  const suggestions = getSuggestions();
-
-  if (suggestionIndex >= suggestions.length) {
-    throw Error(`Cannot find suggestion #${suggestionIndex}`);
-    return null;
-  }
-
-  return suggestions[suggestionIndex];
-};
-
-function expectSuggestions(expectedSuggestions) {
-  const suggestions = getSuggestions().map(suggestion => suggestion.textContent);
-
-  expect(suggestions).to.deep.equal(expectedSuggestions);
-}
-
-function expectFocusedSuggestion(suggestion) {
-  const focusedSuggestions = TestUtils
-    .scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__item--focused');
-
-  if (suggestion === null) {
-    expect(focusedSuggestions).to.have.length(0);
-  } else {
-    expect(focusedSuggestions).to.have.length(1);
-    expect(focusedSuggestions[0].textContent).to.equal(suggestion);
-  }
-}
-
-function clickSuggestion(suggestionIndex) {
-  mouseEnterSuggestion(suggestionIndex);
-  Simulate.click(getSuggestion(suggestionIndex));
-}
-
-function mouseEnterSuggestion(suggestionIndex) {
-  Simulate.mouseEnter(getSuggestion(suggestionIndex));
-}
-
-function mouseLeaveSuggestion(suggestionIndex) {
-  Simulate.mouseLeave(getSuggestion(suggestionIndex));
-}
-
-function focusInput() {
-  Simulate.focus(input);
-}
-
-function blurInput() {
-  Simulate.blur(input);
-}
-
-function clickEscape() {
-  Simulate.keyDown(input, { key: 'Escape' });
-}
-
-function clickEnter() {
-  Simulate.keyDown(input, { key: 'Enter' });
-}
-
-function clickDown(count = 1) {
-  for (let i = 0; i < count; i++) {
-    Simulate.keyDown(input, { key: 'ArrowDown' });
-  }
-}
-
-function clickUp(count = 1) {
-  for (let i = 0; i < count; i++) {
-    Simulate.keyDown(input, { key: 'ArrowUp' });
-  }
-}
-
-function focusAndSetInputValue(value) {
-  focusInput();
-  input.value = value;
-  Simulate.change(input);
-}
+} from './AutosuggestWithPlainList';
 
 describe('Autosuggest', () => {
   beforeEach(() => {
-    app = TestUtils.renderIntoDocument(React.createElement(AppWithAutosuggest));
-    container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
-    input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
+    const app = TestUtils.renderIntoDocument(React.createElement(AutosuggestWithPlainList));
+    const container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
+    const input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
+
+    init({ app, container, input });
   });
 
   describe('initially', () => {
     describe('should render an input and set its:', () => {
       it('id', () => {
-        expect(input.id).to.equal('my-awesome-autosuggest');
+        expectInputAttribute('id', 'my-awesome-autosuggest');
       });
 
-      it('className', () => {
-        expect(input.className).to.equal('react-autosuggest__input');
+      it('class', () => {
+        expectInputAttribute('class', 'react-autosuggest__input');
       });
 
       it('placeholder', () => {
-        expect(input.getAttribute('placeholder')).to.equal('Type a programming language');
+        expectInputAttribute('placeholder', 'Type a programming language');
       });
 
       it('type', () => {
-        expect(input.type).to.equal('search');
+        expectInputAttribute('type', 'search');
       });
 
       it('value', () => {
@@ -359,7 +284,7 @@ describe('Autosuggest', () => {
     it('return value should be used to render suggestions', () => {
       const firstSuggestion = getSuggestion(0);
 
-      expect(stripReactAttributes(firstSuggestion.innerHTML)).to.equal('<strong>R</strong><span>uby</span>');
+      expect(getInnerHTML(firstSuggestion)).to.equal('<strong>R</strong><span>uby</span>');
     });
 
     it('should be called once per suggestion', () => {
@@ -538,25 +463,25 @@ describe('Autosuggest', () => {
     describe('initially', () => {
       describe('should set input\'s', () => {
         it('role to "combobox"', () => {
-          expect(input.getAttribute('role')).to.equal('combobox');
+          expectInputAttribute('role', 'combobox');
         });
 
         it('aria-autocomplete to "list"', () => {
-          expect(input.getAttribute('aria-autocomplete')).to.equal('list');
+          expectInputAttribute('aria-autocomplete', 'list');
         });
 
         it('aria-expanded to "false"', () => {
-          expect(input.getAttribute('aria-expanded')).to.equal('false');
+          expectInputAttribute('aria-expanded', 'false');
         });
 
         it('aria-owns', () => {
-          expect(input.getAttribute('aria-owns')).to.equal('react-whatever-1');
+          expectInputAttribute('aria-owns', 'react-whatever-1');
         });
       });
 
       describe('should not set input\'s', () => {
         it('aria-activedescendant', () => {
-          expect(input.getAttribute('aria-activedescendant')).to.be.null;
+          expectInputAttribute('aria-activedescendant', null);
         });
       });
     });
@@ -567,27 +492,27 @@ describe('Autosuggest', () => {
       });
 
       it('input\'s aria-expanded should be "true"', () => {
-        expect(input.getAttribute('aria-expanded')).to.equal('true');
+        expectInputAttribute('aria-expanded', 'true');
       });
 
       it('input\'s aria-owns should be equal to suggestions container id', () => {
-        expect(input.getAttribute('aria-owns')).to.equal(getSuggestionsContainer().id);
+        expectInputAttribute('aria-owns', getSuggestionsContainer().id);
       });
 
       it('input\'s aria-activedescendant should be equal to the focused suggestion id when using keyboard', () => {
         clickDown();
-        expect(input.getAttribute('aria-activedescendant')).to.equal(getSuggestion(0).id);
+        expectInputAttribute('aria-activedescendant', getSuggestion(0).id);
         clickDown();
-        expect(input.getAttribute('aria-activedescendant')).to.equal(getSuggestion(1).id);
+        expectInputAttribute('aria-activedescendant', getSuggestion(1).id);
         clickDown();
-        expect(input.getAttribute('aria-activedescendant')).to.be.null;
+        expectInputAttribute('aria-activedescendant', null);
       });
 
       it('input\'s aria-activedescendant should be equal to the focused suggestion id when using mouse', () => {
         mouseEnterSuggestion(0);
-        expect(input.getAttribute('aria-activedescendant')).to.equal(getSuggestion(0).id);
+        expectInputAttribute('aria-activedescendant', getSuggestion(0).id);
         mouseLeaveSuggestion(0);
-        expect(input.getAttribute('aria-activedescendant')).to.be.null;
+        expectInputAttribute('aria-activedescendant', null);
       });
 
       it('suggestions container role should be "listbox"', () => {

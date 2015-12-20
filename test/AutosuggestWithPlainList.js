@@ -53,7 +53,7 @@ export const onSuggestionSelected = sinon.spy((event, { suggestionValue }) => {
   });
 });
 
-export default class AppWithAutosuggest extends Component {
+export default class AutosuggestWithPlainList extends Component {
   constructor() {
     super();
 
