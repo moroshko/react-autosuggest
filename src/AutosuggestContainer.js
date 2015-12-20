@@ -4,6 +4,47 @@ import { Provider } from 'react-redux';
 import reducer from './reducerAndActions';
 import Autosuggest from './Autosuggest';
 
+const defaultTheme = {
+  container: 'react-autosuggest__container',
+  'container--open': 'react-autosuggest__container--open',
+  input: 'react-autosuggest__input',
+  'suggestions-container': 'react-autosuggest__suggestions-container',
+  suggestion: 'react-autosuggest__suggestion',
+  'suggestion--focused': 'react-autosuggest__suggestion--focused',
+  'section-container': 'react-autosuggest__section-container',
+  'section-title': 'react-autosuggest__section-title',
+  'section-suggestions-container': 'react-autosuggest__section-suggestions-container'
+};
+
+function mapToAutowhateverTheme(theme) {
+  var result = {};
+
+  for (const key in theme) {
+    switch (key) {
+      case 'suggestions-container':
+        result['items-container'] = theme[key];
+        break;
+
+      case 'suggestion':
+        result['item'] = theme[key];
+        break;
+
+      case 'suggestion--focused':
+        result['item--focused'] = theme[key];
+        break;
+
+      case 'section-suggestions-container':
+        result['section-items-container'] = theme[key];
+        break;
+
+      default:
+        result[key] = theme[key];
+    }
+  }
+
+  return result;
+}
+
 export default class AutosuggestContainer extends Component {
   static propTypes = {
     suggestions: PropTypes.array.isRequired,
@@ -25,7 +66,15 @@ export default class AutosuggestContainer extends Component {
     multiSection: PropTypes.bool,
     renderSectionTitle: PropTypes.func,
     getSectionSuggestions: PropTypes.func,
-    theme: PropTypes.object
+    theme: (props, propName, componentName) => {
+      const theme = props[propName];
+
+      for (const key in theme) {
+        if (!(key in defaultTheme)) {
+          throw new Error(`'${key}' is not a valid property in 'theme'. Valid properties are:\n\n${Object.keys(defaultTheme).join('\n')}\n\n`);
+        }
+      }
+    }
   };
 
   static defaultProps = {
@@ -38,23 +87,13 @@ export default class AutosuggestContainer extends Component {
     getSectionSuggestions() {
       throw new Error('`getSectionSuggestions` must be provided');
     },
-    theme: {
-      container: 'react-autosuggest__container',
-      'container--open': 'react-autosuggest__container--open',
-      input: 'react-autosuggest__input',
-      'items-container': 'react-autosuggest__suggestions-container',
-      item: 'react-autosuggest__item',
-      'item--focused': 'react-autosuggest__item--focused',
-      'section-container': 'react-autosuggest__section-container',
-      'section-title': 'react-autosuggest__section-title',
-      'section-items-container': 'react-autosuggest__section-suggestions-container'
-    }
+    theme: defaultTheme
   };
 
   constructor(props) {
     super(props);
 
-    const { shouldRenderSuggestions, suggestions, inputProps } = props;
+    const { shouldRenderSuggestions, suggestions, inputProps, theme } = props;
     const initialState = {
       isFocused: false,
       isCollapsed: true,
@@ -65,13 +104,14 @@ export default class AutosuggestContainer extends Component {
     };
 
     this.store = createStore(reducer, initialState);
+    this.theme = mapToAutowhateverTheme(theme);
   }
 
   render() {
     const {
       multiSection, shouldRenderSuggestions, suggestions, getSuggestionValue,
       renderSuggestion, renderSectionTitle, getSectionSuggestions, inputProps,
-      onSuggestionSelected, theme
+      onSuggestionSelected
     } = this.props;
 
     return (
@@ -85,7 +125,7 @@ export default class AutosuggestContainer extends Component {
                      getSectionSuggestions={getSectionSuggestions}
                      inputProps={inputProps}
                      onSuggestionSelected={onSuggestionSelected}
-                     theme={theme} />
+                     theme={this.theme} />
       </Provider>
     );
   }

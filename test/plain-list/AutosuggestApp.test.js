@@ -46,10 +46,6 @@ describe('Plain list Autosuggest', () => {
         expectInputAttribute('id', 'my-awesome-autosuggest');
       });
 
-      it('class', () => {
-        expectInputAttribute('class', 'react-autosuggest__input');
-      });
-
       it('placeholder', () => {
         expectInputAttribute('placeholder', 'Type a programming language');
       });
@@ -281,21 +277,21 @@ describe('Plain list Autosuggest', () => {
       focusAndSetInputValue('r');
     });
 
-    it('return value should be used to render suggestions', () => {
-      const firstSuggestion = getSuggestion(0);
-
-      expect(getInnerHTML(firstSuggestion)).to.equal('<strong>R</strong><span>uby</span>');
+    it('should be called with the right parameters', () => {
+      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, 'r', null);
+      renderSuggestion.reset();
+      clickDown();
+      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, 'Ruby', 'r');
     });
 
     it('should be called once per suggestion', () => {
       expect(renderSuggestion).to.have.been.calledOnce;
     });
 
-    it('should be called with the right parameters', () => {
-      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, 'r', null);
-      renderSuggestion.reset();
-      clickDown();
-      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, 'Ruby', 'r');
+    it('return value should be used to render suggestions', () => {
+      const firstSuggestion = getSuggestion(0);
+
+      expect(getInnerHTML(firstSuggestion)).to.equal('<strong>R</strong><span>uby</span>');
     });
   });
 

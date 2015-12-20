@@ -39,12 +39,12 @@
   z-index: 2;
 }
 
-.react-autosuggest__item {
+.react-autosuggest__suggestion {
   cursor: pointer;
   padding: 10px 20px;
 }
 
-.react-autosuggest__item--focused {
+.react-autosuggest__suggestion--focused {
   background-color: #ddd;
 }
 

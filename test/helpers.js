@@ -25,8 +25,16 @@ export function getInnerHTML(element) {
   return stripReactAttributes(element.innerHTML);
 }
 
+export function expectContainerAttribute(attributeName, expectedValue) {
+  expect(data.container.getAttribute(attributeName)).to.equal(expectedValue);
+}
+
 export function expectInputAttribute(attributeName, expectedValue) {
   expect(data.input.getAttribute(attributeName)).to.equal(expectedValue);
+}
+
+export function expectSuggestionsContainerAttribute(attributeName, expectedValue) {
+  expect(getSuggestionsContainer().getAttribute(attributeName)).to.equal(expectedValue);
 }
 
 export function expectInputValue(expectedValue) {
@@ -38,7 +46,7 @@ export function getSuggestionsContainer() {
 }
 
 export function getSuggestions() {
-  return TestUtils.scryRenderedDOMComponentsWithClass(data.app, 'react-autosuggest__item');
+  return TestUtils.scryRenderedDOMComponentsWithClass(data.app, 'react-autosuggest__suggestion');
 }
 
 export function getSuggestion(suggestionIndex) {
@@ -67,16 +75,19 @@ export function getTitle(titleIndex) {
   return titles[titleIndex];
 };
 
+// See: https://github.com/facebook/react/issues/4692#issuecomment-157803622
+/*
 export function getSuggestionsBySectionIndex(sectionIndex) {
-  const sectionsSuggestions = TestUtils.scryRenderedDOMComponentsWithClass(data.app, 'react-autosuggest__section-suggestions-container');
+  const sections = TestUtils.scryRenderedDOMComponentsWithClass(data.app, 'react-autosuggest__section-suggestions-container');
 
-  if (sectionIndex >= sectionsSuggestions.length) {
-    throw Error(`Cannot find section #${sectionIndex} suggestions`);
+  if (sectionIndex >= sections.length) {
+    throw Error(`Cannot find section #${sectionIndex}`);
     return null;
   }
 
-  return sectionsSuggestions[sectionIndex];
+  return TestUtils.scryRenderedDOMComponentsWithClass(sections[sectionIndex], 'react-autosuggest__suggestion');
 }
+*/
 
 export function expectSuggestions(expectedSuggestions) {
   const suggestions = getSuggestions().map(suggestion => suggestion.textContent);
@@ -86,7 +97,7 @@ export function expectSuggestions(expectedSuggestions) {
 
 export function expectFocusedSuggestion(suggestion) {
   const focusedSuggestions = TestUtils
-    .scryRenderedDOMComponentsWithClass(data.app, 'react-autosuggest__item--focused');
+    .scryRenderedDOMComponentsWithClass(data.app, 'react-autosuggest__suggestion--focused');
 
   if (suggestion === null) {
     expect(focusedSuggestions).to.have.length(0);

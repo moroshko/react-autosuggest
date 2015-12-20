@@ -373,9 +373,9 @@ For example, to style the Autosuggest using CSS Modules, do:
 
 .container { ... }
 .input { ... }
-.items-container { ... }
-.item { ... }
-.item--focused { ... }
+.suggestions-container { ... }
+.suggestion { ... }
+.suggestion--focused { ... }
 ...
 ```
 
@@ -390,15 +390,15 @@ When not specified, `theme` defaults to:
 
 ```js
 {
-  'container':               'react-autosuggest__container',
-  'container--open':         'react-autosuggest__container--open',
-  'input':                   'react-autosuggest__input',
-  'items-container':         'react-autosuggest__suggestions-container',
-  'item':                    'react-autosuggest__item',
-  'item--focused':           'react-autosuggest__item--focused',
-  'section-container':       'react-autosuggest__section-container',
-  'section-title':           'react-autosuggest__section-title',
-  'section-items-container': 'react-autosuggest__section-suggestions-container'
+  'container':                     'react-autosuggest__container',
+  'container--open':               'react-autosuggest__container--open',
+  'input':                         'react-autosuggest__input',
+  'suggestions-container':         'react-autosuggest__suggestions-container',
+  'suggestion':                    'react-autosuggest__suggestion',
+  'suggestion--focused':           'react-autosuggest__suggestion--focused',
+  'section-container':             'react-autosuggest__section-container',
+  'section-title':                 'react-autosuggest__section-title',
+  'section-suggestions-container': 'react-autosuggest__section-suggestions-container'
 }
 ```
 
@@ -406,55 +406,58 @@ An example of styling an Autosuggest using CSS Modules can be found [here](https
 
 The following diagrams illustrate how `theme` is structured.
 
-##### No sections
+##### Plain list
 
-    +--| container |-----------------+
-    |                                |
-    |  +--| input |---------------+  |
-    |  |                          |  |
-    |  +--------------------------+  |
-    |                                |
-    |  +--| items-container |-----+  |
-    |  |                          |  |
-    |  |  +--| item |----------+  |  |
-    |  |  |                    |  |  |
-    |  |  +--------------------+  |  |
-    |  |                          |  |
-    |  +--------------------------+  |
-    |                                |
-    +--------------------------------+
-
+    +--| container |-----------------------+
+    |                                      |
+    |  +--| input |---------------------+  |
+    |  |                                |  |
+    |  +--------------------------------+  |
+    |                                      |
+    |  +--| suggestions-container |-----+  |
+    |  |                                |  |
+    |  |  +--| suggestion |----------+  |  |
+    |  |  |                          |  |  |
+    |  |  +--------------------------+  |  |
+    |  |                                |  |
+    |  +--------------------------------+  |
+    |                                      |
+    +--------------------------------------+
 
 ##### Multiple sections
 
-
-    +--| container |----------------------------------+
-    |                                                 |
-    |  +--| input |--------------------------------+  |
-    |  |                                           |  |
-    |  +-------------------------------------------+  |
-    |                                                 |
-    |  +--| items-container |----------------------+  |
-    |  |                                           |  |
-    |  |  +--| section-container |--------------+  |  |
-    |  |  |                                     |  |  |
-    |  |  |  +--| section-title |------------+  |  |  |
-    |  |  |  |                               |  |  |  |
-    |  |  |  +-------------------------------+  |  |  |
-    |  |  |                                     |  |  |
-    |  |  |  +--| section-items-container |--+  |  |  |
-    |  |  |  |                               |  |  |  |
-    |  |  |  |  +--| item |---------------+  |  |  |  |
-    |  |  |  |  |                         |  |  |  |  |
-    |  |  |  |  +-------------------------+  |  |  |  |
-    |  |  |  |                               |  |  |  |
-    |  |  |  +-------------------------------+  |  |  |
-    |  |  |                                     |  |  |
-    |  |  +-------------------------------------+  |  |
-    |  |                                           |  |
-    |  +-------------------------------------------+  |
-    |                                                 |
-    +-------------------------------------------------+
+    +--| container |----------------------------------------+
+    |                                                       |
+    |  +--| input |--------------------------------------+  |
+    |  |                                                 |  |
+    |  +-------------------------------------------------+  |
+    |                                                       |
+    |  +--| suggestions-container |----------------------+  |
+    |  |                                                 |  |
+    |  |  +--| section-container |--------------------+  |  |
+    |  |  |                                           |  |  |
+    |  |  |  +--| section-title |------------------+  |  |  |
+    |  |  |  |                                     |  |  |  |
+    |  |  |  +-------------------------------------+  |  |  |
+    |  |  |                                           |  |  |
+    |  |  |  +--| section-suggestions-container |--+  |  |  |
+    |  |  |  |                                     |  |  |  |
+    |  |  |  |  +--| suggestion |---------------+  |  |  |  |
+    |  |  |  |  |                               |  |  |  |  |
+    |  |  |  |  +-------------------------------+  |  |  |  |
+    |  |  |  |                                     |  |  |  |
+    |  |  |  +-------------------------------------+  |  |  |
+    |  |  |                                           |  |  |
+    |  |  +-------------------------------------------+  |  |
+    |  |                                                 |  |
+    |  |  +--| section-container |--------------------+  |  |
+    |  |  |                                           |  |  |
+    |  |  |  ...                                      |  |  |
+    |  |  |                                           |  |  |
+    |  |  +-------------------------------------------+  |  |
+    |  +-------------------------------------------------+  |
+    |                                                       |
+    +-------------------------------------------------------+
 
 ## Development
 

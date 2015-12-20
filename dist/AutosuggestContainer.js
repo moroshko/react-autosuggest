@@ -30,6 +30,47 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var defaultTheme = {
+  container: 'react-autosuggest__container',
+  'container--open': 'react-autosuggest__container--open',
+  input: 'react-autosuggest__input',
+  'suggestions-container': 'react-autosuggest__suggestions-container',
+  suggestion: 'react-autosuggest__suggestion',
+  'suggestion--focused': 'react-autosuggest__suggestion--focused',
+  'section-container': 'react-autosuggest__section-container',
+  'section-title': 'react-autosuggest__section-title',
+  'section-suggestions-container': 'react-autosuggest__section-suggestions-container'
+};
+
+function mapToAutowhateverTheme(theme) {
+  var result = {};
+
+  for (var key in theme) {
+    switch (key) {
+      case 'suggestions-container':
+        result['items-container'] = theme[key];
+        break;
+
+      case 'suggestion':
+        result['item'] = theme[key];
+        break;
+
+      case 'suggestion--focused':
+        result['item--focused'] = theme[key];
+        break;
+
+      case 'section-suggestions-container':
+        result['section-items-container'] = theme[key];
+        break;
+
+      default:
+        result[key] = theme[key];
+    }
+  }
+
+  return result;
+}
+
 var AutosuggestContainer = (function (_Component) {
   _inherits(AutosuggestContainer, _Component);
 
@@ -41,6 +82,7 @@ var AutosuggestContainer = (function (_Component) {
     var shouldRenderSuggestions = props.shouldRenderSuggestions;
     var suggestions = props.suggestions;
     var inputProps = props.inputProps;
+    var theme = props.theme;
 
     var initialState = {
       isFocused: false,
@@ -52,6 +94,7 @@ var AutosuggestContainer = (function (_Component) {
     };
 
     _this.store = (0, _redux.createStore)(_reducerAndActions2.default, initialState);
+    _this.theme = mapToAutowhateverTheme(theme);
     return _this;
   }
 
@@ -68,7 +111,6 @@ var AutosuggestContainer = (function (_Component) {
       var getSectionSuggestions = _props.getSectionSuggestions;
       var inputProps = _props.inputProps;
       var onSuggestionSelected = _props.onSuggestionSelected;
-      var theme = _props.theme;
 
       return _react2.default.createElement(
         _reactRedux.Provider,
@@ -82,7 +124,7 @@ var AutosuggestContainer = (function (_Component) {
           getSectionSuggestions: getSectionSuggestions,
           inputProps: inputProps,
           onSuggestionSelected: onSuggestionSelected,
-          theme: theme })
+          theme: this.theme })
       );
     }
   }]);
@@ -110,7 +152,15 @@ AutosuggestContainer.propTypes = {
   multiSection: _react.PropTypes.bool,
   renderSectionTitle: _react.PropTypes.func,
   getSectionSuggestions: _react.PropTypes.func,
-  theme: _react.PropTypes.object
+  theme: function theme(props, propName, componentName) {
+    var theme = props[propName];
+
+    for (var key in theme) {
+      if (!(key in defaultTheme)) {
+        throw new Error('\'' + key + '\' is not a valid property in \'theme\'. Valid properties are:\n\n' + Object.keys(defaultTheme).join('\n') + '\n\n');
+      }
+    }
+  }
 };
 AutosuggestContainer.defaultProps = {
   shouldRenderSuggestions: function shouldRenderSuggestions(value) {
@@ -125,16 +175,6 @@ AutosuggestContainer.defaultProps = {
     throw new Error('`getSectionSuggestions` must be provided');
   },
 
-  theme: {
-    container: 'react-autosuggest__container',
-    'container--open': 'react-autosuggest__container--open',
-    input: 'react-autosuggest__input',
-    'items-container': 'react-autosuggest__suggestions-container',
-    item: 'react-autosuggest__item',
-    'item--focused': 'react-autosuggest__item--focused',
-    'section-container': 'react-autosuggest__section-container',
-    'section-title': 'react-autosuggest__section-title',
-    'section-items-container': 'react-autosuggest__section-suggestions-container'
-  }
+  theme: defaultTheme
 };
 exports.default = AutosuggestContainer;
