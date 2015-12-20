@@ -52,6 +52,32 @@ export function getSuggestion(suggestionIndex) {
   return suggestions[suggestionIndex];
 };
 
+export function getTitles() {
+  return TestUtils.scryRenderedDOMComponentsWithClass(data.app, 'react-autosuggest__section-title');
+}
+
+export function getTitle(titleIndex) {
+  const titles = getTitles();
+
+  if (titleIndex >= titles.length) {
+    throw Error(`Cannot find title #${titleIndex}`);
+    return null;
+  }
+
+  return titles[titleIndex];
+};
+
+export function getSuggestionsBySectionIndex(sectionIndex) {
+  const sectionsSuggestions = TestUtils.scryRenderedDOMComponentsWithClass(data.app, 'react-autosuggest__section-suggestions-container');
+
+  if (sectionIndex >= sectionsSuggestions.length) {
+    throw Error(`Cannot find section #${sectionIndex} suggestions`);
+    return null;
+  }
+
+  return sectionsSuggestions[sectionIndex];
+}
+
 export function expectSuggestions(expectedSuggestions) {
   const suggestions = getSuggestions().map(suggestion => suggestion.textContent);
 

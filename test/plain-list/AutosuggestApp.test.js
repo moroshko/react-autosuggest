@@ -22,18 +22,18 @@ import {
   clickDown,
   clickUp,
   focusAndSetInputValue
-} from './helpers';
-import AutosuggestWithPlainList, {
+} from '../helpers';
+import AutosuggestApp, {
   getSuggestionValue,
   renderSuggestion,
   onChange,
   shouldRenderSuggestions,
   onSuggestionSelected
-} from './AutosuggestWithPlainList';
+} from './AutosuggestApp';
 
-describe('Autosuggest', () => {
+describe('Plain list Autosuggest', () => {
   beforeEach(() => {
-    const app = TestUtils.renderIntoDocument(React.createElement(AutosuggestWithPlainList));
+    const app = TestUtils.renderIntoDocument(React.createElement(AutosuggestApp));
     const container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
     const input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
 
