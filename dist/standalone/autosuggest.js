@@ -143,11 +143,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AutosuggestContainer).call(this, props));
 
-	    var shouldRenderSuggestions = props.shouldRenderSuggestions;
-	    var suggestions = props.suggestions;
-	    var inputProps = props.inputProps;
-	    var theme = props.theme;
-
 	    var initialState = {
 	      isFocused: false,
 	      isCollapsed: true,
@@ -158,7 +153,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    _this.store = (0, _redux.createStore)(_reducerAndActions2.default, initialState);
-	    _this.theme = mapToAutowhateverTheme(theme);
+	    _this.theme = mapToAutowhateverTheme(_this.props.theme);
 	    return _this;
 	  }
 
@@ -200,7 +195,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  suggestions: _react.PropTypes.array.isRequired,
 	  getSuggestionValue: _react.PropTypes.func.isRequired,
 	  renderSuggestion: _react.PropTypes.func.isRequired,
-	  inputProps: function inputProps(props, propName, componentName) {
+	  inputProps: function inputProps(props, propName) {
 	    var inputProps = props[propName];
 
 	    if (!('value' in inputProps)) {
@@ -216,7 +211,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  multiSection: _react.PropTypes.bool,
 	  renderSectionTitle: _react.PropTypes.func,
 	  getSectionSuggestions: _react.PropTypes.func,
-	  theme: function theme(props, propName, componentName) {
+	  theme: function theme(props, propName) {
 	    var theme = props[propName];
 
 	    for (var key in theme) {
@@ -464,6 +459,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var fnToString = function fnToString(fn) {
 	  return Function.prototype.toString.call(fn);
 	};
+	var objStringValue = fnToString(Object);
 
 	/**
 	 * @param {any} obj The object to inspect.
@@ -483,7 +479,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var constructor = proto.constructor;
 
-	  return typeof constructor === 'function' && constructor instanceof constructor && fnToString(constructor) === fnToString(Object);
+	  return typeof constructor === 'function' && constructor instanceof constructor && fnToString(constructor) === objStringValue;
 	}
 
 	module.exports = exports['default'];
@@ -501,17 +497,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createStore = __webpack_require__(4);
 
-	var _utilsIsPlainObject = __webpack_require__(5);
+	var _isPlainObject = __webpack_require__(5);
 
-	var _utilsIsPlainObject2 = _interopRequireDefault(_utilsIsPlainObject);
+	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-	var _utilsMapValues = __webpack_require__(8);
+	var _mapValues = __webpack_require__(8);
 
-	var _utilsMapValues2 = _interopRequireDefault(_utilsMapValues);
+	var _mapValues2 = _interopRequireDefault(_mapValues);
 
-	var _utilsPick = __webpack_require__(9);
+	var _pick = __webpack_require__(9);
 
-	var _utilsPick2 = _interopRequireDefault(_utilsPick);
+	var _pick2 = _interopRequireDefault(_pick);
 
 	/* eslint-disable no-console */
 
@@ -530,7 +526,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return 'Store does not have a valid reducer. Make sure the argument passed ' + 'to combineReducers is an object whose values are reducers.';
 	  }
 
-	  if (!_utilsIsPlainObject2['default'](inputState)) {
+	  if (!_isPlainObject2['default'](inputState)) {
 	    return 'The ' + argumentName + ' has unexpected type of "' + ({}).toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] + '". Expected argument to be an object with the following ' + ('keys: "' + reducerKeys.join('", "') + '"');
 	  }
 
@@ -577,7 +573,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	function combineReducers(reducers) {
-	  var finalReducers = _utilsPick2['default'](reducers, function (val) {
+	  var finalReducers = _pick2['default'](reducers, function (val) {
 	    return typeof val === 'function';
 	  });
 	  var sanityError;
@@ -588,7 +584,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    sanityError = e;
 	  }
 
-	  var defaultState = _utilsMapValues2['default'](finalReducers, function () {
+	  var defaultState = _mapValues2['default'](finalReducers, function () {
 	    return undefined;
 	  });
 
@@ -600,7 +596,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    var hasChanged = false;
-	    var finalState = _utilsMapValues2['default'](finalReducers, function (reducer, key) {
+	    var finalState = _mapValues2['default'](finalReducers, function (reducer, key) {
 	      var previousStateForKey = state[key];
 	      var nextStateForKey = reducer(previousStateForKey, action);
 	      if (typeof nextStateForKey === 'undefined') {
@@ -785,9 +781,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _utilsMapValues = __webpack_require__(8);
+	var _mapValues = __webpack_require__(8);
 
-	var _utilsMapValues2 = _interopRequireDefault(_utilsMapValues);
+	var _mapValues2 = _interopRequireDefault(_mapValues);
 
 	function bindActionCreator(actionCreator, dispatch) {
 	  return function () {
@@ -823,11 +819,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  if (typeof actionCreators !== 'object' || actionCreators === null || actionCreators === undefined) {
-	    // eslint-disable-line no-eq-null
 	    throw new Error('bindActionCreators expected an object or a function, instead received ' + (actionCreators === null ? 'null' : typeof actionCreators) + '. ' + 'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?');
 	  }
 
-	  return _utilsMapValues2['default'](actionCreators, function (actionCreator) {
+	  return _mapValues2['default'](actionCreators, function (actionCreator) {
 	    return bindActionCreator(actionCreator, dispatch);
 	  });
 	}
@@ -938,15 +933,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 
-	function _interopRequire(obj) { return obj && obj.__esModule ? obj['default'] : obj; }
+	var _Provider = __webpack_require__(14);
 
-	var _componentsProvider = __webpack_require__(14);
+	Object.defineProperty(exports, 'Provider', {
+	  enumerable: true,
+	  get: function get() {
+	    return _Provider.default;
+	  }
+	});
 
-	exports.Provider = _interopRequire(_componentsProvider);
+	var _connect = __webpack_require__(16);
 
-	var _componentsConnect = __webpack_require__(16);
-
-	exports.connect = _interopRequire(_componentsConnect);
+	Object.defineProperty(exports, 'connect', {
+	  enumerable: true,
+	  get: function get() {
+	    return _connect.default;
+	  }
+	});
 
 /***/ },
 /* 14 */
@@ -955,18 +958,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	exports.__esModule = true;
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	exports.default = undefined;
 
 	var _react = __webpack_require__(2);
 
-	var _utilsStoreShape = __webpack_require__(15);
+	var _storeShape = __webpack_require__(15);
 
-	var _utilsStoreShape2 = _interopRequireDefault(_utilsStoreShape);
+	var _storeShape2 = _interopRequireDefault(_storeShape);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var didWarnAboutReceivingStore = false;
 	function warnAboutReceivingStore() {
@@ -989,8 +995,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Provider(props, context) {
 	    _classCallCheck(this, Provider);
 
-	    _Component.call(this, props, context);
-	    this.store = props.store;
+	    var _this = _possibleConstructorReturn(this, _Component.call(this, props, context));
+
+	    _this.store = props.store;
+	    return _this;
 	  }
 
 	  Provider.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
@@ -1011,16 +1019,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Provider;
 	})(_react.Component);
 
-	exports['default'] = Provider;
+	exports.default = Provider;
 
 	Provider.propTypes = {
-	  store: _utilsStoreShape2['default'].isRequired,
+	  store: _storeShape2.default.isRequired,
 	  children: _react.PropTypes.element.isRequired
 	};
 	Provider.childContextTypes = {
-	  store: _utilsStoreShape2['default'].isRequired
+	  store: _storeShape2.default.isRequired
 	};
-	module.exports = exports['default'];
 
 /***/ },
 /* 15 */
@@ -1032,12 +1039,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react = __webpack_require__(2);
 
-	exports['default'] = _react.PropTypes.shape({
+	exports.default = _react.PropTypes.shape({
 	  subscribe: _react.PropTypes.func.isRequired,
 	  dispatch: _react.PropTypes.func.isRequired,
 	  getState: _react.PropTypes.func.isRequired
 	});
-	module.exports = exports['default'];
 
 /***/ },
 /* 16 */
@@ -1045,37 +1051,30 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	exports.__esModule = true;
-
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	exports['default'] = connect;
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	exports.__esModule = true;
+	exports.default = connect;
 
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _utilsStoreShape = __webpack_require__(15);
+	var _storeShape = __webpack_require__(15);
 
-	var _utilsStoreShape2 = _interopRequireDefault(_utilsStoreShape);
+	var _storeShape2 = _interopRequireDefault(_storeShape);
 
-	var _utilsShallowEqual = __webpack_require__(17);
+	var _shallowEqual = __webpack_require__(17);
 
-	var _utilsShallowEqual2 = _interopRequireDefault(_utilsShallowEqual);
+	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 
-	var _utilsIsPlainObject = __webpack_require__(18);
+	var _isPlainObject = __webpack_require__(18);
 
-	var _utilsIsPlainObject2 = _interopRequireDefault(_utilsIsPlainObject);
+	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-	var _utilsWrapActionCreators = __webpack_require__(19);
+	var _wrapActionCreators = __webpack_require__(19);
 
-	var _utilsWrapActionCreators2 = _interopRequireDefault(_utilsWrapActionCreators);
+	var _wrapActionCreators2 = _interopRequireDefault(_wrapActionCreators);
 
 	var _hoistNonReactStatics = __webpack_require__(20);
 
@@ -1084,6 +1083,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _invariant = __webpack_require__(21);
 
 	var _invariant2 = _interopRequireDefault(_invariant);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var defaultMapStateToProps = function defaultMapStateToProps() {
 	  return {};
@@ -1107,23 +1114,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var shouldSubscribe = Boolean(mapStateToProps);
 	  var finalMapStateToProps = mapStateToProps || defaultMapStateToProps;
-	  var finalMapDispatchToProps = _utilsIsPlainObject2['default'](mapDispatchToProps) ? _utilsWrapActionCreators2['default'](mapDispatchToProps) : mapDispatchToProps || defaultMapDispatchToProps;
+	  var finalMapDispatchToProps = (0, _isPlainObject2.default)(mapDispatchToProps) ? (0, _wrapActionCreators2.default)(mapDispatchToProps) : mapDispatchToProps || defaultMapDispatchToProps;
 	  var finalMergeProps = mergeProps || defaultMergeProps;
-	  var shouldUpdateStateProps = finalMapStateToProps.length > 1;
-	  var shouldUpdateDispatchProps = finalMapDispatchToProps.length > 1;
+	  var shouldUpdateStateProps = finalMapStateToProps.length !== 1;
+	  var shouldUpdateDispatchProps = finalMapDispatchToProps.length !== 1;
 	  var _options$pure = options.pure;
 	  var pure = _options$pure === undefined ? true : _options$pure;
 	  var _options$withRef = options.withRef;
 	  var withRef = _options$withRef === undefined ? false : _options$withRef;
 
 	  // Helps track hot reloading.
+
 	  var version = nextVersion++;
 
 	  function computeStateProps(store, props) {
 	    var state = store.getState();
 	    var stateProps = shouldUpdateStateProps ? finalMapStateToProps(state, props) : finalMapStateToProps(state);
 
-	    _invariant2['default'](_utilsIsPlainObject2['default'](stateProps), '`mapStateToProps` must return an object. Instead received %s.', stateProps);
+	    (0, _invariant2.default)((0, _isPlainObject2.default)(stateProps), '`mapStateToProps` must return an object. Instead received %s.', stateProps);
 	    return stateProps;
 	  }
 
@@ -1132,13 +1140,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var dispatchProps = shouldUpdateDispatchProps ? finalMapDispatchToProps(dispatch, props) : finalMapDispatchToProps(dispatch);
 
-	    _invariant2['default'](_utilsIsPlainObject2['default'](dispatchProps), '`mapDispatchToProps` must return an object. Instead received %s.', dispatchProps);
+	    (0, _invariant2.default)((0, _isPlainObject2.default)(dispatchProps), '`mapDispatchToProps` must return an object. Instead received %s.', dispatchProps);
 	    return dispatchProps;
 	  }
 
 	  function _computeNextState(stateProps, dispatchProps, parentProps) {
 	    var mergedProps = finalMergeProps(stateProps, dispatchProps, parentProps);
-	    _invariant2['default'](_utilsIsPlainObject2['default'](mergedProps), '`mergeProps` must return an object. Instead received %s.', mergedProps);
+	    (0, _invariant2.default)((0, _isPlainObject2.default)(mergedProps), '`mergeProps` must return an object. Instead received %s.', mergedProps);
 	    return mergedProps;
 	  }
 
@@ -1155,7 +1163,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        var storeChanged = nextState.storeState !== this.state.storeState;
-	        var propsChanged = !_utilsShallowEqual2['default'](nextProps, this.props);
+	        var propsChanged = !(0, _shallowEqual2.default)(nextProps, this.props);
 	        var mapStateProducedChange = false;
 	        var dispatchPropsChanged = false;
 
@@ -1178,16 +1186,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      function Connect(props, context) {
 	        _classCallCheck(this, Connect);
 
-	        _Component.call(this, props, context);
-	        this.version = version;
-	        this.store = props.store || context.store;
+	        var _this = _possibleConstructorReturn(this, _Component.call(this, props, context));
 
-	        _invariant2['default'](this.store, 'Could not find "store" in either the context or ' + ('props of "' + this.constructor.displayName + '". ') + 'Either wrap the root component in a <Provider>, ' + ('or explicitly pass "store" as a prop to "' + this.constructor.displayName + '".'));
+	        _this.version = version;
+	        _this.store = props.store || context.store;
 
-	        this.stateProps = computeStateProps(this.store, props);
-	        this.dispatchProps = computeDispatchProps(this.store, props);
-	        this.state = { storeState: null };
-	        this.updateState();
+	        (0, _invariant2.default)(_this.store, 'Could not find "store" in either the context or ' + ('props of "' + _this.constructor.displayName + '". ') + 'Either wrap the root component in a <Provider>, ' + ('or explicitly pass "store" as a prop to "' + _this.constructor.displayName + '".'));
+
+	        _this.stateProps = computeStateProps(_this.store, props);
+	        _this.dispatchProps = computeDispatchProps(_this.store, props);
+	        _this.state = { storeState: _this.store.getState() };
+	        _this.updateState();
+	        return _this;
 	      }
 
 	      Connect.prototype.computeNextState = function computeNextState() {
@@ -1200,7 +1210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var props = arguments.length <= 0 || arguments[0] === undefined ? this.props : arguments[0];
 
 	        var nextStateProps = computeStateProps(this.store, props);
-	        if (_utilsShallowEqual2['default'](nextStateProps, this.stateProps)) {
+	        if ((0, _shallowEqual2.default)(nextStateProps, this.stateProps)) {
 	          return false;
 	        }
 
@@ -1212,7 +1222,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var props = arguments.length <= 0 || arguments[0] === undefined ? this.props : arguments[0];
 
 	        var nextDispatchProps = computeDispatchProps(this.store, props);
-	        if (_utilsShallowEqual2['default'](nextDispatchProps, this.dispatchProps)) {
+	        if ((0, _shallowEqual2.default)(nextDispatchProps, this.dispatchProps)) {
 	          return false;
 	        }
 
@@ -1263,14 +1273,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 
 	      Connect.prototype.getWrappedInstance = function getWrappedInstance() {
-	        _invariant2['default'](withRef, 'To access the wrapped instance, you need to specify ' + '{ withRef: true } as the fourth argument of the connect() call.');
+	        (0, _invariant2.default)(withRef, 'To access the wrapped instance, you need to specify ' + '{ withRef: true } as the fourth argument of the connect() call.');
 
 	        return this.refs.wrappedInstance;
 	      };
 
 	      Connect.prototype.render = function render() {
 	        var ref = withRef ? 'wrappedInstance' : null;
-	        return _react2['default'].createElement(WrappedComponent, _extends({}, this.nextState, { ref: ref }));
+	        return _react2.default.createElement(WrappedComponent, _extends({}, this.nextState, { ref: ref }));
 	      };
 
 	      return Connect;
@@ -1279,10 +1289,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Connect.displayName = 'Connect(' + getDisplayName(WrappedComponent) + ')';
 	    Connect.WrappedComponent = WrappedComponent;
 	    Connect.contextTypes = {
-	      store: _utilsStoreShape2['default']
+	      store: _storeShape2.default
 	    };
 	    Connect.propTypes = {
-	      store: _utilsStoreShape2['default']
+	      store: _storeShape2.default
 	    };
 
 	    if (process.env.NODE_ENV !== 'production') {
@@ -1302,11 +1312,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 	    }
 
-	    return _hoistNonReactStatics2['default'](Connect, WrappedComponent);
+	    return (0, _hoistNonReactStatics2.default)(Connect, WrappedComponent);
 	  };
 	}
-
-	module.exports = exports['default'];
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ },
@@ -1316,8 +1324,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	exports.__esModule = true;
-	exports["default"] = shallowEqual;
-
+	exports.default = shallowEqual;
 	function shallowEqual(objA, objB) {
 	  if (objA === objB) {
 	    return true;
@@ -1341,8 +1348,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return true;
 	}
 
-	module.exports = exports["default"];
-
 /***/ },
 /* 18 */
 /***/ function(module, exports) {
@@ -1350,7 +1355,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	exports.__esModule = true;
-	exports['default'] = isPlainObject;
+	exports.default = isPlainObject;
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 	var fnToString = function fnToString(fn) {
 	  return Function.prototype.toString.call(fn);
 	};
@@ -1359,9 +1367,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {any} obj The object to inspect.
 	 * @returns {boolean} True if the argument appears to be a plain object.
 	 */
-
 	function isPlainObject(obj) {
-	  if (!obj || typeof obj !== 'object') {
+	  if (!obj || (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object') {
 	    return false;
 	  }
 
@@ -1376,8 +1383,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return typeof constructor === 'function' && constructor instanceof constructor && fnToString(constructor) === fnToString(Object);
 	}
 
-	module.exports = exports['default'];
-
 /***/ },
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
@@ -1385,17 +1390,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	exports.__esModule = true;
-	exports['default'] = wrapActionCreators;
+	exports.default = wrapActionCreators;
 
 	var _redux = __webpack_require__(3);
 
 	function wrapActionCreators(actionCreators) {
 	  return function (dispatch) {
-	    return _redux.bindActionCreators(actionCreators, dispatch);
+	    return (0, _redux.bindActionCreators)(actionCreators, dispatch);
 	  };
 	}
-
-	module.exports = exports['default'];
 
 /***/ },
 /* 20 */
@@ -1778,7 +1781,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var _props4 = this.props;
 	      var suggestions = _props4.suggestions;
-	      var getSuggestionValue = _props4.getSuggestionValue;
 	      var renderSuggestion = _props4.renderSuggestion;
 	      var inputProps = _props4.inputProps;
 	      var shouldRenderSuggestions = _props4.shouldRenderSuggestions;
@@ -1792,7 +1794,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var focusedSectionIndex = _props4.focusedSectionIndex;
 	      var focusedSuggestionIndex = _props4.focusedSuggestionIndex;
 	      var valueBeforeUpDown = _props4.valueBeforeUpDown;
-	      var lastAction = _props4.lastAction;
 	      var inputFocused = _props4.inputFocused;
 	      var inputBlurred = _props4.inputBlurred;
 	      var inputChanged = _props4.inputChanged;
@@ -1803,7 +1804,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _onBlur = inputProps.onBlur;
 	      var _onFocus = inputProps.onFocus;
 	      var _onKeyDown = inputProps.onKeyDown;
-	      var onChange = inputProps.onChange;
 
 	      var isOpen = isFocused && !isCollapsed && this.willRenderSuggestions();
 	      var items = isOpen ? suggestions : [];

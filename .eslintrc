@@ -21,6 +21,7 @@
     "no-multiple-empty-lines": [2, { "max": 1 }],
     "no-spaced-func": 2,
     "no-trailing-spaces": 2,
+    "no-unused-vars": 2,
     "newline-after-var": [2, "always"],
     "object-curly-spacing": [2, "always"],
     "quote-props": [2, "as-needed"],
@@ -29,6 +30,7 @@
     "space-after-keywords": [2, "always"],
     "space-before-blocks": [2, "always"],
     "space-before-function-paren": [2, "never"],
-    "space-in-parens": [2, "never"]
+    "space-in-parens": [2, "never"],
+    "react/jsx-uses-react": 2
   }
 }

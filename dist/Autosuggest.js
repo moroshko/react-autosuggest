@@ -151,7 +151,6 @@ var Autosuggest = (function (_Component) {
 
       var _props4 = this.props;
       var suggestions = _props4.suggestions;
-      var getSuggestionValue = _props4.getSuggestionValue;
       var renderSuggestion = _props4.renderSuggestion;
       var inputProps = _props4.inputProps;
       var shouldRenderSuggestions = _props4.shouldRenderSuggestions;
@@ -165,7 +164,6 @@ var Autosuggest = (function (_Component) {
       var focusedSectionIndex = _props4.focusedSectionIndex;
       var focusedSuggestionIndex = _props4.focusedSuggestionIndex;
       var valueBeforeUpDown = _props4.valueBeforeUpDown;
-      var lastAction = _props4.lastAction;
       var inputFocused = _props4.inputFocused;
       var inputBlurred = _props4.inputBlurred;
       var inputChanged = _props4.inputChanged;
@@ -176,7 +174,6 @@ var Autosuggest = (function (_Component) {
       var _onBlur = inputProps.onBlur;
       var _onFocus = inputProps.onFocus;
       var _onKeyDown = inputProps.onKeyDown;
-      var onChange = inputProps.onChange;
 
       var isOpen = isFocused && !isCollapsed && this.willRenderSuggestions();
       var items = isOpen ? suggestions : [];

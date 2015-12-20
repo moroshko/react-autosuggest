@@ -79,11 +79,6 @@ var AutosuggestContainer = (function (_Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AutosuggestContainer).call(this, props));
 
-    var shouldRenderSuggestions = props.shouldRenderSuggestions;
-    var suggestions = props.suggestions;
-    var inputProps = props.inputProps;
-    var theme = props.theme;
-
     var initialState = {
       isFocused: false,
       isCollapsed: true,
@@ -94,7 +89,7 @@ var AutosuggestContainer = (function (_Component) {
     };
 
     _this.store = (0, _redux.createStore)(_reducerAndActions2.default, initialState);
-    _this.theme = mapToAutowhateverTheme(theme);
+    _this.theme = mapToAutowhateverTheme(_this.props.theme);
     return _this;
   }
 
@@ -136,7 +131,7 @@ AutosuggestContainer.propTypes = {
   suggestions: _react.PropTypes.array.isRequired,
   getSuggestionValue: _react.PropTypes.func.isRequired,
   renderSuggestion: _react.PropTypes.func.isRequired,
-  inputProps: function inputProps(props, propName, componentName) {
+  inputProps: function inputProps(props, propName) {
     var inputProps = props[propName];
 
     if (!('value' in inputProps)) {
@@ -152,7 +147,7 @@ AutosuggestContainer.propTypes = {
   multiSection: _react.PropTypes.bool,
   renderSectionTitle: _react.PropTypes.func,
   getSectionSuggestions: _react.PropTypes.func,
-  theme: function theme(props, propName, componentName) {
+  theme: function theme(props, propName) {
     var theme = props[propName];
 
     for (var key in theme) {

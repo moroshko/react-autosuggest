@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import sinon from 'sinon';
 import Autosuggest from '../../src/AutosuggestContainer';
 import languages from './languages';

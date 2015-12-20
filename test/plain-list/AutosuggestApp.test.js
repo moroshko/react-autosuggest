@@ -8,7 +8,6 @@ import {
   expectInputAttribute,
   expectInputValue,
   getSuggestionsContainer,
-  getSuggestions,
   getSuggestion,
   expectSuggestions,
   expectFocusedSuggestion,

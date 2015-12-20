@@ -50,7 +50,7 @@ export default class AutosuggestContainer extends Component {
     suggestions: PropTypes.array.isRequired,
     getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
-    inputProps: (props, propName, componentName) => {
+    inputProps: (props, propName) => {
       const inputProps = props[propName];
 
       if (!('value' in inputProps)) {
@@ -66,7 +66,7 @@ export default class AutosuggestContainer extends Component {
     multiSection: PropTypes.bool,
     renderSectionTitle: PropTypes.func,
     getSectionSuggestions: PropTypes.func,
-    theme: (props, propName, componentName) => {
+    theme: (props, propName) => {
       const theme = props[propName];
 
       for (const key in theme) {
@@ -93,7 +93,6 @@ export default class AutosuggestContainer extends Component {
   constructor(props) {
     super(props);
 
-    const { shouldRenderSuggestions, suggestions, inputProps, theme } = props;
     const initialState = {
       isFocused: false,
       isCollapsed: true,
@@ -104,7 +103,7 @@ export default class AutosuggestContainer extends Component {
     };
 
     this.store = createStore(reducer, initialState);
-    this.theme = mapToAutowhateverTheme(theme);
+    this.theme = mapToAutowhateverTheme(this.props.theme);
   }
 
   render() {
