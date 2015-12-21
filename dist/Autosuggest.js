@@ -281,7 +281,7 @@ var Autosuggest = (function (_Component) {
         }
       };
       var renderItem = function renderItem(item) {
-        return renderSuggestion(item, value, valueBeforeUpDown);
+        return renderSuggestion(item, { value: value, valueBeforeUpDown: valueBeforeUpDown });
       };
 
       return _react2.default.createElement(_reactAutowhatever2.default, { multiSection: multiSection,

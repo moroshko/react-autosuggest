@@ -277,10 +277,10 @@ describe('Plain list Autosuggest', () => {
     });
 
     it('should be called with the right parameters', () => {
-      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, 'r', null);
+      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, { value: 'r', valueBeforeUpDown: null });
       renderSuggestion.reset();
       clickDown();
-      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, 'Ruby', 'r');
+      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, { value: 'Ruby', valueBeforeUpDown: 'r' });
     });
 
     it('should be called once per suggestion', () => {

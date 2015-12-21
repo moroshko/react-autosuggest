@@ -27,7 +27,9 @@
 
 ## Playground
 
-[Codepen][playground]
+<a href="http://codepen.io/moroshko/pen/LGNJMy" target="_blank">
+  Codepen
+</a>
 
 ## Features
 
@@ -232,7 +234,13 @@ function getSuggestionValue(suggestion) {
 
 Use your imagination to define how suggestions are rendered.
 
-This function gets:
+`renderSuggestion` has the following signature:
+
+```js
+function renderSuggestion(suggestion, { value, valueBeforeUpDown })
+```
+
+where:
 
 * `suggestion` - The suggestion to render
 * `value` - The current value of the input
@@ -241,7 +249,7 @@ This function gets:
 It should return a `ReactElement`. For example:
 
 ```js
-function renderSuggestion(suggestion, value, valueBeforeUpDown) {
+function renderSuggestion(suggestion) {
   return (
     <span>{suggestion.text}</span>
   );
@@ -485,7 +493,6 @@ npm test
 [multiple-sections]: https://moroshko.github.io/react-autosuggest#multiple-sections
 [async-example]: https://moroshko.github.io/react-autosuggest#async-example
 [caching-example]: https://moroshko.github.io/react-autosuggest#caching-example
-[playground]: http://codepen.io/moroshko/pen/LGNJMy
 
 ---
 

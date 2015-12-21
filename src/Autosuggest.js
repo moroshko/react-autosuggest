@@ -226,7 +226,7 @@ class Autosuggest extends Component {
         this.justClickedOnSuggestion = false;
       }
     };
-    const renderItem = item => renderSuggestion(item, value, valueBeforeUpDown);
+    const renderItem = item => renderSuggestion(item, { value, valueBeforeUpDown });
 
     return (
       <Autowhatever multiSection={multiSection}
