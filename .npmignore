@@ -1,0 +1,13 @@
+demo/
+src/
+test/
+.babelrc
+.editorconfig
+.eslintrc
+CONTRIBUTING.md
+server.js
+UPGRADE_GUIDE.md
+webpack.dev.config.js
+webpack.gh-pages.config.js
+webpack.standalone-demo.config.js
+webpack.standalone.config.js
