@@ -22,7 +22,8 @@
     "standalone-demo": "webpack --config webpack.standalone-demo.config.js",
     "build": "npm run lint && npm test && npm run dist && npm run standalone && npm run standalone-demo",
     "gh-pages-build": "npm run lint && npm test && npm run demo-dist",
-    "deploy": "echo 'Not yet'"
+    "deploy": "echo 'Not yet'",
+    "prepublish": "npm run dist && npm run standalone"
   },
   "dependencies": {
     "react-autowhatever": "^1.3.2",
