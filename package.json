@@ -23,6 +23,7 @@
     "build": "npm run lint && npm test && npm run dist && npm run standalone && npm run standalone-demo",
     "gh-pages-build": "npm run lint && npm test && npm run demo-dist",
     "deploy": "echo 'Not yet'",
+    "postversion": "git push && git push --tags",
     "prepublish": "npm run dist && npm run standalone"
   },
   "dependencies": {
