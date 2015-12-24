@@ -319,7 +319,7 @@ When rendering [multiple sections](#multiSectionProp), you need to tell Autosugg
 
 This function gets:
 
-* `section` - The section to render (this would be an item in the [suggestions](#suggestionsProp) array
+* `section` - The section to render (an item in the [suggestions](#suggestionsProp) array)
 
 
 It should return a `ReactElement`. For example:
@@ -332,6 +332,8 @@ function renderSectionTitle(section) {
 }
 ```
 
+If `renderSectionTitle` returns `null` or `undefined`, section title is not rendered.
+
 <a name="getSectionSuggestionsProp"></a>
 #### getSectionSuggestions (optional)
 
@@ -339,7 +341,7 @@ When rendering [multiple sections](#multiSectionProp), you need to tell Autosugg
 
 This function gets:
 
-* `section` - The section to render (this would be an item in the [suggestions](#suggestionsProp) array
+* `section` - The section to render (an item in the [suggestions](#suggestionsProp) array)
 
 
 It should return an array of suggestions to render in the given section. For example:
