@@ -81,6 +81,11 @@ describe('Plain list Autosuggest', () => {
       expectSuggestions([]);
     });
 
+    it('should not clear the input when Escape is pressed', () => {
+      clickEscape();
+      expectInputValue('p');
+    });
+
     it('should clear the input when Escape is pressed again', () => {
       clickEscape();
       clickEscape();

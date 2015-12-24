@@ -186,6 +186,14 @@ class Autosuggest extends Component {
           }
 
           case 'Escape':
+            if (isOpen) {
+              // If input.type === 'search', the browser clears the input
+              // when Escape is pressed. We want to disable this default
+              // behaviour so that, when suggestions are shown, we just hide
+              // them, without clearing the input.
+              event.preventDefault();
+            }
+
             if (valueBeforeUpDown === null) { // Didn't interact with Up/Down
               if (!isOpen) {
                 this.maybeEmitOnChange(event, '', 'escape');
