@@ -352,6 +352,8 @@ function getSectionSuggestions(section) {
 }
 ```
 
+**Note:** Sections with no suggestions are not rendered.
+
 <a name="onSuggestionSelectedProp"></a>
 #### onSuggestionSelected (optional)
 
