@@ -1,8 +1,8 @@
 # Upgrading from 2.x to 3.x
 
-* `suggestions` are an array now, not a function
-* `suggestionValue` become `getSuggestionValue`
-* `suggestionRenderer` become `renderSuggestion` and the signature is slightly
+* `suggestions` are an array now, not a function. [See docs.](https://github.com/moroshko/react-autosuggest/tree/3.0#suggestionsProp)
+* `suggestionValue` becomes `getSuggestionValue`
+* `suggestionRenderer` becomes `renderSuggestion` and the signature is slightly
   different now.
 
   In 2.x, the second argument was the current value of the input field, or the
@@ -18,9 +18,9 @@
   ```js
   function renderSuggestion(suggestion, { value, valueBeforeUpDown })
   ```
-* `showWhen` become `shouldRenderSuggestions`
-* `inputAttributes` become `inputProps`
-* `inputAttributes.onChange` become `inputProps.onChange` and the signature is
+* `showWhen` becomes `shouldRenderSuggestions`
+* `inputAttributes` becomes `inputProps`
+* `inputAttributes.onChange` becomes `inputProps.onChange` and the signature is
   slightly different now.
 
   In 2.x, the first argument was the new value:
@@ -35,7 +35,14 @@
   ```js
   function onChange(event, { newValue, method })
   ```
+* `value` becomes `inputProps.value`
+* `defaultValue` was removed
 * `onSuggestionFocused` and `onSuggestionUnfocused` were removed
+* Uncontrolled behaviour is not supported in 3.x
+* `cache` was removed. Caching is not part of `react-autosuggest` anymore. You'll have to implement this yourself. [Example](https://github.com/moroshko/react-autosuggest/tree/3.0/demo/src/components/App/components/CachingExample)
+* Input debouncing is not part of `react-autosuggest` anymore. You'll have to implement this yourself. [Example](https://github.com/moroshko/react-autosuggest/tree/3.0/demo/src/components/App/components/DebouncedExample)
+* Support for delayed requests is not part of `react-autosuggest` anymore. You'll have to implement this yourself. [Example](https://github.com/moroshko/react-autosuggest/tree/3.0/demo/src/components/App/components/AsyncExample)
+* `scrollBar` doesn't exist in 3.x yet, but hopefully will exist soon.
 * Some `theme` properties have changed:
 
 ```
