@@ -15,11 +15,17 @@
 
 [WAI-ARIA compliant][wai-aria] React autosuggest component.
 
-## Coming soon...
+## New!
 
-Support for flux architecture, including redux.
+react-autosuggest 3.0 beta is available on npm now!
 
-Check out the [redux examples](https://github.com/moroshko/react-autosuggest/tree/3.0/demo/src/components/App/components) and <a href="http://codepen.io/moroshko/pen/LGNJMy" target="_blank">Codepen playground</a>.
+It includes support for flux architecture, including redux.
+
+    npm install react-autosuggest@3.0-latest --save
+
+Check out the [redux examples](https://github.com/moroshko/react-autosuggest/tree/3.0/demo/src/components/App/components), the <a href="http://codepen.io/moroshko/pen/LGNJMy" target="_blank">Codepen playground</a>, and the [updated documentation](https://github.com/moroshko/react-autosuggest/blob/3.0/README.md).
+
+The documentation below is for react-autosuggest 2.x.
 
 ## Live Examples
 
