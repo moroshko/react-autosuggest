@@ -76,7 +76,8 @@ export default class Example extends Component {
                        getSuggestionValue={getSuggestionValue}
                        renderSuggestion={renderSuggestion}
                        inputProps={inputProps}
-                       onSuggestionSelected={this.onSuggestionSelected} />
+                       onSuggestionSelected={this.onSuggestionSelected}
+                       id="basic-usage" />
         </div>
       </div>
     );

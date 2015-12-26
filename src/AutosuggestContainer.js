@@ -74,7 +74,8 @@ export default class AutosuggestContainer extends Component {
           throw new Error(`'${key}' is not a valid property in 'theme'. Valid properties are:\n\n${Object.keys(defaultTheme).join('\n')}\n\n`);
         }
       }
-    }
+    },
+    id: PropTypes.string
   };
 
   static defaultProps = {
@@ -87,7 +88,8 @@ export default class AutosuggestContainer extends Component {
     getSectionSuggestions() {
       throw new Error('`getSectionSuggestions` must be provided');
     },
-    theme: defaultTheme
+    theme: defaultTheme,
+    id: '1'
   };
 
   constructor(props) {
@@ -110,7 +112,7 @@ export default class AutosuggestContainer extends Component {
     const {
       multiSection, shouldRenderSuggestions, suggestions, getSuggestionValue,
       renderSuggestion, renderSectionTitle, getSectionSuggestions, inputProps,
-      onSuggestionSelected
+      onSuggestionSelected, id
     } = this.props;
 
     return (
@@ -124,7 +126,8 @@ export default class AutosuggestContainer extends Component {
                      getSectionSuggestions={getSectionSuggestions}
                      inputProps={inputProps}
                      onSuggestionSelected={onSuggestionSelected}
-                     theme={this.theme} />
+                     theme={this.theme}
+                     id={id} />
       </Provider>
     );
   }

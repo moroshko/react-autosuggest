@@ -71,7 +71,8 @@ function Example(props) {
                      renderSuggestion={renderSuggestion}
                      inputProps={inputProps}
                      onSuggestionSelected={onSuggestionSelected}
-                     theme={theme} />
+                     theme={theme}
+                     id="debounced-example" />
       </div>
     </div>
   );

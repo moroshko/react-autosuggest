@@ -158,6 +158,7 @@ class Example extends React.Component {
 * [`getSectionSuggestions`](#getSectionSuggestionsProp)
 * [`onSuggestionSelected`](#onSuggestionSelectedProp)
 * [`theme`](#themeProp)
+* [`id`](#idProp)
 
 <a name="suggestionsProp"></a>
 #### suggestions (required)
@@ -313,7 +314,7 @@ By default, Autosuggest renders a plain list of suggestions.
 If you'd like to have multiple sections (with optional titles), set `multiSection={true}`.
 
 <a name="renderSectionTitleProp"></a>
-#### renderSectionTitle (optional)
+#### renderSectionTitle (required when `multiSection={true}`)
 
 When rendering [multiple sections](#multiSectionProp), you need to tell Autosuggest how to render a section title.
 
@@ -335,7 +336,7 @@ function renderSectionTitle(section) {
 If `renderSectionTitle` returns `null` or `undefined`, section title is not rendered.
 
 <a name="getSectionSuggestionsProp"></a>
-#### getSectionSuggestions (optional)
+#### getSectionSuggestions (required when `multiSection={true}`)
 
 When rendering [multiple sections](#multiSectionProp), you need to tell Autosuggest where to find the suggestions for a given section.
 
@@ -471,6 +472,20 @@ The following diagrams illustrate how `theme` is structured.
     |                                                       |
     +-------------------------------------------------------+
 
+<a name="idProp"></a>
+#### id (required when multiple Autosuggest components are rendered on a page)
+
+The only reason `id` exists, is to set ARIA attributes (they require a unique id).
+
+When rendering a single Autosuggest, don't set the `id` (it will be set to `'1'`, by default).
+
+When rendering multiple Autosuggest components on a page, make sure to give them unique `id`s. For example:
+
+```xml
+<Autosuggest id="source" ... />
+<Autosuggest id="destination" ... />
+```
+
 ## Development
 
 ```shell
@@ -497,18 +512,3 @@ npm test
 [multiple-sections]: https://moroshko.github.io/react-autosuggest#multiple-sections
 [async-example]: https://moroshko.github.io/react-autosuggest#async-example
 [caching-example]: https://moroshko.github.io/react-autosuggest#caching-example
-
----
-
-**TODO:**
-
-* Examples:
-  * No results
-  * Navigate on selection
-* Write upgrade guide
-* Release 3.0
-  * Update deps
-  * Publish to npm
-  * Publish to gh-pages
-* Add support for scrollbar
-

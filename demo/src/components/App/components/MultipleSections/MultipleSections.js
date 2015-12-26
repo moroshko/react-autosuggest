@@ -82,7 +82,8 @@ function Example(props) {
                      getSectionSuggestions={getSectionSuggestions}
                      inputProps={inputProps}
                      onSuggestionSelected={onSuggestionSelected}
-                     theme={theme} />
+                     theme={theme}
+                     id="multiple-sections" />
       </div>
     </div>
   );

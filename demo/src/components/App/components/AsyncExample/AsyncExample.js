@@ -72,7 +72,8 @@ function Example(props) {
                      renderSuggestion={renderSuggestion}
                      inputProps={inputProps}
                      onSuggestionSelected={onSuggestionSelected}
-                     theme={theme} />
+                     theme={theme}
+                     id="async-example" />
       </div>
     </div>
   );

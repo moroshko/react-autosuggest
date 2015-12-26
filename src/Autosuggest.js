@@ -50,6 +50,7 @@ class Autosuggest extends Component {
     renderSectionTitle: PropTypes.func.isRequired,
     getSectionSuggestions: PropTypes.func.isRequired,
     theme: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
 
     isFocused: PropTypes.bool.isRequired,
     isCollapsed: PropTypes.bool.isRequired,
@@ -123,7 +124,7 @@ class Autosuggest extends Component {
   render() {
     const {
       suggestions, renderSuggestion, inputProps, shouldRenderSuggestions,
-      onSuggestionSelected, multiSection, renderSectionTitle,
+      onSuggestionSelected, multiSection, renderSectionTitle, id,
       getSectionSuggestions, theme, isFocused, isCollapsed, focusedSectionIndex,
       focusedSuggestionIndex, valueBeforeUpDown, inputFocused, inputBlurred,
       inputChanged, updateFocusedSuggestion, revealSuggestions, closeSuggestions
@@ -247,6 +248,7 @@ class Autosuggest extends Component {
                     inputProps={autowhateverInputProps}
                     itemProps={itemProps}
                     theme={theme}
+                    id={id}
                     ref={autowhatever => {
                       if (autowhatever !== null) {
                         this.input = autowhatever.refs.input;

@@ -67,7 +67,8 @@ function Example(props) {
                      renderSuggestion={renderSuggestion}
                      inputProps={inputProps}
                      onSuggestionSelected={onSuggestionSelected}
-                     theme={theme} />
+                     theme={theme}
+                     id="highlight-matches" />
       </div>
     </div>
   );
