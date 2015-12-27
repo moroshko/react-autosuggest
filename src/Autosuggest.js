@@ -18,7 +18,8 @@ export default class Autosuggest extends Component {
     cache: PropTypes.bool,                  // Set it to false to disable in-memory caching
     id: PropTypes.string,                   // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
     scrollBar: PropTypes.bool,              // Set it to true when the suggestions container can have a scroll bar
-    theme: PropTypes.object                 // Custom theme. See: https://github.com/markdalgleish/react-themeable
+    theme: PropTypes.object,                // Custom theme. See: https://github.com/markdalgleish/react-themeable
+    debounce: PropTypes.number              // Amount of miliseconds to wait before calling getSuggestions after the last user input
   }
 
   static defaultProps = {
@@ -38,7 +39,8 @@ export default class Autosuggest extends Component {
       section: 'react-autosuggest__suggestions-section',
       sectionName: 'react-autosuggest__suggestions-section-name',
       sectionSuggestions: 'react-autosuggest__suggestions-section-suggestions'
-    }
+    },
+    debounce: 100
   }
 
   constructor(props) {
@@ -56,7 +58,7 @@ export default class Autosuggest extends Component {
                                     // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
     };
     this.isControlledComponent = (typeof props.value !== 'undefined');
-    this.suggestionsFn = debounce(props.suggestions, 100);
+    this.updateSuggestionsFn(props);
     this.onChange = props.inputAttributes.onChange || (() => {});
     this.onFocus = props.inputAttributes.onFocus || (() => {});
     this.onBlur = props.inputAttributes.onBlur || (() => {});
@@ -86,6 +88,15 @@ export default class Autosuggest extends Component {
         this.handleValueChange(nextProps.value);
       }
     }
+    if (nextProps.debounce !== this.props.debounce || nextProps.suggestions !== this.props.suggestions) {
+      this.updateSuggestionsFn(nextProps);
+    }
+  }
+
+  updateSuggestionsFn = (nextProps) => {
+    const fn = nextProps.suggestions || this.props.suggestions;
+    const delay = nextProps.debounce || this.props.debounce;
+    this.suggestionsFn = debounce(fn, delay);
   }
 
   resetSectionIterator(suggestions) {

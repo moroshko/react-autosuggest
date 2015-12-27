@@ -102,6 +102,7 @@ Check out the [standalone example](https://github.com/moroshko/react-autosuggest
 * [`id`](#idOption)
 * [`scrollBar`](#scrollBarOption)
 * [`theme`](#themeOption)
+* [`debounce`](#debounce)
 
 <a name="suggestionsOption"></a>
 #### suggestions (required)
@@ -464,6 +465,14 @@ The following diagrams explain the classes above.
     |  +----------------------------------------------------------------------+  |
     |                                                                            |
     +----------------------------------------------------------------------------+
+
+<a name="debounce"></a>
+#### debounce (optional)
+
+Specifies the number of milliseconds to wait before invoking the `getSuggestions` function. The default value is 100.  
+Usefull for reducing the amount of calls to the server.  
+
+For example a value of 0 would fetch new suggestions in realtime, whenever the user changes the input value. A value of 1000 on the other hand would fetch the suggestions only after the user didn't type anything for one second.
 
 ## Development
 
