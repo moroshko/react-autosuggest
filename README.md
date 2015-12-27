@@ -102,6 +102,7 @@ Check out the [standalone example](https://github.com/moroshko/react-autosuggest
 * [`id`](#idOption)
 * [`scrollBar`](#scrollBarOption)
 * [`theme`](#themeOption)
+* [`ignoredByFastClick`](#ignoredByFastClickOption)
 
 <a name="suggestionsOption"></a>
 #### suggestions (required)
@@ -464,6 +465,13 @@ The following diagrams explain the classes above.
     |  +----------------------------------------------------------------------+  |
     |                                                                            |
     +----------------------------------------------------------------------------+
+
+<a name="ignoredByFastClickOption"></a>
+#### ignoredByFastClick (optional)
+
+Defaults to `false`.
+Set it to `true` to avoid conflict with [fastclick](https://github.com/ftlabs/fastclick) if you are using it.
+If `true`, each suggestion list item has `needsclick` class, which makes fastclick ignore the elements.
 
 ## Development
 
