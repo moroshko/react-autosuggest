@@ -153,3 +153,7 @@ export function focusAndSetInputValue(value) {
   data.input.value = value;
   Simulate.change(data.input);
 }
+
+export function isInputFocused() {
+  return global.document.activeElement === data.input;
+}

@@ -9,8 +9,10 @@ import {
   expectSuggestionsContainerAttribute,
   getTitle,
 //  getSuggestionsBySectionIndex,
+  clickSuggestion,
   clickEscape,
-  focusAndSetInputValue
+  focusAndSetInputValue,
+  isInputFocused
 } from '../helpers';
 import AutosuggestApp, {
   renderSectionTitle,
@@ -24,6 +26,17 @@ describe('Multi section Autosuggest', () => {
     const input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
 
     init({ app, container, input });
+  });
+
+  describe('when suggestion is clicked', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('p');
+      clickSuggestion(1);
+    });
+
+    it('should not focus on input if focusInputOnSuggestionClick is false', () => {
+      expect(isInputFocused()).to.equal(false);
+    });
   });
 
   describe('renderSectionTitle', () => {

@@ -20,7 +20,8 @@ import {
   clickEnter,
   clickDown,
   clickUp,
-  focusAndSetInputValue
+  focusAndSetInputValue,
+  isInputFocused
 } from '../helpers';
 import AutosuggestApp, {
   getSuggestionValue,
@@ -247,6 +248,10 @@ describe('Plain list Autosuggest', () => {
 
     it('should hide suggestions', () => {
       expectSuggestions([]);
+    });
+
+    it('should focus on input if focusInputOnSuggestionClick is true', () => {
+      expect(isInputFocused()).to.equal(true);
     });
   });
 

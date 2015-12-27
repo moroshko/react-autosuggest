@@ -49,6 +49,7 @@ class Autosuggest extends Component {
     multiSection: PropTypes.bool.isRequired,
     renderSectionTitle: PropTypes.func.isRequired,
     getSectionSuggestions: PropTypes.func.isRequired,
+    focusInputOnSuggestionClick: PropTypes.bool.isRequired,
     theme: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,
 
@@ -125,9 +126,10 @@ class Autosuggest extends Component {
     const {
       suggestions, renderSuggestion, inputProps, shouldRenderSuggestions,
       onSuggestionSelected, multiSection, renderSectionTitle, id,
-      getSectionSuggestions, theme, isFocused, isCollapsed, focusedSectionIndex,
-      focusedSuggestionIndex, valueBeforeUpDown, inputFocused, inputBlurred,
-      inputChanged, updateFocusedSuggestion, revealSuggestions, closeSuggestions
+      getSectionSuggestions, focusInputOnSuggestionClick, theme, isFocused,
+      isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
+      valueBeforeUpDown, inputFocused, inputBlurred, inputChanged,
+      updateFocusedSuggestion, revealSuggestions, closeSuggestions
     } = this.props;
     const { value, onBlur, onFocus, onKeyDown } = inputProps;
     const isOpen = isFocused && !isCollapsed && this.willRenderSuggestions();
@@ -231,7 +233,11 @@ class Autosuggest extends Component {
         });
         this.maybeEmitOnChange(event, suggestionValue, 'click');
         closeSuggestions('click');
-        this.input.focus();
+
+        if (focusInputOnSuggestionClick === true) {
+          this.input.focus();
+        }
+
         this.justClickedOnSuggestion = false;
       }
     };

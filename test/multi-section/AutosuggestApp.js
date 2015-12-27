@@ -84,7 +84,8 @@ export default class AutosuggestApp extends Component {
                    inputProps={inputProps}
                    onSuggestionSelected={onSuggestionSelected}
                    renderSectionTitle={renderSectionTitle}
-                   getSectionSuggestions={getSectionSuggestions} />
+                   getSectionSuggestions={getSectionSuggestions}
+                   focusInputOnSuggestionClick={false} />
     );
   }
 }
