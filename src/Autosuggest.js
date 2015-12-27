@@ -106,9 +106,6 @@ export default class Autosuggest extends Component {
     this.resetSectionIterator(suggestions);
     this.setState({
       suggestions: suggestions,
-      focusedSectionIndex: null,
-      focusedSuggestionIndex: null,
-      valueBeforeUpDown: null
     });
   }
 
