@@ -26,6 +26,9 @@ module.exports = {
       test: /\.less$/,
       loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]__[local]___[hash:base64:5]!autoprefixer!less'),
       exclude: /node_modules/
+    }, {
+      test: /\.svg$/,
+      loader: 'url?limit=8192!svgo' // 8kb
     }]
   },
 
