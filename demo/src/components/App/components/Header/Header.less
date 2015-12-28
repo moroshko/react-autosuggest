@@ -1,16 +1,63 @@
 .container {
-  height: 720px;
+  height: 594px;
+  padding-top: 126px;
   color: #fff;
   background-color: #21a2dd;
   text-align: center;
 }
 
 .logo {
-  background-image: url(./logo.svg);
+  width: 100%;
+  height: 176px;
+  background: url(../Header/logo.svg) center no-repeat;
 }
 
-.h1 {
-  margin: 0;
+.header {
+  margin: 27px 0;
   font-size: 50px;
   font-weight: 300;
+}
+
+.subHeader {
+  font-size: 20px;
+}
+
+.button {
+  display: inline-block;
+  margin-top: 45px;
+  width: 180px;
+  font-size: 20px;
+  line-height: 50px;
+  color: #21a2dd;
+  background-color: #fff;
+  border-radius: 3px;
+  text-decoration: none;
+  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+  }
+}
+
+.socialLinks {
+  margin-top: 45px;
+}
+
+.link {
+  color: #fff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.stargazersLink {
+  composes: link;
+}
+
+.twitterLink {
+  composes: link;
+  margin-left: 40px;
 }

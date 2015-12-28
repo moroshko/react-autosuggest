@@ -1,5 +1,4 @@
 import styles from './App.less';
-import theme from 'theme.less';
 
 import React from 'react';
 import Header from 'Header/Header';

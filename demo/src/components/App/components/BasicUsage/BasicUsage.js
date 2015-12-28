@@ -1,6 +1,6 @@
 import styles from './BasicUsage.less';
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Autosuggest from 'AutosuggestContainer';
 import languages from './languages';
 import { escapeRegexCharacters } from 'utils/utils';

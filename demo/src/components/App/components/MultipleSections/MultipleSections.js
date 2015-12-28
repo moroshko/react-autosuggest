@@ -27,7 +27,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-function shouldRenderSuggestions(value) {
+function shouldRenderSuggestions() {
   return true;
 }
 

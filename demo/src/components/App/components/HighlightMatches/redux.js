@@ -1,5 +1,5 @@
 import countries from 'data/countries';
-import { escapeRegexCharacters, randomDelay } from 'utils/utils';
+import { escapeRegexCharacters } from 'utils/utils';
 
 const UPDATE_INPUT_VALUE = 'HIGHLIGHT_MATCHES_UPDATE_INPUT_VALUE';
 const SUGGESTION_SELECTED = 'HIGHLIGHT_MATCHES_SUGGESTION_SELECTED';
