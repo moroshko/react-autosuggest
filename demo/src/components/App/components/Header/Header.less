@@ -1,6 +1,7 @@
 @import '~variables';
 
 .container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -68,20 +69,6 @@
   margin-top: 45px;
 }
 
-.link {
-  color: #fff;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-.stargazersLink {
-  composes: link;
-}
-
 .twitterLink {
-  composes: link;
   margin-left: 40px;
 }

@@ -9,6 +9,7 @@ import MultipleSections from 'MultipleSections/MultipleSections';
 import AsyncExample from 'AsyncExample/AsyncExample';
 import DebouncedExample from 'DebouncedExample/DebouncedExample';
 import CachingExample from 'CachingExample/CachingExample';
+import Footer from 'Footer/Footer';
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
         <DebouncedExample />
         <CachingExample />
       </div>
+      <Footer />
     </div>
   );
 }

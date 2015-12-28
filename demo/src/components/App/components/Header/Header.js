@@ -2,6 +2,7 @@ import styles from './Header.less';
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Link from 'Link/Link';
 import GitHub from 'GitHub/GitHub';
 import { loadStargazers } from './redux';
 
@@ -46,16 +47,15 @@ class Header extends Component {
           Get started
         </a>
         <div className={styles.socialLinks}>
-          <a className={styles.stargazersLink}
-             href="https://github.com/moroshko/react-autosuggest"
-             target="_blank">
+          <Link href="https://github.com/moroshko/react-autosuggest"
+                underline={false}>
             {stargazers} stargazers
-          </a>
-          <a className={styles.twitterLink}
-             href="https://twitter.com/moroshko"
-             target="_blank">
+          </Link>
+          <Link className={styles.twitterLink}
+                href="https://twitter.com/moroshko"
+                underline={false}>
             @moroshko
-          </a>
+          </Link>
         </div>
         <GitHub user="moroshko" repo="react-autosuggest" />
       </div>
