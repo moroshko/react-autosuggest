@@ -33,7 +33,12 @@ module.exports = {
   },
 
   resolve: {
-    modulesDirectories: ['node_modules', 'components', 'src']
+    modulesDirectories: [
+      'node_modules',
+      'components',
+      'src',
+      path.join(__dirname, 'demo', 'src') // Must be an absolute path
+    ]
   },
 
   plugins: [
