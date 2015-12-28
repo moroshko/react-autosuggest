@@ -1,0 +1,132 @@
+@import '~variables';
+
+@vertical: ~"(max-width: 859px)";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: (11 * @rows) 0;
+  color: #fff;
+  background-color: #33bff5;
+
+  @media @small {
+    padding: (7 * @rows) 0;
+  }
+}
+
+.header {
+  margin: 0;
+  font-size: 50px;
+  font-weight: 300;
+
+  @media @small {
+    font-size: 34px;
+  }
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  margin-top: 8 * @rows;
+
+  @media @vertical {
+    flex-direction: column;
+    margin-top: 0;
+    width: 60%;
+  }
+
+  @media @small {
+    width: 90%;
+  }
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 14 * @columns;
+  text-align: center;
+
+  @media @vertical {
+    margin-top: 10 * @rows;
+    width: auto;
+
+    &:first-child {
+      margin-top: 7 * @rows;
+    }
+  }
+}
+
+.icon {
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+.accessibleIcon {
+  @width: 98px;
+  @height: 92px;
+
+  composes: icon;
+  width: @width;
+  height: @height;
+  background-image: url(../Features/accessible.svg); // https://github.com/webpack/css-loader/issues/74
+
+  @media @small {
+    width: @width * 0.7;
+    height: @height * 0.7;
+  }
+}
+
+.mobileFriendlyIcon {
+  @width: 113px;
+  @height: 127px;
+
+  composes: icon;
+  width: @width;
+  height: @height;
+  background-image: url(../Features/mobile-friendly.svg); // https://github.com/webpack/css-loader/issues/74
+
+  @media @small {
+    width: @width * 0.7;
+    height: @height * 0.7;
+  }
+}
+
+.customizableIcon {
+  @width: 116px;
+  @height: 108px;
+
+  composes: icon;
+  width: @width;
+  height: @height;
+  background-image: url(../Features/customizable.svg); // https://github.com/webpack/css-loader/issues/74
+
+  @media @small {
+    width: @width * 0.7;
+    height: @height * 0.7;
+  }
+}
+
+.featureName {
+  margin-top: 4 * @rows;
+  font-size: 30px;
+
+  @media @small {
+    font-size: 25px;
+  }
+}
+
+.featureDescription {
+  margin: (3 * @rows) (0.5 * @column) 0;
+  font-size: 20px;
+}
+
+.footer {
+  margin: (10 * @rows) (0.5 * @column) 0;
+  font-size: 20px;
+}
+
+.footerLink {
+  color: #fff;
+}

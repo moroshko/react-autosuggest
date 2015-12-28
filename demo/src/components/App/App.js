@@ -2,6 +2,7 @@ import styles from './App.less';
 
 import React from 'react';
 import Header from 'Header/Header';
+import Features from 'Features/Features';
 import BasicUsage from 'BasicUsage/BasicUsage';
 import HighlightMatches from 'HighlightMatches/HighlightMatches';
 import MultipleSections from 'MultipleSections/MultipleSections';
@@ -13,6 +14,7 @@ export default function App() {
   return (
     <div className={styles.container}>
       <Header />
+      <Features />
       <div>
         <h2>Examples</h2>
         <ul>
