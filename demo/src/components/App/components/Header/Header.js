@@ -44,7 +44,7 @@ class Header extends Component {
         <a className={styles.button}
            href="https://github.com/moroshko/react-autosuggest#installation"
            target="_blank">
-          Get started
+          Get Started
         </a>
         <div className={styles.socialLinks}>
           <Link href="https://github.com/moroshko/react-autosuggest"
