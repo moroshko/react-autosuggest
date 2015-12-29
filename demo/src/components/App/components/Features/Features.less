@@ -66,22 +66,26 @@
 .accessibleIcon {
   @width: 98px;
   @height: 130px;
+  @xOffset: 3px;
+  @yOffset: 5px;
 
   composes: icon;
   width: @width;
   height: @height;
   background-image: url(../Features/accessible.svg); // https://github.com/webpack/css-loader/issues/74
+  transform: translateX(@xOffset) translateY(@yOffset);
 
   @media @small {
     width: @width * 0.7;
     height: @height * 0.7;
+    transform: translateX(@xOffset * 0.7) translateY(@yOffset * 0.7);
   }
 }
 
 .mobileFriendlyIcon {
   @width: 105px;
   @height: 130px;
-  @offset: 24px;
+  @offset: 25px;
 
   composes: icon;
   width: @width;
