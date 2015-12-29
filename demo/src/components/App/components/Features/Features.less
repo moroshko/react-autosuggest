@@ -8,7 +8,7 @@
   align-items: center;
   padding: (11 * @rows) 0;
   color: #fff;
-  background-color: #33bff5;
+  background-color: #009EDC;
 
   @media @small {
     padding: (7 * @rows) 0;
@@ -65,7 +65,7 @@
 
 .accessibleIcon {
   @width: 98px;
-  @height: 92px;
+  @height: 130px;
 
   composes: icon;
   width: @width;
@@ -79,37 +79,42 @@
 }
 
 .mobileFriendlyIcon {
-  @width: 113px;
-  @height: 127px;
+  @width: 105px;
+  @height: 130px;
+  @offset: 24px;
 
   composes: icon;
   width: @width;
   height: @height;
   background-image: url(../Features/mobile-friendly.svg); // https://github.com/webpack/css-loader/issues/74
+  transform: translateX(@offset);
 
   @media @small {
     width: @width * 0.7;
     height: @height * 0.7;
+    transform: translateX(@offset * 0.7);
   }
 }
 
 .customizableIcon {
-  @width: 116px;
-  @height: 108px;
+  @width: 108px;
+  @height: 130px;
+  @offset: 9px;
 
   composes: icon;
   width: @width;
   height: @height;
   background-image: url(../Features/customizable.svg); // https://github.com/webpack/css-loader/issues/74
+  transform: translateX(@offset);
 
   @media @small {
     width: @width * 0.7;
     height: @height * 0.7;
+    transform: translateX(@offset * 0.7);
   }
 }
 
 .featureName {
-  margin-top: 4 * @rows;
   font-size: 30px;
 
   @media @small {
@@ -125,6 +130,7 @@
 .footer {
   margin: (10 * @rows) (0.5 * @column) 0;
   font-size: 20px;
+  text-align: center;
 }
 
 .footerLink {
