@@ -18,6 +18,7 @@
     "key-spacing": [2, { "beforeColon": false, "afterColon": true }],
     "linebreak-style": [2, "unix"],
     "no-cond-assign": [2, "always"],
+    "no-console": 2,
     "no-multiple-empty-lines": [2, { "max": 1 }],
     "no-spaced-func": 2,
     "no-trailing-spaces": 2,
