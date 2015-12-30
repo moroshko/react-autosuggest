@@ -56,6 +56,7 @@
     "less-loader": "^2.2.2",
     "lodash.debounce": "^3.1.1",
     "mocha": "^2.3.4",
+    "react": "^0.14.5",
     "react-addons-test-utils": "^0.14.5",
     "react-dom": "^0.14.5",
     "react-transform-hmr": "^1.0.1",
