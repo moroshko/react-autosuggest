@@ -19,7 +19,7 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        loaders: 'happypack/loader',
+        loader: 'happypack/loader',
         include: [
           path.join(__dirname, 'src'), // Must be an absolute path
           path.join(__dirname, 'demo', 'src') // Must be an absolute path
@@ -52,7 +52,8 @@ module.exports = {
     new HappyPack({
       loaders: [
         {
-          path: path.join(__dirname, 'demo', 'src') // Must be an absolute path
+          path: path.resolve(__dirname, 'node_modules/babel-loader/index.js'), // Must be an absolute path
+          query: '?presets[]=es2015,presets[]=stage-0,presets[]=react'
         }
       ]
     })
