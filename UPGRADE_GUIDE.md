@@ -38,6 +38,7 @@
 * `value` becomes `inputProps.value`
 * `defaultValue` was removed
 * `onSuggestionFocused` and `onSuggestionUnfocused` were removed
+* Bower support was removed
 * Uncontrolled behaviour is not supported in 3.x
 * `cache` was removed. Caching is not part of `react-autosuggest` anymore. You'll have to implement this yourself. [Example](https://github.com/moroshko/react-autosuggest/tree/3.0/demo/src/components/App/components/CachingExample)
 * Input debouncing is not part of `react-autosuggest` anymore. You'll have to implement this yourself. [Example](https://github.com/moroshko/react-autosuggest/tree/3.0/demo/src/components/App/components/DebouncedExample)
@@ -54,17 +55,4 @@ suggestionIsFocused    suggestion--focused
             section    section-container
         sectionName    section-title
  sectionSuggestions    section-suggestions-container
-```
-
-## Troubleshooting
-
-If you are getting the following error:
-
-> Uncaught Error: Invariant Violation: addComponentAsRefTo(...): Only a ReactOwner can have refs. You might be adding a ref to a component that was not created inside a component's `render` method, or you have multiple copies of React loaded
-
-Try:
-
-```
-$ rm -rf node_modules
-$ npm install
 ```

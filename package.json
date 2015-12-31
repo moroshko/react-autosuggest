@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "3.0.0-beta.1",
+  "version": "3.0.0-beta.4",
   "publishConfig": {
     "tag": "3.0-latest"
   },
@@ -27,12 +27,12 @@
     "prepublish": "npm run dist && npm run standalone"
   },
   "dependencies": {
-    "react-autowhatever": "^1.3.6",
-    "react-redux": "^4.0.5",
+    "react-autowhatever": "^2.0.1",
+    "react-redux": "^4.0.6",
     "redux": "^3.0.5"
   },
   "peerDependencies": {
-    "react": "^0.14.3"
+    "react": "^0.14.5"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.1.0",
@@ -50,15 +50,17 @@
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^3.13.1",
     "extract-text-webpack-plugin": "^0.9.1",
-    "jsdom": "^7.2.1",
+    "file-loader": "^0.8.5",
+    "jsdom": "^7.2.2",
     "less": "^2.5.3",
     "less-loader": "^2.2.2",
     "lodash.debounce": "^3.1.1",
     "mocha": "^2.3.4",
-    "react-addons-test-utils": "^0.14.3",
-    "react-dom": "^0.14.3",
+    "react": "^0.14.5",
+    "react-addons-test-utils": "^0.14.5",
+    "react-dom": "^0.14.5",
     "react-transform-hmr": "^1.0.1",
-    "redux-thunk": "^1.0.2",
+    "redux-thunk": "^1.0.3",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.13.0",

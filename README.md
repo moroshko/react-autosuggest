@@ -34,7 +34,7 @@
 ## Features
 
 * [WAI-ARIA accessible][wai-aria] (including ARIA attributes and keyboard interactions)
-* Supports flux architecture (see [redux examples][examples])
+* Flux architecture support, including redux
 * Supports [react-themeable](https://github.com/markdalgleish/react-themeable) for flexible styling
 * Supports [multiple sections][multiple-sections] as well as [plain list][basic-usage] of suggestions
 * Full control over [suggestion rendering](#renderSuggestionProp) (you can display extra data, images, whatever you want)
@@ -42,11 +42,6 @@
 * [Pass through props to the input field](#inputPropsProp) (e.g. placeholder, type, onChange, onBlur)
 * [onSuggestionSelected](#onSuggestionSelectedProp) hook
 * Thoroughly tested
-
-The following are not part of react-autosuggest, but can be easily implemented:
-
-* Delayed requests management (if request comes back after user types another letter, it will be ignored). [Example][async-example]
-* In-memory caching (suggestions for a given input are retrieved only once). [Example][caching-example]
 
 ## Installation
 
@@ -157,6 +152,7 @@ class Example extends React.Component {
 * [`renderSectionTitle`](#renderSectionTitleProp)
 * [`getSectionSuggestions`](#getSectionSuggestionsProp)
 * [`onSuggestionSelected`](#onSuggestionSelectedProp)
+* [`focusInputOnSuggestionClick`](#focusInputOnSuggestionClickProp)
 * [`theme`](#themeProp)
 * [`id`](#idProp)
 
@@ -371,6 +367,23 @@ where:
 * `method` - string describing how user selected the suggestion. The possible values are:
   * `'click'` - user clicked on the suggestion
   * `'enter'` - user selected the suggestion using Enter
+
+<a name="focusInputOnSuggestionClickProp"></a>
+#### focusInputOnSuggestionClick (optional)
+
+By default, `focusInputOnSuggestionClick={true}`, which means that, every time suggestion is clicked, the input will get the focus back.
+
+To prevent the focus going back to the input, set `focusInputOnSuggestionClick={false}`.
+
+This may be useful on mobile devices where the keyboard appears when input is focused.
+
+You might want to do something like this:
+
+```xml
+<Autosuggest focusInputOnSuggestionClick={!isMobile} ... />
+```
+
+where `isMobile` is a boolean describing whether Autosuggest operates on a mobile device or not. You can use [kaimallea/isMobile](https://github.com/kaimallea/isMobile), for example, to determine that.
 
 <a name="themeProp"></a>
 #### theme (optional)
