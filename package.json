@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "3.0.0-beta.3",
+  "version": "3.0.0-beta.4",
   "publishConfig": {
     "tag": "3.0-latest"
   },
@@ -51,6 +51,7 @@
     "eslint-plugin-react": "^3.13.1",
     "extract-text-webpack-plugin": "^0.9.1",
     "isomorphic-fetch": "^2.2.0",
+    "file-loader": "^0.8.5",
     "jsdom": "^7.2.2",
     "less": "^2.5.3",
     "less-loader": "^2.2.2",
