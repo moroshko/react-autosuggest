@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HappyPack = require('happypack');
 
 module.exports = {
   entry: [
@@ -15,21 +16,25 @@ module.exports = {
   },
 
   module: {
-    loaders: [{
-      test: /\.js$/,
-      loaders: ['babel'],
-      include: [
-        path.join(__dirname, 'src'), // Must be an absolute path
-        path.join(__dirname, 'demo', 'src') // Must be an absolute path
-      ]
-    }, {
-      test: /\.less$/,
-      loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]__[local]___[hash:base64:5]!autoprefixer!less'),
-      exclude: /node_modules/
-    }, {
-      test: /\.svg$/,
-      loader: 'url?limit=8192!svgo' // 8kb
-    }]
+    loaders: [
+      {
+        test: /\.js$/,
+        loaders: 'happypack/loader',
+        include: [
+          path.join(__dirname, 'src'), // Must be an absolute path
+          path.join(__dirname, 'demo', 'src') // Must be an absolute path
+        ]
+      },
+      {
+        test: /\.less$/,
+        loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]__[local]___[hash:base64:5]!autoprefixer!less'),
+        exclude: /node_modules/
+      },
+      {
+        test: /\.svg$/,
+        loader: 'url?limit=8192!svgo' // 8kb
+      }
+    ]
   },
 
   resolve: {
@@ -43,6 +48,13 @@ module.exports = {
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin('app.css')
+    new ExtractTextPlugin('app.css'),
+    new HappyPack({
+      loaders: [
+        {
+          path: path.join(__dirname, 'demo', 'src') // Must be an absolute path
+        }
+      ]
+    })
   ]
 };

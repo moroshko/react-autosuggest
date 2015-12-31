@@ -2,3 +2,4 @@ node_modules
 dist
 demo/dist
 npm-debug.log
+.happypack
