@@ -106,6 +106,7 @@ var AutosuggestContainer = (function (_Component) {
       var getSectionSuggestions = _props.getSectionSuggestions;
       var inputProps = _props.inputProps;
       var onSuggestionSelected = _props.onSuggestionSelected;
+      var focusInputOnSuggestionClick = _props.focusInputOnSuggestionClick;
       var id = _props.id;
 
       return _react2.default.createElement(
@@ -120,6 +121,7 @@ var AutosuggestContainer = (function (_Component) {
           getSectionSuggestions: getSectionSuggestions,
           inputProps: inputProps,
           onSuggestionSelected: onSuggestionSelected,
+          focusInputOnSuggestionClick: focusInputOnSuggestionClick,
           theme: this.theme,
           id: id })
       );
@@ -149,6 +151,7 @@ AutosuggestContainer.propTypes = {
   multiSection: _react.PropTypes.bool,
   renderSectionTitle: _react.PropTypes.func,
   getSectionSuggestions: _react.PropTypes.func,
+  focusInputOnSuggestionClick: _react.PropTypes.bool,
   theme: function theme(props, propName) {
     var theme = props[propName];
 
@@ -173,6 +176,7 @@ AutosuggestContainer.defaultProps = {
     throw new Error('`getSectionSuggestions` must be provided');
   },
 
+  focusInputOnSuggestionClick: true,
   theme: defaultTheme,
   id: '1'
 };

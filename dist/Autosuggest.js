@@ -65,10 +65,13 @@ function mapDispatchToProps(dispatch) {
 var Autosuggest = (function (_Component) {
   _inherits(Autosuggest, _Component);
 
-  function Autosuggest() {
+  function Autosuggest(props) {
     _classCallCheck(this, Autosuggest);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Autosuggest).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Autosuggest).call(this, props));
+
+    _this.saveInput = _this.saveInput.bind(_this);
+    return _this;
   }
 
   _createClass(Autosuggest, [{
@@ -123,6 +126,33 @@ var Autosuggest = (function (_Component) {
       return getSuggestionValue(this.getSuggestion(sectionIndex, suggestionIndex));
     }
   }, {
+    key: 'getSuggestionIndices',
+    value: function getSuggestionIndices(suggestionElement) {
+      var sectionIndex = suggestionElement.getAttribute('data-section-index');
+      var suggestionIndex = suggestionElement.getAttribute('data-suggestion-index');
+
+      return {
+        sectionIndex: typeof sectionIndex === 'string' ? parseInt(sectionIndex, 10) : null,
+        suggestionIndex: parseInt(suggestionIndex, 10)
+      };
+    }
+  }, {
+    key: 'findSuggestionElement',
+    value: function findSuggestionElement(startNode) {
+      var node = startNode;
+
+      do {
+        if (node.getAttribute('data-suggestion-index') !== null) {
+          return node;
+        }
+
+        node = node.parentNode;
+      } while (node !== null);
+
+      console.error('Clicked element:', startNode); // eslint-disable-line no-console
+      throw new Error('Couldn\'t find suggestion element');
+    }
+  }, {
     key: 'maybeEmitOnChange',
     value: function maybeEmitOnChange(event, newValue, method) {
       var _props$inputProps = this.props.inputProps;
@@ -145,6 +175,13 @@ var Autosuggest = (function (_Component) {
       return suggestions.length > 0 && shouldRenderSuggestions(value);
     }
   }, {
+    key: 'saveInput',
+    value: function saveInput(autowhatever) {
+      if (autowhatever !== null) {
+        this.input = autowhatever.refs.input;
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -159,6 +196,7 @@ var Autosuggest = (function (_Component) {
       var renderSectionTitle = _props4.renderSectionTitle;
       var id = _props4.id;
       var getSectionSuggestions = _props4.getSectionSuggestions;
+      var focusInputOnSuggestionClick = _props4.focusInputOnSuggestionClick;
       var theme = _props4.theme;
       var isFocused = _props4.isFocused;
       var isCollapsed = _props4.isCollapsed;
@@ -258,36 +296,54 @@ var Autosuggest = (function (_Component) {
           _onKeyDown && _onKeyDown(event);
         }
       });
-      var itemProps = {
-        onMouseEnter: function onMouseEnter(event, _ref) {
-          var sectionIndex = _ref.sectionIndex;
-          var itemIndex = _ref.itemIndex;
+      var onMouseEnter = function onMouseEnter(event, _ref) {
+        var sectionIndex = _ref.sectionIndex;
+        var itemIndex = _ref.itemIndex;
 
-          updateFocusedSuggestion(sectionIndex, itemIndex);
-        },
-        onMouseLeave: function onMouseLeave() {
-          updateFocusedSuggestion(null, null);
-        },
-        onMouseDown: function onMouseDown() {
-          _this2.justClickedOnSuggestion = true;
-        },
-        onClick: function onClick(event, _ref2) {
-          var sectionIndex = _ref2.sectionIndex;
-          var itemIndex = _ref2.itemIndex;
+        updateFocusedSuggestion(sectionIndex, itemIndex);
+      };
+      var onMouseLeave = function onMouseLeave() {
+        updateFocusedSuggestion(null, null);
+      };
+      var onMouseDown = function onMouseDown() {
+        _this2.justClickedOnSuggestion = true;
+      };
+      var onClick = function onClick(event) {
+        var _getSuggestionIndices = _this2.getSuggestionIndices(_this2.findSuggestionElement(event.target));
 
-          var focusedSuggestion = _this2.getFocusedSuggestion();
-          var suggestionValue = _this2.getSuggestionValueByIndex(sectionIndex, itemIndex);
+        var sectionIndex = _getSuggestionIndices.sectionIndex;
+        var suggestionIndex = _getSuggestionIndices.suggestionIndex;
 
-          onSuggestionSelected(event, {
-            suggestion: focusedSuggestion,
-            suggestionValue: suggestionValue,
-            method: 'click'
-          });
-          _this2.maybeEmitOnChange(event, suggestionValue, 'click');
-          closeSuggestions('click');
+        var clickedSuggestion = _this2.getSuggestion(sectionIndex, suggestionIndex);
+        var clickedSuggestionValue = _this2.props.getSuggestionValue(clickedSuggestion);
+
+        onSuggestionSelected(event, {
+          suggestion: clickedSuggestion,
+          suggestionValue: clickedSuggestionValue,
+          method: 'click'
+        });
+        _this2.maybeEmitOnChange(event, clickedSuggestionValue, 'click');
+        closeSuggestions('click');
+
+        if (focusInputOnSuggestionClick === true) {
           _this2.input.focus();
-          _this2.justClickedOnSuggestion = false;
         }
+
+        _this2.justClickedOnSuggestion = false;
+      };
+      var itemProps = function itemProps(_ref2) {
+        var sectionIndex = _ref2.sectionIndex;
+        var itemIndex = _ref2.itemIndex;
+
+        return {
+          'data-section-index': sectionIndex,
+          'data-suggestion-index': itemIndex,
+          onMouseEnter: onMouseEnter,
+          onMouseLeave: onMouseLeave,
+          onMouseDown: onMouseDown,
+          onTouchStart: onMouseDown, // Because on iOS `onMouseDown` is not triggered
+          onClick: onClick
+        };
       };
       var renderItem = function renderItem(item) {
         return renderSuggestion(item, { value: value, valueBeforeUpDown: valueBeforeUpDown });
@@ -304,11 +360,7 @@ var Autosuggest = (function (_Component) {
         itemProps: itemProps,
         theme: theme,
         id: id,
-        ref: function ref(autowhatever) {
-          if (autowhatever !== null) {
-            _this2.input = autowhatever.refs.input;
-          }
-        } });
+        ref: this.saveInput });
     }
   }]);
 
@@ -325,6 +377,7 @@ Autosuggest.propTypes = {
   multiSection: _react.PropTypes.bool.isRequired,
   renderSectionTitle: _react.PropTypes.func.isRequired,
   getSectionSuggestions: _react.PropTypes.func.isRequired,
+  focusInputOnSuggestionClick: _react.PropTypes.bool.isRequired,
   theme: _react.PropTypes.object.isRequired,
   id: _react.PropTypes.string.isRequired,
 
