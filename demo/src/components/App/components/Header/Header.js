@@ -39,12 +39,12 @@ class Header extends Component {
           React Autosuggest
         </h1>
         <div className={styles.subHeader}>
-          A WAI-ARIA compliant autosuggest component built in React
+          WAI-ARIA compliant autosuggest component built in React
         </div>
         <a className={styles.button}
            href="https://github.com/moroshko/react-autosuggest#installation"
            target="_blank">
-          Get Started
+          Get started
         </a>
         <div className={styles.socialLinks}>
           <Link className={styles.stargazersLink}

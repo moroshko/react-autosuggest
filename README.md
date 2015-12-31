@@ -13,30 +13,18 @@
 
 # React Autosuggest
 
-[WAI-ARIA compliant][wai-aria] React autosuggest component.
-
+WAI-ARIA compliant autosuggest component built in React
 
 ## Demo
 
-* <a href="https://moroshko.github.io/react-autosuggest#basic-usage" target="_blank">Basic usage</a>
-* <a href="https://moroshko.github.io/react-autosuggest#highlight-matches" target="_blank">Highlight matches</a>
-* <a href="https://moroshko.github.io/react-autosuggest#async-example" target="_blank">Async example</a>
-* <a href="https://moroshko.github.io/react-autosuggest#multiple-sections" target="_blank">Multiple sections</a>
-* <a href="https://moroshko.github.io/react-autosuggest#debounced-example" target="_blank">Debounced example</a>
-* <a href="https://moroshko.github.io/react-autosuggest#caching-example" target="_blank">Caching example</a>
-
-## Playground
-
-<a href="http://codepen.io/moroshko/pen/LGNJMy" target="_blank">
-  Codepen
-</a>
+See [Codepen examples](http://codepen.io/collection/DkkYaQ/)
 
 ## Features
 
-* [WAI-ARIA accessible][wai-aria] (including ARIA attributes and keyboard interactions)
+* [WAI-ARIA compliant][wai-aria] (including ARIA attributes and keyboard interactions)
 * Flux architecture support, including redux
 * Supports [react-themeable](https://github.com/markdalgleish/react-themeable) for flexible styling
-* Supports [multiple sections][multiple-sections] as well as [plain list][basic-usage] of suggestions
+* Supports [multiple sections][multiple-sections] as well as [plain list][basic-example] of suggestions
 * Full control over [suggestion rendering](#renderSuggestionProp) (you can display extra data, images, whatever you want)
 * Full control over [when to show the suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Pass through props to the input field](#inputPropsProp) (e.g. placeholder, type, onChange, onBlur)
@@ -521,7 +509,7 @@ npm test
 [wai-aria]: https://www.w3.org/TR/wai-aria-practices/#autocomplete
 [controlled-component]: https://facebook.github.io/react/docs/forms.html#controlled-components
 [examples]: https://github.com/moroshko/react-autosuggest/tree/master/demo/src/components/App/components
-[basic-usage]: https://moroshko.github.io/react-autosuggest#basic-usage
+[basic-example]: https://moroshko.github.io/react-autosuggest#basic-example
 [multiple-sections]: https://moroshko.github.io/react-autosuggest#multiple-sections
 [async-example]: https://moroshko.github.io/react-autosuggest#async-example
 [caching-example]: https://moroshko.github.io/react-autosuggest#caching-example

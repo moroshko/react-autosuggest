@@ -1,0 +1,23 @@
+@import '~variables';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: (11 * @rows) 0;
+  color: #212121;
+
+  @media @small {
+    padding: (7 * @rows) 0;
+  }
+}
+
+.header {
+  margin: 0;
+  font-size: 50px;
+  font-weight: 300;
+
+  @media @small {
+    font-size: 34px;
+  }
+}

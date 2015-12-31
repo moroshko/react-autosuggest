@@ -16,7 +16,8 @@ export default function Features() {
             Accessible
           </div>
           <div className={styles.featureDescription}>
-            <Link href="http://www.w3.org/TR/wai-aria-practices/#autocomplete">
+            <Link className={styles.link}
+                  href="http://www.w3.org/TR/wai-aria-practices/#autocomplete">
               WAI-ARIA accessible
             </Link>
             , with support for ARIA attributes and keyboard interactions.
@@ -38,15 +39,23 @@ export default function Features() {
           </div>
           <div className={styles.featureDescription}>
             {'Support for '}
-            <Link href="http://redux.js.org">redux</Link>{', '}
-            <Link href="https://github.com/markdalgleish/react-themeable">react-themable</Link>{', '}
-            {' custom rendering and much more.'}
+            <Link className={styles.link}
+                  href="http://redux.js.org">
+              redux
+            </Link>
+            {', '}
+            <Link className={styles.link}
+                  href="https://github.com/markdalgleish/react-themeable">
+              react-themable
+            </Link>
+            {', custom rendering and much more.'}
           </div>
         </div>
       </div>
       <div className={styles.footer}>
         {'Check out the '}
-        <Link href="https://github.com/moroshko/react-autosuggest#features">
+        <Link className={styles.link}
+              href="https://github.com/moroshko/react-autosuggest#features">
           GitHub page
         </Link>
         {' for a full list of features.'}

@@ -8,19 +8,22 @@ export default function Footer() {
     <div className={styles.container}>
       <div>
         {'Crafted with love by '}
-        <Link href="https://twitter.com/moroshko" underline={false}>
+        <Link className={styles.link}
+              href="https://twitter.com/moroshko" underline={false}>
           @moroshko
         </Link>
       </div>
-      <div>
+      <div className={styles.pageDesign}>
         {'Page design by '}
-        <Link href="https://twitter.com/ThatBaldUXGuy" underline={false}>
+        <Link className={styles.link}
+              href="https://twitter.com/ThatBaldUXGuy" underline={false}>
           @thatbalduxguy
         </Link>
       </div>
       <div className={styles.licensed}>
         {'Licensed under '}
-        <Link href="http://moroshko.mit-license.org/" underline={false}>
+        <Link className={styles.link}
+              href="http://moroshko.mit-license.org/" underline={false}>
           MIT license
         </Link>
       </div>
