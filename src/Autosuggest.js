@@ -23,8 +23,8 @@ function mapDispatchToProps(dispatch) {
     inputBlurred: () => {
       dispatch(inputBlurred());
     },
-    inputChanged: lastAction => {
-      dispatch(inputChanged(lastAction));
+    inputChanged: (shouldRenderSuggestions, lastAction) => {
+      dispatch(inputChanged(shouldRenderSuggestions, lastAction));
     },
     updateFocusedSuggestion: (sectionIndex, suggestionIndex, value) => {
       dispatch(updateFocusedSuggestion(sectionIndex, suggestionIndex, value));
@@ -187,9 +187,10 @@ class Autosuggest extends Component {
       },
       onChange: event => {
         const { value } = event.target;
+        const { shouldRenderSuggestions } = this.props;
 
         this.maybeEmitOnChange(event, value, 'type');
-        inputChanged('type');
+        inputChanged(shouldRenderSuggestions(value), 'type');
       },
       onKeyDown: (event, data) => {
         switch (event.key) {

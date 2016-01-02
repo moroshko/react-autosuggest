@@ -18,9 +18,10 @@ export function inputBlurred() {
   };
 }
 
-export function inputChanged(lastAction) {
+export function inputChanged(shouldRenderSuggestions, lastAction) {
   return {
     type: INPUT_CHANGED,
+    shouldRenderSuggestions,
     lastAction
   };
 }
@@ -61,7 +62,8 @@ export default function reducer(state, action) {
         ...state,
         isFocused: false,
         focusedSectionIndex: null,
-        focusedSuggestionIndex: null
+        focusedSuggestionIndex: null,
+        isCollapsed: true
       };
 
     case INPUT_CHANGED:
@@ -70,6 +72,7 @@ export default function reducer(state, action) {
         focusedSectionIndex: null,
         focusedSuggestionIndex: null,
         valueBeforeUpDown: null,
+        isCollapsed: !action.shouldRenderSuggestions,
         lastAction: action.lastAction
       };
 
