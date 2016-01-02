@@ -5,7 +5,6 @@ import Header from 'Header/Header';
 import Features from 'Features/Features';
 import Examples from 'Examples/Examples';
 /*import HighlightMatches from 'HighlightMatches/HighlightMatches';
-import MultipleSections from 'MultipleSections/MultipleSections';
 import AsyncExample from 'AsyncExample/AsyncExample';
 import DebouncedExample from 'DebouncedExample/DebouncedExample';
 import CachingExample from 'CachingExample/CachingExample';*/
@@ -22,7 +21,6 @@ export default function App() {
         <ul>
           <li><a href="#highlight-matches">Highlight matches</a></li>
           <li><a href="#async-example">Async example</a></li>
-          <li><a href="#multiple-sections">Multiple sections</a></li>
           <li><a href="#debounced-example">Debounced example</a></li>
           <li><a href="#caching-example">Caching example</a></li>
         </ul>
@@ -30,7 +28,6 @@ export default function App() {
       <div className={styles.examplesContainer}>
         <HighlightMatches />
         <AsyncExample />
-        <MultipleSections />
         <DebouncedExample />
         <CachingExample />
       </div>*/}

@@ -2,6 +2,7 @@ import styles from './Examples.less';
 
 import React from 'react';
 import Basic from 'Basic/Basic';
+import MultipleSections from 'MultipleSections/MultipleSections';
 
 export default function Examples() {
   return (
@@ -10,6 +11,7 @@ export default function Examples() {
         Examples
       </h2>
       <Basic />
+      <MultipleSections />
     </div>
   );
 };

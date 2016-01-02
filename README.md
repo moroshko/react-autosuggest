@@ -24,7 +24,7 @@ See [Codepen examples](http://codepen.io/collection/DkkYaQ/)
 * [WAI-ARIA compliant][wai-aria] (including ARIA attributes and keyboard interactions)
 * Flux architecture support, including redux
 * Supports [react-themeable](https://github.com/markdalgleish/react-themeable) for flexible styling
-* Supports [multiple sections][multiple-sections] as well as [plain list][basic-example] of suggestions
+* Suggestions can be presented as [plain list][basic-example] or [multiple sections][multiple-sections-example]
 * Full control over [suggestion rendering](#renderSuggestionProp) (you can display extra data, images, whatever you want)
 * Full control over [when to show the suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Pass through props to the input field](#inputPropsProp) (e.g. placeholder, type, onChange, onBlur)
@@ -39,24 +39,27 @@ npm install react-autosuggest --save
 
 ## Basic Usage
 
-This example doesn't use flux architecture. If you would like to connect Autosuggest to your redux app, check out the [redux examples][examples].
-
 ```js
 import Autosuggest from 'react-autosuggest';
 
-const languages = [{
-  name: 'C',
-  year: 1972
-}, {
-  name: 'Elm',
-  year: 2012
-}, {
-  name: 'Javascript',
-  year: 1995
-}, {
-  name: 'Python',
-  year: 1991
-}];
+const languages = [
+  {
+    name: 'C',
+    year: 1972
+  },
+  {
+    name: 'Elm',
+    year: 2012
+  },
+  {
+    name: 'Javascript',
+    year: 1995
+  },
+  {
+    name: 'Python',
+    year: 1991
+  }
+];
 
 function getMatchingLanguages(value) {
   const escapedValue = escapeRegexCharacters(value.trim()); // See: https://github.com/moroshko/react-autosuggest/blob/master/demo/src/components/utils/utils.js#L2-L4
@@ -147,9 +150,9 @@ class Example extends React.Component {
 <a name="suggestionsProp"></a>
 #### suggestions (required)
 
-Arbitrary array of suggestions to display.
+An array of suggestions to display.
 
-For plain list of suggestions, you could have:
+For a plain list of suggestions, every item in `suggestions` should be a single suggestion. It's up to you what shape every suggestion takes. For example:
 
 ```js
 const suggestions = [{
@@ -165,7 +168,7 @@ const suggestions = [{
 }];
 ```
 
-You could also have [multiple sections](#multiSectionProp), in which case `suggestions` would be an array of sections. For example:
+To display [multiple sections](#multiSectionProp), every item in `suggestions` should be a single section. Again, it's up to you what shape every section takes. For example:
 
 ```js
 const suggestions = [{
@@ -508,8 +511,7 @@ npm test
 
 [wai-aria]: https://www.w3.org/TR/wai-aria-practices/#autocomplete
 [controlled-component]: https://facebook.github.io/react/docs/forms.html#controlled-components
-[examples]: https://github.com/moroshko/react-autosuggest/tree/master/demo/src/components/App/components
-[basic-example]: https://moroshko.github.io/react-autosuggest#basic-example
-[multiple-sections]: https://moroshko.github.io/react-autosuggest#multiple-sections
+[basic-example]: http://codepen.io/moroshko/pen/LGNJMy
+[multiple-sections-example]: http://codepen.io/moroshko/pen/qbRNjV
 [async-example]: https://moroshko.github.io/react-autosuggest#async-example
 [caching-example]: https://moroshko.github.io/react-autosuggest#caching-example
