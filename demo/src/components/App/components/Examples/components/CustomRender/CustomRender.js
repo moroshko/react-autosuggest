@@ -1,29 +1,48 @@
-import styles from './Basic.less';
+import styles from './CustomRender.less';
+import theme from './theme.less';
 
 import React, { Component } from 'react';
+import highlight  from 'autosuggest-highlight';
 import Link from 'Link/Link';
 import Autosuggest from 'AutosuggestContainer';
-import languages from './languages';
+import people from './people';
 import { escapeRegexCharacters } from 'utils/utils';
 
 function getSuggestions(value) {
   const escapedValue = escapeRegexCharacters(value.trim());
-  const regex = new RegExp('^' + escapedValue, 'i');
+  const regex = new RegExp('\\b' + escapedValue, 'i');
 
-  return languages.filter(language => regex.test(language.name));
+  return people.filter(person => regex.test(getSuggestionValue(person)));
 }
 
 function getSuggestionValue(suggestion) {
-  return suggestion.name;
+  return `${suggestion.first} ${suggestion.last}`;
 }
 
-function renderSuggestion(suggestion) {
+function renderSuggestion(suggestion, { value, valueBeforeUpDown }) {
+  const suggestionText = `${suggestion.first} ${suggestion.last}`;
+  const query = (valueBeforeUpDown || value).trim();
+  const matches = highlight.match(suggestionText, query);
+  const parts = highlight.parse(suggestionText, matches);
+
   return (
-    <span>{suggestion.name}</span>
+    <span className={theme.suggestionContent + ' ' + theme[suggestion.twitter]}>
+      <span className={theme.name}>
+        {
+          parts.map((part, index) => {
+            const className = part.highlight ? theme.highlight : null;
+
+            return (
+              <span className={className} key={index}>{part.text}</span>
+            );
+          })
+        }
+      </span>
+    </span>
   );
 }
 
-export default class Basic extends Component {
+export default class CustomRender extends Component {
   constructor() {
     super();
 
@@ -64,13 +83,14 @@ export default class Basic extends Component {
     };
 
     return (
-      <div id="basic-example" className={styles.container}>
+      <div id="custom-render-example" className={styles.container}>
         <div className={styles.textContainer}>
           <div className={styles.title}>
-            Basic
+            Custom render
           </div>
           <div className={styles.description}>
-            Let’s start simple. Here’s a plain list of suggestions.
+            Apply any styling you wish.<br />
+            For example, render images and highlight the matching string.
           </div>
           <Link className={styles.codepenLink}
                 href="http://codepen.io/moroshko/pen/LGNJMy" underline={false}>
@@ -83,7 +103,8 @@ export default class Basic extends Component {
                        renderSuggestion={renderSuggestion}
                        inputProps={inputProps}
                        onSuggestionSelected={this.onSuggestionSelected}
-                       id="basic-example" />
+                       theme={theme}
+                       id="custom-render-example" />
         </div>
       </div>
     );

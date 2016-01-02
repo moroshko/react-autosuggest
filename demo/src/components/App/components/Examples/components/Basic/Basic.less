@@ -2,10 +2,13 @@
 
 .container {
   display: flex;
+  justify-content: space-between;
+  width: 34 * @columns;
   margin: (11 * @rows) (0.5 * @column) 0;
 
   @media @examples-vertical {
     flex-direction: column;
+    width: 14 * @columns;
   }
 
   @media @small {
@@ -16,7 +19,6 @@
 .textContainer {
   display: flex;
   flex-direction: column;
-  max-width: 15 * @columns;
 }
 
 .title {
