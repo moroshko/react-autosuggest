@@ -93,7 +93,7 @@ export default class CustomRender extends Component {
             For example, render images and highlight the matching string.
           </div>
           <Link className={styles.codepenLink}
-                href="http://codepen.io/moroshko/pen/LGNJMy" underline={false}>
+                href="http://codepen.io/moroshko/pen/PZWbzK" underline={false}>
             Codepen
           </Link>
         </div>
