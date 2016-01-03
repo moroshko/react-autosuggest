@@ -4,7 +4,7 @@ import React from 'react';
 import Header from 'Header/Header';
 import Features from 'Features/Features';
 import Examples from 'Examples/Examples';
-/*import AsyncExample from 'AsyncExample/AsyncExample';
+/*
 import DebouncedExample from 'DebouncedExample/DebouncedExample';
 import CachingExample from 'CachingExample/CachingExample';*/
 import Footer from 'Footer/Footer';
@@ -18,13 +18,11 @@ export default function App() {
       {/*<div>
         <h2>Examples</h2>
         <ul>
-          <li><a href="#async-example">Async example</a></li>
           <li><a href="#debounced-example">Debounced example</a></li>
           <li><a href="#caching-example">Caching example</a></li>
         </ul>
       </div>
       <div className={styles.examplesContainer}>
-        <AsyncExample />
         <DebouncedExample />
         <CachingExample />
       </div>*/}

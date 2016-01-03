@@ -379,7 +379,7 @@ where `isMobile` is a boolean describing whether Autosuggest operates on a mobil
 <a name="themeProp"></a>
 #### theme (optional)
 
-Autosuggest comes with no styles. 
+Autosuggest comes with no styles.
 
 It uses <a href="https://github.com/markdalgleish/react-themeable" target="_blank">react-themeable</a> to allow you to style your Autosuggest component using <a href="https://github.com/css-modules/css-modules" target="_blank">CSS Modules</a>, <a href="https://github.com/FormidableLabs/radium" target="_blank">Radium</a>, <a href="https://github.com/js-next/react-style" target="_blank">React Style</a>, <a href="https://github.com/jsstyles/jss" target="_blank">JSS</a>, <a href="https://facebook.github.io/react/tips/inline-styles.html" target="_blank">Inline styles</a>, or even global CSS.
 
@@ -510,5 +510,3 @@ npm test
 [controlled-component]: https://facebook.github.io/react/docs/forms.html#controlled-components
 [basic-example]: http://codepen.io/moroshko/pen/LGNJMy
 [multiple-sections-example]: http://codepen.io/moroshko/pen/qbRNjV
-[async-example]: https://moroshko.github.io/react-autosuggest#async-example
-[caching-example]: https://moroshko.github.io/react-autosuggest#caching-example
