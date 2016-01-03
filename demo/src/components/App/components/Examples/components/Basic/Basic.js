@@ -1,11 +1,12 @@
-import styles from './BasicUsage.less';
+import styles from './Basic.less';
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import Link from 'Link/Link';
 import Autosuggest from 'AutosuggestContainer';
 import languages from './languages';
 import { escapeRegexCharacters } from 'utils/utils';
 
-function getMatchingLanguages(value) {
+function getSuggestions(value) {
   const escapedValue = escapeRegexCharacters(value.trim());
   const regex = new RegExp('^' + escapedValue, 'i');
 
@@ -22,13 +23,13 @@ function renderSuggestion(suggestion) {
   );
 }
 
-export default class Example extends Component {
+export default class Basic extends Component {
   constructor() {
     super();
 
     this.state = {
       value: '',
-      suggestions: getMatchingLanguages('')
+      suggestions: getSuggestions('')
     };
 
     this.onChange = this.onChange.bind(this);
@@ -39,7 +40,7 @@ export default class Example extends Component {
     if (method === 'type') {
       this.setState({
         value: newValue,
-        suggestions: getMatchingLanguages(newValue)
+        suggestions: getSuggestions(newValue)
       });
     } else {
       this.setState({
@@ -48,36 +49,41 @@ export default class Example extends Component {
     }
   }
 
-  // When suggestion is selected, we need to update `suggestions` so that,
-  // if user presses Up or Down to reveal suggestions,
-  // they would see the updated list.
   onSuggestionSelected(event, { suggestionValue }) {
     this.setState({
-      suggestions: getMatchingLanguages(suggestionValue)
+      suggestions: getSuggestions(suggestionValue)
     });
   }
 
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Type a programming language',
+      placeholder: 'Type \'c\'',
       value,
       onChange: this.onChange
     };
 
     return (
-      <div className={styles.container}>
-        <h3 id="basic-usage">Basic usage</h3>
-        <div className={styles.content}>
-          <ul className={styles.info}>
-            <li>Plain list of suggestions</li>
-          </ul>
+      <div id="basic-example" className={styles.container}>
+        <div className={styles.textContainer}>
+          <div className={styles.title}>
+            Basic
+          </div>
+          <div className={styles.description}>
+            Let’s start simple. Here’s a plain list of suggestions.
+          </div>
+          <Link className={styles.codepenLink}
+                href="http://codepen.io/moroshko/pen/LGNJMy" underline={false}>
+            Codepen
+          </Link>
+        </div>
+        <div className={styles.autosuggest}>
           <Autosuggest suggestions={suggestions}
                        getSuggestionValue={getSuggestionValue}
                        renderSuggestion={renderSuggestion}
                        inputProps={inputProps}
                        onSuggestionSelected={this.onSuggestionSelected}
-                       id="basic-usage" />
+                       id="basic-example" />
         </div>
       </div>
     );

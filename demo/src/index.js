@@ -3,17 +3,13 @@ import { render } from 'react-dom';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import highlightMatches from 'App/components/HighlightMatches/redux';
-import multipleSections from 'App/components/MultipleSections/redux';
-import asyncExample from 'App/components/AsyncExample/redux';
+import header from 'App/components/Header/redux';
 import debouncedExample from 'App/components/DebouncedExample/redux';
 import cachingExample from 'App/components/CachingExample/redux';
 import App from 'App/App';
 
 const appReducer = combineReducers({
-  highlightMatches,
-  asyncExample,
-  multipleSections,
+  header,
   debouncedExample,
   cachingExample
 });

@@ -1,0 +1,16 @@
+.link {
+  white-space: nowrap;
+}
+
+.linkWithUnderline {
+  composes: link;
+}
+
+.linkWithoutUnderline {
+  composes: link;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

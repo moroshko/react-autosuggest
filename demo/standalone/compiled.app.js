@@ -110,7 +110,7 @@
 	  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 	}
 
-	function getMatchingLanguages(value) {
+	function getSuggestions(value) {
 	  var escapedValue = escapeRegexCharacters(value.trim());
 	  var regex = new RegExp('^' + escapedValue, 'i');
 
@@ -118,8 +118,6 @@
 	    return regex.test(language.name);
 	  });
 	}
-
-	var app = null;
 
 	function getSuggestionValue(suggestion) {
 	  return suggestion.name;
@@ -133,30 +131,6 @@
 	  );
 	}
 
-	function onChange(event, _ref) {
-	  var newValue = _ref.newValue;
-	  var method = _ref.method;
-
-	  if (method === 'type') {
-	    app.setState({
-	      value: newValue,
-	      suggestions: getMatchingLanguages(newValue)
-	    });
-	  } else {
-	    app.setState({
-	      value: newValue
-	    });
-	  }
-	}
-
-	function onSuggestionSelected(event, _ref2) {
-	  var suggestionValue = _ref2.suggestionValue;
-
-	  app.setState({
-	    suggestions: getMatchingLanguages(suggestionValue)
-	  });
-	}
-
 	var App = (function (_React$Component) {
 	  _inherits(App, _React$Component);
 
@@ -165,16 +139,43 @@
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this));
 
-	    app = _this;
-
 	    _this.state = {
 	      value: '',
-	      suggestions: getMatchingLanguages('')
+	      suggestions: getSuggestions('')
 	    };
+
+	    _this.onChange = _this.onChange.bind(_this);
+	    _this.onSuggestionSelected = _this.onSuggestionSelected.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(App, [{
+	    key: 'onChange',
+	    value: function onChange(event, _ref) {
+	      var newValue = _ref.newValue;
+	      var method = _ref.method;
+
+	      if (method === 'type') {
+	        this.setState({
+	          value: newValue,
+	          suggestions: getSuggestions(newValue)
+	        });
+	      } else {
+	        this.setState({
+	          value: newValue
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'onSuggestionSelected',
+	    value: function onSuggestionSelected(event, _ref2) {
+	      var suggestionValue = _ref2.suggestionValue;
+
+	      this.setState({
+	        suggestions: getSuggestions(suggestionValue)
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _state = this.state;
@@ -182,16 +183,16 @@
 	      var suggestions = _state.suggestions;
 
 	      var inputProps = {
-	        placeholder: 'Type a programming language',
+	        placeholder: 'Type \'c\'',
 	        value: value,
-	        onChange: onChange
+	        onChange: this.onChange
 	      };
 
 	      return React.createElement(Autosuggest, { suggestions: suggestions,
 	        getSuggestionValue: getSuggestionValue,
 	        renderSuggestion: renderSuggestion,
 	        inputProps: inputProps,
-	        onSuggestionSelected: onSuggestionSelected });
+	        onSuggestionSelected: this.onSuggestionSelected });
 	    }
 	  }]);
 

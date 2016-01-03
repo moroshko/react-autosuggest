@@ -1,4 +1,3 @@
-@font-size: 16px;
 @border-color: #aaa;
 @border-radius: 4px;
 
@@ -12,7 +11,7 @@
   padding: 10px 20px;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
-  font-size: @font-size;
+  font-size: 16px;
   border: 1px solid @border-color;
   border-radius: @border-radius;
 
@@ -37,7 +36,7 @@
   background-color: #fff;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
-  font-size: @font-size;
+  font-size: 20px;
   border-bottom-left-radius: @border-radius;
   border-bottom-right-radius: @border-radius;
   z-index: 2;
@@ -46,25 +45,50 @@
 .suggestion {
   cursor: pointer;
   padding: 10px 20px;
-}
+  height: 48px;
 
-.suggestion--focused {
-  background-color: #ddd;
-}
-
-.section-title {
-  padding: 10px 0 0 10px;
-  font-size: 12px;
-  color: #777;
-  border-top: 1px dashed #ccc;
-
-  .section-container:first-child & {
-    border-top: 0;
+  &:not(:first-child) {
+    border-top: 1px solid #ddd;
   }
 }
 
-.section-suggestions-container {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
+.suggestion--focused {
+  background-color: #0C7EAF;
+  color: #fff;
+}
+
+.suggestionContent {
+  display: flex;
+  align-items: center;
+  background-repeat: no-repeat;
+
+  &.dancounsell {
+    background-image: url(../CustomRender/photos/dancounsell.jpg);
+  }
+
+  &.ladylexy {
+    background-image: url(../CustomRender/photos/ladylexy.jpg);
+  }
+
+  &.mtnmissy {
+    background-image: url(../CustomRender/photos/mtnmissy.jpg);
+  }
+
+  &.steveodom {
+    background-image: url(../CustomRender/photos/steveodom.jpg);
+  }
+}
+
+.name {
+  margin-left: 68px;
+  line-height: 45px;
+}
+
+.highlight {
+  color: #ee0000;
+  font-weight: 400;
+
+  .suggestion--focused & {
+    color: #120000;
+  }
 }

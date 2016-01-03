@@ -23,8 +23,8 @@
 }
 
 .react-autosuggest__suggestions-container {
-  position: relative;
-  top: -1px;
+  position: absolute;
+  top: 51px;
   width: 280px;
   margin: 0;
   padding: 0;

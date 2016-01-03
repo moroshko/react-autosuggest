@@ -62,14 +62,12 @@ function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function getMatchingLanguages(value) {
+function getSuggestions(value) {
   const escapedValue = escapeRegexCharacters(value.trim());
   const regex = new RegExp('^' + escapedValue, 'i');
 
   return languages.filter(language => regex.test(language.name));
 }
-
-let app = null;
 
 function getSuggestionValue(suggestion) {
   return suggestion.name;
@@ -81,43 +79,44 @@ function renderSuggestion(suggestion) {
   );
 }
 
-function onChange(event, { newValue, method }) {
-  if (method === 'type') {
-    app.setState({
-      value: newValue,
-      suggestions: getMatchingLanguages(newValue)
-    });
-  } else {
-    app.setState({
-      value: newValue
-    });
-  }
-}
-
-function onSuggestionSelected(event, { suggestionValue }) {
-  app.setState({
-    suggestions: getMatchingLanguages(suggestionValue)
-  });
-}
-
 class App extends React.Component {
   constructor() {
     super();
 
-    app = this;
-
     this.state = {
       value: '',
-      suggestions: getMatchingLanguages('')
+      suggestions: getSuggestions('')
     };
+
+    this.onChange = this.onChange.bind(this);
+    this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
+  }
+
+  onChange(event, { newValue, method }) {
+    if (method === 'type') {
+      this.setState({
+        value: newValue,
+        suggestions: getSuggestions(newValue)
+      });
+    } else {
+      this.setState({
+        value: newValue
+      });
+    }
+  }
+
+  onSuggestionSelected(event, { suggestionValue }) {
+    this.setState({
+      suggestions: getSuggestions(suggestionValue)
+    });
   }
 
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Type a programming language',
+      placeholder: 'Type \'c\'',
       value,
-      onChange
+      onChange: this.onChange
     };
 
     return (
@@ -125,7 +124,7 @@ class App extends React.Component {
                    getSuggestionValue={getSuggestionValue}
                    renderSuggestion={renderSuggestion}
                    inputProps={inputProps}
-                   onSuggestionSelected={onSuggestionSelected} />
+                   onSuggestionSelected={this.onSuggestionSelected} />
     );
   }
 }

@@ -67,15 +67,7 @@ export default class AutosuggestContainer extends Component {
     renderSectionTitle: PropTypes.func,
     getSectionSuggestions: PropTypes.func,
     focusInputOnSuggestionClick: PropTypes.bool,
-    theme: (props, propName) => {
-      const theme = props[propName];
-
-      for (const key in theme) {
-        if (!(key in defaultTheme)) {
-          throw new Error(`'${key}' is not a valid property in 'theme'. Valid properties are:\n\n${Object.keys(defaultTheme).join('\n')}\n\n`);
-        }
-      }
-    },
+    theme: PropTypes.object,
     id: PropTypes.string
   };
 
