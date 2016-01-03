@@ -27,7 +27,6 @@
 
 .content {
   display: flex;
-  align-items: center;
   margin-top: 8 * @rows;
 
   @media @vertical {
@@ -54,6 +53,14 @@
 
     &:first-child {
       margin-top: 9 * @rows;
+    }
+  }
+
+  @media @small {
+    margin-top: 12 * @rows;
+
+    &:first-child {
+      margin-top: 7 * @rows;
     }
   }
 }
@@ -133,12 +140,12 @@
 }
 
 .featureDescription {
-  margin: @row 24px 0;
+  margin: @row 18px 0;
   font-size: 20px;
 }
 
 .footer {
-  margin: (14 * @rows) (0.5 * @column) 0;
+  margin: (8 * @rows) (0.5 * @column) 0;
   font-size: 20px;
   text-align: center;
 }

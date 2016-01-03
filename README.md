@@ -17,16 +17,16 @@ WAI-ARIA compliant autosuggest component built in React
 
 ## Demo
 
-See [Codepen examples](http://codepen.io/collection/DkkYaQ/)
+Check out the <a href="http://react-autosuggest.js.org" target="_blank">Homepage</a> and the <a href="http://codepen.io/collection/DkkYaQ" target="_blank">Codepen examples</a>.
 
 ## Features
 
-* [WAI-ARIA compliant][wai-aria] (including ARIA attributes and keyboard interactions)
-* Flux architecture support, including redux
-* Supports [react-themeable](https://github.com/markdalgleish/react-themeable) for flexible styling
+* <a href="https://www.w3.org/TR/wai-aria-practices/#autocomplete" target="_blank">WAI-ARIA compliant</a>, with support for ARIA attributes and keyboard interactions
+* Plugs in nicely to Flux and <a href="http://redux.js.org" target="_blank">redux</a> applications
+* Full control over [suggestions rendering](#renderSuggestionProp)
 * Suggestions can be presented as [plain list][basic-example] or [multiple sections][multiple-sections-example]
-* Full control over [suggestion rendering](#renderSuggestionProp) (you can display extra data, images, whatever you want)
-* Full control over [when to show the suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
+* Supports styling using <a href="https://github.com/css-modules/css-modules" target="_blank">CSS Modules</a>, <a href="https://github.com/FormidableLabs/radium" target="_blank">Radium</a>, <a href="https://facebook.github.io/react/tips/inline-styles.html" target="_blank">Inline styles</a>, global CSS, [and more](#themeProp)
+* Decide [when to show the suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Pass through props to the input field](#inputPropsProp) (e.g. placeholder, type, onChange, onBlur)
 * [onSuggestionSelected](#onSuggestionSelectedProp) hook
 * Thoroughly tested
@@ -61,7 +61,7 @@ const languages = [
   }
 ];
 
-function getMatchingLanguages(value) {
+function getSuggestions(value) {
   const escapedValue = escapeRegexCharacters(value.trim()); // See: https://github.com/moroshko/react-autosuggest/blob/master/demo/src/components/utils/utils.js#L2-L4
   const regex = new RegExp('^' + escapedValue, 'i');
 
@@ -84,7 +84,7 @@ class Example extends React.Component {
 
     this.state = {
       value: '',
-      suggestions: getMatchingLanguages('')
+      suggestions: getSuggestions('')
     };
 
     this.onChange = this.onChange.bind(this);
@@ -95,7 +95,7 @@ class Example extends React.Component {
     if (method === 'type') {
       this.setState({
         value: newValue,
-        suggestions: getMatchingLanguages(newValue)
+        suggestions: getSuggestions(newValue)
       });
     } else {
       this.setState({
@@ -109,7 +109,7 @@ class Example extends React.Component {
   // they would see the updated list.
   onSuggestionSelected(event, { suggestionValue }) {
     this.setState({
-      suggestions: getMatchingLanguages(suggestionValue)
+      suggestions: getSuggestions(suggestionValue)
     });
   }
 
@@ -203,7 +203,7 @@ const suggestions = [{
 <a name="getSuggestionValueProp"></a>
 #### getSuggestionValue (required)
 
-When user navigates the suggestions using the Up and Down keys, [the input should display the highlighted suggestion][wai-aria]. You design how suggestion is modelled. Therefore, it's your responsibility to tell Autosuggest how to map suggestions to input values.
+When user navigates the suggestions using the Up and Down keys, <a href="https://www.w3.org/TR/wai-aria-practices/#autocomplete" target="_blank">the input should display the highlighted suggestion</a>. You design how suggestion is modelled. Therefore, it's your responsibility to tell Autosuggest how to map suggestions to input values.
 
 This function gets:
 
@@ -379,9 +379,9 @@ where `isMobile` is a boolean describing whether Autosuggest operates on a mobil
 <a name="themeProp"></a>
 #### theme (optional)
 
-Autosuggest comes with no styles, and it supports [react-themeable](https://github.com/markdalgleish/react-themeable).
+Autosuggest comes with no styles. 
 
-This means you can use [CSS Modules](https://github.com/css-modules/css-modules), [Radium](http://projects.formidablelabs.com/radium), [React Style](https://github.com/js-next/react-style), [JSS](https://github.com/jsstyles/jss), inline styles, or even global CSS to style your Autosugest component.
+It uses <a href="https://github.com/markdalgleish/react-themeable" target="_blank">react-themeable</a> to allow you to style your Autosuggest component using <a href="https://github.com/css-modules/css-modules" target="_blank">CSS Modules</a>, <a href="https://github.com/FormidableLabs/radium" target="_blank">Radium</a>, <a href="https://github.com/js-next/react-style" target="_blank">React Style</a>, <a href="https://github.com/jsstyles/jss" target="_blank">JSS</a>, <a href="https://facebook.github.io/react/tips/inline-styles.html" target="_blank">Inline styles</a>, or even global CSS.
 
 For example, to style the Autosuggest using CSS Modules, do:
 
@@ -418,8 +418,6 @@ When not specified, `theme` defaults to:
   'section-suggestions-container': 'react-autosuggest__section-suggestions-container'
 }
 ```
-
-An example of styling an Autosuggest using CSS Modules can be found [here](https://github.com/moroshko/react-autosuggest/blob/master/demo/src/components/theme.less).
 
 The following diagrams illustrate how `theme` is structured.
 
@@ -509,7 +507,6 @@ npm test
 
 [MIT](http://moroshko.mit-license.org)
 
-[wai-aria]: https://www.w3.org/TR/wai-aria-practices/#autocomplete
 [controlled-component]: https://facebook.github.io/react/docs/forms.html#controlled-components
 [basic-example]: http://codepen.io/moroshko/pen/LGNJMy
 [multiple-sections-example]: http://codepen.io/moroshko/pen/qbRNjV

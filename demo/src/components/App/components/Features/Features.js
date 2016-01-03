@@ -18,7 +18,7 @@ export default function Features() {
           <div className={styles.featureDescription}>
             <Link className={styles.link}
                   href="http://www.w3.org/TR/wai-aria-practices/#autocomplete">
-              WAI-ARIA accessible
+              WAI-ARIA compliant
             </Link>
             , with support for ARIA attributes and keyboard interactions.
           </div>
@@ -38,17 +38,7 @@ export default function Features() {
             Customizable
           </div>
           <div className={styles.featureDescription}>
-            {'Support for '}
-            <Link className={styles.link}
-                  href="http://redux.js.org">
-              redux
-            </Link>
-            {', '}
-            <Link className={styles.link}
-                  href="https://github.com/markdalgleish/react-themeable">
-              react-themable
-            </Link>
-            {', custom rendering and much more.'}
+            Supports custom suggestion rendering, multiple sections, and more.
           </div>
         </div>
       </div>
