@@ -10,18 +10,29 @@ module.exports = {
   },
 
   module: {
-    loaders: [{
-      test: /\.js$/,
-      loaders: ['babel'],
-      include: [
-        path.join(__dirname, 'src'), // Must be an absolute path
-        path.join(__dirname, 'demo', 'src') // Must be an absolute path
-      ]
-    }, {
-      test: /\.less$/,
-      loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]__[local]___[hash:base64:5]!autoprefixer!less'),
-      exclude: /node_modules/
-    }]
+    loaders: [
+      {
+        test: /\.js$/,
+        loaders: ['babel'],
+        include: [
+          path.join(__dirname, 'src'), // Must be an absolute path
+          path.join(__dirname, 'demo', 'src') // Must be an absolute path
+        ]
+      },
+      {
+        test: /\.less$/,
+        loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]__[local]___[hash:base64:5]!autoprefixer!less'),
+        exclude: /node_modules/
+      },
+      {
+        test: /\.jpg$/,
+        loader: 'url?limit=8192' // 8kb
+      },
+      {
+        test: /\.svg$/,
+        loader: 'url?limit=8192!svgo' // 8kb
+      }
+    ]
   },
 
   resolve: {
