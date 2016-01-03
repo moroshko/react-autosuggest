@@ -32,9 +32,10 @@ function inputBlurred() {
   };
 }
 
-function inputChanged(lastAction) {
+function inputChanged(shouldRenderSuggestions, lastAction) {
   return {
     type: INPUT_CHANGED,
+    shouldRenderSuggestions: shouldRenderSuggestions,
     lastAction: lastAction
   };
 }
@@ -73,7 +74,8 @@ function reducer(state, action) {
       return _extends({}, state, {
         isFocused: false,
         focusedSectionIndex: null,
-        focusedSuggestionIndex: null
+        focusedSuggestionIndex: null,
+        isCollapsed: true
       });
 
     case INPUT_CHANGED:
@@ -81,6 +83,7 @@ function reducer(state, action) {
         focusedSectionIndex: null,
         focusedSuggestionIndex: null,
         valueBeforeUpDown: null,
+        isCollapsed: !action.shouldRenderSuggestions,
         lastAction: action.lastAction
       });
 

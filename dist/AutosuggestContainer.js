@@ -152,15 +152,7 @@ AutosuggestContainer.propTypes = {
   renderSectionTitle: _react.PropTypes.func,
   getSectionSuggestions: _react.PropTypes.func,
   focusInputOnSuggestionClick: _react.PropTypes.bool,
-  theme: function theme(props, propName) {
-    var theme = props[propName];
-
-    for (var key in theme) {
-      if (!(key in defaultTheme)) {
-        throw new Error('\'' + key + '\' is not a valid property in \'theme\'. Valid properties are:\n\n' + Object.keys(defaultTheme).join('\n') + '\n\n');
-      }
-    }
-  },
+  theme: _react.PropTypes.object,
   id: _react.PropTypes.string
 };
 AutosuggestContainer.defaultProps = {

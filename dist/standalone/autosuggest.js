@@ -216,15 +216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  renderSectionTitle: _react.PropTypes.func,
 	  getSectionSuggestions: _react.PropTypes.func,
 	  focusInputOnSuggestionClick: _react.PropTypes.bool,
-	  theme: function theme(props, propName) {
-	    var theme = props[propName];
-
-	    for (var key in theme) {
-	      if (!(key in defaultTheme)) {
-	        throw new Error('\'' + key + '\' is not a valid property in \'theme\'. Valid properties are:\n\n' + Object.keys(defaultTheme).join('\n') + '\n\n');
-	      }
-	    }
-	  },
+	  theme: _react.PropTypes.object,
 	  id: _react.PropTypes.string
 	};
 	AutosuggestContainer.defaultProps = {
@@ -1528,9 +1520,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}
 
-	function inputChanged(lastAction) {
+	function inputChanged(shouldRenderSuggestions, lastAction) {
 	  return {
 	    type: INPUT_CHANGED,
+	    shouldRenderSuggestions: shouldRenderSuggestions,
 	    lastAction: lastAction
 	  };
 	}
@@ -1569,7 +1562,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return _extends({}, state, {
 	        isFocused: false,
 	        focusedSectionIndex: null,
-	        focusedSuggestionIndex: null
+	        focusedSuggestionIndex: null,
+	        isCollapsed: true
 	      });
 
 	    case INPUT_CHANGED:
@@ -1577,6 +1571,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        focusedSectionIndex: null,
 	        focusedSuggestionIndex: null,
 	        valueBeforeUpDown: null,
+	        isCollapsed: !action.shouldRenderSuggestions,
 	        lastAction: action.lastAction
 	      });
 
@@ -1667,8 +1662,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    inputBlurred: function inputBlurred() {
 	      dispatch((0, _reducerAndActions.inputBlurred)());
 	    },
-	    inputChanged: function inputChanged(lastAction) {
-	      dispatch((0, _reducerAndActions.inputChanged)(lastAction));
+	    inputChanged: function inputChanged(shouldRenderSuggestions, lastAction) {
+	      dispatch((0, _reducerAndActions.inputChanged)(shouldRenderSuggestions, lastAction));
 	    },
 	    updateFocusedSuggestion: function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
 	      dispatch((0, _reducerAndActions.updateFocusedSuggestion)(sectionIndex, suggestionIndex, value));
@@ -1851,9 +1846,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 	        onChange: function onChange(event) {
 	          var value = event.target.value;
+	          var shouldRenderSuggestions = _this2.props.shouldRenderSuggestions;
 
 	          _this2.maybeEmitOnChange(event, value, 'type');
-	          inputChanged('type');
+	          inputChanged(shouldRenderSuggestions(value), 'type');
 	        },
 	        onKeyDown: function onKeyDown(event, data) {
 	          switch (event.key) {

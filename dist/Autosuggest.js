@@ -47,8 +47,8 @@ function mapDispatchToProps(dispatch) {
     inputBlurred: function inputBlurred() {
       dispatch((0, _reducerAndActions.inputBlurred)());
     },
-    inputChanged: function inputChanged(lastAction) {
-      dispatch((0, _reducerAndActions.inputChanged)(lastAction));
+    inputChanged: function inputChanged(shouldRenderSuggestions, lastAction) {
+      dispatch((0, _reducerAndActions.inputChanged)(shouldRenderSuggestions, lastAction));
     },
     updateFocusedSuggestion: function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
       dispatch((0, _reducerAndActions.updateFocusedSuggestion)(sectionIndex, suggestionIndex, value));
@@ -231,9 +231,10 @@ var Autosuggest = (function (_Component) {
         },
         onChange: function onChange(event) {
           var value = event.target.value;
+          var shouldRenderSuggestions = _this2.props.shouldRenderSuggestions;
 
           _this2.maybeEmitOnChange(event, value, 'type');
-          inputChanged('type');
+          inputChanged(shouldRenderSuggestions(value), 'type');
         },
         onKeyDown: function onKeyDown(event, data) {
           switch (event.key) {
