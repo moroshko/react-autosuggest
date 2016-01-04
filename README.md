@@ -63,6 +63,11 @@ const languages = [
 
 function getSuggestions(value) {
   const escapedValue = escapeRegexCharacters(value.trim()); // See: https://github.com/moroshko/react-autosuggest/blob/master/demo/src/components/utils/utils.js#L2-L4
+  
+  if (escapedValue === '') {
+    return [];
+  }
+  
   const regex = new RegExp('^' + escapedValue, 'i');
 
   return languages.filter(language => regex.test(language.name));
@@ -198,7 +203,7 @@ const suggestions = [{
 **Note:**
 
 * It's totally up to you what shape suggestions take!
-* The initial value of `suggestions` should match the initial value of `inputProps.value`. This is to make sure that, if input has a non-empty initial value, and it's focused, the right suggestions are displayed.
+* The initial value of `suggestions` should match the initial value of `inputProps.value`. This will make sure that, if input has a non-empty initial value, and it's focused, the right suggestions are displayed.
 
 <a name="getSuggestionValueProp"></a>
 #### getSuggestionValue (required)
