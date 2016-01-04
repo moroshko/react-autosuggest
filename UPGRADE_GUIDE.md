@@ -40,9 +40,9 @@
 * `onSuggestionFocused` and `onSuggestionUnfocused` were removed
 * Bower support was removed
 * Uncontrolled behaviour is not supported in 3.x
-* `cache` was removed. Caching is not part of `react-autosuggest` anymore. You'll have to implement this yourself. [Example](https://github.com/moroshko/react-autosuggest/tree/3.0/demo/src/components/App/components/CachingExample)
-* Input debouncing is not part of `react-autosuggest` anymore. You'll have to implement this yourself. [Example](https://github.com/moroshko/react-autosuggest/tree/3.0/demo/src/components/App/components/DebouncedExample)
-* Support for delayed requests is not part of `react-autosuggest` anymore. You'll have to implement this yourself. [Example](https://github.com/moroshko/react-autosuggest/tree/3.0/demo/src/components/App/components/AsyncExample)
+* `cache` was removed. Caching is not part of `react-autosuggest` anymore. You'll have to implement this yourself. [Example](http://codepen.io/moroshko/pen/JGEmeX)
+* Input debouncing is not part of `react-autosuggest` anymore. You'll have to implement this yourself. [Example](http://codepen.io/moroshko/pen/KVaGJE)
+* Support for delayed requests is not part of `react-autosuggest` anymore. You'll have to implement this yourself. [Example](http://codepen.io/moroshko/pen/EPZpev)
 * `scrollBar` doesn't exist in 3.x yet, but hopefully will exist soon.
 * Some `theme` properties have changed:
 
