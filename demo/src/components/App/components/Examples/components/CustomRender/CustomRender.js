@@ -10,6 +10,11 @@ import { escapeRegexCharacters } from 'utils/utils';
 
 function getSuggestions(value) {
   const escapedValue = escapeRegexCharacters(value.trim());
+
+  if (escapedValue === '') {
+    return [];
+  }
+
   const regex = new RegExp('\\b' + escapedValue, 'i');
 
   return people.filter(person => regex.test(getSuggestionValue(person)));

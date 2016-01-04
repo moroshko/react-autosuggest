@@ -112,6 +112,11 @@
 
 	function getSuggestions(value) {
 	  var escapedValue = escapeRegexCharacters(value.trim());
+
+	  if (escapedValue === '') {
+	    return [];
+	  }
+
 	  var regex = new RegExp('^' + escapedValue, 'i');
 
 	  return languages.filter(function (language) {
