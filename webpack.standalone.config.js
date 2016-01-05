@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = [{
-  entry: './src/Autosuggest.js',
+  entry: './src/index.js',
 
   output: {
     filename: './dist/standalone/autosuggest.js',
@@ -13,7 +13,7 @@ module.exports = [{
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['babel', 'eslint'],
+      loader: 'babel',
       include: [
         path.join(__dirname, 'src') // Must be an absolute path
       ]
@@ -24,7 +24,7 @@ module.exports = [{
     react: 'React'
   }
 }, {
-  entry: './src/Autosuggest.js',
+  entry: './src/index.js',
 
   output: {
     filename: './dist/standalone/autosuggest.min.js',
@@ -35,7 +35,7 @@ module.exports = [{
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['babel', 'eslint'],
+      loader: 'babel',
       include: [
         path.join(__dirname, 'src') // Must be an absolute path
       ]
@@ -62,4 +62,3 @@ module.exports = [{
     })
   ]
 }];
-

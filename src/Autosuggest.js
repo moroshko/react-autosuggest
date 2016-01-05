@@ -1,572 +1,312 @@
 import React, { Component, PropTypes } from 'react';
-import debounce from 'debounce';
-import themeable from 'react-themeable';
-import sectionIterator from './sectionIterator';
+import { connect } from 'react-redux';
+import { inputFocused, inputBlurred, inputChanged, updateFocusedSuggestion,
+         revealSuggestions, closeSuggestions } from './reducerAndActions';
+import Autowhatever from 'react-autowhatever';
 
-export default class Autosuggest extends Component {
-  static propTypes = {
-    value: PropTypes.string,                // Controlled value of the selected suggestion
-    defaultValue: PropTypes.string,         // Initial value of the text
-    suggestions: PropTypes.func.isRequired, // Function to get the suggestions
-    suggestionRenderer: PropTypes.func,     // Function that renders a given suggestion (must be implemented when suggestions are objects)
-    suggestionValue: PropTypes.func,        // Function that maps suggestion object to input value (must be implemented when suggestions are objects)
-    showWhen: PropTypes.func,               // Function that determines whether to show suggestions or not
-    onSuggestionSelected: PropTypes.func,   // This function is called when suggestion is selected via mouse click or Enter
-    onSuggestionFocused: PropTypes.func,    // This function is called when suggestion is focused via mouse hover or Up/Down keys
-    onSuggestionUnfocused: PropTypes.func,  // This function is called when suggestion is unfocused via mouse hover or Up/Down keys
-    inputAttributes: PropTypes.object,      // Attributes to pass to the input field (e.g. { id: 'my-input', className: 'sweet autosuggest' })
-    cache: PropTypes.bool,                  // Set it to false to disable in-memory caching
-    id: PropTypes.string,                   // Used in aria-* attributes. If multiple Autosuggest's are rendered on a page, they must have unique ids.
-    scrollBar: PropTypes.bool,              // Set it to true when the suggestions container can have a scroll bar
-    theme: PropTypes.object                 // Custom theme. See: https://github.com/markdalgleish/react-themeable
-  }
+function mapStateToProps(state) {
+  return {
+    isFocused: state.isFocused,
+    isCollapsed: state.isCollapsed,
+    focusedSectionIndex: state.focusedSectionIndex,
+    focusedSuggestionIndex: state.focusedSuggestionIndex,
+    valueBeforeUpDown: state.valueBeforeUpDown,
+    lastAction: state.lastAction
+  };
+}
 
-  static defaultProps = {
-    showWhen: input => input.trim().length > 0,
-    onSuggestionSelected: () => {},
-    onSuggestionFocused: () => {},
-    onSuggestionUnfocused: () => {},
-    inputAttributes: {},
-    cache: true,
-    id: '1',
-    scrollBar: false,
-    theme: {
-      root: 'react-autosuggest',
-      suggestions: 'react-autosuggest__suggestions',
-      suggestion: 'react-autosuggest__suggestion',
-      suggestionIsFocused: 'react-autosuggest__suggestion--focused',
-      section: 'react-autosuggest__suggestions-section',
-      sectionName: 'react-autosuggest__suggestions-section-name',
-      sectionSuggestions: 'react-autosuggest__suggestions-section-suggestions'
+function mapDispatchToProps(dispatch) {
+  return {
+    inputFocused: shouldRenderSuggestions => {
+      dispatch(inputFocused(shouldRenderSuggestions));
+    },
+    inputBlurred: () => {
+      dispatch(inputBlurred());
+    },
+    inputChanged: (shouldRenderSuggestions, lastAction) => {
+      dispatch(inputChanged(shouldRenderSuggestions, lastAction));
+    },
+    updateFocusedSuggestion: (sectionIndex, suggestionIndex, value) => {
+      dispatch(updateFocusedSuggestion(sectionIndex, suggestionIndex, value));
+    },
+    revealSuggestions: () => {
+      dispatch(revealSuggestions());
+    },
+    closeSuggestions: lastAction => {
+      dispatch(closeSuggestions(lastAction));
     }
-  }
+  };
+}
+
+class Autosuggest extends Component {
+  static propTypes = {
+    suggestions: PropTypes.array.isRequired,
+    getSuggestionValue: PropTypes.func.isRequired,
+    renderSuggestion: PropTypes.func.isRequired,
+    inputProps: PropTypes.object.isRequired,
+    shouldRenderSuggestions: PropTypes.func.isRequired,
+    onSuggestionSelected: PropTypes.func.isRequired,
+    multiSection: PropTypes.bool.isRequired,
+    renderSectionTitle: PropTypes.func.isRequired,
+    getSectionSuggestions: PropTypes.func.isRequired,
+    focusInputOnSuggestionClick: PropTypes.bool.isRequired,
+    theme: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
+
+    isFocused: PropTypes.bool.isRequired,
+    isCollapsed: PropTypes.bool.isRequired,
+    focusedSectionIndex: PropTypes.number,
+    focusedSuggestionIndex: PropTypes.number,
+    valueBeforeUpDown: PropTypes.string,
+    lastAction: PropTypes.string,
+
+    inputFocused: PropTypes.func.isRequired,
+    inputBlurred: PropTypes.func.isRequired,
+    inputChanged: PropTypes.func.isRequired,
+    updateFocusedSuggestion: PropTypes.func.isRequired,
+    revealSuggestions: PropTypes.func.isRequired,
+    closeSuggestions: PropTypes.func.isRequired
+  };
 
   constructor(props) {
-    super();
+    super(props);
 
-    this.cache = {};
-    this.state = {
-      value: props.value || props.defaultValue || '',
-      suggestions: null,
-      focusedSectionIndex: null,    // Used when multiple sections are displayed
-      focusedSuggestionIndex: null, // Index within a section
-      valueBeforeUpDown: null       // When user interacts using the Up and Down keys,
-                                    // this field remembers input's value prior to
-                                    // interaction in order to revert back if ESC hit.
-                                    // See: http://www.w3.org/TR/wai-aria-practices/#autocomplete
-    };
-    this.isControlledComponent = (typeof props.value !== 'undefined');
-    this.suggestionsFn = debounce(props.suggestions, 100);
-    this.onChange = props.inputAttributes.onChange || (() => {});
-    this.onFocus = props.inputAttributes.onFocus || (() => {});
-    this.onBlur = props.inputAttributes.onBlur || (() => {});
-    this.lastSuggestionsInputValue = null; // Helps to deal with delayed requests
-    this.justUnfocused = false; // Helps to avoid calling onSuggestionUnfocused
-                                // twice when mouse is moving between suggestions
-    this.justClickedOnSuggestion = false; // Helps not to call inputAttributes.onBlur
-                                          // and showSuggestions() when suggestion is clicked.
-                                          // Also helps not to call handleValueChange() in
-                                          // componentWillReceiveProps() when suggestion is clicked.
-    this.justPressedUpDown = false; // Helps not to call handleValueChange() in
-                                    // componentWillReceiveProps() when Up or Down is pressed.
-    this.justPressedEsc = false; // Helps not to call handleValueChange() in
-                                 // componentWillReceiveProps() when ESC is pressed.
-    this.onInputChange = ::this.onInputChange;
-    this.onInputKeyDown = ::this.onInputKeyDown;
-    this.onInputFocus = ::this.onInputFocus;
-    this.onInputBlur = ::this.onInputBlur;
+    this.saveInput = this.saveInput.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.isControlledComponent) {
-      const inputValue = this.refs.input.value;
+    if (nextProps.suggestions !== this.props.suggestions) {
+      const { suggestions, inputProps, shouldRenderSuggestions,
+              isCollapsed, revealSuggestions, lastAction } = nextProps;
+      const { value } = inputProps;
 
-      if (nextProps.value !== inputValue &&
-          !this.justClickedOnSuggestion && !this.justPressedUpDown && !this.justPressedEsc) {
-        this.handleValueChange(nextProps.value);
+      if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter' &&
+          suggestions.length > 0 && shouldRenderSuggestions(value)) {
+        revealSuggestions();
       }
     }
-  }
-
-  resetSectionIterator(suggestions) {
-    if (this.isMultipleSections(suggestions)) {
-      sectionIterator.setData(suggestions.map(suggestion => suggestion.suggestions.length));
-    } else {
-      sectionIterator.setData(suggestions === null ? [] : suggestions.length);
-    }
-  }
-
-  isMultipleSections(suggestions) {
-    return suggestions !== null &&
-           suggestions.length > 0 &&
-           typeof suggestions[0].suggestions !== 'undefined';
-  }
-
-  setSuggestionsState(suggestions) {
-    this.resetSectionIterator(suggestions);
-    this.setState({
-      suggestions: suggestions,
-      focusedSectionIndex: null,
-      focusedSuggestionIndex: null,
-      valueBeforeUpDown: null
-    });
-  }
-
-  suggestionsExist(suggestions) {
-    if (this.isMultipleSections(suggestions)) {
-      return suggestions.some(section => section.suggestions.length > 0);
-    }
-
-    return suggestions !== null && suggestions.length > 0;
-  }
-
-  showSuggestions(input) {
-    const cacheKey = input.toLowerCase();
-
-    this.lastSuggestionsInputValue = input;
-
-    if (!this.props.showWhen(input)) {
-      this.setSuggestionsState(null);
-    } else if (this.props.cache && this.cache[cacheKey]) {
-      this.setSuggestionsState(this.cache[cacheKey]);
-    } else {
-      this.suggestionsFn(input, (error, suggestions) => {
-        // If input value changed, suggestions are not relevant anymore.
-        if (this.lastSuggestionsInputValue !== input) {
-          return;
-        }
-
-        if (error) {
-          throw error;
-        } else {
-          if (!this.suggestionsExist(suggestions)) {
-            suggestions = null;
-          }
-
-          if (this.props.cache) {
-            this.cache[cacheKey] = suggestions;
-          }
-
-          this.setSuggestionsState(suggestions);
-        }
-      });
-    }
-  }
-
-  suggestionIsFocused() {
-    return this.state.focusedSuggestionIndex !== null;
   }
 
   getSuggestion(sectionIndex, suggestionIndex) {
-    if (this.isMultipleSections(this.state.suggestions)) {
-      return this.state.suggestions[sectionIndex].suggestions[suggestionIndex];
+    const { suggestions, multiSection, getSectionSuggestions } = this.props;
+
+    if (multiSection) {
+      return getSectionSuggestions(suggestions[sectionIndex])[suggestionIndex];
     }
 
-    return this.state.suggestions[suggestionIndex];
+    return suggestions[suggestionIndex];
   }
 
   getFocusedSuggestion() {
-    if (this.suggestionIsFocused()) {
-      return this.getSuggestion(this.state.focusedSectionIndex,
-                                this.state.focusedSuggestionIndex);
+    const { focusedSectionIndex, focusedSuggestionIndex } = this.props;
+
+    if (focusedSuggestionIndex === null) {
+      return null;
     }
 
-    return null;
+    return this.getSuggestion(focusedSectionIndex, focusedSuggestionIndex);
   }
 
-  getSuggestionValue(sectionIndex, suggestionIndex) {
-    const suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
+  getSuggestionValueByIndex(sectionIndex, suggestionIndex) {
+    const { getSuggestionValue } = this.props;
 
-    if (typeof suggestion === 'object') {
-      if (this.props.suggestionValue) {
-        return this.props.suggestionValue(suggestion);
-      }
-
-      throw new Error('When <suggestion> is an object, you must implement the suggestionValue() function to specify how to set input\'s value when suggestion selected.');
-    } else {
-      return suggestion.toString();
-    }
+    return getSuggestionValue(this.getSuggestion(sectionIndex, suggestionIndex));
   }
 
-  onSuggestionUnfocused() {
-    const focusedSuggestion = this.getFocusedSuggestion();
+  getSuggestionIndices(suggestionElement) {
+    const sectionIndex = suggestionElement.getAttribute('data-section-index');
+    const suggestionIndex = suggestionElement.getAttribute('data-suggestion-index');
 
-    if (focusedSuggestion !== null && !this.justUnfocused) {
-      this.props.onSuggestionUnfocused(focusedSuggestion);
-      this.justUnfocused = true;
-    }
-  }
-
-  onSuggestionFocused(sectionIndex, suggestionIndex) {
-    this.onSuggestionUnfocused();
-
-    const suggestion = this.getSuggestion(sectionIndex, suggestionIndex);
-
-    this.props.onSuggestionFocused(suggestion);
-    this.justUnfocused = false;
-  }
-
-  scrollToElement(container, element, alignTo) {
-    if (alignTo === 'bottom') {
-      const scrollDelta = element.offsetTop +
-                          element.offsetHeight -
-                          container.scrollTop -
-                          container.offsetHeight;
-
-      if (scrollDelta > 0) {
-        container.scrollTop += scrollDelta;
-      }
-    } else {
-      const scrollDelta = container.scrollTop -
-                          element.offsetTop;
-
-      if (scrollDelta > 0) {
-        container.scrollTop -= scrollDelta;
-      }
-    }
-  }
-
-  scrollToSuggestion(direction, sectionIndex, suggestionIndex) {
-    let alignTo = (direction === 'down' ? 'bottom' : 'top');
-
-    if (suggestionIndex === null) {
-      if (direction === 'down') {
-        alignTo = 'top';
-        [sectionIndex, suggestionIndex] = sectionIterator.next([null, null]);
-      } else {
-        return;
-      }
-    } else {
-      if (sectionIterator.isLast([sectionIndex, suggestionIndex]) &&
-          direction === 'up') {
-        alignTo = 'bottom';
-      }
-    }
-
-    const suggestions = this.refs.suggestions;
-    const suggestionRef = this.getSuggestionRef(sectionIndex, suggestionIndex);
-    const suggestion = this.refs[suggestionRef];
-
-    this.scrollToElement(suggestions, suggestion, alignTo);
-  }
-
-  focusOnSuggestionUsingKeyboard(direction, suggestionPosition) {
-    const [sectionIndex, suggestionIndex] = suggestionPosition;
-    const newState = {
-      focusedSectionIndex: sectionIndex,
-      focusedSuggestionIndex: suggestionIndex,
-      value: suggestionIndex === null
-               ? this.state.valueBeforeUpDown
-               : this.getSuggestionValue(sectionIndex, suggestionIndex)
+    return {
+      sectionIndex: (typeof sectionIndex === 'string' ? parseInt(sectionIndex, 10) : null),
+      suggestionIndex: parseInt(suggestionIndex, 10)
     };
-
-    this.justPressedUpDown = true;
-
-    // When users starts to interact with Up/Down keys, remember input's value.
-    if (this.state.valueBeforeUpDown === null) {
-      newState.valueBeforeUpDown = this.state.value;
-    }
-
-    if (suggestionIndex === null) {
-      this.onSuggestionUnfocused();
-    } else {
-      this.onSuggestionFocused(sectionIndex, suggestionIndex);
-    }
-
-    if (this.props.scrollBar) {
-      this.scrollToSuggestion(direction, sectionIndex, suggestionIndex);
-    }
-
-    if (newState.value !== this.state.value) {
-      this.onChange(newState.value);
-    }
-
-    this.setState(newState);
-
-    setTimeout(() => this.justPressedUpDown = false);
   }
 
-  onSuggestionSelected(event) {
-    const focusedSuggestion = this.getFocusedSuggestion();
+  findSuggestionElement(startNode) {
+    let node = startNode;
 
-    this.props.onSuggestionUnfocused(focusedSuggestion);
-    this.props.onSuggestionSelected(focusedSuggestion, event);
+    do {
+      if (node.getAttribute('data-suggestion-index') !== null) {
+        return node;
+      }
+
+      node = node.parentNode;
+    } while (node !== null);
+
+    console.error('Clicked element:', startNode); // eslint-disable-line no-console
+    throw new Error('Couldn\'t find suggestion element');
   }
 
-  onInputChange(event) {
-    const newValue = event.target.value;
+  maybeEmitOnChange(event, newValue, method) {
+    const { value, onChange } = this.props.inputProps;
 
-    this.onSuggestionUnfocused();
-    this.handleValueChange(newValue);
-    this.showSuggestions(newValue);
-  }
-
-  handleValueChange(newValue) {
-    if (newValue !== this.state.value) {
-      this.onChange(newValue);
-      this.setState({
-        value: newValue
-      });
+    if (newValue !== value) {
+      onChange && onChange(event, { newValue, method });
     }
   }
 
-  onInputKeyDown(event) {
-    let newState;
+  willRenderSuggestions() {
+    const { suggestions, inputProps, shouldRenderSuggestions } = this.props;
+    const { value } = inputProps;
 
-    switch (event.keyCode) {
-      case 13: // Enter
-        if (this.state.valueBeforeUpDown !== null && this.suggestionIsFocused()) {
-          this.onSuggestionSelected(event);
-          this.setSuggestionsState(null);
-        }
-        break;
-
-      case 27: // ESC
-        newState = {
-          suggestions: null,
-          focusedSectionIndex: null,
-          focusedSuggestionIndex: null,
-          valueBeforeUpDown: null
-        };
-
-        if (this.state.valueBeforeUpDown !== null) {
-          newState.value = this.state.valueBeforeUpDown;
-        } else if (this.state.suggestions === null) {
-          newState.value = '';
-        }
-
-        this.onSuggestionUnfocused();
-        this.justPressedEsc = true;
-
-        if (typeof newState.value === 'string' && newState.value !== this.state.value) {
-          this.onChange(newState.value);
-        }
-
-        this.setState(newState);
-
-        setTimeout(() => this.justPressedEsc = false);
-        break;
-
-      case 38: // Up
-        if (this.state.suggestions === null) {
-          this.showSuggestions(this.state.value);
-        } else {
-          this.focusOnSuggestionUsingKeyboard(
-            'up',
-            sectionIterator.prev([this.state.focusedSectionIndex,
-                                  this.state.focusedSuggestionIndex])
-          );
-        }
-
-        event.preventDefault(); // Prevent the cursor from jumping to input's start
-        break;
-
-      case 40: // Down
-        if (this.state.suggestions === null) {
-          this.showSuggestions(this.state.value);
-        } else {
-          this.focusOnSuggestionUsingKeyboard(
-            'down',
-            sectionIterator.next([this.state.focusedSectionIndex,
-                                  this.state.focusedSuggestionIndex])
-          );
-        }
-
-        break;
-    }
+    return suggestions.length > 0 && shouldRenderSuggestions(value);
   }
 
-  onInputFocus(event) {
-    if (!this.justClickedOnSuggestion) {
-      this.showSuggestions(this.state.value);
+  saveInput(autowhatever) {
+    if (autowhatever !== null) {
+      this.input = autowhatever.refs.input;
     }
-
-    this.onFocus(event);
-  }
-
-  onInputBlur(event) {
-    this.onSuggestionUnfocused();
-
-    if (!this.justClickedOnSuggestion) {
-      this.onBlur(event);
-    }
-
-    this.setSuggestionsState(null);
-  }
-
-  isSuggestionFocused(sectionIndex, suggestionIndex) {
-    return sectionIndex === this.state.focusedSectionIndex &&
-           suggestionIndex === this.state.focusedSuggestionIndex;
-  }
-
-  onSuggestionMouseEnter(sectionIndex, suggestionIndex) {
-    if (!this.isSuggestionFocused(sectionIndex, suggestionIndex)) {
-      this.onSuggestionFocused(sectionIndex, suggestionIndex);
-    }
-
-    this.setState({
-      focusedSectionIndex: sectionIndex,
-      focusedSuggestionIndex: suggestionIndex
-    });
-  }
-
-  onSuggestionMouseLeave(sectionIndex, suggestionIndex) {
-    if (this.isSuggestionFocused(sectionIndex, suggestionIndex)) {
-      this.onSuggestionUnfocused();
-    }
-
-    this.setState({
-      focusedSectionIndex: null,
-      focusedSuggestionIndex: null
-    });
-  }
-
-  onSuggestionMouseDown(sectionIndex, suggestionIndex, event) {
-    const suggestionValue = this.getSuggestionValue(sectionIndex, suggestionIndex);
-
-    this.justClickedOnSuggestion = true;
-
-    this.onSuggestionSelected(event);
-
-    if (suggestionValue !== this.state.value) {
-      this.onChange(suggestionValue);
-    }
-
-    this.setState({
-      value: suggestionValue,
-      suggestions: null,
-      focusedSectionIndex: null,
-      focusedSuggestionIndex: null,
-      valueBeforeUpDown: null
-    }, () => {
-      // This code executes after the component is re-rendered
-      setTimeout(() => {
-        this.refs.input.focus();
-        this.justClickedOnSuggestion = false;
-      });
-    });
-  }
-
-  getSuggestionId(sectionIndex, suggestionIndex) {
-    if (suggestionIndex === null) {
-      return null;
-    }
-
-    return 'react-autosuggest-' + this.props.id + '-' +
-           this.getSuggestionRef(sectionIndex, suggestionIndex);
-  }
-
-  getSuggestionRef(sectionIndex, suggestionIndex) {
-    return 'suggestion-' + (sectionIndex === null ? '' : sectionIndex) +
-           '-' + suggestionIndex;
-  }
-
-  renderSuggestionContent(suggestion) {
-    if (this.props.suggestionRenderer) {
-      return this.props.suggestionRenderer(
-        suggestion,
-        this.state.valueBeforeUpDown || this.state.value
-      );
-    }
-
-    if (typeof suggestion === 'object') {
-      throw new Error('When <suggestion> is an object, you must implement the suggestionRenderer() function to specify how to render it.');
-    } else {
-      return suggestion.toString();
-    }
-  }
-
-  renderSuggestionsList(theme, suggestions, sectionIndex) {
-    return suggestions.map((suggestion, suggestionIndex) => {
-      const styles = theme(suggestionIndex, 'suggestion',
-        sectionIndex === this.state.focusedSectionIndex &&
-        suggestionIndex === this.state.focusedSuggestionIndex &&
-        'suggestionIsFocused'
-      );
-      const suggestionRef =
-        this.getSuggestionRef(sectionIndex, suggestionIndex);
-
-      return (
-        <li id={this.getSuggestionId(sectionIndex, suggestionIndex)}
-            {...styles}
-            role="option"
-            ref={suggestionRef}
-            key={suggestionRef}
-            onMouseEnter={() => this.onSuggestionMouseEnter(sectionIndex, suggestionIndex)}
-            onMouseLeave={() => this.onSuggestionMouseLeave(sectionIndex, suggestionIndex)}
-            onMouseDown={event => this.onSuggestionMouseDown(sectionIndex, suggestionIndex, event)}>
-          {this.renderSuggestionContent(suggestion)}
-        </li>
-      );
-    });
-  }
-
-  renderSuggestions(theme) {
-    if (this.state.suggestions === null) {
-      return null;
-    }
-
-    if (this.isMultipleSections(this.state.suggestions)) {
-      return (
-        <div id={'react-autosuggest-' + this.props.id}
-             {...theme('suggestions', 'suggestions')}
-             ref="suggestions"
-             role="listbox">
-          {this.state.suggestions.map((section, sectionIndex) => {
-            const sectionName = section.sectionName ? (
-              <div {...theme('sectionName-' + sectionIndex, 'sectionName')}>
-                {section.sectionName}
-              </div>
-            ) : null;
-
-            return section.suggestions.length === 0 ? null : (
-              <div {...theme('section-' + sectionIndex, 'section')}
-                   key={'section-' + sectionIndex}>
-                {sectionName}
-                <ul {...theme('sectionSuggestions-' + sectionIndex, 'sectionSuggestions')}>
-                  {this.renderSuggestionsList(theme, section.suggestions, sectionIndex)}
-                </ul>
-              </div>
-            );
-          })}
-        </div>
-      );
-    }
-
-    return (
-      <ul id={'react-autosuggest-' + this.props.id}
-          {...theme('suggestions', 'suggestions')}
-          ref="suggestions"
-          role="listbox">
-        {this.renderSuggestionsList(theme, this.state.suggestions, null)}
-      </ul>
-    );
   }
 
   render() {
-    const { id, inputAttributes } = this.props;
-    const { value, suggestions, focusedSectionIndex, focusedSuggestionIndex } = this.state;
-    const theme = themeable(this.props.theme);
-    const ariaActivedescendant = this.getSuggestionId(focusedSectionIndex, focusedSuggestionIndex);
+    const {
+      suggestions, renderSuggestion, inputProps, shouldRenderSuggestions,
+      onSuggestionSelected, multiSection, renderSectionTitle, id,
+      getSectionSuggestions, focusInputOnSuggestionClick, theme, isFocused,
+      isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
+      valueBeforeUpDown, inputFocused, inputBlurred, inputChanged,
+      updateFocusedSuggestion, revealSuggestions, closeSuggestions
+    } = this.props;
+    const { value, onBlur, onFocus, onKeyDown } = inputProps;
+    const isOpen = isFocused && !isCollapsed && this.willRenderSuggestions();
+    const items = (isOpen ? suggestions : []);
+    const autowhateverInputProps = {
+      ...inputProps,
+      onFocus: event => {
+        if (!this.justClickedOnSuggestion) {
+          inputFocused(shouldRenderSuggestions(value));
+          onFocus && onFocus(event);
+        }
+      },
+      onBlur: event => {
+        if (!this.justClickedOnSuggestion) {
+          inputBlurred();
+          onBlur && onBlur(event);
+        }
+      },
+      onChange: event => {
+        const { value } = event.target;
+        const { shouldRenderSuggestions } = this.props;
+
+        this.maybeEmitOnChange(event, value, 'type');
+        inputChanged(shouldRenderSuggestions(value), 'type');
+      },
+      onKeyDown: (event, data) => {
+        switch (event.key) {
+          case 'ArrowDown':
+          case 'ArrowUp':
+            if (isCollapsed) {
+              if (this.willRenderSuggestions()) {
+                revealSuggestions();
+              }
+            } else if (suggestions.length > 0) {
+              const { newFocusedSectionIndex, newFocusedItemIndex } = data;
+              const newValue = newFocusedItemIndex === null ?
+                valueBeforeUpDown :
+                this.getSuggestionValueByIndex(newFocusedSectionIndex, newFocusedItemIndex);
+
+              updateFocusedSuggestion(newFocusedSectionIndex, newFocusedItemIndex, value);
+              this.maybeEmitOnChange(event, newValue, event.key === 'ArrowDown' ? 'down' : 'up');
+            }
+            event.preventDefault();
+            break;
+
+          case 'Enter': {
+            const focusedSuggestion = this.getFocusedSuggestion();
+
+            if (focusedSuggestion !== null) {
+              closeSuggestions('enter');
+              onSuggestionSelected(event, {
+                suggestion: focusedSuggestion,
+                suggestionValue: value,
+                method: 'enter'
+              });
+            }
+            break;
+          }
+
+          case 'Escape':
+            if (isOpen) {
+              // If input.type === 'search', the browser clears the input
+              // when Escape is pressed. We want to disable this default
+              // behaviour so that, when suggestions are shown, we just hide
+              // them, without clearing the input.
+              event.preventDefault();
+            }
+
+            if (valueBeforeUpDown === null) { // Didn't interact with Up/Down
+              if (!isOpen) {
+                this.maybeEmitOnChange(event, '', 'escape');
+              }
+            } else { // Interacted with Up/Down
+              this.maybeEmitOnChange(event, valueBeforeUpDown, 'escape');
+            }
+
+            closeSuggestions('escape');
+            break;
+        }
+
+        onKeyDown && onKeyDown(event);
+      }
+    };
+    const onMouseEnter = (event, { sectionIndex, itemIndex }) => {
+      updateFocusedSuggestion(sectionIndex, itemIndex);
+    };
+    const onMouseLeave = () => {
+      updateFocusedSuggestion(null, null);
+    };
+    const onMouseDown = () => {
+      this.justClickedOnSuggestion = true;
+    };
+    const onClick = event => {
+      const { sectionIndex, suggestionIndex } =
+        this.getSuggestionIndices(this.findSuggestionElement(event.target));
+      const clickedSuggestion = this.getSuggestion(sectionIndex, suggestionIndex);
+      const clickedSuggestionValue = this.props.getSuggestionValue(clickedSuggestion);
+
+      onSuggestionSelected(event, {
+        suggestion: clickedSuggestion,
+        suggestionValue: clickedSuggestionValue,
+        method: 'click'
+      });
+      this.maybeEmitOnChange(event, clickedSuggestionValue, 'click');
+      closeSuggestions('click');
+
+      if (focusInputOnSuggestionClick === true) {
+        this.input.focus();
+      }
+
+      this.justClickedOnSuggestion = false;
+    };
+    const itemProps = ({ sectionIndex, itemIndex }) => {
+      return {
+        'data-section-index': sectionIndex,
+        'data-suggestion-index': itemIndex,
+        onMouseEnter,
+        onMouseLeave,
+        onMouseDown,
+        onTouchStart: onMouseDown, // Because on iOS `onMouseDown` is not triggered
+        onClick
+      };
+    };
+    const renderItem = item => renderSuggestion(item, { value, valueBeforeUpDown });
 
     return (
-      <div {...theme('root', 'root')}>
-        <input {...inputAttributes}
-               type={inputAttributes.type || 'text'}
-               value={value}
-               autoComplete="off"
-               role="combobox"
-               aria-autocomplete="list"
-               aria-owns={'react-autosuggest-' + id}
-               aria-expanded={suggestions !== null}
-               aria-activedescendant={ariaActivedescendant}
-               ref="input"
-               onChange={this.onInputChange}
-               onKeyDown={this.onInputKeyDown}
-               onFocus={this.onInputFocus}
-               onBlur={this.onInputBlur} />
-        {this.renderSuggestions(theme)}
-      </div>
+      <Autowhatever multiSection={multiSection}
+                    items={items}
+                    renderItem={renderItem}
+                    renderSectionTitle={renderSectionTitle}
+                    getSectionItems={getSectionSuggestions}
+                    focusedSectionIndex={focusedSectionIndex}
+                    focusedItemIndex={focusedSuggestionIndex}
+                    inputProps={autowhateverInputProps}
+                    itemProps={itemProps}
+                    theme={theme}
+                    id={id}
+                    ref={this.saveInput} />
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Autosuggest);

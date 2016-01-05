@@ -1,0 +1,38 @@
+.octoArm {
+  transform-origin: 130px 106px;
+}
+
+.corner:hover .octoArm {
+  animation: octocat-wave 560ms ease-in-out
+}
+
+.svg {
+  position: absolute;
+  top: 0;
+  border: 0;
+  right: 0;
+  fill: #212121;
+  color: #0C7EAF;
+}
+
+@keyframes octocat-wave {
+  0%, 100% {
+    transform: rotate(0)
+  }
+  20%, 60% {
+    transform: rotate(-25deg)
+  }
+  40%, 80% {
+    transform: rotate(10deg)
+  }
+}
+
+@media (max-width: 500px) {
+  .corner:hover .octoArm {
+    animation: none
+  }
+
+  .corner .octoArm {
+    animation: octocat-wave 560ms ease-in-out
+  }
+}

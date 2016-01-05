@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="25px" height="24px" viewBox="0 0 25 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.4.3 (16044) - http://www.bohemiancoding.com/sketch -->
+    <title>star</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g sketch:type="MSArtboardGroup" transform="translate(-140.000000, -591.000000)" id="star" fill="#FFFFFF">
+            <g sketch:type="MSLayerGroup" transform="translate(140.000000, 591.000000)">
+                <path d="M12.469053,0.280606061 L15.5237405,8.90560606 L24.687803,8.90560606 L17.4557405,14.5434811 L20.0834905,23.2130436 L12.5143343,18.1142311 L4.98974053,23.2806061 L7.54992803,14.5880436 L0.25030303,8.90560606 L9.41436553,8.90560606 L12.469053,0.280606061" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>

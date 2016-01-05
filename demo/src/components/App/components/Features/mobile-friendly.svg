@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="105px" height="130px" viewBox="0 0 105 130" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.4.3 (16044) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_mobile-friendly</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="20.017619%" y1="32.5244759%" x2="61.6842857%" y2="60.1523072%" id="linearGradient-1">
+            <stop stop-color="#000000" offset="0%"></stop>
+            <stop stop-color="#000000" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g sketch:type="MSArtboardGroup" transform="translate(-122.000000, -419.000000)" id="icon_mobile-friendly">
+            <g sketch:type="MSLayerGroup" transform="translate(50.000000, 419.000000)">
+                <rect id="background-padding" fill-opacity="0" fill="#D8D8D8" sketch:type="MSShapeGroup" x="0" y="0" width="200" height="146"></rect>
+                <path d="M126.458,2 L126.095543,87.6174044 L76,88.259201 L73,86.2744889 L131.968857,146 L196,70.2592 L126.458,2 Z" id="shadow" opacity="0.1" fill="url(#linearGradient-1)" sketch:type="MSShapeGroup"></path>
+                <path d="M108.606,5.613 L91.494,5.613 C90.713,5.613 90.079,6.247 90.079,7.027 C90.079,7.807 90.713,8.441 91.494,8.441 L108.606,8.441 C109.387,8.441 110.021,7.807 110.021,7.027 C110.021,6.247 109.387,5.613 108.606,5.613 L108.606,5.613 L108.606,5.613 Z M78.257,90 C74.807,90 72,87.193 72,83.743 L72,6.257 C72,2.807 74.807,0 78.257,0 L121.844,0 C125.294,0 128.101,2.807 128.101,6.257 L128.101,83.743 C128.101,87.194 125.294,90 121.844,90 L78.257,90 L78.257,90 Z M74.828,11.139 L125.273,11.139 L125.273,6.257 C125.273,4.366 123.735,2.828 121.844,2.828 L78.257,2.828 C76.366,2.828 74.828,4.366 74.828,6.257 L74.828,11.139 L74.828,11.139 L74.828,11.139 Z M74.828,69.576 L125.273,69.576 L125.273,13.967 L74.828,13.967 L74.828,69.576 L74.828,69.576 L74.828,69.576 Z M78.257,87.172 L121.844,87.172 C123.735,87.172 125.273,85.634 125.273,83.743 L125.273,72.404 L74.828,72.404 L74.828,83.743 C74.828,85.635 76.366,87.172 78.257,87.172 L78.257,87.172 L78.257,87.172 Z M104.855,79.203 C104.855,81.852 102.7,84.007 100.051,84.007 C97.402,84.007 95.247,81.852 95.247,79.203 C95.247,76.554 97.402,74.399 100.051,74.399 C102.7,74.399 104.855,76.554 104.855,79.203 L104.855,79.203 L104.855,79.203 Z M102.026,79.203 C102.026,78.113 101.14,77.227 100.05,77.227 C98.96,77.227 98.074,78.113 98.074,79.203 C98.074,80.292 98.96,81.179 100.05,81.179 C101.14,81.179 102.026,80.292 102.026,79.203 L102.026,79.203 L102.026,79.203 Z" id="Shape" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>

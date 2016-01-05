@@ -1,0 +1,92 @@
+@import '~variables';
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: (11 * @rows) 0;
+  color: #fff;
+  background-color: #0C7EAF;
+
+  @media @small {
+    padding: (8 * @rows) 0;
+  }
+}
+
+.logo {
+  @logoWidth: 199px;
+  @logoHeight: 176px;
+
+  width: @logoWidth;
+  height: @logoHeight;
+  background-image: url(../Header/logo.svg); // https://github.com/webpack/css-loader/issues/74
+  background-repeat: no-repeat;
+  background-size: 100%;
+
+  @media @small {
+    width: @logoWidth * 0.7;
+    height: @logoHeight * 0.7;
+  }
+}
+
+.header {
+  margin: (3 * @rows) (0.5 * @column);
+  font-size: 50px;
+  font-weight: 300;
+
+  @media @small {
+    font-size: 34px;
+  }
+}
+
+.subHeader {
+  margin: 0 (0.5 * @column);
+  text-align: center;
+  font-size: 20px;
+}
+
+.button {
+  display: inline-block;
+  margin-top: 5 * @rows;
+  width: 9 * @columns;
+  text-align: center;
+  font-size: 20px;
+  line-height: 5 * @rows;
+  color: #0C7EAF;
+  background-color: #fff;
+  border-radius: 3px;
+  text-decoration: none;
+  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+  }
+}
+
+.socialLinks {
+  margin-top: 5 * @rows;
+  font-size: 15px;
+}
+
+.socialLink {
+  display: inline-block;
+  line-height: 3 * @rows;
+  padding-left: 1.75 * @columns;
+  color: #fff;
+  background-repeat: no-repeat;
+}
+
+.stargazersLink {
+  composes: socialLink;
+  background-image: url(../Header/star.svg); // https://github.com/webpack/css-loader/issues/74
+  background-position: 0 -1px;
+}
+
+.twitterLink {
+  composes: socialLink;
+  background-image: url(../Header/twitter.svg); // https://github.com/webpack/css-loader/issues/74
+  background-position: 0 4px;
+  margin-left: 2 * @columns;
+}
