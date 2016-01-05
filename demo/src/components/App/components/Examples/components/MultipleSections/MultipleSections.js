@@ -9,6 +9,11 @@ import { escapeRegexCharacters } from 'utils/utils';
 
 function getSuggestions(value) {
   const escapedValue = escapeRegexCharacters(value.trim());
+
+  if (escapedValue === '') {
+    return [];
+  }
+
   const regex = new RegExp('^' + escapedValue, 'i');
 
   return languages

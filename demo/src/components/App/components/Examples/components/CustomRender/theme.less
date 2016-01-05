@@ -9,7 +9,7 @@
   width: 240px;
   height: 30px;
   padding: 10px 20px;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   font-size: 16px;
   border: 1px solid @border-color;
@@ -19,13 +19,13 @@
     outline: none;
   }
 
-  .container--open & {
+  .containerOpen & {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
 }
 
-.suggestions-container {
+.suggestionsContainer {
   position: absolute;
   top: 51px;
   width: 280px;
@@ -34,7 +34,7 @@
   list-style-type: none;
   border: 1px solid @border-color;
   background-color: #fff;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   font-size: 20px;
   border-bottom-left-radius: @border-radius;
@@ -52,7 +52,7 @@
   }
 }
 
-.suggestion--focused {
+.suggestionFocused {
   background-color: #0C7EAF;
   color: #fff;
 }
@@ -88,7 +88,7 @@
   color: #ee0000;
   font-weight: 400;
 
-  .suggestion--focused & {
+  .suggestionFocused & {
     color: #120000;
   }
 }
