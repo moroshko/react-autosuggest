@@ -1,14 +1,22 @@
 <a href="https://codeship.com/projects/67868" target="_blank">
-  <img src="https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg"
+  <img src="https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg?style=flat-square"
        alt="Build Status" />
 </a>
-<a href="https://npmjs.org/package/react-autosuggest" target="_blank">
-  <img src="https://img.shields.io/npm/v/react-autosuggest.svg"
-       alt="NPM Version" />
+<a href="https://github.com/moroshko/react-autosuggest/issues" target="_blank">
+  <img src="http://issuestats.com/github/moroshko/react-autosuggest/badge/issue?style=flat-square"
+       alt="Issues stats" />
+</a>
+<a href="https://github.com/moroshko/react-autosuggest/pulls" target="_blank">
+  <img src="https://img.shields.io/badge/pull%20requests%20closed%20in-5%20days-green.svg?style=flat-square"
+       alt="Pull Requests stats" />
 </a>
 <a href="https://npmjs.org/package/react-autosuggest" target="_blank">
-  <img src="https://img.shields.io/npm/dm/react-autosuggest.svg"
+  <img src="https://img.shields.io/npm/dm/react-autosuggest.svg?style=flat-square"
        alt="NPM Downloads" />
+</a>
+<a href="https://npmjs.org/package/react-autosuggest" target="_blank">
+  <img src="https://img.shields.io/npm/v/react-autosuggest.svg?style=flat-square"
+       alt="NPM Version" />
 </a>
 
 # React Autosuggest
