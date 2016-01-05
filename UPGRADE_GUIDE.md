@@ -49,9 +49,9 @@
                 2.x    3.x
  ------------------------------------
                root    container
-        suggestions    suggestions-container
-suggestionIsFocused    suggestion--focused
-            section    section-container
-        sectionName    section-title
- sectionSuggestions    section-suggestions-container
+        suggestions    suggestionsContainer
+suggestionIsFocused    suggestionFocused
+            section    sectionContainer
+        sectionName    sectionTitle
+ sectionSuggestions    sectionSuggestionsContainer
 ```

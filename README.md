@@ -63,11 +63,11 @@ const languages = [
 
 function getSuggestions(value) {
   const escapedValue = escapeRegexCharacters(value.trim()); // See: https://github.com/moroshko/react-autosuggest/blob/master/demo/src/components/utils/utils.js#L2-L4
-  
+
   if (escapedValue === '') {
     return [];
   }
-  
+
   const regex = new RegExp('^' + escapedValue, 'i');
 
   return languages.filter(language => regex.test(language.name));
@@ -395,9 +395,9 @@ For example, to style the Autosuggest using CSS Modules, do:
 
 .container { ... }
 .input { ... }
-.suggestions-container { ... }
+.suggestionsContainer { ... }
 .suggestion { ... }
-.suggestion--focused { ... }
+.suggestionFocused { ... }
 ...
 ```
 
@@ -412,15 +412,15 @@ When not specified, `theme` defaults to:
 
 ```js
 {
-  'container':                     'react-autosuggest__container',
-  'container--open':               'react-autosuggest__container--open',
-  'input':                         'react-autosuggest__input',
-  'suggestions-container':         'react-autosuggest__suggestions-container',
-  'suggestion':                    'react-autosuggest__suggestion',
-  'suggestion--focused':           'react-autosuggest__suggestion--focused',
-  'section-container':             'react-autosuggest__section-container',
-  'section-title':                 'react-autosuggest__section-title',
-  'section-suggestions-container': 'react-autosuggest__section-suggestions-container'
+  container:                   'react-autosuggest__container',
+  containerOpen:               'react-autosuggest__container--open',
+  input:                       'react-autosuggest__input',
+  suggestionsContainer:        'react-autosuggest__suggestions-container',
+  suggestion:                  'react-autosuggest__suggestion',
+  suggestionFocused:           'react-autosuggest__suggestion--focused',
+  sectionContainer:            'react-autosuggest__section-container',
+  sectionTitle:                'react-autosuggest__section-title',
+  sectionSuggestionsContainer: 'react-autosuggest__section-suggestions-container'
 }
 ```
 
@@ -428,56 +428,56 @@ The following diagrams illustrate how `theme` is structured.
 
 ##### Plain list
 
-    +--| container |-----------------------+
-    |                                      |
-    |  +--| input |---------------------+  |
-    |  |                                |  |
-    |  +--------------------------------+  |
-    |                                      |
-    |  +--| suggestions-container |-----+  |
-    |  |                                |  |
-    |  |  +--| suggestion |----------+  |  |
-    |  |  |                          |  |  |
-    |  |  +--------------------------+  |  |
-    |  |                                |  |
-    |  +--------------------------------+  |
-    |                                      |
-    +--------------------------------------+
+    +--| container |----------------------+
+    |                                     |
+    |  +--| input |--------------------+  |
+    |  |                               |  |
+    |  +-------------------------------+  |
+    |                                     |
+    |  +--| suggestionsContainer |-----+  |
+    |  |                               |  |
+    |  |  +--| suggestion |---------+  |  |
+    |  |  |                         |  |  |
+    |  |  +-------------------------+  |  |
+    |  |                               |  |
+    |  +-------------------------------+  |
+    |                                     |
+    +-------------------------------------+
 
 ##### Multiple sections
 
-    +--| container |----------------------------------------+
-    |                                                       |
-    |  +--| input |--------------------------------------+  |
-    |  |                                                 |  |
-    |  +-------------------------------------------------+  |
-    |                                                       |
-    |  +--| suggestions-container |----------------------+  |
-    |  |                                                 |  |
-    |  |  +--| section-container |--------------------+  |  |
-    |  |  |                                           |  |  |
-    |  |  |  +--| section-title |------------------+  |  |  |
-    |  |  |  |                                     |  |  |  |
-    |  |  |  +-------------------------------------+  |  |  |
-    |  |  |                                           |  |  |
-    |  |  |  +--| section-suggestions-container |--+  |  |  |
-    |  |  |  |                                     |  |  |  |
-    |  |  |  |  +--| suggestion |---------------+  |  |  |  |
-    |  |  |  |  |                               |  |  |  |  |
-    |  |  |  |  +-------------------------------+  |  |  |  |
-    |  |  |  |                                     |  |  |  |
-    |  |  |  +-------------------------------------+  |  |  |
-    |  |  |                                           |  |  |
-    |  |  +-------------------------------------------+  |  |
-    |  |                                                 |  |
-    |  |  +--| section-container |--------------------+  |  |
-    |  |  |                                           |  |  |
-    |  |  |  ...                                      |  |  |
-    |  |  |                                           |  |  |
-    |  |  +-------------------------------------------+  |  |
-    |  +-------------------------------------------------+  |
-    |                                                       |
-    +-------------------------------------------------------+
+    +--| container |--------------------------------------+
+    |                                                     |
+    |  +--| input |------------------------------------+  |
+    |  |                                               |  |
+    |  +-----------------------------------------------+  |
+    |                                                     |
+    |  +--| suggestionsContainer |---------------------+  |
+    |  |                                               |  |
+    |  |  +--| sectionContainer |-------------------+  |  |
+    |  |  |                                         |  |  |
+    |  |  |  +--| sectionTitle |-----------------+  |  |  |
+    |  |  |  |                                   |  |  |  |
+    |  |  |  +-----------------------------------+  |  |  |
+    |  |  |                                         |  |  |
+    |  |  |  +--| sectionSuggestionsContainer |--+  |  |  |
+    |  |  |  |                                   |  |  |  |
+    |  |  |  |  +--| suggestion |-------------+  |  |  |  |
+    |  |  |  |  |                             |  |  |  |  |
+    |  |  |  |  +-----------------------------+  |  |  |  |
+    |  |  |  |                                   |  |  |  |
+    |  |  |  +-----------------------------------+  |  |  |
+    |  |  |                                         |  |  |
+    |  |  +-----------------------------------------+  |  |
+    |  |                                               |  |
+    |  |  +--| sectionContainer |-------------------+  |  |
+    |  |  |                                         |  |  |
+    |  |  |  ...                                    |  |  |
+    |  |  |                                         |  |  |
+    |  |  +-----------------------------------------+  |  |
+    |  +-----------------------------------------------+  |
+    |                                                     |
+    +-----------------------------------------------------+
 
 <a name="idProp"></a>
 #### id (required when multiple Autosuggest components are rendered on a page)
