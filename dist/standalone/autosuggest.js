@@ -96,14 +96,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var defaultTheme = {
 	  container: 'react-autosuggest__container',
-	  'container--open': 'react-autosuggest__container--open',
+	  containerOpen: 'react-autosuggest__container--open',
 	  input: 'react-autosuggest__input',
-	  'suggestions-container': 'react-autosuggest__suggestions-container',
+	  suggestionsContainer: 'react-autosuggest__suggestions-container',
 	  suggestion: 'react-autosuggest__suggestion',
-	  'suggestion--focused': 'react-autosuggest__suggestion--focused',
-	  'section-container': 'react-autosuggest__section-container',
-	  'section-title': 'react-autosuggest__section-title',
-	  'section-suggestions-container': 'react-autosuggest__section-suggestions-container'
+	  suggestionFocused: 'react-autosuggest__suggestion--focused',
+	  sectionContainer: 'react-autosuggest__section-container',
+	  sectionTitle: 'react-autosuggest__section-title',
+	  sectionSuggestionsContainer: 'react-autosuggest__section-suggestions-container'
 	};
 
 	function mapToAutowhateverTheme(theme) {
@@ -111,20 +111,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  for (var key in theme) {
 	    switch (key) {
-	      case 'suggestions-container':
-	        result['items-container'] = theme[key];
+	      case 'suggestionsContainer':
+	        result['itemsContainer'] = theme[key];
 	        break;
 
 	      case 'suggestion':
 	        result['item'] = theme[key];
 	        break;
 
-	      case 'suggestion--focused':
-	        result['item--focused'] = theme[key];
+	      case 'suggestionFocused':
+	        result['itemFocused'] = theme[key];
 	        break;
 
-	      case 'section-suggestions-container':
-	        result['section-items-container'] = theme[key];
+	      case 'sectionSuggestionsContainer':
+	        result['sectionItemsContainer'] = theme[key];
 	        break;
 
 	      default:
@@ -2117,7 +2117,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var itemProps = _extends({
 	          id: _this2.getItemId(sectionIndex, itemIndex),
 	          role: 'option'
-	        }, theme(itemIndex, 'item', sectionIndex === focusedSectionIndex && itemIndex === focusedItemIndex && 'item--focused'), itemPropsObj, {
+	        }, theme(itemIndex, 'item', sectionIndex === focusedSectionIndex && itemIndex === focusedItemIndex && 'itemFocused'), itemPropsObj, {
 	          onMouseEnter: onMouseEnterFn,
 	          onMouseLeave: onMouseLeaveFn,
 	          onMouseDown: onMouseDownFn,
@@ -2159,7 +2159,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        'div',
 	        _extends({ id: this.getItemsContainerId(),
 	          role: 'listbox'
-	        }, theme('items-container', 'items-container')),
+	        }, theme('itemsContainer', 'itemsContainer')),
 	        items.map(function (section, sectionIndex) {
 	          if (!shouldRenderSection(section)) {
 	            return null;
@@ -2170,15 +2170,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return _react2.default.createElement(
 	            'div',
 	            _extends({ key: sectionIndex
-	            }, theme(sectionIndex, 'section-container')),
+	            }, theme(sectionIndex, 'sectionContainer')),
 	            sectionTitle && _react2.default.createElement(
 	              'div',
-	              theme('section-title', 'section-title'),
+	              theme('sectionTitle', 'sectionTitle'),
 	              sectionTitle
 	            ),
 	            _react2.default.createElement(
 	              'ul',
-	              theme('section-items-container', 'section-items-container'),
+	              theme('sectionItemsContainer', 'sectionItemsContainer'),
 	              _this3.renderItemsList(theme, sectionItemsArray[sectionIndex], sectionIndex)
 	            )
 	          );
@@ -2198,7 +2198,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        'ul',
 	        _extends({ id: this.getItemsContainerId(),
 	          role: 'listbox'
-	        }, theme('items-container', 'items-container')),
+	        }, theme('itemsContainer', 'itemsContainer')),
 	        this.renderItemsList(theme, items, null)
 	      );
 	    }
@@ -2272,7 +2272,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      return _react2.default.createElement(
 	        'div',
-	        theme('container', 'container', isOpen && 'container--open'),
+	        theme('container', 'container', isOpen && 'containerOpen'),
 	        _react2.default.createElement('input', inputProps),
 	        renderedItems
 	      );
@@ -2317,14 +2317,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  focusedItemIndex: null,
 	  theme: {
 	    container: 'react-autowhatever__container',
-	    'container--open': 'react-autowhatever__container--open',
+	    containerOpen: 'react-autowhatever__container--open',
 	    input: 'react-autowhatever__input',
-	    'items-container': 'react-autowhatever__items-container',
+	    itemsContainer: 'react-autowhatever__items-container',
 	    item: 'react-autowhatever__item',
-	    'item--focused': 'react-autowhatever__item--focused',
-	    'section-container': 'react-autowhatever__section-container',
-	    'section-title': 'react-autowhatever__section-title',
-	    'section-items-container': 'react-autowhatever__section-items-container'
+	    itemFocused: 'react-autowhatever__item--focused',
+	    sectionContainer: 'react-autowhatever__section-container',
+	    sectionTitle: 'react-autowhatever__section-title',
+	    sectionItemsContainer: 'react-autowhatever__section-items-container'
 	  }
 	};
 	exports.default = Autowhatever;

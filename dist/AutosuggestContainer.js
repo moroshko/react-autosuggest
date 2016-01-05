@@ -32,14 +32,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var defaultTheme = {
   container: 'react-autosuggest__container',
-  'container--open': 'react-autosuggest__container--open',
+  containerOpen: 'react-autosuggest__container--open',
   input: 'react-autosuggest__input',
-  'suggestions-container': 'react-autosuggest__suggestions-container',
+  suggestionsContainer: 'react-autosuggest__suggestions-container',
   suggestion: 'react-autosuggest__suggestion',
-  'suggestion--focused': 'react-autosuggest__suggestion--focused',
-  'section-container': 'react-autosuggest__section-container',
-  'section-title': 'react-autosuggest__section-title',
-  'section-suggestions-container': 'react-autosuggest__section-suggestions-container'
+  suggestionFocused: 'react-autosuggest__suggestion--focused',
+  sectionContainer: 'react-autosuggest__section-container',
+  sectionTitle: 'react-autosuggest__section-title',
+  sectionSuggestionsContainer: 'react-autosuggest__section-suggestions-container'
 };
 
 function mapToAutowhateverTheme(theme) {
@@ -47,20 +47,20 @@ function mapToAutowhateverTheme(theme) {
 
   for (var key in theme) {
     switch (key) {
-      case 'suggestions-container':
-        result['items-container'] = theme[key];
+      case 'suggestionsContainer':
+        result['itemsContainer'] = theme[key];
         break;
 
       case 'suggestion':
         result['item'] = theme[key];
         break;
 
-      case 'suggestion--focused':
-        result['item--focused'] = theme[key];
+      case 'suggestionFocused':
+        result['itemFocused'] = theme[key];
         break;
 
-      case 'section-suggestions-container':
-        result['section-items-container'] = theme[key];
+      case 'sectionSuggestionsContainer':
+        result['sectionItemsContainer'] = theme[key];
         break;
 
       default:
