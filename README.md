@@ -519,6 +519,4 @@ npm test
 
 ## License
 
-[MIT](http://moroshko.mit-license.org)
-
-[multiple-sections-example]: http://codepen.io/moroshko/pen/qbRNjV
+<a href="http://moroshko.mit-license.org" target="_blank">MIT</a>
