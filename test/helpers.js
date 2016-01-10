@@ -115,8 +115,14 @@ export function mouseLeaveSuggestion(suggestionIndex) {
   Simulate.mouseLeave(getSuggestion(suggestionIndex));
 }
 
+export function mouseDownSuggestion(suggestionIndex) {
+  Simulate.mouseDown(getSuggestion(suggestionIndex));
+}
+
 export function clickSuggestion(suggestionIndex) {
   mouseEnterSuggestion(suggestionIndex);
+  mouseDownSuggestion(suggestionIndex);
+  blurInput();
   Simulate.click(getSuggestion(suggestionIndex));
 }
 

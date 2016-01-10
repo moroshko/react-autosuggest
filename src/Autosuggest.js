@@ -180,9 +180,11 @@ class Autosuggest extends Component {
         }
       },
       onBlur: event => {
+        this.onBlurEvent = event;
+
         if (!this.justClickedOnSuggestion) {
           inputBlurred();
-          onBlur && onBlur(event);
+          onBlur && onBlur(event, { value, valueBeforeUpDown, method: 'other' });
         }
       },
       onChange: event => {
@@ -275,6 +277,9 @@ class Autosuggest extends Component {
 
       if (focusInputOnSuggestionClick === true) {
         this.input.focus();
+      } else {
+        inputBlurred();
+        onBlur && onBlur(this.onBlurEvent, { value, valueBeforeUpDown, method: 'click' });
       }
 
       this.justClickedOnSuggestion = false;

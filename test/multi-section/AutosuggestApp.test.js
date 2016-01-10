@@ -3,6 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 import {
   init,
+  eventInstance,
   getInnerHTML,
   expectContainerAttribute,
   expectInputAttribute,
@@ -15,6 +16,7 @@ import {
   isInputFocused
 } from '../helpers';
 import AutosuggestApp, {
+  onBlur,
   renderSectionTitle,
   getSectionSuggestions
 } from './AutosuggestApp';
@@ -28,14 +30,19 @@ describe('Multi section Autosuggest', () => {
     init({ app, container, input });
   });
 
-  describe('when suggestion is clicked', () => {
+  describe('when focusInputOnSuggestionClick is false and suggestion is clicked', () => {
     beforeEach(() => {
+      onBlur.reset();
       focusAndSetInputValue('p');
       clickSuggestion(1);
     });
 
-    it('should not focus on input if focusInputOnSuggestionClick is false', () => {
+    it('should not focus on input', () => {
       expect(isInputFocused()).to.equal(false);
+    });
+
+    it('should call onBlur with the right parameters', () => {
+      expect(onBlur).to.have.been.calledWithExactly(eventInstance, { value: 'p', valueBeforeUpDown: null, method: 'click' });
     });
   });
 

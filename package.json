@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/index.js",
   "repository": {
@@ -32,8 +32,8 @@
   "devDependencies": {
     "autoprefixer-loader": "^3.1.0",
     "autosuggest-highlight": "^2.1.1",
-    "babel-cli": "^6.3.17",
-    "babel-core": "^6.3.26",
+    "babel-cli": "^6.4.0",
+    "babel-core": "^6.4.0",
     "babel-eslint": "^5.0.0-beta6",
     "babel-loader": "^6.2.1",
     "babel-plugin-react-transform": "^2.0.0",
@@ -42,11 +42,12 @@
     "babel-preset-stage-0": "^6.3.13",
     "chai": "^3.4.1",
     "css-loader": "^0.23.1",
+    "es6-promise": "^3.0.2",
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^3.14.0",
-    "extract-text-webpack-plugin": "^0.9.1",
+    "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
-    "happypack": "^1.1.1",
+    "happypack": "^1.1.2",
     "isomorphic-fetch": "^2.2.0",
     "jsdom": "^7.2.2",
     "less": "^2.5.3",
@@ -63,7 +64,7 @@
     "svgo": "^0.6.1",
     "svgo-loader": "^1.1.0",
     "url-loader": "^0.5.7",
-    "webpack": "^1.12.9",
+    "webpack": "^1.12.10",
     "webpack-dev-server": "^1.14.0"
   },
   "files": [
