@@ -41,7 +41,13 @@ export const onChange = sinon.spy((event, { newValue, method }) => {
   }
 });
 
-export const onBlur = sinon.spy();
+export const onBlur = sinon.spy((event, { value, valueBeforeUpDown, method }) => {
+  if (method !== 'click' && valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
+    app.setState({
+      suggestions: getMatchingLanguages(value)
+    });
+  }
+});
 
 export const onSuggestionSelected = sinon.spy((event, { suggestionValue }) => {
   app.setState({
