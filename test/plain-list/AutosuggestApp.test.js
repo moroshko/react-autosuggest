@@ -27,6 +27,7 @@ import AutosuggestApp, {
   getSuggestionValue,
   renderSuggestion,
   onChange,
+  onBlur,
   shouldRenderSuggestions,
   onSuggestionSelected
 } from './AutosuggestApp';
@@ -461,6 +462,28 @@ describe('Plain list Autosuggest', () => {
       clickDown();
       clickEnter();
       expect(onSuggestionSelected).not.to.have.been.called;
+    });
+  });
+
+  describe('when focusInputOnSuggestionClick is true', () => {
+    beforeEach(() => {
+      onBlur.reset();
+      focusAndSetInputValue('p');
+    });
+
+    it('should keep the focus on input when suggestion is clicked', () => {
+      clickSuggestion(1);
+      expect(isInputFocused()).to.equal(true);
+    });
+
+    it('should not call onBlur when suggestion is clicked', () => {
+      clickSuggestion(1);
+      expect(onBlur).not.to.have.been.called;
+    });
+
+    it('should call onBlur with the right parameters when input is blurred', () => {
+      blurInput();
+      expect(onBlur).to.have.been.calledWithExactly(eventInstance, { value: 'p', valueBeforeUpDown: null, method: 'other' });
     });
   });
 

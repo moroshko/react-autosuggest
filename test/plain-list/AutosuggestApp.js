@@ -43,6 +43,8 @@ export const onChange = sinon.spy((event, { newValue, method }) => {
   }
 });
 
+export const onBlur = sinon.spy();
+
 export const shouldRenderSuggestions = sinon.spy(value => {
   return value.trim().length > 0 && value[0] !== ' ';
 });
@@ -72,7 +74,8 @@ export default class AutosuggestApp extends Component {
       placeholder: 'Type a programming language',
       type: 'search',
       value,
-      onChange
+      onChange,
+      onBlur
     };
 
     return (

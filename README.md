@@ -102,6 +102,7 @@ class Example extends React.Component {
     };
 
     this.onChange = this.onChange.bind(this);
+    this.onBlur = this.onBlur.bind(this);
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
   }
 
@@ -117,10 +118,15 @@ class Example extends React.Component {
       });
     }
   }
+  
+  onBlur(event, { value, valueBeforeUpDown, method }) {
+    if (method !== 'click' && valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
+      this.setState({
+        suggestions: getSuggestions(value)
+      });
+    }
+  }
 
-  // When suggestion is selected, we need to update `suggestions` so that,
-  // if user presses Up or Down to reveal suggestions,
-  // they would see the updated list.
   onSuggestionSelected(event, { suggestionValue }) {
     this.setState({
       suggestions: getSuggestions(suggestionValue)
@@ -132,7 +138,8 @@ class Example extends React.Component {
     const inputProps = {
       placeholder: 'Type a programming language',
       value,
-      onChange: this.onChange
+      onChange: this.onChange,
+      onBlur: this.onBlur
     };
 
     return (
@@ -266,7 +273,8 @@ Autosuggest is a <a href="https://facebook.github.io/react/docs/forms.html#contr
 ```js
 const inputProps = {
   value: inputValue,   // `inputValue` usually comes from application state
-  onChange: onChange   // `onChange` will be called when input value changes
+  onChange: onChange   // called when input value changes
+  onBlur: onBlur,      // called when input loses focus
   type: 'search',
   placeholder: 'Enter city or postcode'
 };
@@ -287,6 +295,21 @@ where:
   * `'escape'` - user pressed Esc
   * `'click'` - user clicked on suggestion
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
+
+`onBlur` has the following signature:
+
+```js
+function onBlur(event, { value, valueBeforeUpDown, method })
+```
+
+where:
+
+* `value` - The value of the input before losing the focus. For example, if the value of the input is `'me'`, and `'Melbourne'` is clicked, `value` will be `'me'`. 
+* `valueBeforeUpDown` - The value of the input prior to Up/Down interactions. If user didn't interact with Up/Down yet, it will be `null`.
+* `method` - string describing how input lost the focus. The possible values are:
+  * `'click'` - user clicked on suggestion. `'click'` is possible only when [`focusInputOnSuggestionClick`](#focusInputOnSuggestionClickProp) is `false`.
+  * `'other'` - something else (e.g. user clicked outside of the input field, pressed `Tab` or `Shift+Tab`, focused on another tab in the browser, etc.)
+
 
 <a name="shouldRenderSuggestionsProp"></a>
 #### shouldRenderSuggestions (optional)

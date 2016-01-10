@@ -41,6 +41,8 @@ export const onChange = sinon.spy((event, { newValue, method }) => {
   }
 });
 
+export const onBlur = sinon.spy();
+
 export const onSuggestionSelected = sinon.spy((event, { suggestionValue }) => {
   app.setState({
     suggestions: getMatchingLanguages(suggestionValue)
@@ -73,7 +75,8 @@ export default class AutosuggestApp extends Component {
     const { value, suggestions } = this.state;
     const inputProps = {
       value,
-      onChange
+      onChange,
+      onBlur
     };
 
     return (
