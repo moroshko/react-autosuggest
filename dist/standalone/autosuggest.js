@@ -64,7 +64,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -135,7 +135,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return result;
 	}
 
-	var AutosuggestContainer = (function (_Component) {
+	var AutosuggestContainer = function (_Component) {
 	  _inherits(AutosuggestContainer, _Component);
 
 	  function AutosuggestContainer(props) {
@@ -193,7 +193,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }]);
 
 	  return AutosuggestContainer;
-	})(_react.Component);
+	}(_react.Component);
 
 	AutosuggestContainer.propTypes = {
 	  suggestions: _react.PropTypes.array.isRequired,
@@ -1617,7 +1617,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -1677,7 +1677,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}
 
-	var Autosuggest = (function (_Component) {
+	var Autosuggest = function (_Component) {
 	  _inherits(Autosuggest, _Component);
 
 	  function Autosuggest(props) {
@@ -1839,9 +1839,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	        },
 	        onBlur: function onBlur(event) {
+	          _this2.onBlurEvent = event;
+
 	          if (!_this2.justClickedOnSuggestion) {
 	            inputBlurred();
-	            _onBlur && _onBlur(event);
+	            _onBlur && _onBlur(event, { value: value, valueBeforeUpDown: valueBeforeUpDown, method: 'other' });
 	          }
 	        },
 	        onChange: function onChange(event) {
@@ -1943,6 +1945,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        if (focusInputOnSuggestionClick === true) {
 	          _this2.input.focus();
+	        } else {
+	          inputBlurred();
+	          _onBlur && _onBlur(_this2.onBlurEvent, { value: value, valueBeforeUpDown: valueBeforeUpDown, method: 'click' });
 	        }
 
 	        _this2.justClickedOnSuggestion = false;
@@ -1981,7 +1986,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }]);
 
 	  return Autosuggest;
-	})(_react.Component);
+	}(_react.Component);
 
 	Autosuggest.propTypes = {
 	  suggestions: _react.PropTypes.array.isRequired,

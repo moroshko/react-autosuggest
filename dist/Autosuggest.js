@@ -2,7 +2,7 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -62,7 +62,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-var Autosuggest = (function (_Component) {
+var Autosuggest = function (_Component) {
   _inherits(Autosuggest, _Component);
 
   function Autosuggest(props) {
@@ -224,9 +224,11 @@ var Autosuggest = (function (_Component) {
           }
         },
         onBlur: function onBlur(event) {
+          _this2.onBlurEvent = event;
+
           if (!_this2.justClickedOnSuggestion) {
             inputBlurred();
-            _onBlur && _onBlur(event);
+            _onBlur && _onBlur(event, { value: value, valueBeforeUpDown: valueBeforeUpDown, method: 'other' });
           }
         },
         onChange: function onChange(event) {
@@ -328,6 +330,9 @@ var Autosuggest = (function (_Component) {
 
         if (focusInputOnSuggestionClick === true) {
           _this2.input.focus();
+        } else {
+          inputBlurred();
+          _onBlur && _onBlur(_this2.onBlurEvent, { value: value, valueBeforeUpDown: valueBeforeUpDown, method: 'click' });
         }
 
         _this2.justClickedOnSuggestion = false;
@@ -366,7 +371,7 @@ var Autosuggest = (function (_Component) {
   }]);
 
   return Autosuggest;
-})(_react.Component);
+}(_react.Component);
 
 Autosuggest.propTypes = {
   suggestions: _react.PropTypes.array.isRequired,
