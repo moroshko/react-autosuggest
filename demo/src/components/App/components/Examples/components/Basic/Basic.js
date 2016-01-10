@@ -38,6 +38,7 @@ export default class Basic extends Component {
     };
 
     this.onChange = this.onChange.bind(this);
+    this.onBlur = this.onBlur.bind(this);
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
   }
 
@@ -54,6 +55,14 @@ export default class Basic extends Component {
     }
   }
 
+  onBlur(event, { value, valueBeforeUpDown, method }) {
+    if (method !== 'click' && valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
+      this.setState({
+        suggestions: getSuggestions(value)
+      });
+    }
+  }
+
   onSuggestionSelected(event, { suggestionValue }) {
     this.setState({
       suggestions: getSuggestions(suggestionValue)
@@ -65,7 +74,8 @@ export default class Basic extends Component {
     const inputProps = {
       placeholder: 'Type \'c\'',
       value,
-      onChange: this.onChange
+      onChange: this.onChange,
+      onBlur: this.onBlur
     };
 
     return (
