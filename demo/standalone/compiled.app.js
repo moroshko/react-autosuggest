@@ -165,7 +165,9 @@
 	    }
 	  }, {
 	    key: 'onSuggestionsUpdateRequested',
-	    value: function onSuggestionsUpdateRequested(value) {
+	    value: function onSuggestionsUpdateRequested(_ref2) {
+	      var value = _ref2.value;
+
 	      this.setState({
 	        suggestions: getSuggestions(value)
 	      });

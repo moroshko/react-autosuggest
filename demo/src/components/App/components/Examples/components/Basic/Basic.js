@@ -47,7 +47,7 @@ export default class Basic extends Component {
     });
   }
 
-  onSuggestionsUpdateRequested(value) {
+  onSuggestionsUpdateRequested({ value }) {
     this.setState({
       suggestions: getSuggestions(value)
     });

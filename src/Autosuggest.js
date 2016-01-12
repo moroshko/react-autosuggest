@@ -188,7 +188,7 @@ class Autosuggest extends Component {
           onBlur && onBlur(event);
 
           if (valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
-            onSuggestionsUpdateRequested(value);
+            onSuggestionsUpdateRequested({ value, reason: 'blur' });
           }
         }
       },
@@ -198,7 +198,7 @@ class Autosuggest extends Component {
 
         this.maybeEmitOnChange(event, value, 'type');
         inputChanged(shouldRenderSuggestions(value), 'type');
-        onSuggestionsUpdateRequested(value);
+        onSuggestionsUpdateRequested({ value, reason: 'type' });
       },
       onKeyDown: (event, data) => {
         switch (event.key) {
@@ -230,7 +230,7 @@ class Autosuggest extends Component {
                 suggestionValue: value,
                 method: 'enter'
               });
-              onSuggestionsUpdateRequested(value);
+              onSuggestionsUpdateRequested({ value, reason: 'enter' });
             }
             break;
           }
@@ -289,7 +289,7 @@ class Autosuggest extends Component {
         onBlur && onBlur(this.onBlurEvent);
       }
 
-      onSuggestionsUpdateRequested(clickedSuggestionValue);
+      onSuggestionsUpdateRequested({ value: clickedSuggestionValue, reason: 'click' });
 
       this.justClickedOnSuggestion = false;
     };

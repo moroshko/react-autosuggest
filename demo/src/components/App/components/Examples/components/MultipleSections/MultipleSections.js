@@ -65,7 +65,7 @@ export default class MultipleSections extends Component {
     });
   }
 
-  onSuggestionsUpdateRequested(value) {
+  onSuggestionsUpdateRequested({ value }) {
     this.setState({
       suggestions: getSuggestions(value)
     });

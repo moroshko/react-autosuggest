@@ -50,7 +50,7 @@ describe('Multi section Autosuggest', () => {
 
     it('should call onSuggestionsUpdateRequested once with the right parameters', () => {
       expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
-      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly('PHP');
+      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'PHP', reason: 'click' });
     });
   });
 
