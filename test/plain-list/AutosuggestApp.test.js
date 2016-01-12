@@ -29,7 +29,8 @@ import AutosuggestApp, {
   onChange,
   onBlur,
   shouldRenderSuggestions,
-  onSuggestionSelected
+  onSuggestionSelected,
+  onSuggestionsUpdateRequested
 } from './AutosuggestApp';
 
 describe('Plain list Autosuggest', () => {
@@ -465,6 +466,82 @@ describe('Plain list Autosuggest', () => {
     });
   });
 
+  describe('onSuggestionsUpdateRequested', () => {
+    it('should be called once with the right parameters when user types', () => {
+      onSuggestionsUpdateRequested.reset();
+      focusAndSetInputValue('j');
+      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
+      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly('j');
+    });
+
+    it('should be called once with the right parameters when suggestion is clicked', () => {
+      focusAndSetInputValue('j');
+      onSuggestionsUpdateRequested.reset();
+      clickSuggestion(1);
+      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
+      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly('Javascript');
+    });
+
+    it('should be called once with the right parameters when Enter is pressed and suggestion is focused', () => {
+      focusAndSetInputValue('j');
+      clickDown();
+      onSuggestionsUpdateRequested.reset();
+      clickEnter();
+      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
+      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly('Java');
+    });
+
+    it('should be called once with the right parameters when input is blurred, user interacted with Up/Down, and the value before Up/Down is not equal to current input value', () => {
+      focusAndSetInputValue('j');
+      clickDown();
+      onSuggestionsUpdateRequested.reset();
+      blurInput();
+      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
+      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly('Java');
+    });
+
+    it('should not be called when Up/Down is pressed', () => {
+      focusAndSetInputValue('j');
+      onSuggestionsUpdateRequested.reset();
+      clickDown();
+      clickDown();
+      clickUp();
+      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+    });
+
+    it('should not be called when Enter is pressed and there is no focused suggestion', () => {
+      focusAndSetInputValue('j');
+      onSuggestionsUpdateRequested.reset();
+      clickEnter();
+      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+    });
+
+    it('should not be called when Enter is pressed and there is no focused suggestion after Up/Down interaction', () => {
+      focusAndSetInputValue('j');
+      onSuggestionsUpdateRequested.reset();
+      clickDown();
+      clickDown();
+      clickDown();
+      clickEnter();
+      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+    });
+
+    it('should not be called when input is blurred and user did not interact with Up/Down', () => {
+      focusAndSetInputValue('j');
+      onSuggestionsUpdateRequested.reset();
+      blurInput();
+      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+    });
+
+    it('should not be called when input is blurred, user interacted with Up/Down, but the value before Up/Down is equal to current input value', () => {
+      focusAndSetInputValue('Java');
+      clickDown();
+      onSuggestionsUpdateRequested.reset();
+      blurInput();
+      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+    });
+  });
+
   describe('when focusInputOnSuggestionClick is true', () => {
     beforeEach(() => {
       onBlur.reset();
@@ -481,9 +558,10 @@ describe('Plain list Autosuggest', () => {
       expect(onBlur).not.to.have.been.called;
     });
 
-    it('should call onBlur with the right parameters when input is blurred', () => {
+    it('should call onBlur once with the right parameters when input is blurred', () => {
       blurInput();
-      expect(onBlur).to.have.been.calledWithExactly(eventInstance, { value: 'p', valueBeforeUpDown: null, method: 'other' });
+      expect(onBlur).to.have.been.calledOnce;
+      expect(onBlur).to.have.been.calledWithExactly(eventInstance);
     });
   });
 
