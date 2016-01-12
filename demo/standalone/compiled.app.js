@@ -150,7 +150,7 @@
 	    };
 
 	    _this.onChange = _this.onChange.bind(_this);
-	    _this.onSuggestionSelected = _this.onSuggestionSelected.bind(_this);
+	    _this.onSuggestionsUpdateRequested = _this.onSuggestionsUpdateRequested.bind(_this);
 	    return _this;
 	  }
 
@@ -158,26 +158,18 @@
 	    key: 'onChange',
 	    value: function onChange(event, _ref) {
 	      var newValue = _ref.newValue;
-	      var method = _ref.method;
-
-	      if (method === 'type') {
-	        this.setState({
-	          value: newValue,
-	          suggestions: getSuggestions(newValue)
-	        });
-	      } else {
-	        this.setState({
-	          value: newValue
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'onSuggestionSelected',
-	    value: function onSuggestionSelected(event, _ref2) {
-	      var suggestionValue = _ref2.suggestionValue;
 
 	      this.setState({
-	        suggestions: getSuggestions(suggestionValue)
+	        value: newValue
+	      });
+	    }
+	  }, {
+	    key: 'onSuggestionsUpdateRequested',
+	    value: function onSuggestionsUpdateRequested(_ref2) {
+	      var value = _ref2.value;
+
+	      this.setState({
+	        suggestions: getSuggestions(value)
 	      });
 	    }
 	  }, {
@@ -194,10 +186,10 @@
 	      };
 
 	      return React.createElement(Autosuggest, { suggestions: suggestions,
+	        onSuggestionsUpdateRequested: this.onSuggestionsUpdateRequested,
 	        getSuggestionValue: getSuggestionValue,
 	        renderSuggestion: renderSuggestion,
-	        inputProps: inputProps,
-	        onSuggestionSelected: this.onSuggestionSelected });
+	        inputProps: inputProps });
 	    }
 	  }]);
 

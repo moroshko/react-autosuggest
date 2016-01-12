@@ -57,34 +57,18 @@ export default class CustomRender extends Component {
     };
 
     this.onChange = this.onChange.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
+    this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
   }
 
-  onChange(event, { newValue, method }) {
-    if (method === 'type') {
-      this.setState({
-        value: newValue,
-        suggestions: getSuggestions(newValue)
-      });
-    } else {
-      this.setState({
-        value: newValue
-      });
-    }
-  }
-
-  onBlur(event, { value, valueBeforeUpDown, method }) {
-    if (method !== 'click' && valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
-      this.setState({
-        suggestions: getSuggestions(value)
-      });
-    }
-  }
-
-  onSuggestionSelected(event, { suggestionValue }) {
+  onChange(event, { newValue }) {
     this.setState({
-      suggestions: getSuggestions(suggestionValue)
+      value: newValue
+    });
+  }
+
+  onSuggestionsUpdateRequested({ value }) {
+    this.setState({
+      suggestions: getSuggestions(value)
     });
   }
 
@@ -93,8 +77,7 @@ export default class CustomRender extends Component {
     const inputProps = {
       placeholder: 'Type \'c\'',
       value,
-      onChange: this.onChange,
-      onBlur: this.onBlur
+      onChange: this.onChange
     };
 
     return (
@@ -114,10 +97,10 @@ export default class CustomRender extends Component {
         </div>
         <div className={styles.autosuggest}>
           <Autosuggest suggestions={suggestions}
+                       onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                        getSuggestionValue={getSuggestionValue}
                        renderSuggestion={renderSuggestion}
                        inputProps={inputProps}
-                       onSuggestionSelected={this.onSuggestionSelected}
                        theme={theme}
                        id="custom-render-example" />
         </div>

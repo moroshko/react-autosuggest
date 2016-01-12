@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import reducer from './reducerAndActions';
 import Autosuggest from './Autosuggest';
 
+function noop() {}
+
 const defaultTheme = {
   container: 'react-autosuggest__container',
   containerOpen: 'react-autosuggest__container--open',
@@ -48,16 +50,17 @@ function mapToAutowhateverTheme(theme) {
 export default class AutosuggestContainer extends Component {
   static propTypes = {
     suggestions: PropTypes.array.isRequired,
+    onSuggestionsUpdateRequested: PropTypes.func,
     getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
     inputProps: (props, propName) => {
       const inputProps = props[propName];
 
-      if (!('value' in inputProps)) {
+      if (!inputProps.hasOwnProperty('value')) {
         throw new Error('\'inputProps\' must have \'value\'.');
       }
 
-      if (!('onChange' in inputProps)) {
+      if (!inputProps.hasOwnProperty('onChange')) {
         throw new Error('\'inputProps\' must have \'onChange\'.');
       }
     },
@@ -72,8 +75,9 @@ export default class AutosuggestContainer extends Component {
   };
 
   static defaultProps = {
+    onSuggestionsUpdateRequested: noop,
     shouldRenderSuggestions: value => value.trim().length > 0,
-    onSuggestionSelected: () => {},
+    onSuggestionSelected: noop,
     multiSection: false,
     renderSectionTitle() {
       throw new Error('`renderSectionTitle` must be provided');
@@ -104,8 +108,9 @@ export default class AutosuggestContainer extends Component {
 
   render() {
     const {
-      multiSection, shouldRenderSuggestions, suggestions, getSuggestionValue,
-      renderSuggestion, renderSectionTitle, getSectionSuggestions, inputProps,
+      multiSection, shouldRenderSuggestions, suggestions,
+      onSuggestionsUpdateRequested, getSuggestionValue, renderSuggestion,
+      renderSectionTitle, getSectionSuggestions, inputProps,
       onSuggestionSelected, focusInputOnSuggestionClick, id
     } = this.props;
 
@@ -114,6 +119,7 @@ export default class AutosuggestContainer extends Component {
         <Autosuggest multiSection={multiSection}
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      suggestions={suggestions}
+                     onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
                      renderSuggestion={renderSuggestion}
                      renderSectionTitle={renderSectionTitle}

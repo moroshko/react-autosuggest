@@ -102,34 +102,18 @@ class Example extends React.Component {
     };
 
     this.onChange = this.onChange.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
+    this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
   }
 
-  onChange(event, { newValue, method }) {
-    if (method === 'type') {
-      this.setState({
-        value: newValue,
-        suggestions: getSuggestions(newValue)
-      });
-    } else {
-      this.setState({
-        value: newValue
-      });
-    }
-  }
-  
-  onBlur(event, { value, valueBeforeUpDown, method }) {
-    if (method !== 'click' && valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
-      this.setState({
-        suggestions: getSuggestions(value)
-      });
-    }
-  }
-
-  onSuggestionSelected(event, { suggestionValue }) {
+  onChange(event, { newValue }) {
     this.setState({
-      suggestions: getSuggestions(suggestionValue)
+      value: newValue
+    });
+  }
+
+  onSuggestionsUpdateRequested(value) {
+    this.setState({
+      suggestions: getSuggestions(value)
     });
   }
 
@@ -138,16 +122,15 @@ class Example extends React.Component {
     const inputProps = {
       placeholder: 'Type a programming language',
       value,
-      onChange: this.onChange,
-      onBlur: this.onBlur
+      onChange: this.onChange
     };
 
     return (
       <Autosuggest suggestions={suggestions}
+                   onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                    getSuggestionValue={getSuggestionValue}
                    renderSuggestion={renderSuggestion}
-                   inputProps={inputProps}
-                   onSuggestionSelected={this.onSuggestionSelected} />
+                   inputProps={inputProps} />
     );
   }
 }
@@ -156,6 +139,7 @@ class Example extends React.Component {
 ## Props
 
 * [`suggestions`](#suggestionsProp)
+* [`onSuggestionsUpdateRequested`](#onSuggestionsUpdateRequestedProp)
 * [`getSuggestionValue`](#getSuggestionValueProp)
 * [`renderSuggestion`](#renderSuggestionProp)
 * [`inputProps`](#inputPropsProp)
@@ -176,50 +160,89 @@ An array of suggestions to display.
 For a plain list of suggestions, every item in `suggestions` should be a single suggestion. It's up to you what shape every suggestion takes. For example:
 
 ```js
-const suggestions = [{
-  text: 'Apple'
-}, {
-  text: 'Banana'
-}, {
-  text: 'Cherry'
-}, {
-  text: 'Grapefruit'
-}, {
-  text: 'Lemon'
-}];
+const suggestions = [
+  {
+    text: 'Apple'
+  },
+  {
+    text: 'Banana'
+  },
+  {
+    text: 'Cherry'
+  },
+  {
+    text: 'Grapefruit'
+  },
+  {
+    text: 'Lemon'
+  }
+];
 ```
 
 To display [multiple sections](#multiSectionProp), every item in `suggestions` should be a single section. Again, it's up to you what shape every section takes. For example:
 
 ```js
-const suggestions = [{
-  title: 'A',
-  suggestions: [{
-    id: '100',
-    text: 'Apple'
-  }, {
-    id: '101',
-    text: 'Apricot'
-  }]
-}, {
-  title: 'B',
-  suggestions: [{
-    id: '102',
-    text: 'Banana'
-  }]
-}, {
-  title: 'C',
-  suggestions: [{
-    id: '103',
-    text: 'Cherry'
-  }]
-}];
+const suggestions = [
+  {
+    title: 'A',
+    suggestions: [
+      {
+        id: '100',
+        text: 'Apple'
+      },
+      {
+        id: '101',
+        text: 'Apricot'
+      }
+    ]
+  },
+  {
+    title: 'B',
+    suggestions: [
+      {
+        id: '102',
+        text: 'Banana'
+      }
+    ]
+  },
+  {
+    title: 'C',
+    suggestions: [
+      {
+        id: '103',
+        text: 'Cherry'
+      }
+    ]
+  }
+];
 ```
 
 **Note:**
 
 * It's totally up to you what shape suggestions take!
 * The initial value of `suggestions` should match the initial value of `inputProps.value`. This will make sure that, if input has a non-empty initial value, and it's focused, the right suggestions are displayed.
+
+<a name="onSuggestionsUpdateRequestedProp"></a>
+#### onSuggestionsUpdateRequested (optional)
+
+Normally, you would want to update [`suggestions`](#suggestionsProp) as user types. You might also want to update suggestions when user selects a suggestion or the input loses focus (so that, next time the input gets focus, suggestions will be up to date).
+
+Autosuggest will call `onSuggestionsUpdateRequested` every time it thinks you might want to update suggestions.
+
+`onSuggestionsUpdateRequested` has the following signature:
+
+```js
+function onSuggestionsUpdateRequested({ value, reason })
+```
+
+where:
+
+* `value` - The current value of the input
+* `reason` - string describing why Autosuggest thinks you might want to update suggestions. The possible values are:
+  * `'type'` - usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.
+  * `'click'` - user clicked (or tapped) a suggestion
+  * `'enter'` - user pressed Enter
+  * `'blur'` - input lost focus
 
 <a name="getSuggestionValueProp"></a>
 #### getSuggestionValue (required)
@@ -272,9 +295,8 @@ Autosuggest is a <a href="https://facebook.github.io/react/docs/forms.html#contr
 
 ```js
 const inputProps = {
-  value: inputValue,   // `inputValue` usually comes from application state
-  onChange: onChange   // called when input value changes
-  onBlur: onBlur,      // called when input loses focus
+  value: inputValue,  // `inputValue` usually comes from application state
+  onChange: onChange, // called when input value changes
   type: 'search',
   placeholder: 'Enter city or postcode'
 };
@@ -293,23 +315,8 @@ where:
   * `'down'` - user pressed Down
   * `'up'` - user pressed Up
   * `'escape'` - user pressed Esc
-  * `'click'` - user clicked on suggestion
+  * `'click'` - user clicked (or tapped) on suggestion
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
-
-`onBlur` has the following signature:
-
-```js
-function onBlur(event, { value, valueBeforeUpDown, method })
-```
-
-where:
-
-* `value` - The value of the input before losing the focus. For example, if the value of the input is `'me'`, and `'Melbourne'` is clicked, `value` will be `'me'`. 
-* `valueBeforeUpDown` - The value of the input prior to Up/Down interactions. If user didn't interact with Up/Down yet, it will be `null`.
-* `method` - string describing how input lost the focus. The possible values are:
-  * `'click'` - user clicked on suggestion. `'click'` is possible only when [`focusInputOnSuggestionClick`](#focusInputOnSuggestionClickProp) is `false`.
-  * `'other'` - something else (e.g. user clicked outside of the input field, pressed `Tab` or `Shift+Tab`, focused on another tab in the browser, etc.)
-
 
 <a name="shouldRenderSuggestionsProp"></a>
 #### shouldRenderSuggestions (optional)
@@ -393,7 +400,7 @@ where:
 * `suggestion` - the selected suggestion
 * `suggestionValue` - the value of the selected suggestion (equivalent to `getSuggestionValue(suggestion)`)
 * `method` - string describing how user selected the suggestion. The possible values are:
-  * `'click'` - user clicked on the suggestion
+  * `'click'` - user clicked (or tapped) on the suggestion
   * `'enter'` - user selected the suggestion using Enter
 
 <a name="focusInputOnSuggestionClickProp"></a>

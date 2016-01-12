@@ -56,34 +56,18 @@ export default class MultipleSections extends Component {
     };
 
     this.onChange = this.onChange.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
+    this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
   }
 
-  onChange(event, { newValue, method }) {
-    if (method === 'type') {
-      this.setState({
-        value: newValue,
-        suggestions: getSuggestions(newValue)
-      });
-    } else {
-      this.setState({
-        value: newValue
-      });
-    }
-  }
-
-  onBlur(event, { value, valueBeforeUpDown, method }) {
-    if (method !== 'click' && valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
-      this.setState({
-        suggestions: getSuggestions(value)
-      });
-    }
-  }
-
-  onSuggestionSelected(event, { suggestionValue }) {
+  onChange(event, { newValue }) {
     this.setState({
-      suggestions: getSuggestions(suggestionValue)
+      value: newValue
+    });
+  }
+
+  onSuggestionsUpdateRequested({ value }) {
+    this.setState({
+      suggestions: getSuggestions(value)
     });
   }
 
@@ -92,8 +76,7 @@ export default class MultipleSections extends Component {
     const inputProps = {
       placeholder: 'Type \'c\'',
       value,
-      onChange: this.onChange,
-      onBlur: this.onBlur
+      onChange: this.onChange
     };
 
     return (
@@ -113,12 +96,12 @@ export default class MultipleSections extends Component {
         <div className={styles.autosuggest}>
           <Autosuggest multiSection={true}
                        suggestions={suggestions}
+                       onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                        getSuggestionValue={getSuggestionValue}
                        renderSuggestion={renderSuggestion}
                        renderSectionTitle={renderSectionTitle}
                        getSectionSuggestions={getSectionSuggestions}
                        inputProps={inputProps}
-                       onSuggestionSelected={this.onSuggestionSelected}
                        theme={theme}
                        id="multiple-sections-example" />
         </div>
