@@ -41,6 +41,7 @@ function mapDispatchToProps(dispatch) {
 class Autosuggest extends Component {
   static propTypes = {
     suggestions: PropTypes.array.isRequired,
+    onSuggestionsUpdateRequested: PropTypes.func.isRequired,
     getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
     inputProps: PropTypes.object.isRequired,
@@ -161,10 +162,10 @@ class Autosuggest extends Component {
 
   render() {
     const {
-      suggestions, renderSuggestion, inputProps, shouldRenderSuggestions,
-      onSuggestionSelected, multiSection, renderSectionTitle, id,
-      getSectionSuggestions, focusInputOnSuggestionClick, theme, isFocused,
-      isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
+      suggestions, onSuggestionsUpdateRequested, renderSuggestion, inputProps,
+      shouldRenderSuggestions, onSuggestionSelected, multiSection,
+      renderSectionTitle, id, getSectionSuggestions, focusInputOnSuggestionClick,
+      theme, isFocused, isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
       valueBeforeUpDown, inputFocused, inputBlurred, inputChanged,
       updateFocusedSuggestion, revealSuggestions, closeSuggestions
     } = this.props;
@@ -184,15 +185,20 @@ class Autosuggest extends Component {
 
         if (!this.justClickedOnSuggestion) {
           inputBlurred();
-          onBlur && onBlur(event, { value, valueBeforeUpDown, method: 'other' });
+          onBlur && onBlur(event);
+
+          if (valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
+            onSuggestionsUpdateRequested(value);
+          }
         }
       },
       onChange: event => {
         const { value } = event.target;
-        const { shouldRenderSuggestions } = this.props;
+        const { shouldRenderSuggestions, onSuggestionsUpdateRequested } = this.props;
 
         this.maybeEmitOnChange(event, value, 'type');
         inputChanged(shouldRenderSuggestions(value), 'type');
+        onSuggestionsUpdateRequested(value);
       },
       onKeyDown: (event, data) => {
         switch (event.key) {
@@ -224,6 +230,7 @@ class Autosuggest extends Component {
                 suggestionValue: value,
                 method: 'enter'
               });
+              onSuggestionsUpdateRequested(value);
             }
             break;
           }
@@ -279,8 +286,10 @@ class Autosuggest extends Component {
         this.input.focus();
       } else {
         inputBlurred();
-        onBlur && onBlur(this.onBlurEvent, { value, valueBeforeUpDown, method: 'click' });
+        onBlur && onBlur(this.onBlurEvent);
       }
+
+      onSuggestionsUpdateRequested(clickedSuggestionValue);
 
       this.justClickedOnSuggestion = false;
     };

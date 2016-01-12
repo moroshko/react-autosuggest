@@ -16,6 +16,7 @@ import {
   isInputFocused
 } from '../helpers';
 import AutosuggestApp, {
+  onSuggestionsUpdateRequested,
   onBlur,
   renderSectionTitle,
   getSectionSuggestions
@@ -34,6 +35,7 @@ describe('Multi section Autosuggest', () => {
     beforeEach(() => {
       onBlur.reset();
       focusAndSetInputValue('p');
+      onSuggestionsUpdateRequested.reset();
       clickSuggestion(1);
     });
 
@@ -41,8 +43,14 @@ describe('Multi section Autosuggest', () => {
       expect(isInputFocused()).to.equal(false);
     });
 
-    it('should call onBlur with the right parameters', () => {
-      expect(onBlur).to.have.been.calledWithExactly(eventInstance, { value: 'p', valueBeforeUpDown: null, method: 'click' });
+    it('should call onBlur once with the right parameters', () => {
+      expect(onBlur).to.have.been.calledOnce;
+      expect(onBlur).to.have.been.calledWithExactly(eventInstance);
+    });
+
+    it('should call onSuggestionsUpdateRequested once with the right parameters', () => {
+      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
+      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly('PHP');
     });
   });
 

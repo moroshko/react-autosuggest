@@ -94,25 +94,18 @@ class App extends React.Component {
     };
 
     this.onChange = this.onChange.bind(this);
-    this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
+    this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
   }
 
-  onChange(event, { newValue, method }) {
-    if (method === 'type') {
-      this.setState({
-        value: newValue,
-        suggestions: getSuggestions(newValue)
-      });
-    } else {
-      this.setState({
-        value: newValue
-      });
-    }
-  }
-
-  onSuggestionSelected(event, { suggestionValue }) {
+  onChange(event, { newValue }) {
     this.setState({
-      suggestions: getSuggestions(suggestionValue)
+      value: newValue
+    });
+  }
+
+  onSuggestionsUpdateRequested(value) {
+    this.setState({
+      suggestions: getSuggestions(value)
     });
   }
 
@@ -126,10 +119,10 @@ class App extends React.Component {
 
     return (
       <Autosuggest suggestions={suggestions}
+                   onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                    getSuggestionValue={getSuggestionValue}
                    renderSuggestion={renderSuggestion}
-                   inputProps={inputProps}
-                   onSuggestionSelected={this.onSuggestionSelected} />
+                   inputProps={inputProps} />
     );
   }
 }
