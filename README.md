@@ -139,6 +139,7 @@ class Example extends React.Component {
 ## Props
 
 * [`suggestions`](#suggestionsProp)
+* [`onSuggestionsUpdateRequested`](#onSuggestionsUpdateRequestedProp)
 * [`getSuggestionValue`](#getSuggestionValueProp)
 * [`renderSuggestion`](#renderSuggestionProp)
 * [`inputProps`](#inputPropsProp)
@@ -159,50 +160,89 @@ An array of suggestions to display.
 For a plain list of suggestions, every item in `suggestions` should be a single suggestion. It's up to you what shape every suggestion takes. For example:
 
 ```js
-const suggestions = [{
-  text: 'Apple'
-}, {
-  text: 'Banana'
-}, {
-  text: 'Cherry'
-}, {
-  text: 'Grapefruit'
-}, {
-  text: 'Lemon'
-}];
+const suggestions = [
+  {
+    text: 'Apple'
+  },
+  {
+    text: 'Banana'
+  },
+  {
+    text: 'Cherry'
+  },
+  {
+    text: 'Grapefruit'
+  },
+  {
+    text: 'Lemon'
+  }
+];
 ```
 
 To display [multiple sections](#multiSectionProp), every item in `suggestions` should be a single section. Again, it's up to you what shape every section takes. For example:
 
 ```js
-const suggestions = [{
-  title: 'A',
-  suggestions: [{
-    id: '100',
-    text: 'Apple'
-  }, {
-    id: '101',
-    text: 'Apricot'
-  }]
-}, {
-  title: 'B',
-  suggestions: [{
-    id: '102',
-    text: 'Banana'
-  }]
-}, {
-  title: 'C',
-  suggestions: [{
-    id: '103',
-    text: 'Cherry'
-  }]
-}];
+const suggestions = [
+  {
+    title: 'A',
+    suggestions: [
+      {
+        id: '100',
+        text: 'Apple'
+      },
+      {
+        id: '101',
+        text: 'Apricot'
+      }
+    ]
+  },
+  {
+    title: 'B',
+    suggestions: [
+      {
+        id: '102',
+        text: 'Banana'
+      }
+    ]
+  },
+  {
+    title: 'C',
+    suggestions: [
+      {
+        id: '103',
+        text: 'Cherry'
+      }
+    ]
+  }
+];
 ```
 
 **Note:**
 
 * It's totally up to you what shape suggestions take!
 * The initial value of `suggestions` should match the initial value of `inputProps.value`. This will make sure that, if input has a non-empty initial value, and it's focused, the right suggestions are displayed.
+
+<a name="onSuggestionsUpdateRequestedProp"></a>
+#### onSuggestionsUpdateRequested (optional)
+
+Normally, you would want to update [`suggestions`](#suggestionsProp) as user types. You might also want to update suggestions when user selects a suggestion or the input loses focus (so that, next time the input gets focus, suggestions will be up to date).
+
+Autosuggest will call `onSuggestionsUpdateRequested` every time it thinks you might want to update suggestions.
+
+`onSuggestionsUpdateRequested` has the following signature:
+
+```js
+function onSuggestionsUpdateRequested({ value, reason })
+```
+
+where:
+
+* `value` - The current value of the input
+* `reason` - string describing why Autosuggest thinks you might want to update suggestions. The possible values are:
+  * `'type'` - usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.
+  * `'click'` - user clicked (or tapped) a suggestion
+  * `'enter'` - user pressed Enter
+  * `'blur'` - input lost focus
 
 <a name="getSuggestionValueProp"></a>
 #### getSuggestionValue (required)
@@ -275,7 +315,7 @@ where:
   * `'down'` - user pressed Down
   * `'up'` - user pressed Up
   * `'escape'` - user pressed Esc
-  * `'click'` - user clicked on suggestion
+  * `'click'` - user clicked (or tapped) on suggestion
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
 
 <a name="shouldRenderSuggestionsProp"></a>
@@ -360,7 +400,7 @@ where:
 * `suggestion` - the selected suggestion
 * `suggestionValue` - the value of the selected suggestion (equivalent to `getSuggestionValue(suggestion)`)
 * `method` - string describing how user selected the suggestion. The possible values are:
-  * `'click'` - user clicked on the suggestion
+  * `'click'` - user clicked (or tapped) on the suggestion
   * `'enter'` - user selected the suggestion using Enter
 
 <a name="focusInputOnSuggestionClickProp"></a>

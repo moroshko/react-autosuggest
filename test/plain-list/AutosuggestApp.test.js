@@ -471,7 +471,7 @@ describe('Plain list Autosuggest', () => {
       onSuggestionsUpdateRequested.reset();
       focusAndSetInputValue('j');
       expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
-      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly('j');
+      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'j', reason: 'type' });
     });
 
     it('should be called once with the right parameters when suggestion is clicked', () => {
@@ -479,7 +479,7 @@ describe('Plain list Autosuggest', () => {
       onSuggestionsUpdateRequested.reset();
       clickSuggestion(1);
       expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
-      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly('Javascript');
+      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'Javascript', reason: 'click' });
     });
 
     it('should be called once with the right parameters when Enter is pressed and suggestion is focused', () => {
@@ -488,7 +488,7 @@ describe('Plain list Autosuggest', () => {
       onSuggestionsUpdateRequested.reset();
       clickEnter();
       expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
-      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly('Java');
+      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'Java', reason: 'enter' });
     });
 
     it('should be called once with the right parameters when input is blurred, user interacted with Up/Down, and the value before Up/Down is not equal to current input value', () => {
@@ -497,7 +497,7 @@ describe('Plain list Autosuggest', () => {
       onSuggestionsUpdateRequested.reset();
       blurInput();
       expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
-      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly('Java');
+      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'Java', reason: 'blur' });
     });
 
     it('should not be called when Up/Down is pressed', () => {

@@ -43,7 +43,7 @@ export const shouldRenderSuggestions = sinon.spy(value => {
   return value.trim().length > 0 && value[0] !== ' ';
 });
 
-export const onSuggestionsUpdateRequested = sinon.spy(value => {
+export const onSuggestionsUpdateRequested = sinon.spy(({ value }) => {
   app.setState({
     suggestions: getMatchingLanguages(value)
   });

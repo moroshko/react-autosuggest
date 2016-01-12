@@ -36,7 +36,7 @@ export const onChange = sinon.spy((event, { newValue }) => {
 
 export const onBlur = sinon.spy();
 
-export const onSuggestionsUpdateRequested = sinon.spy(value => {
+export const onSuggestionsUpdateRequested = sinon.spy(({ value }) => {
   app.setState({
     suggestions: getMatchingLanguages(value)
   });
