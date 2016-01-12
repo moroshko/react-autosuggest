@@ -188,6 +188,7 @@ var Autosuggest = function (_Component) {
 
       var _props4 = this.props;
       var suggestions = _props4.suggestions;
+      var onSuggestionsUpdateRequested = _props4.onSuggestionsUpdateRequested;
       var renderSuggestion = _props4.renderSuggestion;
       var inputProps = _props4.inputProps;
       var shouldRenderSuggestions = _props4.shouldRenderSuggestions;
@@ -228,15 +229,22 @@ var Autosuggest = function (_Component) {
 
           if (!_this2.justClickedOnSuggestion) {
             inputBlurred();
-            _onBlur && _onBlur(event, { value: value, valueBeforeUpDown: valueBeforeUpDown, method: 'other' });
+            _onBlur && _onBlur(event);
+
+            if (valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
+              onSuggestionsUpdateRequested(value);
+            }
           }
         },
         onChange: function onChange(event) {
           var value = event.target.value;
-          var shouldRenderSuggestions = _this2.props.shouldRenderSuggestions;
+          var _props5 = _this2.props;
+          var shouldRenderSuggestions = _props5.shouldRenderSuggestions;
+          var onSuggestionsUpdateRequested = _props5.onSuggestionsUpdateRequested;
 
           _this2.maybeEmitOnChange(event, value, 'type');
           inputChanged(shouldRenderSuggestions(value), 'type');
+          onSuggestionsUpdateRequested(value);
         },
         onKeyDown: function onKeyDown(event, data) {
           switch (event.key) {
@@ -269,6 +277,7 @@ var Autosuggest = function (_Component) {
                     suggestionValue: value,
                     method: 'enter'
                   });
+                  onSuggestionsUpdateRequested(value);
                 }
                 break;
               }
@@ -332,8 +341,10 @@ var Autosuggest = function (_Component) {
           _this2.input.focus();
         } else {
           inputBlurred();
-          _onBlur && _onBlur(_this2.onBlurEvent, { value: value, valueBeforeUpDown: valueBeforeUpDown, method: 'click' });
+          _onBlur && _onBlur(_this2.onBlurEvent);
         }
+
+        onSuggestionsUpdateRequested(clickedSuggestionValue);
 
         _this2.justClickedOnSuggestion = false;
       };
@@ -375,6 +386,7 @@ var Autosuggest = function (_Component) {
 
 Autosuggest.propTypes = {
   suggestions: _react.PropTypes.array.isRequired,
+  onSuggestionsUpdateRequested: _react.PropTypes.func.isRequired,
   getSuggestionValue: _react.PropTypes.func.isRequired,
   renderSuggestion: _react.PropTypes.func.isRequired,
   inputProps: _react.PropTypes.object.isRequired,

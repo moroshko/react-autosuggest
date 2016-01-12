@@ -94,6 +94,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	function noop() {}
+
 	var defaultTheme = {
 	  container: 'react-autosuggest__container',
 	  containerOpen: 'react-autosuggest__container--open',
@@ -164,6 +166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var multiSection = _props.multiSection;
 	      var shouldRenderSuggestions = _props.shouldRenderSuggestions;
 	      var suggestions = _props.suggestions;
+	      var onSuggestionsUpdateRequested = _props.onSuggestionsUpdateRequested;
 	      var getSuggestionValue = _props.getSuggestionValue;
 	      var renderSuggestion = _props.renderSuggestion;
 	      var renderSectionTitle = _props.renderSectionTitle;
@@ -179,6 +182,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _react2.default.createElement(_Autosuggest2.default, { multiSection: multiSection,
 	          shouldRenderSuggestions: shouldRenderSuggestions,
 	          suggestions: suggestions,
+	          onSuggestionsUpdateRequested: onSuggestionsUpdateRequested,
 	          getSuggestionValue: getSuggestionValue,
 	          renderSuggestion: renderSuggestion,
 	          renderSectionTitle: renderSectionTitle,
@@ -197,16 +201,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	AutosuggestContainer.propTypes = {
 	  suggestions: _react.PropTypes.array.isRequired,
+	  onSuggestionsUpdateRequested: _react.PropTypes.func,
 	  getSuggestionValue: _react.PropTypes.func.isRequired,
 	  renderSuggestion: _react.PropTypes.func.isRequired,
 	  inputProps: function inputProps(props, propName) {
 	    var inputProps = props[propName];
 
-	    if (!('value' in inputProps)) {
+	    if (!inputProps.hasOwnProperty('value')) {
 	      throw new Error('\'inputProps\' must have \'value\'.');
 	    }
 
-	    if (!('onChange' in inputProps)) {
+	    if (!inputProps.hasOwnProperty('onChange')) {
 	      throw new Error('\'inputProps\' must have \'onChange\'.');
 	    }
 	  },
@@ -220,10 +225,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  id: _react.PropTypes.string
 	};
 	AutosuggestContainer.defaultProps = {
+	  onSuggestionsUpdateRequested: noop,
 	  shouldRenderSuggestions: function shouldRenderSuggestions(value) {
 	    return value.trim().length > 0;
 	  },
-	  onSuggestionSelected: function onSuggestionSelected() {},
+	  onSuggestionSelected: noop,
 	  multiSection: false,
 	  renderSectionTitle: function renderSectionTitle() {
 	    throw new Error('`renderSectionTitle` must be provided');
@@ -1803,6 +1809,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var _props4 = this.props;
 	      var suggestions = _props4.suggestions;
+	      var onSuggestionsUpdateRequested = _props4.onSuggestionsUpdateRequested;
 	      var renderSuggestion = _props4.renderSuggestion;
 	      var inputProps = _props4.inputProps;
 	      var shouldRenderSuggestions = _props4.shouldRenderSuggestions;
@@ -1843,15 +1850,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	          if (!_this2.justClickedOnSuggestion) {
 	            inputBlurred();
-	            _onBlur && _onBlur(event, { value: value, valueBeforeUpDown: valueBeforeUpDown, method: 'other' });
+	            _onBlur && _onBlur(event);
+
+	            if (valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
+	              onSuggestionsUpdateRequested(value);
+	            }
 	          }
 	        },
 	        onChange: function onChange(event) {
 	          var value = event.target.value;
-	          var shouldRenderSuggestions = _this2.props.shouldRenderSuggestions;
+	          var _props5 = _this2.props;
+	          var shouldRenderSuggestions = _props5.shouldRenderSuggestions;
+	          var onSuggestionsUpdateRequested = _props5.onSuggestionsUpdateRequested;
 
 	          _this2.maybeEmitOnChange(event, value, 'type');
 	          inputChanged(shouldRenderSuggestions(value), 'type');
+	          onSuggestionsUpdateRequested(value);
 	        },
 	        onKeyDown: function onKeyDown(event, data) {
 	          switch (event.key) {
@@ -1884,6 +1898,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    suggestionValue: value,
 	                    method: 'enter'
 	                  });
+	                  onSuggestionsUpdateRequested(value);
 	                }
 	                break;
 	              }
@@ -1947,8 +1962,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _this2.input.focus();
 	        } else {
 	          inputBlurred();
-	          _onBlur && _onBlur(_this2.onBlurEvent, { value: value, valueBeforeUpDown: valueBeforeUpDown, method: 'click' });
+	          _onBlur && _onBlur(_this2.onBlurEvent);
 	        }
+
+	        onSuggestionsUpdateRequested(clickedSuggestionValue);
 
 	        _this2.justClickedOnSuggestion = false;
 	      };
@@ -1990,6 +2007,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Autosuggest.propTypes = {
 	  suggestions: _react.PropTypes.array.isRequired,
+	  onSuggestionsUpdateRequested: _react.PropTypes.func.isRequired,
 	  getSuggestionValue: _react.PropTypes.func.isRequired,
 	  renderSuggestion: _react.PropTypes.func.isRequired,
 	  inputProps: _react.PropTypes.object.isRequired,

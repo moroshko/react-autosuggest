@@ -30,6 +30,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+function noop() {}
+
 var defaultTheme = {
   container: 'react-autosuggest__container',
   containerOpen: 'react-autosuggest__container--open',
@@ -100,6 +102,7 @@ var AutosuggestContainer = function (_Component) {
       var multiSection = _props.multiSection;
       var shouldRenderSuggestions = _props.shouldRenderSuggestions;
       var suggestions = _props.suggestions;
+      var onSuggestionsUpdateRequested = _props.onSuggestionsUpdateRequested;
       var getSuggestionValue = _props.getSuggestionValue;
       var renderSuggestion = _props.renderSuggestion;
       var renderSectionTitle = _props.renderSectionTitle;
@@ -115,6 +118,7 @@ var AutosuggestContainer = function (_Component) {
         _react2.default.createElement(_Autosuggest2.default, { multiSection: multiSection,
           shouldRenderSuggestions: shouldRenderSuggestions,
           suggestions: suggestions,
+          onSuggestionsUpdateRequested: onSuggestionsUpdateRequested,
           getSuggestionValue: getSuggestionValue,
           renderSuggestion: renderSuggestion,
           renderSectionTitle: renderSectionTitle,
@@ -133,16 +137,17 @@ var AutosuggestContainer = function (_Component) {
 
 AutosuggestContainer.propTypes = {
   suggestions: _react.PropTypes.array.isRequired,
+  onSuggestionsUpdateRequested: _react.PropTypes.func,
   getSuggestionValue: _react.PropTypes.func.isRequired,
   renderSuggestion: _react.PropTypes.func.isRequired,
   inputProps: function inputProps(props, propName) {
     var inputProps = props[propName];
 
-    if (!('value' in inputProps)) {
+    if (!inputProps.hasOwnProperty('value')) {
       throw new Error('\'inputProps\' must have \'value\'.');
     }
 
-    if (!('onChange' in inputProps)) {
+    if (!inputProps.hasOwnProperty('onChange')) {
       throw new Error('\'inputProps\' must have \'onChange\'.');
     }
   },
@@ -156,10 +161,11 @@ AutosuggestContainer.propTypes = {
   id: _react.PropTypes.string
 };
 AutosuggestContainer.defaultProps = {
+  onSuggestionsUpdateRequested: noop,
   shouldRenderSuggestions: function shouldRenderSuggestions(value) {
     return value.trim().length > 0;
   },
-  onSuggestionSelected: function onSuggestionSelected() {},
+  onSuggestionSelected: noop,
   multiSection: false,
   renderSectionTitle: function renderSectionTitle() {
     throw new Error('`renderSectionTitle` must be provided');
