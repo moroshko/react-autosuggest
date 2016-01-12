@@ -232,7 +232,7 @@ var Autosuggest = function (_Component) {
             _onBlur && _onBlur(event);
 
             if (valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
-              onSuggestionsUpdateRequested(value);
+              onSuggestionsUpdateRequested({ value: value, reason: 'blur' });
             }
           }
         },
@@ -244,7 +244,7 @@ var Autosuggest = function (_Component) {
 
           _this2.maybeEmitOnChange(event, value, 'type');
           inputChanged(shouldRenderSuggestions(value), 'type');
-          onSuggestionsUpdateRequested(value);
+          onSuggestionsUpdateRequested({ value: value, reason: 'type' });
         },
         onKeyDown: function onKeyDown(event, data) {
           switch (event.key) {
@@ -277,7 +277,7 @@ var Autosuggest = function (_Component) {
                     suggestionValue: value,
                     method: 'enter'
                   });
-                  onSuggestionsUpdateRequested(value);
+                  onSuggestionsUpdateRequested({ value: value, reason: 'enter' });
                 }
                 break;
               }
@@ -344,7 +344,7 @@ var Autosuggest = function (_Component) {
           _onBlur && _onBlur(_this2.onBlurEvent);
         }
 
-        onSuggestionsUpdateRequested(clickedSuggestionValue);
+        onSuggestionsUpdateRequested({ value: clickedSuggestionValue, reason: 'click' });
 
         _this2.justClickedOnSuggestion = false;
       };

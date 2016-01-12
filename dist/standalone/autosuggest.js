@@ -1853,7 +1853,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _onBlur && _onBlur(event);
 
 	            if (valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
-	              onSuggestionsUpdateRequested(value);
+	              onSuggestionsUpdateRequested({ value: value, reason: 'blur' });
 	            }
 	          }
 	        },
@@ -1865,7 +1865,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	          _this2.maybeEmitOnChange(event, value, 'type');
 	          inputChanged(shouldRenderSuggestions(value), 'type');
-	          onSuggestionsUpdateRequested(value);
+	          onSuggestionsUpdateRequested({ value: value, reason: 'type' });
 	        },
 	        onKeyDown: function onKeyDown(event, data) {
 	          switch (event.key) {
@@ -1898,7 +1898,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    suggestionValue: value,
 	                    method: 'enter'
 	                  });
-	                  onSuggestionsUpdateRequested(value);
+	                  onSuggestionsUpdateRequested({ value: value, reason: 'enter' });
 	                }
 	                break;
 	              }
@@ -1965,7 +1965,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _onBlur && _onBlur(_this2.onBlurEvent);
 	        }
 
-	        onSuggestionsUpdateRequested(clickedSuggestionValue);
+	        onSuggestionsUpdateRequested({ value: clickedSuggestionValue, reason: 'click' });
 
 	        _this2.justClickedOnSuggestion = false;
 	      };
