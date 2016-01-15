@@ -274,12 +274,12 @@ class Autosuggest extends Component {
       const clickedSuggestion = this.getSuggestion(sectionIndex, suggestionIndex);
       const clickedSuggestionValue = this.props.getSuggestionValue(clickedSuggestion);
 
+      this.maybeEmitOnChange(event, clickedSuggestionValue, 'click');
       onSuggestionSelected(event, {
         suggestion: clickedSuggestion,
         suggestionValue: clickedSuggestionValue,
         method: 'click'
       });
-      this.maybeEmitOnChange(event, clickedSuggestionValue, 'click');
       closeSuggestions('click');
 
       if (focusInputOnSuggestionClick === true) {
