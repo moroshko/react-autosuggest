@@ -7,6 +7,19 @@ import TestUtils, { Simulate } from 'react-addons-test-utils';
 chai.use(sinonChai);
 
 let data = null;
+let eventsArray = [];
+
+export const clearEvents = () => {
+  eventsArray = [];
+};
+
+export const addEvent = event => {
+  eventsArray.push(event);
+};
+
+export const getEvents = () => {
+  return eventsArray;
+};
 
 export function init(d) {
   data = d;

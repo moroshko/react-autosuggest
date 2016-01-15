@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import sinon from 'sinon';
+import highlight  from 'autosuggest-highlight';
 import Autosuggest from '../../src/AutosuggestContainer';
 import languages from './languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
-import highlight  from 'autosuggest-highlight';
+import { addEvent } from '../helpers';
 
 function getMatchingLanguages(value) {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -31,13 +32,17 @@ export const renderSuggestion = sinon.spy((suggestion, { value, valueBeforeUpDow
 });
 
 export const onChange = sinon.spy((event, { newValue }) => {
+  addEvent('onChange');
+
   app.setState({
     value: newValue
   });
 });
 
 export const onBlur = sinon.spy();
-export const onSuggestionSelected = sinon.spy();
+export const onSuggestionSelected = sinon.spy(() => {
+  addEvent('onSuggestionSelected');
+});
 
 export const shouldRenderSuggestions = sinon.spy(value => {
   return value.trim().length > 0 && value[0] !== ' ';
