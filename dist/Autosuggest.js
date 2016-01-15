@@ -329,12 +329,12 @@ var Autosuggest = function (_Component) {
         var clickedSuggestion = _this2.getSuggestion(sectionIndex, suggestionIndex);
         var clickedSuggestionValue = _this2.props.getSuggestionValue(clickedSuggestion);
 
+        _this2.maybeEmitOnChange(event, clickedSuggestionValue, 'click');
         onSuggestionSelected(event, {
           suggestion: clickedSuggestion,
           suggestionValue: clickedSuggestionValue,
           method: 'click'
         });
-        _this2.maybeEmitOnChange(event, clickedSuggestionValue, 'click');
         closeSuggestions('click');
 
         if (focusInputOnSuggestionClick === true) {
