@@ -111,7 +111,7 @@ class Example extends React.Component {
     });
   }
 
-  onSuggestionsUpdateRequested(value) {
+  onSuggestionsUpdateRequested({ value }) {
     this.setState({
       suggestions: getSuggestions(value)
     });

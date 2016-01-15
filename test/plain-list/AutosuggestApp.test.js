@@ -21,7 +21,9 @@ import {
   clickDown,
   clickUp,
   focusAndSetInputValue,
-  isInputFocused
+  isInputFocused,
+  clearEvents,
+  getEvents
 } from '../helpers';
 import AutosuggestApp, {
   getSuggestionValue,
@@ -463,6 +465,13 @@ describe('Plain list Autosuggest', () => {
       clickDown();
       clickEnter();
       expect(onSuggestionSelected).not.to.have.been.called;
+    });
+
+    it('should be called after inputProps.onChange when suggestion is clicked', () => {
+      onChange.reset();
+      clearEvents();
+      clickSuggestion(1);
+      expect(getEvents()).to.deep.equal(['onChange', 'onSuggestionSelected']);
     });
   });
 
