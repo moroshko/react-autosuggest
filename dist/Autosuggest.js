@@ -295,6 +295,7 @@ var Autosuggest = function (_Component) {
                 // Didn't interact with Up/Down
                 if (!isOpen) {
                   _this2.maybeEmitOnChange(event, '', 'escape');
+                  onSuggestionsUpdateRequested({ value: '', reason: 'escape' });
                 }
               } else {
                 // Interacted with Up/Down

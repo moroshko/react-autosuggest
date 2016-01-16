@@ -75,6 +75,7 @@ function reducer(state, action) {
         isFocused: false,
         focusedSectionIndex: null,
         focusedSuggestionIndex: null,
+        valueBeforeUpDown: null,
         isCollapsed: true
       });
 

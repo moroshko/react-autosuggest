@@ -1569,6 +1569,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        isFocused: false,
 	        focusedSectionIndex: null,
 	        focusedSuggestionIndex: null,
+	        valueBeforeUpDown: null,
 	        isCollapsed: true
 	      });
 
@@ -1916,6 +1917,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                // Didn't interact with Up/Down
 	                if (!isOpen) {
 	                  _this2.maybeEmitOnChange(event, '', 'escape');
+	                  onSuggestionsUpdateRequested({ value: '', reason: 'escape' });
 	                }
 	              } else {
 	                // Interacted with Up/Down
