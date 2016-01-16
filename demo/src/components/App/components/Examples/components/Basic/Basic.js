@@ -1,10 +1,13 @@
 import styles from './Basic.less';
 
 import React, { Component } from 'react';
+import isMobile from 'ismobilejs';
 import Link from 'Link/Link';
 import Autosuggest from 'AutosuggestContainer';
 import languages from './languages';
 import { escapeRegexCharacters } from 'utils/utils';
+
+const focusInputOnSuggestionClick = !isMobile.any;
 
 function getSuggestions(value) {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -81,6 +84,7 @@ export default class Basic extends Component {
                        getSuggestionValue={getSuggestionValue}
                        renderSuggestion={renderSuggestion}
                        inputProps={inputProps}
+                       focusInputOnSuggestionClick={focusInputOnSuggestionClick}
                        id="basic-example" />
         </div>
       </div>
