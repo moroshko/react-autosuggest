@@ -14,6 +14,7 @@ import {
   clickSuggestion,
   focusInput,
   clickEscape,
+  setInputValue,
   focusAndSetInputValue,
   isInputFocused
 } from '../helpers';
@@ -68,8 +69,9 @@ describe('Multi section Autosuggest', () => {
 
   describe('renderSectionTitle', () => {
     beforeEach(() => {
+      focusInput();
       renderSectionTitle.reset();
-      focusAndSetInputValue('c');
+      setInputValue('c');
     });
 
     it('should be called with the right parameters', () => {
@@ -109,8 +111,9 @@ describe('Multi section Autosuggest', () => {
 
   describe('getSectionSuggestions', () => {
     beforeEach(() => {
+      focusInput();
       getSectionSuggestions.reset();
-      focusAndSetInputValue('j');
+      setInputValue('j');
     });
 
     it('should be called with the right parameters', () => {
