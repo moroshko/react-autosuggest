@@ -247,6 +247,7 @@ class Autosuggest extends Component {
             if (valueBeforeUpDown === null) { // Didn't interact with Up/Down
               if (!isOpen) {
                 this.maybeEmitOnChange(event, '', 'escape');
+                onSuggestionsUpdateRequested({ value: '', reason: 'escape' });
               }
             } else { // Interacted with Up/Down
               this.maybeEmitOnChange(event, valueBeforeUpDown, 'escape');

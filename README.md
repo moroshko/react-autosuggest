@@ -242,6 +242,7 @@ where:
   * `'type'` - usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.
   * `'click'` - user clicked (or tapped) a suggestion
   * `'enter'` - user pressed Enter
+  * `'escape'` - user pressed Escape
   * `'blur'` - input lost focus
 
 <a name="getSuggestionValueProp"></a>
@@ -314,7 +315,7 @@ where:
 * `method` - string describing how the change occurred. The possible values are:
   * `'down'` - user pressed Down
   * `'up'` - user pressed Up
-  * `'escape'` - user pressed Esc
+  * `'escape'` - user pressed Escape
   * `'click'` - user clicked (or tapped) on suggestion
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
 

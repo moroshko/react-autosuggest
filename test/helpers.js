@@ -167,10 +167,14 @@ export function clickUp(count = 1) {
   }
 }
 
-export function focusAndSetInputValue(value) {
-  focusInput();
+export function setInputValue(value) {
   data.input.value = value;
   Simulate.change(data.input);
+}
+
+export function focusAndSetInputValue(value) {
+  focusInput();
+  setInputValue(value);
 }
 
 export function isInputFocused() {

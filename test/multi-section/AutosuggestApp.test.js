@@ -7,11 +7,14 @@ import {
   getInnerHTML,
   expectContainerAttribute,
   expectInputAttribute,
+  expectSuggestions,
   expectSuggestionsContainerAttribute,
   getTitle,
 //  getSuggestionsBySectionIndex,
   clickSuggestion,
+  focusInput,
   clickEscape,
+  setInputValue,
   focusAndSetInputValue,
   isInputFocused
 } from '../helpers';
@@ -29,6 +32,16 @@ describe('Multi section Autosuggest', () => {
     const input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
 
     init({ app, container, input });
+  });
+
+  describe('shouldRenderSuggestions', () => {
+    it('should show suggestions input is empty and `true` is returned', () => {
+      focusInput();
+      expectSuggestions([
+        'C', 'C#', 'C++', 'Clojure', 'Elm', 'Go', 'Haskell', 'Java',
+        'Javascript', 'Perl', 'PHP', 'Python', 'Ruby', 'Scala'
+      ]);
+    });
   });
 
   describe('when focusInputOnSuggestionClick is false and suggestion is clicked', () => {
@@ -56,8 +69,9 @@ describe('Multi section Autosuggest', () => {
 
   describe('renderSectionTitle', () => {
     beforeEach(() => {
+      focusInput();
       renderSectionTitle.reset();
-      focusAndSetInputValue('c');
+      setInputValue('c');
     });
 
     it('should be called with the right parameters', () => {
@@ -97,8 +111,9 @@ describe('Multi section Autosuggest', () => {
 
   describe('getSectionSuggestions', () => {
     beforeEach(() => {
+      focusInput();
       getSectionSuggestions.reset();
-      focusAndSetInputValue('j');
+      setInputValue('j');
     });
 
     it('should be called with the right parameters', () => {
