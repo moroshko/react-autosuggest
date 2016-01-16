@@ -44,11 +44,11 @@
     "css-loader": "^0.23.1",
     "es6-promise": "^3.0.2",
     "eslint": "^1.10.3",
-    "eslint-plugin-react": "^3.14.0",
+    "eslint-plugin-react": "^3.15.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
-    "happypack": "^1.1.2",
-    "isomorphic-fetch": "^2.2.0",
+    "happypack": "^1.1.3",
+    "isomorphic-fetch": "^2.2.1",
     "jsdom": "^7.2.2",
     "less": "^2.5.3",
     "less-loader": "^2.2.2",
@@ -64,8 +64,8 @@
     "svgo": "^0.6.1",
     "svgo-loader": "^1.1.0",
     "url-loader": "^0.5.7",
-    "webpack": "^1.12.10",
-    "webpack-dev-server": "^1.14.0"
+    "webpack": "^1.12.11",
+    "webpack-dev-server": "^1.14.1"
   },
   "files": [
     "dist"
