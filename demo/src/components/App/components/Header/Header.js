@@ -48,7 +48,7 @@ class Header extends Component {
         </a>
         <div className={styles.socialLinks}>
           <Link className={styles.stargazersLink}
-                href="https://github.com/moroshko/react-autosuggest"
+                href="https://github.com/moroshko/react-autosuggest/stargazers"
                 underline={false}>
             {stargazers} stargazers
           </Link>
