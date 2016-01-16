@@ -509,6 +509,14 @@ describe('Plain list Autosuggest', () => {
       expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'Java', reason: 'blur' });
     });
 
+    it('should be called once with the right parameters when Escape is pressed and suggestions are hidden', () => {
+      focusAndSetInputValue('jr');
+      onSuggestionsUpdateRequested.reset();
+      clickEscape();
+      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
+      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: '', reason: 'escape' });
+    });
+
     it('should not be called when Up/Down is pressed', () => {
       focusAndSetInputValue('j');
       onSuggestionsUpdateRequested.reset();
@@ -547,6 +555,13 @@ describe('Plain list Autosuggest', () => {
       clickDown();
       onSuggestionsUpdateRequested.reset();
       blurInput();
+      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+    });
+
+    it('should not be called when Escape is pressed and suggestions are shown', () => {
+      focusAndSetInputValue('j');
+      onSuggestionsUpdateRequested.reset();
+      clickEscape();
       expect(onSuggestionsUpdateRequested).not.to.have.been.called;
     });
   });

@@ -79,6 +79,7 @@ export default class AutosuggestApp extends Component {
                    getSuggestionValue={getSuggestionValue}
                    renderSuggestion={renderSuggestion}
                    inputProps={inputProps}
+                   shouldRenderSuggestions={() => true}
                    renderSectionTitle={renderSectionTitle}
                    getSectionSuggestions={getSectionSuggestions}
                    focusInputOnSuggestionClick={false} />
