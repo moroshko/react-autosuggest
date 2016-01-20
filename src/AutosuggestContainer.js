@@ -103,7 +103,7 @@ export default class AutosuggestContainer extends Component {
     };
 
     this.store = createStore(reducer, initialState);
-    this.theme = mapToAutowhateverTheme(this.props.theme);
+    this.theme = mapToAutowhateverTheme(props.theme);
   }
 
   render() {
