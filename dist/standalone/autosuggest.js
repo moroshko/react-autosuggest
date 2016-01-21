@@ -155,7 +155,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    _this.store = (0, _redux.createStore)(_reducerAndActions2.default, initialState);
-	    _this.theme = mapToAutowhateverTheme(_this.props.theme);
+	    _this.theme = mapToAutowhateverTheme(props.theme);
 	    return _this;
 	  }
 
