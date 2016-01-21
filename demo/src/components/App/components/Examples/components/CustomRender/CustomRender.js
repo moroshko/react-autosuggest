@@ -2,11 +2,14 @@ import styles from './CustomRender.less';
 import theme from './theme.less';
 
 import React, { Component } from 'react';
+import isMobile from 'ismobilejs';
 import highlight  from 'autosuggest-highlight';
 import Link from 'Link/Link';
 import Autosuggest from 'AutosuggestContainer';
 import people from './people';
 import { escapeRegexCharacters } from 'utils/utils';
+
+const focusInputOnSuggestionClick = !isMobile.any;
 
 function getSuggestions(value) {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -101,6 +104,7 @@ export default class CustomRender extends Component {
                        getSuggestionValue={getSuggestionValue}
                        renderSuggestion={renderSuggestion}
                        inputProps={inputProps}
+                       focusInputOnSuggestionClick={focusInputOnSuggestionClick}
                        theme={theme}
                        id="custom-render-example" />
         </div>

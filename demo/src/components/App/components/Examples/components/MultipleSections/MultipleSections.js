@@ -2,10 +2,13 @@ import styles from './MultipleSections.less';
 import theme from './theme.less';
 
 import React, { Component } from 'react';
+import isMobile from 'ismobilejs';
 import Link from 'Link/Link';
 import Autosuggest from 'AutosuggestContainer';
 import languages from './languages';
 import { escapeRegexCharacters } from 'utils/utils';
+
+const focusInputOnSuggestionClick = !isMobile.any;
 
 function getSuggestions(value) {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -102,6 +105,7 @@ export default class MultipleSections extends Component {
                        renderSectionTitle={renderSectionTitle}
                        getSectionSuggestions={getSectionSuggestions}
                        inputProps={inputProps}
+                       focusInputOnSuggestionClick={focusInputOnSuggestionClick}
                        theme={theme}
                        id="multiple-sections-example" />
         </div>
