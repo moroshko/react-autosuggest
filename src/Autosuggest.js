@@ -53,6 +53,7 @@ class Autosuggest extends Component {
     focusInputOnSuggestionClick: PropTypes.bool.isRequired,
     theme: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,
+    inputRef: PropTypes.func.isRequired,
 
     isFocused: PropTypes.bool.isRequired,
     isCollapsed: PropTypes.bool.isRequired,
@@ -69,8 +70,8 @@ class Autosuggest extends Component {
     closeSuggestions: PropTypes.func.isRequired
   };
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.saveInput = this.saveInput.bind(this);
   }
@@ -156,7 +157,10 @@ class Autosuggest extends Component {
 
   saveInput(autowhatever) {
     if (autowhatever !== null) {
-      this.input = autowhatever.refs.input;
+      const input = autowhatever.refs.input;
+
+      this.input = input;
+      this.props.inputRef(input);
     }
   }
 
