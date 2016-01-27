@@ -143,7 +143,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function AutosuggestContainer(props) {
 	    _classCallCheck(this, AutosuggestContainer);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AutosuggestContainer).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AutosuggestContainer).call(this));
 
 	    var initialState = {
 	      isFocused: false,
@@ -156,10 +156,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _this.store = (0, _redux.createStore)(_reducerAndActions2.default, initialState);
 	    _this.theme = mapToAutowhateverTheme(props.theme);
+
+	    _this.saveInput = _this.saveInput.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(AutosuggestContainer, [{
+	    key: 'saveInput',
+	    value: function saveInput(input) {
+	      this.input = input;
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
@@ -191,7 +198,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          onSuggestionSelected: onSuggestionSelected,
 	          focusInputOnSuggestionClick: focusInputOnSuggestionClick,
 	          theme: this.theme,
-	          id: id })
+	          id: id,
+	          inputRef: this.saveInput })
 	      );
 	    }
 	  }]);
@@ -1687,10 +1695,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Autosuggest = function (_Component) {
 	  _inherits(Autosuggest, _Component);
 
-	  function Autosuggest(props) {
+	  function Autosuggest() {
 	    _classCallCheck(this, Autosuggest);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Autosuggest).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Autosuggest).call(this));
 
 	    _this.saveInput = _this.saveInput.bind(_this);
 	    return _this;
@@ -1800,7 +1808,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'saveInput',
 	    value: function saveInput(autowhatever) {
 	      if (autowhatever !== null) {
-	        this.input = autowhatever.refs.input;
+	        var input = autowhatever.refs.input;
+
+	        this.input = input;
+	        this.props.inputRef(input);
 	      }
 	    }
 	  }, {
@@ -2021,6 +2032,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  focusInputOnSuggestionClick: _react.PropTypes.bool.isRequired,
 	  theme: _react.PropTypes.object.isRequired,
 	  id: _react.PropTypes.string.isRequired,
+	  inputRef: _react.PropTypes.func.isRequired,
 
 	  isFocused: _react.PropTypes.bool.isRequired,
 	  isCollapsed: _react.PropTypes.bool.isRequired,

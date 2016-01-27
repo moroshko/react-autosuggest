@@ -79,7 +79,7 @@ var AutosuggestContainer = function (_Component) {
   function AutosuggestContainer(props) {
     _classCallCheck(this, AutosuggestContainer);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AutosuggestContainer).call(this, props));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AutosuggestContainer).call(this));
 
     var initialState = {
       isFocused: false,
@@ -92,10 +92,17 @@ var AutosuggestContainer = function (_Component) {
 
     _this.store = (0, _redux.createStore)(_reducerAndActions2.default, initialState);
     _this.theme = mapToAutowhateverTheme(props.theme);
+
+    _this.saveInput = _this.saveInput.bind(_this);
     return _this;
   }
 
   _createClass(AutosuggestContainer, [{
+    key: 'saveInput',
+    value: function saveInput(input) {
+      this.input = input;
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _props = this.props;
@@ -127,7 +134,8 @@ var AutosuggestContainer = function (_Component) {
           onSuggestionSelected: onSuggestionSelected,
           focusInputOnSuggestionClick: focusInputOnSuggestionClick,
           theme: this.theme,
-          id: id })
+          id: id,
+          inputRef: this.saveInput })
       );
     }
   }]);

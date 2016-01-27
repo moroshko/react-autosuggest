@@ -65,10 +65,10 @@ function mapDispatchToProps(dispatch) {
 var Autosuggest = function (_Component) {
   _inherits(Autosuggest, _Component);
 
-  function Autosuggest(props) {
+  function Autosuggest() {
     _classCallCheck(this, Autosuggest);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Autosuggest).call(this, props));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Autosuggest).call(this));
 
     _this.saveInput = _this.saveInput.bind(_this);
     return _this;
@@ -178,7 +178,10 @@ var Autosuggest = function (_Component) {
     key: 'saveInput',
     value: function saveInput(autowhatever) {
       if (autowhatever !== null) {
-        this.input = autowhatever.refs.input;
+        var input = autowhatever.refs.input;
+
+        this.input = input;
+        this.props.inputRef(input);
       }
     }
   }, {
@@ -399,6 +402,7 @@ Autosuggest.propTypes = {
   focusInputOnSuggestionClick: _react.PropTypes.bool.isRequired,
   theme: _react.PropTypes.object.isRequired,
   id: _react.PropTypes.string.isRequired,
+  inputRef: _react.PropTypes.func.isRequired,
 
   isFocused: _react.PropTypes.bool.isRequired,
   isCollapsed: _react.PropTypes.bool.isRequired,
