@@ -91,7 +91,7 @@ export default class AutosuggestContainer extends Component {
   };
 
   constructor(props) {
-    super(props);
+    super();
 
     const initialState = {
       isFocused: false,
@@ -104,6 +104,12 @@ export default class AutosuggestContainer extends Component {
 
     this.store = createStore(reducer, initialState);
     this.theme = mapToAutowhateverTheme(props.theme);
+
+    this.saveInput = this.saveInput.bind(this);
+  }
+
+  saveInput(input) {
+    this.input = input;
   }
 
   render() {
@@ -128,7 +134,8 @@ export default class AutosuggestContainer extends Component {
                      onSuggestionSelected={onSuggestionSelected}
                      focusInputOnSuggestionClick={focusInputOnSuggestionClick}
                      theme={this.theme}
-                     id={id} />
+                     id={id}
+                     inputRef={this.saveInput} />
       </Provider>
     );
   }
