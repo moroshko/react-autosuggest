@@ -19,7 +19,7 @@ const defaultTheme = {
 };
 
 function mapToAutowhateverTheme(theme) {
-  var result = {};
+  let result = {};
 
   for (const key in theme) {
     switch (key) {
@@ -90,7 +90,7 @@ export default class AutosuggestContainer extends Component {
     id: '1'
   };
 
-  constructor(props) {
+  constructor() {
     super();
 
     const initialState = {
@@ -103,7 +103,6 @@ export default class AutosuggestContainer extends Component {
     };
 
     this.store = createStore(reducer, initialState);
-    this.theme = mapToAutowhateverTheme(props.theme);
 
     this.saveInput = this.saveInput.bind(this);
   }
@@ -117,7 +116,7 @@ export default class AutosuggestContainer extends Component {
       multiSection, shouldRenderSuggestions, suggestions,
       onSuggestionsUpdateRequested, getSuggestionValue, renderSuggestion,
       renderSectionTitle, getSectionSuggestions, inputProps,
-      onSuggestionSelected, focusInputOnSuggestionClick, id
+      onSuggestionSelected, focusInputOnSuggestionClick, theme, id
     } = this.props;
 
     return (
@@ -133,7 +132,7 @@ export default class AutosuggestContainer extends Component {
                      inputProps={inputProps}
                      onSuggestionSelected={onSuggestionSelected}
                      focusInputOnSuggestionClick={focusInputOnSuggestionClick}
-                     theme={this.theme}
+                     theme={mapToAutowhateverTheme(theme)}
                      id={id}
                      inputRef={this.saveInput} />
       </Provider>

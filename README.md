@@ -2,11 +2,11 @@
   <img src="https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg?style=flat-square"
        alt="Build Status" />
 </a>
-<a href="https://github.com/moroshko/react-autosuggest/issues" target="_blank">
+<a href="http://issuestats.com/github/moroshko/react-autosuggest" target="_blank">
   <img src="http://issuestats.com/github/moroshko/react-autosuggest/badge/issue?style=flat-square"
        alt="Issues stats" />
 </a>
-<a href="https://github.com/moroshko/react-autosuggest/pulls" target="_blank">
+<a href="http://issuestats.com/github/moroshko/react-autosuggest" target="_blank">
   <img src="https://img.shields.io/badge/pull%20requests%20closed%20in-5%20days-green.svg?style=flat-square"
        alt="Pull Requests stats" />
 </a>
@@ -60,26 +60,16 @@ const languages = [
     name: 'Elm',
     year: 2012
   },
-  {
-    name: 'Javascript',
-    year: 1995
-  },
-  {
-    name: 'Python',
-    year: 1991
-  }
+  ...
 ];
 
 function getSuggestions(value) {
-  const escapedValue = escapeRegexCharacters(value.trim()); // See: https://github.com/moroshko/react-autosuggest/blob/master/demo/src/components/utils/utils.js#L2-L4
-
-  if (escapedValue === '') {
-    return [];
-  }
-
-  const regex = new RegExp('^' + escapedValue, 'i');
-
-  return languages.filter(language => regex.test(language.name));
+  const inputValue = value.trim().toLowerCase();
+  const inputLength = inputValue.length;
+  
+  return inputLength === 0 ? [] : languages.filter(lang =>
+    lang.name.toLowerCase().slice(0, inputLength) === inputValue
+  );
 }
 
 function getSuggestionValue(suggestion) { // when suggestion selected, this function tells
