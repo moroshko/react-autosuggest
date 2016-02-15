@@ -1,12 +1,12 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -86,6 +86,7 @@ var Autosuggest = function (_Component) {
         var lastAction = nextProps.lastAction;
         var value = inputProps.value;
 
+
         if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter' && suggestions.length > 0 && shouldRenderSuggestions(value)) {
           revealSuggestions();
         }
@@ -98,6 +99,7 @@ var Autosuggest = function (_Component) {
       var suggestions = _props.suggestions;
       var multiSection = _props.multiSection;
       var getSectionSuggestions = _props.getSectionSuggestions;
+
 
       if (multiSection) {
         return getSectionSuggestions(suggestions[sectionIndex])[suggestionIndex];
@@ -112,6 +114,7 @@ var Autosuggest = function (_Component) {
       var focusedSectionIndex = _props2.focusedSectionIndex;
       var focusedSuggestionIndex = _props2.focusedSuggestionIndex;
 
+
       if (focusedSuggestionIndex === null) {
         return null;
       }
@@ -122,6 +125,7 @@ var Autosuggest = function (_Component) {
     key: 'getSuggestionValueByIndex',
     value: function getSuggestionValueByIndex(sectionIndex, suggestionIndex) {
       var getSuggestionValue = this.props.getSuggestionValue;
+
 
       return getSuggestionValue(this.getSuggestion(sectionIndex, suggestionIndex));
     }
@@ -159,6 +163,7 @@ var Autosuggest = function (_Component) {
       var value = _props$inputProps.value;
       var onChange = _props$inputProps.onChange;
 
+
       if (newValue !== value) {
         onChange && onChange(event, { newValue: newValue, method: method });
       }
@@ -171,6 +176,7 @@ var Autosuggest = function (_Component) {
       var inputProps = _props3.inputProps;
       var shouldRenderSuggestions = _props3.shouldRenderSuggestions;
       var value = inputProps.value;
+
 
       return suggestions.length > 0 && shouldRenderSuggestions(value);
     }
@@ -244,6 +250,7 @@ var Autosuggest = function (_Component) {
           var _props5 = _this2.props;
           var shouldRenderSuggestions = _props5.shouldRenderSuggestions;
           var onSuggestionsUpdateRequested = _props5.onSuggestionsUpdateRequested;
+
 
           _this2.maybeEmitOnChange(event, value, 'type');
           inputChanged(shouldRenderSuggestions(value), 'type');

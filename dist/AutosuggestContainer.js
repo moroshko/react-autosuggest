@@ -1,10 +1,10 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -76,7 +76,7 @@ function mapToAutowhateverTheme(theme) {
 var AutosuggestContainer = function (_Component) {
   _inherits(AutosuggestContainer, _Component);
 
-  function AutosuggestContainer(props) {
+  function AutosuggestContainer() {
     _classCallCheck(this, AutosuggestContainer);
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AutosuggestContainer).call(this));
@@ -91,7 +91,6 @@ var AutosuggestContainer = function (_Component) {
     };
 
     _this.store = (0, _redux.createStore)(_reducerAndActions2.default, initialState);
-    _this.theme = mapToAutowhateverTheme(props.theme);
 
     _this.saveInput = _this.saveInput.bind(_this);
     return _this;
@@ -117,7 +116,9 @@ var AutosuggestContainer = function (_Component) {
       var inputProps = _props.inputProps;
       var onSuggestionSelected = _props.onSuggestionSelected;
       var focusInputOnSuggestionClick = _props.focusInputOnSuggestionClick;
+      var theme = _props.theme;
       var id = _props.id;
+
 
       return _react2.default.createElement(
         _reactRedux.Provider,
@@ -133,7 +134,7 @@ var AutosuggestContainer = function (_Component) {
           inputProps: inputProps,
           onSuggestionSelected: onSuggestionSelected,
           focusInputOnSuggestionClick: focusInputOnSuggestionClick,
-          theme: this.theme,
+          theme: mapToAutowhateverTheme(theme),
           id: id,
           inputRef: this.saveInput })
       );
