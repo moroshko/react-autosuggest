@@ -68,6 +68,7 @@ export default class AutosuggestApp extends Component {
 
   render() {
     const { value, suggestions } = this.state;
+    const { maxLength } = this.props;
     const inputProps = {
       id: 'my-awesome-autosuggest',
       placeholder: 'Type a programming language',
@@ -84,7 +85,8 @@ export default class AutosuggestApp extends Component {
                    renderSuggestion={renderSuggestion}
                    inputProps={inputProps}
                    shouldRenderSuggestions={shouldRenderSuggestions}
-                   onSuggestionSelected={onSuggestionSelected} />
+                   onSuggestionSelected={onSuggestionSelected}
+                   maxLength={maxLength} />
     );
   }
 }

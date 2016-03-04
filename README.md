@@ -66,7 +66,7 @@ const languages = [
 function getSuggestions(value) {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
-  
+
   return inputLength === 0 ? [] : languages.filter(lang =>
     lang.name.toLowerCase().slice(0, inputLength) === inputValue
   );
@@ -141,6 +141,7 @@ class Example extends React.Component {
 * [`focusInputOnSuggestionClick`](#focusInputOnSuggestionClickProp)
 * [`theme`](#themeProp)
 * [`id`](#idProp)
+* [`maxLength`](#maxLengthProp)
 
 <a name="suggestionsProp"></a>
 #### suggestions (required)
@@ -471,6 +472,10 @@ When rendering multiple Autosuggest components on a page, make sure to give them
 <Autosuggest id="source" ... />
 <Autosuggest id="destination" ... />
 ```
+
+<a name="maxLengthProp"></a>
+#### maxLength (optional)
+Limit the number of suggestions that appear
 
 ## Development
 

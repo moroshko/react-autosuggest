@@ -35,6 +35,26 @@ import AutosuggestApp, {
   onSuggestionsUpdateRequested
 } from './AutosuggestApp';
 
+describe('Plain list Autosuggest filtered', () => {
+  beforeEach(() => {
+    const app = TestUtils.renderIntoDocument(<AutosuggestApp maxLength={2} />);
+    const container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
+    const input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
+
+    init({ app, container, input });
+  });
+
+  describe('when typing matches exist', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('p');
+    });
+
+    it('should show suggestions only up until max length', () => {
+      expectSuggestions(['Perl', 'PHP']);
+    });
+  });
+});
+
 describe('Plain list Autosuggest', () => {
   beforeEach(() => {
     const app = TestUtils.renderIntoDocument(React.createElement(AutosuggestApp));
