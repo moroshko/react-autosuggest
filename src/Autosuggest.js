@@ -61,6 +61,7 @@ class Autosuggest extends Component {
     focusedSuggestionIndex: PropTypes.number,
     valueBeforeUpDown: PropTypes.string,
     lastAction: PropTypes.string,
+    maxLength: PropTypes.number,
 
     inputFocused: PropTypes.func.isRequired,
     inputBlurred: PropTypes.func.isRequired,
@@ -171,11 +172,12 @@ class Autosuggest extends Component {
       renderSectionTitle, id, getSectionSuggestions, focusInputOnSuggestionClick,
       theme, isFocused, isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
       valueBeforeUpDown, inputFocused, inputBlurred, inputChanged,
-      updateFocusedSuggestion, revealSuggestions, closeSuggestions
+      updateFocusedSuggestion, revealSuggestions, closeSuggestions, maxLength
     } = this.props;
     const { value, onBlur, onFocus, onKeyDown } = inputProps;
     const isOpen = isFocused && !isCollapsed && this.willRenderSuggestions();
-    const items = (isOpen ? suggestions : []);
+    const suggestionsFiltered = maxLength ? suggestions.slice(0, maxLength) : suggestions;
+    const items = (isOpen ? suggestionsFiltered : []);
     const autowhateverInputProps = {
       ...inputProps,
       onFocus: event => {
