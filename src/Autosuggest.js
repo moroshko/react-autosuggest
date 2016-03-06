@@ -140,7 +140,7 @@ class Autosuggest extends Component {
     throw new Error('Couldn\'t find suggestion element');
   }
 
-  maybeEmitOnChange(event, newValue, method) {
+  maybeCallOnChange(event, newValue, method) {
     const { value, onChange } = this.props.inputProps;
 
     if (newValue !== value) {
@@ -208,7 +208,7 @@ class Autosuggest extends Component {
         const { value } = event.target;
         const { shouldRenderSuggestions } = this.props;
 
-        this.maybeEmitOnChange(event, value, 'type');
+        this.maybeCallOnChange(event, value, 'type');
         inputChanged(shouldRenderSuggestions(value), 'type');
         this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'type' });
       },
@@ -227,7 +227,7 @@ class Autosuggest extends Component {
                 this.getSuggestionValueByIndex(newFocusedSectionIndex, newFocusedItemIndex);
 
               updateFocusedSuggestion(newFocusedSectionIndex, newFocusedItemIndex, value);
-              this.maybeEmitOnChange(event, newValue, event.key === 'ArrowDown' ? 'down' : 'up');
+              this.maybeCallOnChange(event, newValue, event.key === 'ArrowDown' ? 'down' : 'up');
             }
             event.preventDefault();
             break;
@@ -258,11 +258,11 @@ class Autosuggest extends Component {
 
             if (valueBeforeUpDown === null) { // Didn't interact with Up/Down
               if (!isOpen) {
-                this.maybeEmitOnChange(event, '', 'escape');
+                this.maybeCallOnChange(event, '', 'escape');
                 this.maybeCallOnSuggestionsUpdateRequested({ value: '', reason: 'escape' });
               }
             } else { // Interacted with Up/Down
-              this.maybeEmitOnChange(event, valueBeforeUpDown, 'escape');
+              this.maybeCallOnChange(event, valueBeforeUpDown, 'escape');
             }
 
             closeSuggestions('escape');
@@ -287,7 +287,7 @@ class Autosuggest extends Component {
       const clickedSuggestion = this.getSuggestion(sectionIndex, suggestionIndex);
       const clickedSuggestionValue = this.props.getSuggestionValue(clickedSuggestion);
 
-      this.maybeEmitOnChange(event, clickedSuggestionValue, 'click');
+      this.maybeCallOnChange(event, clickedSuggestionValue, 'click');
       onSuggestionSelected(event, {
         suggestion: clickedSuggestion,
         suggestionValue: clickedSuggestionValue,
