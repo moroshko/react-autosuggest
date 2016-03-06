@@ -18,7 +18,8 @@ export default function Link(props) {
 Link.propTypes = {
   className: PropTypes.string,
   href: PropTypes.string.isRequired,
-  underline: PropTypes.bool.isRequired
+  underline: PropTypes.bool.isRequired,
+  children: PropTypes.node
 };
 
 Link.defaultProps = {
