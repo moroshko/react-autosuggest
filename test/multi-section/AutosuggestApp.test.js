@@ -44,7 +44,17 @@ describe('Multi section Autosuggest', () => {
     });
   });
 
-  describe('when focusInputOnSuggestionClick is false and suggestion is clicked', () => {
+  describe('onSuggestionsUpdateRequested', () => {
+    it('should be called once with the right parameters when Escape is pressed and suggestions are hidden and shouldRenderSuggestions returns `true` for empty value', () => {
+      focusAndSetInputValue('jr');
+      onSuggestionsUpdateRequested.reset();
+      clickEscape();
+      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
+      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: '', reason: 'escape' });
+    });
+  });
+
+  describe('when focusInputOnSuggestionClick is `false` and suggestion is clicked', () => {
     beforeEach(() => {
       onBlur.reset();
       focusAndSetInputValue('p');

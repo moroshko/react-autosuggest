@@ -148,6 +148,14 @@ class Autosuggest extends Component {
     }
   }
 
+  maybeCallOnSuggestionsUpdateRequested(data) {
+    const { onSuggestionsUpdateRequested, shouldRenderSuggestions } = this.props;
+
+    if (shouldRenderSuggestions(data.value)) {
+      onSuggestionsUpdateRequested(data);
+    }
+  }
+
   willRenderSuggestions() {
     const { suggestions, inputProps, shouldRenderSuggestions } = this.props;
     const { value } = inputProps;
@@ -166,10 +174,10 @@ class Autosuggest extends Component {
 
   render() {
     const {
-      suggestions, onSuggestionsUpdateRequested, renderSuggestion, inputProps,
-      shouldRenderSuggestions, onSuggestionSelected, multiSection,
-      renderSectionTitle, id, getSectionSuggestions, focusInputOnSuggestionClick,
-      theme, isFocused, isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
+      suggestions, renderSuggestion, inputProps, shouldRenderSuggestions,
+      onSuggestionSelected, multiSection, renderSectionTitle, id,
+      getSectionSuggestions, focusInputOnSuggestionClick, theme, isFocused,
+      isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
       valueBeforeUpDown, inputFocused, inputBlurred, inputChanged,
       updateFocusedSuggestion, revealSuggestions, closeSuggestions
     } = this.props;
@@ -192,17 +200,17 @@ class Autosuggest extends Component {
           onBlur && onBlur(event);
 
           if (valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
-            onSuggestionsUpdateRequested({ value, reason: 'blur' });
+            this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'blur' });
           }
         }
       },
       onChange: event => {
         const { value } = event.target;
-        const { shouldRenderSuggestions, onSuggestionsUpdateRequested } = this.props;
+        const { shouldRenderSuggestions } = this.props;
 
         this.maybeEmitOnChange(event, value, 'type');
         inputChanged(shouldRenderSuggestions(value), 'type');
-        onSuggestionsUpdateRequested({ value, reason: 'type' });
+        this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'type' });
       },
       onKeyDown: (event, data) => {
         switch (event.key) {
@@ -234,7 +242,7 @@ class Autosuggest extends Component {
                 suggestionValue: value,
                 method: 'enter'
               });
-              onSuggestionsUpdateRequested({ value, reason: 'enter' });
+              this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'enter' });
             }
             break;
           }
@@ -251,7 +259,7 @@ class Autosuggest extends Component {
             if (valueBeforeUpDown === null) { // Didn't interact with Up/Down
               if (!isOpen) {
                 this.maybeEmitOnChange(event, '', 'escape');
-                onSuggestionsUpdateRequested({ value: '', reason: 'escape' });
+                this.maybeCallOnSuggestionsUpdateRequested({ value: '', reason: 'escape' });
               }
             } else { // Interacted with Up/Down
               this.maybeEmitOnChange(event, valueBeforeUpDown, 'escape');
@@ -294,7 +302,7 @@ class Autosuggest extends Component {
         onBlur && onBlur(this.onBlurEvent);
       }
 
-      onSuggestionsUpdateRequested({ value: clickedSuggestionValue, reason: 'click' });
+      this.maybeCallOnSuggestionsUpdateRequested({ value: clickedSuggestionValue, reason: 'click' });
 
       this.justClickedOnSuggestion = false;
     };

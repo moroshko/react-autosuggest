@@ -509,12 +509,11 @@ describe('Plain list Autosuggest', () => {
       expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'Java', reason: 'blur' });
     });
 
-    it('should be called once with the right parameters when Escape is pressed and suggestions are hidden', () => {
+    it('should not be called when Escape is pressed and suggestions are hidden and shouldRenderSuggestions returns `false` for empty value', () => {
       focusAndSetInputValue('jr');
       onSuggestionsUpdateRequested.reset();
       clickEscape();
-      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
-      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: '', reason: 'escape' });
+      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
     });
 
     it('should not be called when Up/Down is pressed', () => {
@@ -562,6 +561,12 @@ describe('Plain list Autosuggest', () => {
       focusAndSetInputValue('j');
       onSuggestionsUpdateRequested.reset();
       clickEscape();
+      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+    });
+
+    it('should not be called when shouldRenderSuggestions returns `false`', () => {
+      onSuggestionsUpdateRequested.reset();
+      focusAndSetInputValue(' ');
       expect(onSuggestionsUpdateRequested).not.to.have.been.called;
     });
   });
