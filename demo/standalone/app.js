@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+
 const languages = [
   {
     name: 'C',
@@ -118,7 +120,7 @@ class App extends React.Component {
     };
 
     return (
-      <Autosuggest suggestions={suggestions}
+      <Autosuggest suggestions={suggestions} // eslint-disable-line react/jsx-no-undef
                    onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                    getSuggestionValue={getSuggestionValue}
                    renderSuggestion={renderSuggestion}

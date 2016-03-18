@@ -140,11 +140,19 @@ class Autosuggest extends Component {
     throw new Error('Couldn\'t find suggestion element');
   }
 
-  maybeEmitOnChange(event, newValue, method) {
+  maybeCallOnChange(event, newValue, method) {
     const { value, onChange } = this.props.inputProps;
 
     if (newValue !== value) {
       onChange && onChange(event, { newValue, method });
+    }
+  }
+
+  maybeCallOnSuggestionsUpdateRequested(data) {
+    const { onSuggestionsUpdateRequested, shouldRenderSuggestions } = this.props;
+
+    if (shouldRenderSuggestions(data.value)) {
+      onSuggestionsUpdateRequested(data);
     }
   }
 
@@ -166,10 +174,10 @@ class Autosuggest extends Component {
 
   render() {
     const {
-      suggestions, onSuggestionsUpdateRequested, renderSuggestion, inputProps,
-      shouldRenderSuggestions, onSuggestionSelected, multiSection,
-      renderSectionTitle, id, getSectionSuggestions, focusInputOnSuggestionClick,
-      theme, isFocused, isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
+      suggestions, renderSuggestion, inputProps, shouldRenderSuggestions,
+      onSuggestionSelected, multiSection, renderSectionTitle, id,
+      getSectionSuggestions, focusInputOnSuggestionClick, theme, isFocused,
+      isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
       valueBeforeUpDown, inputFocused, inputBlurred, inputChanged,
       updateFocusedSuggestion, revealSuggestions, closeSuggestions
     } = this.props;
@@ -192,17 +200,17 @@ class Autosuggest extends Component {
           onBlur && onBlur(event);
 
           if (valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
-            onSuggestionsUpdateRequested({ value, reason: 'blur' });
+            this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'blur' });
           }
         }
       },
       onChange: event => {
         const { value } = event.target;
-        const { shouldRenderSuggestions, onSuggestionsUpdateRequested } = this.props;
+        const { shouldRenderSuggestions } = this.props;
 
-        this.maybeEmitOnChange(event, value, 'type');
+        this.maybeCallOnChange(event, value, 'type');
         inputChanged(shouldRenderSuggestions(value), 'type');
-        onSuggestionsUpdateRequested({ value, reason: 'type' });
+        this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'type' });
       },
       onKeyDown: (event, data) => {
         switch (event.key) {
@@ -219,7 +227,7 @@ class Autosuggest extends Component {
                 this.getSuggestionValueByIndex(newFocusedSectionIndex, newFocusedItemIndex);
 
               updateFocusedSuggestion(newFocusedSectionIndex, newFocusedItemIndex, value);
-              this.maybeEmitOnChange(event, newValue, event.key === 'ArrowDown' ? 'down' : 'up');
+              this.maybeCallOnChange(event, newValue, event.key === 'ArrowDown' ? 'down' : 'up');
             }
             event.preventDefault();
             break;
@@ -234,7 +242,7 @@ class Autosuggest extends Component {
                 suggestionValue: value,
                 method: 'enter'
               });
-              onSuggestionsUpdateRequested({ value, reason: 'enter' });
+              this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'enter' });
             }
             break;
           }
@@ -250,11 +258,11 @@ class Autosuggest extends Component {
 
             if (valueBeforeUpDown === null) { // Didn't interact with Up/Down
               if (!isOpen) {
-                this.maybeEmitOnChange(event, '', 'escape');
-                onSuggestionsUpdateRequested({ value: '', reason: 'escape' });
+                this.maybeCallOnChange(event, '', 'escape');
+                this.maybeCallOnSuggestionsUpdateRequested({ value: '', reason: 'escape' });
               }
             } else { // Interacted with Up/Down
-              this.maybeEmitOnChange(event, valueBeforeUpDown, 'escape');
+              this.maybeCallOnChange(event, valueBeforeUpDown, 'escape');
             }
 
             closeSuggestions('escape');
@@ -279,7 +287,7 @@ class Autosuggest extends Component {
       const clickedSuggestion = this.getSuggestion(sectionIndex, suggestionIndex);
       const clickedSuggestionValue = this.props.getSuggestionValue(clickedSuggestion);
 
-      this.maybeEmitOnChange(event, clickedSuggestionValue, 'click');
+      this.maybeCallOnChange(event, clickedSuggestionValue, 'click');
       onSuggestionSelected(event, {
         suggestion: clickedSuggestion,
         suggestionValue: clickedSuggestionValue,
@@ -294,7 +302,7 @@ class Autosuggest extends Component {
         onBlur && onBlur(this.onBlurEvent);
       }
 
-      onSuggestionsUpdateRequested({ value: clickedSuggestionValue, reason: 'click' });
+      this.maybeCallOnSuggestionsUpdateRequested({ value: clickedSuggestionValue, reason: 'click' });
 
       this.justClickedOnSuggestion = false;
     };
