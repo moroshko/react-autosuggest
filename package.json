@@ -23,12 +23,12 @@
     "prepublish": "npm run dist && npm run standalone"
   },
   "dependencies": {
-    "react-autowhatever": "^3.0.0",
+    "react-autowhatever": "^3.1.0",
     "react-redux": "^4.4.0",
     "redux": "^3.3.1"
   },
   "peerDependencies": {
-    "react": "^0.14.7"
+    "react": "^0.14.7 || ^15.0.0-rc.1"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.2.0",
@@ -55,9 +55,9 @@
     "less": "^2.6.1",
     "less-loader": "^2.2.2",
     "mocha": "^2.4.5",
-    "react": "^0.14.7",
-    "react-addons-test-utils": "^0.14.7",
-    "react-dom": "^0.14.7",
+    "react": "^15.0.0-rc.1",
+    "react-addons-test-utils": "^15.0.0-rc.1",
+    "react-dom": "^15.0.0-rc.1",
     "react-transform-hmr": "^1.0.3",
     "redux-thunk": "^1.0.3",
     "sinon": "^1.17.3",
