@@ -1,6 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
+import sinon from 'sinon';
 import {
   init,
   eventInstance,
@@ -10,10 +11,11 @@ import {
   expectSuggestions,
   expectSuggestionsContainerAttribute,
   getTitle,
-//  getSuggestionsBySectionIndex,
   clickSuggestion,
   focusInput,
   clickEscape,
+  clickEnter,
+  clickDown,
   setInputValue,
   focusAndSetInputValue,
   isInputFocused
@@ -21,6 +23,7 @@ import {
 import AutosuggestApp, {
   onSuggestionsUpdateRequested,
   onBlur,
+  onSuggestionSelected,
   renderSectionTitle,
   getSectionSuggestions
 } from './AutosuggestApp';
@@ -41,6 +44,28 @@ describe('Multi section Autosuggest', () => {
         'C', 'C#', 'C++', 'Clojure', 'Elm', 'Go', 'Haskell', 'Java',
         'Javascript', 'Perl', 'PHP', 'Python', 'Ruby', 'Scala'
       ]);
+    });
+  });
+
+  describe('onSuggestionSelected', () => {
+    beforeEach(() => {
+      onSuggestionSelected.reset();
+      focusInput();
+    });
+
+    it('should be called with the right sectionIndex when suggestion is clicked', () => {
+      clickSuggestion(4);
+      expect(onSuggestionSelected).to.have.been.calledWith(eventInstance, sinon.match({
+        sectionIndex: 1
+      }));
+    });
+
+    it('should be called with the right sectionIndex when Enter is pressed and suggestion is focused', () => {
+      clickDown(6);
+      clickEnter();
+      expect(onSuggestionSelected).to.have.been.calledWith(eventInstance, sinon.match({
+        sectionIndex: 2
+      }));
     });
   });
 
@@ -145,15 +170,6 @@ describe('Multi section Autosuggest', () => {
     it('should be called once per section', () => {
       expect(getSectionSuggestions).to.have.been.calledOnce;
     });
-
-/*  See: https://github.com/facebook/react/issues/4692#issuecomment-157803622
-
-    it('return value should be used to render section suggestions', () => {
-      const firstSectionSuggestions = getSuggestionsBySectionIndex(0);
-
-      expect(firstSectionSuggestions.length).to.equal(2);
-    });
-*/
   });
 
   describe('default styling', () => {

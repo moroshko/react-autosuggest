@@ -439,6 +439,7 @@ describe('Plain list Autosuggest', () => {
       expect(onSuggestionSelected).to.have.been.calledWithExactly(eventInstance, {
         suggestion: { name: 'Javascript', year: 1995 },
         suggestionValue: 'Javascript',
+        sectionIndex: null,
         method: 'click'
       });
     });
@@ -450,6 +451,7 @@ describe('Plain list Autosuggest', () => {
       expect(onSuggestionSelected).to.have.been.calledWithExactly(eventInstance, {
         suggestion: { name: 'Java', year: 1995 },
         suggestionValue: 'Java',
+        sectionIndex: null,
         method: 'enter'
       });
     });
