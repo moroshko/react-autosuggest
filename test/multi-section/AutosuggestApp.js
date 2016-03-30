@@ -35,6 +35,7 @@ export const onChange = sinon.spy((event, { newValue }) => {
 });
 
 export const onBlur = sinon.spy();
+export const onSuggestionSelected = sinon.spy();
 
 export const onSuggestionsUpdateRequested = sinon.spy(({ value }) => {
   app.setState({
@@ -80,6 +81,7 @@ export default class AutosuggestApp extends Component {
                    renderSuggestion={renderSuggestion}
                    inputProps={inputProps}
                    shouldRenderSuggestions={() => true}
+                   onSuggestionSelected={onSuggestionSelected}
                    renderSectionTitle={renderSectionTitle}
                    getSectionSuggestions={getSectionSuggestions}
                    focusInputOnSuggestionClick={false} />

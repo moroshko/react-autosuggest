@@ -240,6 +240,7 @@ class Autosuggest extends Component {
               onSuggestionSelected(event, {
                 suggestion: focusedSuggestion,
                 suggestionValue: value,
+                sectionIndex: focusedSectionIndex,
                 method: 'enter'
               });
               this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'enter' });
@@ -291,6 +292,7 @@ class Autosuggest extends Component {
       onSuggestionSelected(event, {
         suggestion: clickedSuggestion,
         suggestionValue: clickedSuggestionValue,
+        sectionIndex,
         method: 'click'
       });
       closeSuggestions('click');
