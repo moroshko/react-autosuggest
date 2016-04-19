@@ -1,4 +1,4 @@
-export default [
+const languages = [
   {
     name: 'C',
     year: 1972
@@ -56,3 +56,12 @@ export default [
     year: 2003
   }
 ];
+
+for (let i = 1; i <= 100; ++i) {
+  languages.push({
+    name: `Zooble ${i}`,
+    year: 2035 + i
+  });
+}
+
+export default languages;

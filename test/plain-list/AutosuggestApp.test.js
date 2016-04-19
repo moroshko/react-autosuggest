@@ -13,6 +13,7 @@ import {
   expectFocusedSuggestion,
   mouseEnterSuggestion,
   mouseLeaveSuggestion,
+  mouseMoveSuggestion,
   clickSuggestion,
   focusInput,
   blurInput,
@@ -161,6 +162,27 @@ describe('Plain list Autosuggest', () => {
     it('should focus on the first suggestion', () => {
       clickDown();
       expectFocusedSuggestion('Perl');
+    });
+
+    it('should ignore mouseenter immediately following keyboard click', () => {
+      clickDown();
+
+      // Imagine this has triggered a scroll and results in leave/enter events.
+      mouseLeaveSuggestion(1);
+      mouseEnterSuggestion(2);
+
+      expectFocusedSuggestion('Perl');
+    });
+
+    it('should not ignore mouseenter if mouse moves first', () => {
+      clickDown();
+
+      // This time the leave/enter events are caused by a mouse movement.
+      mouseMoveSuggestion(1);
+      mouseLeaveSuggestion(1);
+      mouseEnterSuggestion(2);
+
+      expectFocusedSuggestion('Python');
     });
 
     it('should focus on the next suggestion', () => {
