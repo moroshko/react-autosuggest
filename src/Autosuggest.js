@@ -306,7 +306,9 @@ class Autosuggest extends Component {
 
       this.maybeCallOnSuggestionsUpdateRequested({ value: clickedSuggestionValue, reason: 'click' });
 
-      this.justClickedOnSuggestion = false;
+      setTimeout(() => {
+        this.justClickedOnSuggestion = false;
+      });
     };
     const itemProps = ({ sectionIndex, itemIndex }) => {
       return {
