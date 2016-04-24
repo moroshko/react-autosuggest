@@ -32,7 +32,7 @@ import AutosuggestApp, {
   onChange,
   onBlur,
   shouldRenderSuggestions,
-  alwaysRenderSuggestions,
+  setAlwaysRenderSuggestions,
   onSuggestionSelected,
   onSuggestionsUpdateRequested
 } from './AutosuggestApp';
@@ -496,24 +496,30 @@ describe('Default Autosuggest', () => {
   describe('when alwaysRenderSuggestions is true', () => {
     beforeEach(done => {
       setAlwaysRenderSuggestions(true, done);
-      focusAndSetInputValue('e');
-      blurInput();
     });
 
     afterEach(done => {
       setAlwaysRenderSuggestions(false, done);
     });
 
-    it('should render suggestions by default', () => {
-      expectSuggestions(['Elm']);
-    });
-
     it('should render suggestions when input is focused', () => {
-      focusInput();
+      focusAndSetInputValue('e');
       expectSuggestions(['Elm']);
     });
 
     it('should render suggestions when input is blurred', () => {
+      focusAndSetInputValue('e');
+      blurInput();
+      expectSuggestions(['Elm']);
+    });
+
+    it('should render suggestions even when input is blank and focused', () => {
+      focusAndSetInputValue('');
+      expectSuggestions(['Elm']);
+    });
+
+    it('should render suggestions even when input is blank and blurred', () => {
+      focusAndSetInputValue('');
       blurInput();
       expectSuggestions(['Elm']);
     });

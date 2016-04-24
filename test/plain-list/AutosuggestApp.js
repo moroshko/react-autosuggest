@@ -48,9 +48,11 @@ export const shouldRenderSuggestions = sinon.spy(value => {
   return value.trim().length > 0 && value[0] !== ' ';
 });
 
-export const toggleAlwaysRenderSuggestions = sinon.spy((toggle, callback) => {
+export const setAlwaysRenderSuggestions = sinon.spy((toggle, callback) => {
   app.setState({
-    alwaysRenderSuggestions: toggle
+    alwaysRenderSuggestions: toggle,
+    // Using "elm" to retrieve suggestions even when input is blank.
+    suggestions: getMatchingLanguages(app.state.value || 'elm')
   }, callback);
 });
 
