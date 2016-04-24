@@ -61,14 +61,16 @@ class Autosuggest extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.suggestions !== this.props.suggestions) {
-      const { suggestions, inputProps, shouldRenderSuggestions,
-              isCollapsed, revealSuggestions, lastAction } = nextProps;
+      const {
+        suggestions, inputProps, shouldRenderSuggestions, isCollapsed,
+        revealSuggestions, lastAction, alwaysRenderSuggestions
+      } = nextProps;
       const { value } = inputProps;
 
-      if (suggestions.length > 0 && shouldRenderSuggestions(value)) {
+      if (alwaysRenderSuggestions || suggestions.length > 0 && shouldRenderSuggestions(value)) {
         this.maybeFocusFirstSuggestion();
 
-        if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter') {
+        if (alwaysRenderSuggestions || isCollapsed && lastAction !== 'click' && lastAction !== 'enter') {
           revealSuggestions();
         }
       }
@@ -226,10 +228,10 @@ class Autosuggest extends Component {
       theme, isFocused, isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
       valueBeforeUpDown, inputFocused, inputBlurred, inputChanged,
       updateFocusedSuggestion, revealSuggestions, closeSuggestions,
-      getSuggestionValue
+      getSuggestionValue, alwaysRenderSuggestions
     } = this.props;
     const { value, onBlur, onFocus, onKeyDown } = inputProps;
-    const isOpen = isFocused && !isCollapsed && this.willRenderSuggestions();
+    const isOpen = alwaysRenderSuggestions || isFocused && !isCollapsed && this.willRenderSuggestions();
     const items = (isOpen ? suggestions : []);
     const autowhateverInputProps = {
       ...inputProps,
