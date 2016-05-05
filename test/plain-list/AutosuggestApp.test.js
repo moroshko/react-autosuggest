@@ -18,6 +18,7 @@ import {
   blurInput,
   clickEscape,
   clickEnter,
+  clickTab,
   clickDown,
   clickUp,
   focusAndSetInputValue,
@@ -32,7 +33,8 @@ import AutosuggestApp, {
   onBlur,
   shouldRenderSuggestions,
   onSuggestionSelected,
-  onSuggestionsUpdateRequested
+  onSuggestionsUpdateRequested,
+  tabToSelect
 } from './AutosuggestApp';
 
 describe('Plain list Autosuggest', () => {
@@ -226,6 +228,47 @@ describe('Plain list Autosuggest', () => {
     it('should not hide suggestions if there is no focused suggestion', () => {
       clickEnter();
       expectSuggestions(['Perl', 'PHP', 'Python']);
+    });
+  });
+
+  describe('when pressing Tab', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('p');
+      tabToSelect.false();
+    });
+
+    describe('when tabToSelect is false', () => {
+      beforeEach(() => {
+        tabToSelect.false();
+      });
+
+      it('should not hide suggestions if there is a focused suggestion', () => {
+        clickDown();
+        clickTab();
+        expectSuggestions(['Perl', 'PHP', 'Python']);
+      });
+
+      it('should not hide suggestions if there is no focused suggestion', () => {
+        clickTab();
+        expectSuggestions(['Perl', 'PHP', 'Python']);
+      });
+    });
+
+    describe('when tabToSelect is true', () => {
+      beforeEach(() => {
+        tabToSelect.true();
+      });
+
+      it('should hide suggestions if there is a focused suggestion', () => {
+        clickDown();
+        clickTab();
+        expectSuggestions([]);
+      });
+
+      it('should not hide suggestions if there is no focused suggestion', () => {
+        clickTab();
+        expectSuggestions(['Perl', 'PHP', 'Python']);
+      });
     });
   });
 
@@ -475,6 +518,65 @@ describe('Plain list Autosuggest', () => {
       clickSuggestion(1);
       expect(getEvents()).to.deep.equal(['onChange', 'onSuggestionSelected']);
     });
+
+    describe('when tabToSelect is false', () => {
+      beforeEach(() => {
+        tabToSelect.false();
+      });
+
+      it('should not be called when Tab is pressed and suggestion is focused', () => {
+        clickDown();
+        clickTab();
+        expect(onSuggestionSelected).not.to.have.been.called;
+      });
+
+      it('should not be called when Tab is pressed and there is no focused suggestion', () => {
+        clickTab();
+        expect(onSuggestionSelected).not.to.have.been.called;
+      });
+
+
+      it('should not be called when Tab is pressed and there is no focused suggestion after Up/Down interaction', () => {
+        clickDown();
+        clickDown();
+        clickDown();
+        clickTab();
+        expect(onSuggestionSelected).not.to.have.been.called;
+      });
+
+    });
+
+    describe('when tabToSelect is true', () => {
+      beforeEach(() => {
+        tabToSelect.true();
+      });
+
+      it('should be called once with the right parameters when Tab is pressed and suggestion is focused', () => {
+        clickDown();
+        clickTab();
+        expect(onSuggestionSelected).to.have.been.calledOnce;
+        expect(onSuggestionSelected).to.have.been.calledWithExactly(eventInstance, {
+          suggestion: { name: 'Java', year: 1995 },
+          suggestionValue: 'Java',
+          sectionIndex: null,
+          method: 'tab'
+        });
+      });
+
+      it('should not be called when Tab is pressed and there is no focused suggestion', () => {
+        clickTab();
+        expect(onSuggestionSelected).not.to.have.been.called;
+      });
+
+
+      it('should not be called when Tab is pressed and there is no focused suggestion after Up/Down interaction', () => {
+        clickDown();
+        clickDown();
+        clickDown();
+        clickTab();
+        expect(onSuggestionSelected).not.to.have.been.called;
+      });
+    });
   });
 
   describe('onSuggestionsUpdateRequested', () => {
@@ -570,6 +672,52 @@ describe('Plain list Autosuggest', () => {
       onSuggestionsUpdateRequested.reset();
       focusAndSetInputValue(' ');
       expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+    });
+
+    describe('when tabToSelect is false', () => {
+      beforeEach(() => {
+        tabToSelect.false();
+      });
+
+      it('should not be called when Tab is pressed and suggestion is focused', () => {
+        focusAndSetInputValue('j');
+        clickDown();
+        onSuggestionsUpdateRequested.reset();
+        clickTab();
+        expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+      });
+    });
+
+    describe('when tabToSelect is true', () => {
+      beforeEach(() => {
+        tabToSelect.true();
+      });
+
+      it('should be called once with the right parameters when Tab is pressed and suggestion is focused', () => {
+        focusAndSetInputValue('j');
+        clickDown();
+        onSuggestionsUpdateRequested.reset();
+        clickTab();
+        expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
+        expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'Java', reason: 'tab' });
+      });
+
+      it('should not be called when Tab is pressed and there is no focused suggestion', () => {
+        focusAndSetInputValue('j');
+        onSuggestionsUpdateRequested.reset();
+        clickTab();
+        expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+      });
+
+      it('should not be called when Tab is pressed and there is no focused suggestion after Up/Down interaction', () => {
+        focusAndSetInputValue('j');
+        onSuggestionsUpdateRequested.reset();
+        clickDown();
+        clickDown();
+        clickDown();
+        clickTab();
+        expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+      });
     });
   });
 
