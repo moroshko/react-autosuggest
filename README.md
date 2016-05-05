@@ -418,14 +418,12 @@ where `isMobile` is a boolean describing whether Autosuggest operates on a mobil
 <a name="tabToSelect"></a>
 #### tabToSelect (optional)
 
-Disabled by default, `tabToSelect={true}` will select the highlighted suggestion on Tab. Suggestions will not close.
+Disabled by default, `tabToSelect={true}` will select the highlighted suggestion on Tab.
 
 
 ```xml
 <Autosuggest tabToSelect={true} ... />
 ```
-
-where `isMobile` is a boolean describing whether Autosuggest operates on a mobile device or not. You can use [kaimallea/isMobile](https://github.com/kaimallea/isMobile), for example, to determine that.
 
 <a name="themeProp"></a>
 #### theme (optional)
