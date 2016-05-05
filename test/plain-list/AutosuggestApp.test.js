@@ -535,7 +535,6 @@ describe('Plain list Autosuggest', () => {
         expect(onSuggestionSelected).not.to.have.been.called;
       });
 
-
       it('should not be called when Tab is pressed and there is no focused suggestion after Up/Down interaction', () => {
         clickDown();
         clickDown();
@@ -567,7 +566,6 @@ describe('Plain list Autosuggest', () => {
         clickTab();
         expect(onSuggestionSelected).not.to.have.been.called;
       });
-
 
       it('should not be called when Tab is pressed and there is no focused suggestion after Up/Down interaction', () => {
         clickDown();

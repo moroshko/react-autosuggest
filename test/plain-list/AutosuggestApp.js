@@ -57,11 +57,11 @@ export const onSuggestionsUpdateRequested = sinon.spy(({ value }) => {
 export const tabToSelect = {
   value: false,
 
-  true(){
+  true() {
     this.value = true;
   },
 
-  false(){
+  false() {
     this.value = false;
   }
 };

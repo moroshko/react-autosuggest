@@ -233,7 +233,7 @@ class Autosuggest extends Component {
             event.preventDefault();
             break;
           case 'Tab': {
-            if(tabToSelect){
+            if (tabToSelect) {
               event.preventDefault();
               const focusedSuggestion = this.getFocusedSuggestion();
 
