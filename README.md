@@ -66,7 +66,7 @@ const languages = [
 function getSuggestions(value) {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
-  
+
   return inputLength === 0 ? [] : languages.filter(lang =>
     lang.name.toLowerCase().slice(0, inputLength) === inputValue
   );
@@ -139,6 +139,7 @@ class Example extends React.Component {
 * [`getSectionSuggestions`](#getSectionSuggestionsProp)
 * [`onSuggestionSelected`](#onSuggestionSelectedProp)
 * [`focusInputOnSuggestionClick`](#focusInputOnSuggestionClickProp)
+* [`tabToSelect`](#tabToSelect)
 * [`theme`](#themeProp)
 * [`id`](#idProp)
 
@@ -232,6 +233,7 @@ where:
   * `'type'` - usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.
   * `'click'` - user clicked (or tapped) a suggestion
   * `'enter'` - user pressed Enter
+  * `'tab'` - user pressed Tab (requires `tabToSelect={true}`)
   * `'escape'` - user pressed Escape
   * `'blur'` - input lost focus
 
@@ -394,6 +396,7 @@ where:
 * `method` - string describing how user selected the suggestion. The possible values are:
   * `'click'` - user clicked (or tapped) on the suggestion
   * `'enter'` - user selected the suggestion using Enter
+  * `'tab'` - user selected the suggestion using Tab (requires `tabToSelect={true}`)
 
 <a name="focusInputOnSuggestionClickProp"></a>
 #### focusInputOnSuggestionClick (optional)
@@ -411,6 +414,16 @@ You might want to do something like this:
 ```
 
 where `isMobile` is a boolean describing whether Autosuggest operates on a mobile device or not. You can use [kaimallea/isMobile](https://github.com/kaimallea/isMobile), for example, to determine that.
+
+<a name="tabToSelect"></a>
+#### tabToSelect (optional)
+
+Disabled by default, `tabToSelect={true}` will select the highlighted suggestion on Tab.
+
+
+```xml
+<Autosuggest tabToSelect={true} ... />
+```
 
 <a name="themeProp"></a>
 #### theme (optional)

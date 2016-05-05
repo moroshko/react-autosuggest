@@ -3,3 +3,4 @@ dist
 demo/dist
 npm-debug.log
 .happypack
+.idea

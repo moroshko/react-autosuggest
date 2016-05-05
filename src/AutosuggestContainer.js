@@ -69,6 +69,7 @@ export default class AutosuggestContainer extends Component {
     renderSectionTitle: PropTypes.func,
     getSectionSuggestions: PropTypes.func,
     focusInputOnSuggestionClick: PropTypes.bool,
+    tabToSelect: PropTypes.bool,
     theme: PropTypes.object,
     id: PropTypes.string
   };
@@ -85,6 +86,7 @@ export default class AutosuggestContainer extends Component {
       throw new Error('`getSectionSuggestions` must be provided');
     },
     focusInputOnSuggestionClick: true,
+    tabToSelect: false,
     theme: defaultTheme,
     id: '1'
   };
@@ -114,8 +116,8 @@ export default class AutosuggestContainer extends Component {
     const {
       multiSection, shouldRenderSuggestions, suggestions,
       onSuggestionsUpdateRequested, getSuggestionValue, renderSuggestion,
-      renderSectionTitle, getSectionSuggestions, inputProps,
-      onSuggestionSelected, focusInputOnSuggestionClick, theme, id
+      renderSectionTitle, getSectionSuggestions, inputProps, onSuggestionSelected,
+      focusInputOnSuggestionClick, tabToSelect, theme, id
     } = this.props;
 
     return (
@@ -130,6 +132,7 @@ export default class AutosuggestContainer extends Component {
                    inputProps={inputProps}
                    onSuggestionSelected={onSuggestionSelected}
                    focusInputOnSuggestionClick={focusInputOnSuggestionClick}
+                   tabToSelect={tabToSelect}
                    theme={mapToAutowhateverTheme(theme)}
                    id={id}
                    inputRef={this.saveInput}

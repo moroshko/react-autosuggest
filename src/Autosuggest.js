@@ -51,6 +51,7 @@ class Autosuggest extends Component {
     renderSectionTitle: PropTypes.func.isRequired,
     getSectionSuggestions: PropTypes.func.isRequired,
     focusInputOnSuggestionClick: PropTypes.bool.isRequired,
+    tabToSelect: PropTypes.bool.isRequired,
     theme: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,
     inputRef: PropTypes.func.isRequired,
@@ -83,7 +84,7 @@ class Autosuggest extends Component {
       const { value } = inputProps;
 
       if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter' &&
-          suggestions.length > 0 && shouldRenderSuggestions(value)) {
+        lastAction !== 'tab' && suggestions.length > 0 && shouldRenderSuggestions(value)) {
         revealSuggestions();
       }
     }
@@ -176,8 +177,8 @@ class Autosuggest extends Component {
     const {
       suggestions, renderSuggestion, inputProps, shouldRenderSuggestions,
       onSuggestionSelected, multiSection, renderSectionTitle, id,
-      getSectionSuggestions, focusInputOnSuggestionClick, theme, isFocused,
-      isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
+      getSectionSuggestions, focusInputOnSuggestionClick, tabToSelect,
+      theme, isFocused, isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
       valueBeforeUpDown, inputFocused, inputBlurred, inputChanged,
       updateFocusedSuggestion, revealSuggestions, closeSuggestions
     } = this.props;
@@ -231,7 +232,24 @@ class Autosuggest extends Component {
             }
             event.preventDefault();
             break;
+          case 'Tab': {
+            if (tabToSelect) {
+              event.preventDefault();
+              const focusedSuggestion = this.getFocusedSuggestion();
 
+              if (focusedSuggestion !== null) {
+                closeSuggestions('tab');
+                onSuggestionSelected(event, {
+                  suggestion: focusedSuggestion,
+                  suggestionValue: value,
+                  sectionIndex: focusedSectionIndex,
+                  method: 'tab'
+                });
+                this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'tab' });
+              }
+            }
+            break;
+          }
           case 'Enter': {
             const focusedSuggestion = this.getFocusedSuggestion();
 

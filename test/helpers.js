@@ -155,6 +155,10 @@ export function clickEnter() {
   Simulate.keyDown(data.input, { key: 'Enter' });
 }
 
+export function clickTab() {
+  Simulate.keyDown(data.input, { key: 'Tab' });
+}
+
 export function clickDown(count = 1) {
   for (let i = 0; i < count; i++) {
     Simulate.keyDown(data.input, { key: 'ArrowDown' });
