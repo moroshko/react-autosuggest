@@ -66,7 +66,7 @@ const languages = [
 function getSuggestions(value) {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
-  
+
   return inputLength === 0 ? [] : languages.filter(lang =>
     lang.name.toLowerCase().slice(0, inputLength) === inputValue
   );
@@ -120,7 +120,8 @@ class Example extends React.Component {
                    onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                    getSuggestionValue={getSuggestionValue}
                    renderSuggestion={renderSuggestion}
-                   inputProps={inputProps} />
+                   inputProps={inputProps}
+                    selectFirstSuggestion={false} />
     );
   }
 }
@@ -139,6 +140,7 @@ class Example extends React.Component {
 * [`getSectionSuggestions`](#getSectionSuggestionsProp)
 * [`onSuggestionSelected`](#onSuggestionSelectedProp)
 * [`focusInputOnSuggestionClick`](#focusInputOnSuggestionClickProp)
+* [`selectFirstSuggestion`](#selectFirstSuggestion)
 * [`theme`](#themeProp)
 * [`id`](#idProp)
 
@@ -307,6 +309,7 @@ where:
   * `'up'` - user pressed Up
   * `'escape'` - user pressed Escape
   * `'click'` - user clicked (or tapped) on suggestion
+  * `'auto'` - component auto-selected first suggestion
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
 
 <a name="shouldRenderSuggestionsProp"></a>
@@ -411,6 +414,15 @@ You might want to do something like this:
 ```
 
 where `isMobile` is a boolean describing whether Autosuggest operates on a mobile device or not. You can use [kaimallea/isMobile](https://github.com/kaimallea/isMobile), for example, to determine that.
+
+<a name="selectFirstSuggestion"></a>
+#### selectFirstSuggestion (optional)
+
+Defaulting to false, `selectFirstSuggestion={true}` will auto-select the first suggestion in the list. When selected, [onChange](#inputPropsProp) will receive the value with method `auto`.
+
+```xml
+<Autosuggest selectFirstSuggestion={true} ... />
+```
 
 <a name="themeProp"></a>
 #### theme (optional)
