@@ -164,7 +164,7 @@ class Autosuggest extends Component {
       let sectionIndex = multiSection ? 0 : null;
       let suggestionIndex = 0;
 
-      updateFocusedSuggestion(sectionIndex, suggestionIndex, value);
+      updateFocusedSuggestion(sectionIndex, suggestionIndex);
       this.maybeCallOnChange(event, value, 'auto');
     }
   }
@@ -192,7 +192,8 @@ class Autosuggest extends Component {
       getSectionSuggestions, focusInputOnSuggestionClick, theme, isFocused,
       isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
       valueBeforeUpDown, inputFocused, inputBlurred, inputChanged,
-      updateFocusedSuggestion, revealSuggestions, closeSuggestions
+      updateFocusedSuggestion, revealSuggestions, closeSuggestions,
+      getSuggestionValue
     } = this.props;
     const { value, onBlur, onFocus, onKeyDown } = inputProps;
     const isOpen = isFocused && !isCollapsed && this.willRenderSuggestions();
@@ -223,7 +224,7 @@ class Autosuggest extends Component {
         const { shouldRenderSuggestions } = this.props;
 
         this.maybeCallOnChange(event, value, 'type');
-        inputChanged(shouldRenderSuggestions(value), 'type', suggestions);
+        inputChanged(shouldRenderSuggestions(value), 'type');
         this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'type' });
         this.maybeSelectFirstSuggestion(event, value);
       },
@@ -237,8 +238,9 @@ class Autosuggest extends Component {
               }
             } else if (suggestions.length > 0) {
               const { newFocusedSectionIndex, newFocusedItemIndex } = data;
+              const safeValue = valueBeforeUpDown ? valueBeforeUpDown : value;
               const newValue = newFocusedItemIndex === null ?
-                valueBeforeUpDown :
+                safeValue :
                 this.getSuggestionValueByIndex(newFocusedSectionIndex, newFocusedItemIndex);
 
               updateFocusedSuggestion(newFocusedSectionIndex, newFocusedItemIndex, value);
@@ -251,14 +253,18 @@ class Autosuggest extends Component {
             const focusedSuggestion = this.getFocusedSuggestion();
 
             if (focusedSuggestion !== null) {
+              const newValue = getSuggestionValue(focusedSuggestion);
+
               closeSuggestions('enter');
               onSuggestionSelected(event, {
                 suggestion: focusedSuggestion,
-                suggestionValue: value,
+                suggestionValue: newValue,
                 sectionIndex: focusedSectionIndex,
                 method: 'enter'
               });
-              this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'enter' });
+
+              this.maybeCallOnChange(event, newValue, event.key === 'enter');
+              this.maybeCallOnSuggestionsUpdateRequested({ value: newValue, reason: 'enter' });
             }
             break;
           }

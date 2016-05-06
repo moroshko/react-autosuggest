@@ -251,7 +251,7 @@ describe('Plain list Autosuggest', () => {
 
     it('should clear the input when Escape is pressed', () => {
       clickEscape();
-      expectInputValue('z');
+      expectInputValue('');
     });
   });
 
@@ -467,14 +467,14 @@ describe('Plain list Autosuggest', () => {
     it('should reset the input if suggestions are hidden and never been shown before', () => {
       focusAndSetInputValue('z');
       clickEscape();
-      expectInputValue('z');
+      expectInputValue('');
     });
 
     it('should reset the input if suggestions are hidden but were shown before', () => {
       focusAndSetInputValue('p');
       focusAndSetInputValue('pz');
       clickEscape();
-      expectInputValue('pz');
+      expectInputValue('');
     });
   });
 
@@ -528,11 +528,11 @@ describe('Plain list Autosuggest', () => {
     });
 
     beforeEach(() => {
-      getSuggestionValue.reset();
       focusAndSetInputValue('p');
+      getSuggestionValue.reset();
     });
 
-    it('should not be called once when Up is pressed (input is focused)', () => {
+    it('should not be called when Up is pressed (goes to input field)', () => {
       clickUp();
       expect(getSuggestionValue).not.to.have.been.called;
     });
@@ -544,9 +544,9 @@ describe('Plain list Autosuggest', () => {
     });
 
     it('should be called once with the right parameters when suggestion is clicked', () => {
-      clickSuggestion(0);
+      clickSuggestion(2);
       expect(getSuggestionValue).to.have.been.calledOnce;
-      expect(getSuggestionValue).to.have.been.calledWithExactly({ name: 'Perl', year: 1987 });
+      expect(getSuggestionValue).to.have.been.calledWithExactly({ name: 'Python', year: 1991 });
     });
   });
 
@@ -685,7 +685,7 @@ describe('Plain list Autosuggest', () => {
       onChange.reset();
     });
 
-    it('should be called once with the right parameters when user types', () => {
+    it('should be called with the right parameters when user types', () => {
       focusAndSetInputValue('c');
       expect(onChange).to.have.been.calledTwice;
       expect(onChange).to.be.calledWith(eventInstance, {
