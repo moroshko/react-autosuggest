@@ -44,6 +44,7 @@ class Autosuggest extends Component {
     onSuggestionsUpdateRequested: PropTypes.func.isRequired,
     getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
+    renderInput: PropTypes.func,
     inputProps: PropTypes.object.isRequired,
     shouldRenderSuggestions: PropTypes.func.isRequired,
     onSuggestionSelected: PropTypes.func.isRequired,
@@ -51,6 +52,7 @@ class Autosuggest extends Component {
     renderSectionTitle: PropTypes.func.isRequired,
     getSectionSuggestions: PropTypes.func.isRequired,
     focusInputOnSuggestionClick: PropTypes.bool.isRequired,
+    blurOnSuggestionSelect: PropTypes.bool.isRequired,
     theme: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,
     inputRef: PropTypes.func.isRequired,
@@ -59,7 +61,11 @@ class Autosuggest extends Component {
     isCollapsed: PropTypes.bool.isRequired,
     focusedSectionIndex: PropTypes.number,
     focusedSuggestionIndex: PropTypes.number,
-    valueBeforeUpDown: PropTypes.string,
+    wrapItemFocus: PropTypes.bool,
+    valueBeforeUpDown: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object
+    ]),
     lastAction: PropTypes.string,
 
     inputFocused: PropTypes.func.isRequired,
@@ -179,7 +185,8 @@ class Autosuggest extends Component {
       getSectionSuggestions, focusInputOnSuggestionClick, theme, isFocused,
       isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
       valueBeforeUpDown, inputFocused, inputBlurred, inputChanged,
-      updateFocusedSuggestion, revealSuggestions, closeSuggestions
+      updateFocusedSuggestion, revealSuggestions, closeSuggestions,
+      renderInput, wrapItemFocus, blurOnSuggestionSelect
     } = this.props;
     const { value, onBlur, onFocus, onKeyDown } = inputProps;
     const isOpen = isFocused && !isCollapsed && this.willRenderSuggestions();
@@ -246,6 +253,9 @@ class Autosuggest extends Component {
               });
               this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'enter' });
             }
+            if (blurOnSuggestionSelect) {
+              this.input.blur();
+            }
             break;
           }
 
@@ -268,6 +278,10 @@ class Autosuggest extends Component {
             }
 
             closeSuggestions('escape');
+
+            if (blurOnSuggestionSelect) {
+              this.input.blur();
+            }
             break;
         }
 
@@ -328,10 +342,12 @@ class Autosuggest extends Component {
       <Autowhatever multiSection={multiSection}
                     items={items}
                     renderItem={renderItem}
+                    renderInput={renderInput}
                     renderSectionTitle={renderSectionTitle}
                     getSectionItems={getSectionSuggestions}
                     focusedSectionIndex={focusedSectionIndex}
                     focusedItemIndex={focusedSuggestionIndex}
+                    wrapItemFocus={wrapItemFocus}
                     inputProps={autowhateverInputProps}
                     itemProps={itemProps}
                     theme={theme}

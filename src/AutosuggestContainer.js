@@ -52,6 +52,7 @@ export default class AutosuggestContainer extends Component {
     onSuggestionsUpdateRequested: PropTypes.func,
     getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
+    renderInput: PropTypes.func,
     inputProps: (props, propName) => {
       const inputProps = props[propName];
 
@@ -69,6 +70,8 @@ export default class AutosuggestContainer extends Component {
     renderSectionTitle: PropTypes.func,
     getSectionSuggestions: PropTypes.func,
     focusInputOnSuggestionClick: PropTypes.bool,
+    blurOnSuggestionSelect: PropTypes.bool,
+    wrapItemFocus: PropTypes.bool,
     theme: PropTypes.object,
     id: PropTypes.string
   };
@@ -85,6 +88,8 @@ export default class AutosuggestContainer extends Component {
       throw new Error('`getSectionSuggestions` must be provided');
     },
     focusInputOnSuggestionClick: true,
+    blurOnSuggestionSelect: false,
+    wrapItemFocus: true,
     theme: defaultTheme,
     id: '1'
   };
@@ -115,7 +120,8 @@ export default class AutosuggestContainer extends Component {
       multiSection, shouldRenderSuggestions, suggestions,
       onSuggestionsUpdateRequested, getSuggestionValue, renderSuggestion,
       renderSectionTitle, getSectionSuggestions, inputProps,
-      onSuggestionSelected, focusInputOnSuggestionClick, theme, id
+      onSuggestionSelected, focusInputOnSuggestionClick, theme, id,
+      renderInput, wrapItemFocus, blurOnSuggestionSelect
     } = this.props;
 
     return (
@@ -125,11 +131,14 @@ export default class AutosuggestContainer extends Component {
                    onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
                    getSuggestionValue={getSuggestionValue}
                    renderSuggestion={renderSuggestion}
+                   renderInput={renderInput}
                    renderSectionTitle={renderSectionTitle}
                    getSectionSuggestions={getSectionSuggestions}
                    inputProps={inputProps}
                    onSuggestionSelected={onSuggestionSelected}
                    focusInputOnSuggestionClick={focusInputOnSuggestionClick}
+                   blurOnSuggestionSelect={blurOnSuggestionSelect}
+                   wrapItemFocus={wrapItemFocus}
                    theme={mapToAutowhateverTheme(theme)}
                    id={id}
                    inputRef={this.saveInput}
