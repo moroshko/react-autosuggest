@@ -141,6 +141,8 @@
 	var App = function (_React$Component) {
 	  _inherits(App, _React$Component);
 
+	  // eslint-disable-line no-undef
+
 	  function App() {
 	    _classCallCheck(this, App);
 
@@ -198,7 +200,7 @@
 	  return App;
 	}(React.Component);
 
-	ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
+	ReactDOM.render(React.createElement(App, null), document.getElementById('app')); // eslint-disable-line no-undef
 
 /***/ }
 /******/ ]);
