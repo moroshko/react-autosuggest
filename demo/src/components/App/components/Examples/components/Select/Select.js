@@ -79,13 +79,13 @@ export default class Select extends Component {
         <div className={styles.autosuggest}>
           Option:
           <Autosuggest suggestions={options}
-                       wrapItemFocus={false}
                        shouldRenderSuggestions={always}
                        getSuggestionValue={identity}
                        renderSuggestion={renderSuggestion}
                        renderInput={renderInput}
                        onSuggestionSelected={this.onChange}
                        inputProps={inputProps}
+                       wrapItemFocus={false}
                        blurOnSuggestionSelect={true}
                        focusInputOnSuggestionClick={false}
                        theme={theme}

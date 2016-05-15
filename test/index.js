@@ -8,3 +8,4 @@ global.navigator = global.window.navigator;
 // the file, and the globals above need to be defined before React is required.
 require('./plain-list/AutosuggestApp.test');
 require('./multi-section/AutosuggestApp.test');
+require('./select/AutosuggestApp.test');

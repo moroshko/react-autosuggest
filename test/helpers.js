@@ -54,6 +54,10 @@ export function expectInputValue(expectedValue) {
   expect(data.input.value).to.equal(expectedValue);
 }
 
+export function expectInputHTML(expectedValue) {
+  expect(getInnerHTML(data.input)).to.equal(expectedValue);
+}
+
 export function getSuggestionsContainer() {
   return TestUtils.findRenderedDOMComponentWithClass(data.app, 'react-autosuggest__suggestions-container');
 }
