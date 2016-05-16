@@ -76,7 +76,7 @@ export default class AutosuggestContainer extends Component {
 
   static defaultProps = {
     onSuggestionsUpdateRequested: noop,
-    shouldRenderSuggestions: value => value && value.trim().length > 0,
+    shouldRenderSuggestions: value => value.trim().length > 0,
     onSuggestionSelected: noop,
     multiSection: false,
     renderSectionTitle() {
