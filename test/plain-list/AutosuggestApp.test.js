@@ -33,7 +33,7 @@ import AutosuggestApp, {
   shouldRenderSuggestions,
   onSuggestionSelected,
   onSuggestionsUpdateRequested,
-  selectFirstSuggestion
+  setSelectFirstSuggestion
 } from './AutosuggestApp';
 
 describe('Plain list Autosuggest', () => {
@@ -134,11 +134,11 @@ describe('Plain list Autosuggest', () => {
 
   describe('when typing and matches exist (when selectFirstSuggestion is true)', () => {
     before(() => {
-      selectFirstSuggestion.true();
+      setSelectFirstSuggestion(true);
     });
 
     after(() => {
-      selectFirstSuggestion.false();
+      setSelectFirstSuggestion(false);
     });
 
     beforeEach(() => {
@@ -249,11 +249,11 @@ describe('Plain list Autosuggest', () => {
 
   describe('when typing and matches do not exist (when selectFirstSuggestion is true)', () => {
     before(() => {
-      selectFirstSuggestion.true();
+      setSelectFirstSuggestion(true);
     });
 
     after(() => {
-      selectFirstSuggestion.false();
+      setSelectFirstSuggestion(false);
     });
 
     beforeEach(() => {
@@ -349,11 +349,11 @@ describe('Plain list Autosuggest', () => {
 
   describe('when pressing Down (when selectFirstSuggestion is true)', () => {
     before(() => {
-      selectFirstSuggestion.true();
+      setSelectFirstSuggestion(true);
     });
 
     after(() => {
-      selectFirstSuggestion.false();
+      setSelectFirstSuggestion(false);
     });
 
     beforeEach(() => {
@@ -423,11 +423,11 @@ describe('Plain list Autosuggest', () => {
 
   describe('when pressing Up (when selectFirstSuggestion is true)', () => {
     before(() => {
-      selectFirstSuggestion.true();
+      setSelectFirstSuggestion(true);
     });
 
     after(() => {
-      selectFirstSuggestion.false();
+      setSelectFirstSuggestion(false);
     });
 
     beforeEach(() => {
@@ -481,11 +481,11 @@ describe('Plain list Autosuggest', () => {
 
   describe('when pressing Enter and selectFirstSuggestion is true', () => {
     before(() => {
-      selectFirstSuggestion.true();
+      setSelectFirstSuggestion(true);
     });
 
     after(() => {
-      selectFirstSuggestion.false();
+      setSelectFirstSuggestion(false);
     });
 
     beforeEach(() => {
@@ -515,11 +515,11 @@ describe('Plain list Autosuggest', () => {
 
   describe('when pressing Escape and selectFirstSuggestion is true', () => {
     before(() => {
-      selectFirstSuggestion.true();
+      setSelectFirstSuggestion(true);
     });
 
     after(() => {
-      selectFirstSuggestion.false();
+      setSelectFirstSuggestion(false);
     });
 
     it('should reset the input if suggestions are hidden and never been shown before', () => {
@@ -578,11 +578,11 @@ describe('Plain list Autosuggest', () => {
 
   describe('getSuggestionValue when selectFirstSuggestion is true', () => {
     before(() => {
-      selectFirstSuggestion.true();
+      setSelectFirstSuggestion(true);
     });
 
     after(() => {
-      selectFirstSuggestion.false();
+      setSelectFirstSuggestion(false);
     });
 
     beforeEach(() => {
@@ -732,11 +732,11 @@ describe('Plain list Autosuggest', () => {
 
   describe('inputProps.onChange with selectFirstSuggestion', () => {
     before(() => {
-      selectFirstSuggestion.true();
+      setSelectFirstSuggestion(true);
     });
 
     after(() => {
-      selectFirstSuggestion.false();
+      setSelectFirstSuggestion(false);
     });
 
     beforeEach(() => {
