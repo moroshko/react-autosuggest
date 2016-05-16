@@ -253,6 +253,11 @@ describe('Plain list Autosuggest', () => {
       clickEscape();
       expectInputValue('');
     });
+
+    it('should not error when Enter is pressed', () => {
+      clickEnter();
+      expectInputValue('z');
+    });
   });
 
   describe('when typing and matches exist, then mousing over first selection', () => {
