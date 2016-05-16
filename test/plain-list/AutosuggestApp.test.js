@@ -142,6 +142,7 @@ describe('Plain list Autosuggest', () => {
     });
 
     beforeEach(() => {
+      onSuggestionSelected.reset();
       focusAndSetInputValue('p');
     });
 
@@ -206,6 +207,24 @@ describe('Plain list Autosuggest', () => {
       mouseEnterSuggestion(2);
       mouseLeaveSuggestion(2);
       expectFocusedSuggestion(null);
+    });
+
+    it('should be called once with the right parameters when Enter is pressed', () => {
+      onChange.reset();
+      clickEnter();
+      expect(onSuggestionSelected).to.have.been.calledOnce;
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(eventInstance, {
+        suggestion: { name: 'Perl', year: 1987 },
+        suggestionValue: 'Perl',
+        sectionIndex: null,
+        method: 'enter'
+      });
+
+      expect(onChange).to.have.been.calledOnce;
+      expect(onChange).to.be.calledWith(eventInstance, {
+        newValue: 'Perl',
+        method: 'enter'
+      });
     });
   });
 
@@ -781,6 +800,19 @@ describe('Plain list Autosuggest', () => {
         suggestionValue: 'Java',
         sectionIndex: null,
         method: 'enter'
+      });
+    });
+
+    it('should not call onChange when Enter is pressed and suggestion is focused with down since value did not change', () => {
+      onChange.reset();
+      clickDown();
+      clickEnter();
+
+      // onChange should not have been called because the value didn't change
+      expect(onChange).to.have.been.calledExactlyOnce;
+      expect(onChange).to.be.calledWithExactly(eventInstance, {
+        newValue: 'Java',
+        method: 'down'
       });
     });
 

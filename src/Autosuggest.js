@@ -268,7 +268,7 @@ class Autosuggest extends Component {
                 method: 'enter'
               });
 
-              this.maybeCallOnChange(event, newValue, event.key === 'enter');
+              this.maybeCallOnChange(event, newValue, 'enter');
               this.maybeCallOnSuggestionsUpdateRequested({ value: newValue, reason: 'enter' });
             }
             break;
