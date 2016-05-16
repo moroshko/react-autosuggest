@@ -237,10 +237,16 @@ class Autosuggest extends Component {
               }
             } else if (suggestions.length > 0) {
               const { newFocusedSectionIndex, newFocusedItemIndex } = data;
-              const safeValue = valueBeforeUpDown ? valueBeforeUpDown : value;
-              const newValue = newFocusedItemIndex === null ?
-                safeValue :
-                this.getSuggestionValueByIndex(newFocusedSectionIndex, newFocusedItemIndex);
+
+              let newValue;
+              if(newFocusedItemIndex === null){
+                // valueBeforeUpDown can be null if, for example, user
+                //  hovers on the first suggestion and then pressed Up.
+                //  if that happens, use the original input value
+                newValue = valueBeforeUpDown ? valueBeforeUpDown : value;
+              } else {
+                newValue = this.getSuggestionValueByIndex(newFocusedSectionIndex, newFocusedItemIndex);
+              }
 
               updateFocusedSuggestion(newFocusedSectionIndex, newFocusedItemIndex, value);
               this.maybeCallOnChange(event, newValue, event.key === 'ArrowDown' ? 'down' : 'up');
