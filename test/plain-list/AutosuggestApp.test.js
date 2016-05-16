@@ -687,10 +687,10 @@ describe('Plain list Autosuggest', () => {
 
     it('should be called with the right parameters when user types', () => {
       focusAndSetInputValue('c');
-      expect(onChange).to.have.been.calledTwice;
+      expect(onChange).to.have.been.calledOnce;
       expect(onChange).to.be.calledWith(eventInstance, {
         newValue: 'c',
-        method: 'auto'
+        method: 'type'
       });
     });
   });

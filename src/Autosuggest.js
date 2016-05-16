@@ -165,7 +165,6 @@ class Autosuggest extends Component {
       let suggestionIndex = 0;
 
       updateFocusedSuggestion(sectionIndex, suggestionIndex);
-      this.maybeCallOnChange(event, value, 'auto');
     }
   }
 
@@ -252,7 +251,7 @@ class Autosuggest extends Component {
           case 'Enter': {
             const focusedSuggestion = this.getFocusedSuggestion();
 
-            if (focusedSuggestion) {
+            if (focusedSuggestion !== null) {
               const newValue = getSuggestionValue(focusedSuggestion);
 
               closeSuggestions('enter');

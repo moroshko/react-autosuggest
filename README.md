@@ -309,7 +309,6 @@ where:
   * `'up'` - user pressed Up
   * `'escape'` - user pressed Escape
   * `'click'` - user clicked (or tapped) on suggestion
-  * `'auto'` - component auto-selected first suggestion
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
 
 <a name="shouldRenderSuggestionsProp"></a>
@@ -418,7 +417,7 @@ where `isMobile` is a boolean describing whether Autosuggest operates on a mobil
 <a name="selectFirstSuggestion"></a>
 #### selectFirstSuggestion (optional)
 
-Defaulting to false, `selectFirstSuggestion={true}` will auto-select the first suggestion in the list. When selected, [onChange](#inputPropsProp) will receive the value with method `auto`.
+Defaulting to false, `selectFirstSuggestion={true}` will highlight the first suggestion in the list.
 
 ```xml
 <Autosuggest selectFirstSuggestion={true} ... />
