@@ -228,7 +228,7 @@ describe('Plain list Autosuggest', () => {
     });
   });
 
-  describe('when typing and matches do not exist (when selectFirstSuggestion is true', () => {
+  describe('when typing and matches do not exist (when selectFirstSuggestion is true)', () => {
     before(() => {
       selectFirstSuggestion.true();
     });
@@ -252,6 +252,40 @@ describe('Plain list Autosuggest', () => {
     it('should clear the input when Escape is pressed', () => {
       clickEscape();
       expectInputValue('');
+    });
+  });
+
+  describe('when typing and matches exist, then mousing over first selection', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('p');
+      mouseEnterSuggestion(0);
+    });
+
+    describe('when pressing up', () => {
+      beforeEach(() => {
+        clickUp();
+      });
+
+      it('should show the original input value', () => {
+        expectInputValue('p');
+      });
+    });
+  });
+
+  describe('when typing and matches exist, then mousing over last selection', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('p');
+      mouseEnterSuggestion(2);
+    });
+
+    describe('when pressing down', () => {
+      beforeEach(() => {
+        clickDown();
+      });
+
+      it('should show the original input value', () => {
+        expectInputValue('p');
+      });
     });
   });
 
