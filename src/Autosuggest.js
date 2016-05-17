@@ -74,6 +74,12 @@ class Autosuggest extends Component {
     super();
 
     this.saveInput = this.saveInput.bind(this);
+    this.onDocumentTouchEnd = this.onDocumentTouchEnd.bind(this);
+  }
+
+  componentDidMount() {
+    this.touchingInput = false;
+    global.window.addEventListener('touchend', this.onDocumentTouchEnd, false);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -87,6 +93,17 @@ class Autosuggest extends Component {
         revealSuggestions();
       }
     }
+  }
+
+  componentWillUnmount() {
+    global.window.removeEventListener('touchend', this.onDocumentTouchEnd, false);
+  }
+
+  onDocumentTouchEnd() {
+    if (!this.touchingInput) {
+      this.input.blur();
+    }
+    this.touchingInput = false;
   }
 
   getSuggestion(sectionIndex, suggestionIndex) {
@@ -186,6 +203,7 @@ class Autosuggest extends Component {
     const items = (isOpen ? suggestions : []);
     const autowhateverInputProps = {
       ...inputProps,
+      onTouchStart: () => this.touchingInput = true,
       onFocus: event => {
         if (!this.justClickedOnSuggestion) {
           inputFocused(shouldRenderSuggestions(value));
