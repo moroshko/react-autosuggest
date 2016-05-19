@@ -43,7 +43,7 @@ Check out the <a href="http://react-autosuggest.js.org" target="_blank">Homepage
 ## Installation
 
 ```shell
-npm install react-autosuggest --save
+npm install @jamiedixon/react-autosuggest --save
 ```
 
 ## Basic Usage
@@ -66,7 +66,7 @@ const languages = [
 function getSuggestions(value) {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
-  
+
   return inputLength === 0 ? [] : languages.filter(lang =>
     lang.name.toLowerCase().slice(0, inputLength) === inputValue
   );
