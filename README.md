@@ -43,7 +43,7 @@ Check out the <a href="http://react-autosuggest.js.org" target="_blank">Homepage
 ## Installation
 
 ```shell
-npm install @jamiedixon/react-autosuggest --save
+npm install react-autosuggest --save
 ```
 
 ## Basic Usage
