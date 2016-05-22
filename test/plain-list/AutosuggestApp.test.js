@@ -223,9 +223,9 @@ describe('Plain list Autosuggest', () => {
       expectSuggestions([]);
     });
 
-    it('should not hide suggestions if there is no focused suggestion', () => {
+    it('should hide suggestions if there is no focused suggestion', () => {
       clickEnter();
-      expectSuggestions(['Perl', 'PHP', 'Python']);
+      expectSuggestions([]);
     });
   });
 
