@@ -74,6 +74,12 @@ class Autosuggest extends Component {
     super();
 
     this.saveInput = this.saveInput.bind(this);
+    this.onDocumentMouseUp = this.onDocumentMouseUp.bind(this);
+  }
+
+  componentDidMount() {
+    global.window.addEventListener('mouseup', this.onDocumentMouseUp, false);
+    global.window.addEventListener('touchend', this.onDocumentMouseUp, false);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -87,6 +93,17 @@ class Autosuggest extends Component {
         revealSuggestions();
       }
     }
+  }
+
+  componentWillUnmount() {
+    global.window.removeEventListener('mouseup', this.onDocumentMouseUp, false);
+    global.window.removeEventListener('touchend', this.onDocumentMouseUp, false);
+  }
+
+  onDocumentMouseUp() {
+    setTimeout(() => {
+      this.justClickedOnSuggestion = false;
+    });
   }
 
   getSuggestion(sectionIndex, suggestionIndex) {
@@ -306,10 +323,6 @@ class Autosuggest extends Component {
       }
 
       this.maybeCallOnSuggestionsUpdateRequested({ value: clickedSuggestionValue, reason: 'click' });
-
-      setTimeout(() => {
-        this.justClickedOnSuggestion = false;
-      });
     };
     const itemProps = ({ sectionIndex, itemIndex }) => {
       return {
