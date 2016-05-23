@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { inputFocused, inputBlurred, inputChanged, updateFocusedSuggestion,
          revealSuggestions, closeSuggestions } from './reducerAndActions';
@@ -38,8 +38,12 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-class Autosuggest extends Component {
-  static propTypes = {
+function extractTouchCoordinates({ changedTouches }) {
+  return { x: changedTouches[0].pageX, y: changedTouches[0].pageY };
+}
+
+const Autosuggest = React.createClass({
+  propTypes: {
     suggestions: PropTypes.array.isRequired,
     onSuggestionsUpdateRequested: PropTypes.func.isRequired,
     getSuggestionValue: PropTypes.func.isRequired,
@@ -68,28 +72,19 @@ class Autosuggest extends Component {
     updateFocusedSuggestion: PropTypes.func.isRequired,
     revealSuggestions: PropTypes.func.isRequired,
     closeSuggestions: PropTypes.func.isRequired
-  };
-
-  constructor() {
-    super();
-
-    this.saveInput = this.saveInput.bind(this);
-    this.onDocumentTouchStart = this.onDocumentTouchStart.bind(this);
-    this.onDocumentTouchEnd = this.onDocumentTouchEnd.bind(this);
-    this.onDocumentMouseUp = this.onDocumentMouseUp.bind(this);
-  }
+  },
 
   componentWillMount() {
     this.justTouchedInput = false;
     this.touchStart = null;
     this.justClickedOnSuggestion = false;
-  }
+  },
 
   componentDidMount() {
     global.window.addEventListener('touchstart', this.onDocumentTouchStart, false);
     global.window.addEventListener('touchend', this.onDocumentTouchEnd, false);
     global.window.addEventListener('mouseup', this.onDocumentMouseUp, false);
-  }
+  },
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.suggestions !== this.props.suggestions) {
@@ -102,35 +97,38 @@ class Autosuggest extends Component {
         revealSuggestions();
       }
     }
-  }
+  },
 
   componentWillUnmount() {
     global.window.removeEventListener('touchstart', this.onDocumentTouchStart, false);
     global.window.removeEventListener('touchend', this.onDocumentTouchEnd, false);
     global.window.removeEventListener('mouseup', this.onDocumentMouseUp, false);
-  }
+  },
 
-  onDocumentTouchStart({ touches }) {
-    this.touchStart = this.touchStart || touches[0];
-  }
+  onDocumentTouchStart(event) {
+    this.touchStart = this.touchStart || extractTouchCoordinates(event);
+  },
 
-  onDocumentTouchEnd({ changedTouches }) {
-    const { clientX, clientY } = changedTouches[0];
-    const oldX = this.touchStart && this.touchStart.clientX || Number.MAX_VALUE;
-    const oldY = this.touchStart && this.touchStart.clientY || Number.MAX_VALUE;
+  onDocumentTouchEnd(event) {
+    const { x, y } = extractTouchCoordinates(event);
 
-    if (!this.justTouchedInput && !this.justClickedOnSuggestion &&
-      Math.abs(oldX - clientX) < 20 && Math.abs(oldY - clientY) < 20) {
-      this.input.blur();
+    if (this.props.isFocused && !this.justTouchedInput && !this.justClickedOnSuggestion &&
+      this.touchStart) {
+      const dx = Math.abs(x - this.touchStart.x);
+      const dy = Math.abs(y - this.touchStart.y);
+
+      if (dx < 20 && dy < 20) {
+        this.input.blur();
+      }
     }
     this.justTouchedInput = false;
     this.touchStart = null;
     setTimeout(() => this.justClickedOnSuggestion = false);
-  }
+  },
 
   onDocumentMouseUp() {
     setTimeout(() => this.justClickedOnSuggestion = false);
-  }
+  },
 
   getSuggestion(sectionIndex, suggestionIndex) {
     const { suggestions, multiSection, getSectionSuggestions } = this.props;
@@ -140,7 +138,7 @@ class Autosuggest extends Component {
     }
 
     return suggestions[suggestionIndex];
-  }
+  },
 
   getFocusedSuggestion() {
     const { focusedSectionIndex, focusedSuggestionIndex } = this.props;
@@ -150,13 +148,13 @@ class Autosuggest extends Component {
     }
 
     return this.getSuggestion(focusedSectionIndex, focusedSuggestionIndex);
-  }
+  },
 
   getSuggestionValueByIndex(sectionIndex, suggestionIndex) {
     const { getSuggestionValue } = this.props;
 
     return getSuggestionValue(this.getSuggestion(sectionIndex, suggestionIndex));
-  }
+  },
 
   getSuggestionIndices(suggestionElement) {
     const sectionIndex = suggestionElement.getAttribute('data-section-index');
@@ -166,7 +164,7 @@ class Autosuggest extends Component {
       sectionIndex: (typeof sectionIndex === 'string' ? parseInt(sectionIndex, 10) : null),
       suggestionIndex: parseInt(suggestionIndex, 10)
     };
-  }
+  },
 
   findSuggestionElement(startNode) {
     let node = startNode;
@@ -181,7 +179,7 @@ class Autosuggest extends Component {
 
     console.error('Clicked element:', startNode); // eslint-disable-line no-console
     throw new Error('Couldn\'t find suggestion element');
-  }
+  },
 
   maybeCallOnChange(event, newValue, method) {
     const { value, onChange } = this.props.inputProps;
@@ -189,7 +187,7 @@ class Autosuggest extends Component {
     if (newValue !== value) {
       onChange && onChange(event, { newValue, method });
     }
-  }
+  },
 
   maybeCallOnSuggestionsUpdateRequested(data) {
     const { onSuggestionsUpdateRequested, shouldRenderSuggestions } = this.props;
@@ -197,14 +195,14 @@ class Autosuggest extends Component {
     if (shouldRenderSuggestions(data.value)) {
       onSuggestionsUpdateRequested(data);
     }
-  }
+  },
 
   willRenderSuggestions() {
     const { suggestions, inputProps, shouldRenderSuggestions } = this.props;
     const { value } = inputProps;
 
     return suggestions.length > 0 && shouldRenderSuggestions(value);
-  }
+  },
 
   saveInput(autowhatever) {
     if (autowhatever !== null) {
@@ -213,7 +211,7 @@ class Autosuggest extends Component {
       this.input = input;
       this.props.inputRef(input);
     }
-  }
+  },
 
   render() {
     const {
@@ -379,6 +377,6 @@ class Autosuggest extends Component {
                     ref={this.saveInput} />
     );
   }
-}
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Autosuggest);

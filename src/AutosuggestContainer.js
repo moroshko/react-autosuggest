@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { createStore } from 'redux';
 import reducer from './reducerAndActions';
 import Autosuggest from './Autosuggest';
@@ -46,8 +46,8 @@ function mapToAutowhateverTheme(theme) {
   return result;
 }
 
-export default class AutosuggestContainer extends Component {
-  static propTypes = {
+export default React.createClass({
+  propTypes: {
     suggestions: PropTypes.array.isRequired,
     onSuggestionsUpdateRequested: PropTypes.func,
     getSuggestionValue: PropTypes.func.isRequired,
@@ -71,27 +71,27 @@ export default class AutosuggestContainer extends Component {
     focusInputOnSuggestionClick: PropTypes.bool,
     theme: PropTypes.object,
     id: PropTypes.string
-  };
+  },
 
-  static defaultProps = {
-    onSuggestionsUpdateRequested: noop,
-    shouldRenderSuggestions: value => value.trim().length > 0,
-    onSuggestionSelected: noop,
-    multiSection: false,
-    renderSectionTitle() {
-      throw new Error('`renderSectionTitle` must be provided');
-    },
-    getSectionSuggestions() {
-      throw new Error('`getSectionSuggestions` must be provided');
-    },
-    focusInputOnSuggestionClick: true,
-    theme: defaultTheme,
-    id: '1'
-  };
+  getDefaultProps() {
+    return {
+      onSuggestionsUpdateRequested: noop,
+      shouldRenderSuggestions: value => value.trim().length > 0,
+      onSuggestionSelected: noop,
+      multiSection: false,
+      renderSectionTitle() {
+        throw new Error('`renderSectionTitle` must be provided');
+      },
+      getSectionSuggestions() {
+        throw new Error('`getSectionSuggestions` must be provided');
+      },
+      focusInputOnSuggestionClick: true,
+      theme: defaultTheme,
+      id: '1'
+    };
+  },
 
-  constructor() {
-    super();
-
+  componentWillMount() {
     const initialState = {
       isFocused: false,
       isCollapsed: true,
@@ -102,13 +102,11 @@ export default class AutosuggestContainer extends Component {
     };
 
     this.store = createStore(reducer, initialState);
-
-    this.saveInput = this.saveInput.bind(this);
-  }
+  },
 
   saveInput(input) {
     this.input = input;
-  }
+  },
 
   render() {
     const {
@@ -136,4 +134,4 @@ export default class AutosuggestContainer extends Component {
                    store={this.store} />
     );
   }
-}
+});
