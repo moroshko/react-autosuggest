@@ -78,8 +78,8 @@ class Autosuggest extends Component {
   }
 
   componentDidMount() {
-    global.window.addEventListener('mouseup', this.onDocumentMouseUp, false);
-    global.window.addEventListener('touchend', this.onDocumentMouseUp, false);
+    global.document.addEventListener('mouseup', this.onDocumentMouseUp, false);
+    global.document.addEventListener('touchend', this.onDocumentMouseUp, false);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -96,8 +96,8 @@ class Autosuggest extends Component {
   }
 
   componentWillUnmount() {
-    global.window.removeEventListener('mouseup', this.onDocumentMouseUp, false);
-    global.window.removeEventListener('touchend', this.onDocumentMouseUp, false);
+    global.document.removeEventListener('mouseup', this.onDocumentMouseUp, false);
+    global.document.removeEventListener('touchend', this.onDocumentMouseUp, false);
   }
 
   onDocumentMouseUp() {
