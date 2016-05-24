@@ -12,7 +12,6 @@ module.exports = {
     './demo/src/index'
   ],
 
-
   output: {
     path: path.join(__dirname, 'dist'), // Must be an absolute path
     filename: 'index.js',
