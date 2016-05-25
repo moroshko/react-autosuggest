@@ -130,6 +130,10 @@ export function mouseDownSuggestion(suggestionIndex) {
   Simulate.mouseDown(getSuggestion(suggestionIndex));
 }
 
+export function mouseMoveSuggestion(suggestionIndex) {
+  Simulate.mouseMove(getSuggestion(suggestionIndex));
+}
+
 export function clickSuggestion(suggestionIndex) {
   mouseEnterSuggestion(suggestionIndex);
   mouseDownSuggestion(suggestionIndex);

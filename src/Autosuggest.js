@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { inputFocused, inputBlurred, inputChanged, updateFocusedSuggestion,
+import { inputFocused, inputBlurred, inputChanged, updateFocusedSuggestion, updateFocusedUsingKeyboard,
          revealSuggestions, closeSuggestions } from './reducerAndActions';
 import Autowhatever from 'react-autowhatever';
 
@@ -10,6 +10,7 @@ function mapStateToProps(state) {
     isCollapsed: state.isCollapsed,
     focusedSectionIndex: state.focusedSectionIndex,
     focusedSuggestionIndex: state.focusedSuggestionIndex,
+    focusedUsingKeyboard: state.focusedUsingKeyboard,
     valueBeforeUpDown: state.valueBeforeUpDown,
     lastAction: state.lastAction
   };
@@ -26,8 +27,11 @@ function mapDispatchToProps(dispatch) {
     inputChanged: (shouldRenderSuggestions, lastAction) => {
       dispatch(inputChanged(shouldRenderSuggestions, lastAction));
     },
-    updateFocusedSuggestion: (sectionIndex, suggestionIndex, value) => {
-      dispatch(updateFocusedSuggestion(sectionIndex, suggestionIndex, value));
+    updateFocusedSuggestion: (sectionIndex, suggestionIndex, value, isKeyboard) => {
+      dispatch(updateFocusedSuggestion(sectionIndex, suggestionIndex, value, isKeyboard));
+    },
+    updateFocusedUsingKeyboard: (isKeyboard) => {
+      dispatch(updateFocusedUsingKeyboard(isKeyboard));
     },
     revealSuggestions: () => {
       dispatch(revealSuggestions());
@@ -59,6 +63,7 @@ class Autosuggest extends Component {
     isCollapsed: PropTypes.bool.isRequired,
     focusedSectionIndex: PropTypes.number,
     focusedSuggestionIndex: PropTypes.number,
+    focusedUsingKeyboard: PropTypes.bool,
     valueBeforeUpDown: PropTypes.string,
     lastAction: PropTypes.string,
 
@@ -66,6 +71,7 @@ class Autosuggest extends Component {
     inputBlurred: PropTypes.func.isRequired,
     inputChanged: PropTypes.func.isRequired,
     updateFocusedSuggestion: PropTypes.func.isRequired,
+    updateFocusedUsingKeyboard: PropTypes.func.isRequired,
     revealSuggestions: PropTypes.func.isRequired,
     closeSuggestions: PropTypes.func.isRequired
   };
@@ -177,9 +183,9 @@ class Autosuggest extends Component {
       suggestions, renderSuggestion, inputProps, shouldRenderSuggestions,
       onSuggestionSelected, multiSection, renderSectionTitle, id,
       getSectionSuggestions, focusInputOnSuggestionClick, theme, isFocused,
-      isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
+      isCollapsed, focusedSectionIndex, focusedSuggestionIndex, focusedUsingKeyboard,
       valueBeforeUpDown, inputFocused, inputBlurred, inputChanged,
-      updateFocusedSuggestion, revealSuggestions, closeSuggestions
+      updateFocusedSuggestion, updateFocusedUsingKeyboard, revealSuggestions, closeSuggestions
     } = this.props;
     const { value, onBlur, onFocus, onKeyDown } = inputProps;
     const isOpen = isFocused && !isCollapsed && this.willRenderSuggestions();
@@ -226,7 +232,7 @@ class Autosuggest extends Component {
                 valueBeforeUpDown :
                 this.getSuggestionValueByIndex(newFocusedSectionIndex, newFocusedItemIndex);
 
-              updateFocusedSuggestion(newFocusedSectionIndex, newFocusedItemIndex, value);
+              updateFocusedSuggestion(newFocusedSectionIndex, newFocusedItemIndex, value, true);
               this.maybeCallOnChange(event, newValue, event.key === 'ArrowDown' ? 'down' : 'up');
             }
             event.preventDefault();
@@ -275,11 +281,18 @@ class Autosuggest extends Component {
       }
     };
     const onMouseEnter = (event, { sectionIndex, itemIndex }) => {
-      updateFocusedSuggestion(sectionIndex, itemIndex);
+      if (!focusedUsingKeyboard) {
+        updateFocusedSuggestion(sectionIndex, itemIndex);
+      }
     };
     const onMouseLeave = () => {
-      updateFocusedSuggestion(null, null);
+      if (!focusedUsingKeyboard) {
+        updateFocusedSuggestion(null, null);
+      }
     };
+    const onMouseMove = (focusedUsingKeyboard
+      ? () => updateFocusedUsingKeyboard(false)
+      : undefined);
     const onMouseDown = () => {
       this.justClickedOnSuggestion = true;
     };
@@ -319,6 +332,7 @@ class Autosuggest extends Component {
         onMouseLeave,
         onMouseDown,
         onTouchStart: onMouseDown, // Because on iOS `onMouseDown` is not triggered
+        onMouseMove,
         onClick
       };
     };

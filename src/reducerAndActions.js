@@ -2,6 +2,7 @@ const INPUT_FOCUSED = 'INPUT_FOCUSED';
 const INPUT_BLURRED = 'INPUT_BLURRED';
 const INPUT_CHANGED = 'INPUT_CHANGED';
 const UPDATE_FOCUSED_SUGGESTION = 'UPDATE_FOCUSED_SUGGESTION';
+const UPDATE_FOCUSED_USING_KEYBOARD = 'UPDATE_FOCUSED_USING_KEYBOARD';
 const REVEAL_SUGGESTIONS = 'REVEAL_SUGGESTIONS';
 const CLOSE_SUGGESTIONS = 'CLOSE_SUGGESTIONS';
 
@@ -26,12 +27,20 @@ export function inputChanged(shouldRenderSuggestions, lastAction) {
   };
 }
 
-export function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
+export function updateFocusedSuggestion(sectionIndex, suggestionIndex, value, isKeyboard) {
   return {
     type: UPDATE_FOCUSED_SUGGESTION,
     sectionIndex,
     suggestionIndex,
-    value
+    value,
+    isKeyboard
+  };
+}
+
+export function updateFocusedUsingKeyboard(isKeyboard) {
+  return {
+    type: UPDATE_FOCUSED_USING_KEYBOARD,
+    isKeyboard
   };
 }
 
@@ -78,7 +87,7 @@ export default function reducer(state, action) {
       };
 
     case UPDATE_FOCUSED_SUGGESTION: {
-      const { value, sectionIndex, suggestionIndex } = action;
+      const { value, sectionIndex, suggestionIndex, isKeyboard } = action;
       const valueBeforeUpDown =
         state.valueBeforeUpDown === null && typeof value !== 'undefined'
           ? value
@@ -88,7 +97,17 @@ export default function reducer(state, action) {
         ...state,
         focusedSectionIndex: sectionIndex,
         focusedSuggestionIndex: suggestionIndex,
-        valueBeforeUpDown
+        valueBeforeUpDown,
+        focusedUsingKeyboard: isKeyboard
+      };
+    }
+
+    case UPDATE_FOCUSED_USING_KEYBOARD: {
+      const { isKeyboard } = action;
+
+      return {
+        ...state,
+        focusedUsingKeyboard: isKeyboard
       };
     }
 
