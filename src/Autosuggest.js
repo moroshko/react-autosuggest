@@ -289,11 +289,9 @@ class Autosuggest extends Component {
         updateFocusedSuggestion(null, null);
       }
     };
-    const onMouseMove = () => {
-      if (focusedUsingKeyboard) {
-        updateFocusedUsingKeyboard(false);
-      }
-    };
+    const onMouseMove = (focusedUsingKeyboard
+      ? () => updateFocusedUsingKeyboard(false)
+      : undefined);
     const onMouseDown = () => {
       this.justClickedOnSuggestion = true;
     };
