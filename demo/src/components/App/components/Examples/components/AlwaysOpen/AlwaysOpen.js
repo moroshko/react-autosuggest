@@ -42,6 +42,7 @@ export default class AlwaysOpen extends Component {
 
     this.onChange = this.onChange.bind(this);
     this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
+    this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
     this.onOpenModal = this.onToggleModal.bind(this, true);
     this.onCloseModal = this.onToggleModal.bind(this, false);
     this.onClickOverlay = this.onClickOverlay.bind(this);
@@ -75,10 +76,18 @@ export default class AlwaysOpen extends Component {
   }
 
   onSuggestionsUpdateRequested({ value }) {
-    console.log(value);
     this.setState({
       suggestions: getSuggestions(value)
     });
+  }
+
+  onSuggestionSelected(e, { suggestionValue }) {
+    this.setState({
+      value: suggestionValue,
+      suggestions: getSuggestions(suggestionValue)
+    });
+
+    this.onCloseModal();
   }
 
   render() {
@@ -102,11 +111,11 @@ export default class AlwaysOpen extends Component {
         <div className={styles.autosuggest}>
           <a href="javascript:void(0)" onClick={this.onOpenModal} className={styles.button}>View suggestions</a>
           {isOpen ? (
-            <div className={styles.overlay} data-overlay onClick={this.onClickOverlay}>
+            <div className={styles.overlay} data-overlay={true} onClick={this.onClickOverlay}>
               <div className={styles.modal}>
                 <Autosuggest suggestions={suggestions}
                              onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                             onSuggestionSelected={this.onCloseModal}
+                             onSuggestionSelected={this.onSuggestionSelected}
                              getSuggestionValue={getSuggestionValue}
                              renderSuggestion={renderSuggestion}
                              inputProps={inputProps}
