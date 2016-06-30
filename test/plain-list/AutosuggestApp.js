@@ -55,9 +55,10 @@ export const onSuggestionsUpdateRequested = sinon.spy(({ value }) => {
 });
 
 let selectFirstSuggestion = false;
-export function setSelectFirstSuggestion(value){
+
+export function setSelectFirstSuggestion(value) {
   selectFirstSuggestion = value;
-} 
+}
 
 export default class AutosuggestApp extends Component {
   constructor() {

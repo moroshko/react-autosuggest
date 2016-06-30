@@ -239,6 +239,7 @@ class Autosuggest extends Component {
               const { newFocusedSectionIndex, newFocusedItemIndex } = data;
 
               let newValue;
+
               if (newFocusedItemIndex === null) {
                 // valueBeforeUpDown can be null if, for example, user
                 //  hovers on the first suggestion and then pressed Up.
