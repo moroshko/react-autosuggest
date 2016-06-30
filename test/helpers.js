@@ -67,11 +67,10 @@ export function getSuggestion(suggestionIndex) {
 
   if (suggestionIndex >= suggestions.length) {
     throw Error(`Cannot find suggestion #${suggestionIndex}`);
-    return null;
   }
 
   return suggestions[suggestionIndex];
-};
+}
 
 export function getTitles() {
   return TestUtils.scryRenderedDOMComponentsWithClass(data.app, 'react-autosuggest__section-title');
@@ -82,11 +81,10 @@ export function getTitle(titleIndex) {
 
   if (titleIndex >= titles.length) {
     throw Error(`Cannot find title #${titleIndex}`);
-    return null;
   }
 
   return titles[titleIndex];
-};
+}
 
 // See: https://github.com/facebook/react/issues/4692#issuecomment-157803622
 /*

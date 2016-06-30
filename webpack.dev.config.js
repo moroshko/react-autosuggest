@@ -3,10 +3,12 @@ var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HappyPack = require('happypack');
+var host = process.env.NODE_HOST || 'localhost';
+var port = process.env.NODE_PORT || 3000;
 
 module.exports = {
   entry: [
-    'webpack-dev-server/client?http://localhost:3000',
+    `webpack-dev-server/client?http://${host}:${port}`,
     './demo/src/index'
   ],
 

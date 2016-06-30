@@ -86,7 +86,7 @@ function renderSuggestion(suggestion) {
   );
 }
 
-class App extends React.Component {
+class App extends React.Component { // eslint-disable-line no-undef
   constructor() {
     super();
 
@@ -129,4 +129,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app')); // eslint-disable-line no-undef

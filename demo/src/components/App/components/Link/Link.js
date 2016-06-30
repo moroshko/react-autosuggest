@@ -13,7 +13,7 @@ export default function Link(props) {
       {children}
     </a>
   );
-};
+}
 
 Link.propTypes = {
   className: PropTypes.string,

@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "3.7.3",
+  "version": "3.7.4",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/index.js",
   "repository": {
@@ -10,7 +10,7 @@
   "author": "Misha Moroshko <michael.moroshko@gmail.com>",
   "scripts": {
     "start": "mkdir -p demo/dist && npm run copy-static-files && node server",
-    "lint": "eslint src demo/src test server.js demo/standalone/app.js webpack.dev.config.js webpack.gh-pages.config.js webpack.standalone.config.js webpack.standalone-demo.config.js",
+    "lint": "eslint src demo/src demo/standalone/app.js test server.js webpack.*.js",
     "test": "mocha test/index.js --compilers js:babel-register",
     "copy-static-files": "cp demo/src/index.html demo/src/components/App/components/Examples/components/Basic/autosuggest.css demo/dist/",
     "dist": "rm -rf dist && mkdir dist && babel src -d dist",
@@ -23,7 +23,7 @@
     "prepublish": "npm run dist && npm run standalone"
   },
   "dependencies": {
-    "react-autowhatever": "^3.2.2",
+    "react-autowhatever": "^3.3.0",
     "react-redux": "^4.4.5",
     "redux": "^3.5.1"
   },
@@ -52,11 +52,11 @@
     "happypack": "^2.0.4",
     "ismobilejs": "^0.4.0",
     "isomorphic-fetch": "^2.2.1",
-    "jsdom": "^8.4.0",
+    "jsdom": "^9.0.0",
     "less": "^2.6.1",
     "less-loader": "^2.2.3",
     "mocha": "^2.4.5",
-    "postcss-loader": "^0.8.2",
+    "postcss-loader": "^0.9.1",
     "react": "^15.0.1",
     "react-addons-test-utils": "^15.0.1",
     "react-dom": "^15.0.1",
