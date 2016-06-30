@@ -157,7 +157,7 @@ class Autosuggest extends Component {
     }
   }
 
-  maybeSelectFirstSuggestion(event, value) {
+  maybeSelectFirstSuggestion() {
     const { selectFirstSuggestion, multiSection, updateFocusedSuggestion } = this.props;
 
     if (selectFirstSuggestion) {
