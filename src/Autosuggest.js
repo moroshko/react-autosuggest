@@ -161,8 +161,8 @@ class Autosuggest extends Component {
     const { selectFirstSuggestion, multiSection, updateFocusedSuggestion } = this.props;
 
     if (selectFirstSuggestion) {
-      let sectionIndex = multiSection ? 0 : null;
-      let suggestionIndex = 0;
+      const sectionIndex = multiSection ? 0 : null;
+      const suggestionIndex = 0;
 
       updateFocusedSuggestion(sectionIndex, suggestionIndex);
     }
