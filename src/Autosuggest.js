@@ -202,7 +202,7 @@ class Autosuggest extends Component {
       onFocus: event => {
         if (!this.justClickedOnSuggestion) {
           inputFocused(shouldRenderSuggestions(value));
-          this.maybeSelectFirstSuggestion(event, value);
+          this.maybeSelectFirstSuggestion();
           onFocus && onFocus(event);
         }
       },
@@ -225,7 +225,7 @@ class Autosuggest extends Component {
         this.maybeCallOnChange(event, value, 'type');
         inputChanged(shouldRenderSuggestions(value), 'type');
         this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'type' });
-        this.maybeSelectFirstSuggestion(event, value);
+        this.maybeSelectFirstSuggestion();
       },
       onKeyDown: (event, data) => {
         switch (event.key) {
