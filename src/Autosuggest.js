@@ -83,9 +83,11 @@ class Autosuggest extends Component {
               isCollapsed, revealSuggestions, lastAction } = nextProps;
       const { value } = inputProps;
 
-      if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter' &&
-          suggestions.length > 0 && shouldRenderSuggestions(value)) {
-        revealSuggestions();
+      if (suggestions.length > 0 && shouldRenderSuggestions(value)) {
+        this.maybeSelectFirstSuggestion();
+        if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter') {
+          revealSuggestions();
+        }
       }
     }
   }
@@ -161,10 +163,7 @@ class Autosuggest extends Component {
     const { selectFirstSuggestion, multiSection, updateFocusedSuggestion } = this.props;
 
     if (selectFirstSuggestion) {
-      const sectionIndex = multiSection ? 0 : null;
-      const suggestionIndex = 0;
-
-      updateFocusedSuggestion(sectionIndex, suggestionIndex);
+      updateFocusedSuggestion(multiSection ? 0 : null, 0);
     }
   }
 
@@ -202,8 +201,11 @@ class Autosuggest extends Component {
       onFocus: event => {
         if (!this.justClickedOnSuggestion) {
           inputFocused(shouldRenderSuggestions(value));
-          this.maybeSelectFirstSuggestion();
           onFocus && onFocus(event);
+
+          if (suggestions.length > 0) {
+            this.maybeSelectFirstSuggestion();
+          }
         }
       },
       onBlur: event => {
@@ -225,7 +227,6 @@ class Autosuggest extends Component {
         this.maybeCallOnChange(event, value, 'type');
         inputChanged(shouldRenderSuggestions(value), 'type');
         this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'type' });
-        this.maybeSelectFirstSuggestion();
       },
       onKeyDown: (event, data) => {
         switch (event.key) {
@@ -260,7 +261,7 @@ class Autosuggest extends Component {
 
             closeSuggestions('enter');
 
-            if (focusedSuggestion) {
+            if (focusedSuggestion !== null) {
               const newValue = getSuggestionValue(focusedSuggestion);
 
               onSuggestionSelected(event, {
