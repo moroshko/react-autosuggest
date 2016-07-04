@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { inputFocused, inputBlurred, inputChanged, updateFocusedSuggestion,
          revealSuggestions, closeSuggestions } from './reducerAndActions';
@@ -42,8 +42,8 @@ function extractTouchCoordinates({ changedTouches }) {
   return { x: changedTouches[0].pageX, y: changedTouches[0].pageY };
 }
 
-const Autosuggest = React.createClass({
-  propTypes: {
+class Autosuggest extends Component {
+  static propTypes = {
     suggestions: PropTypes.array.isRequired,
     onSuggestionsUpdateRequested: PropTypes.func.isRequired,
     getSuggestionValue: PropTypes.func.isRequired,
@@ -72,19 +72,26 @@ const Autosuggest = React.createClass({
     updateFocusedSuggestion: PropTypes.func.isRequired,
     revealSuggestions: PropTypes.func.isRequired,
     closeSuggestions: PropTypes.func.isRequired
-  },
+  };
 
-  componentWillMount() {
+  constructor() {
+    super();
+
+    this.saveInput = this.saveInput.bind(this);
+    this.onDocumentTouchStart = this.onDocumentTouchStart.bind(this);
+    this.onDocumentTouchEnd = this.onDocumentTouchEnd.bind(this);
+    this.onDocumentMouseUp = this.onDocumentMouseUp.bind(this);
+
     this.justTouchedInput = false;
     this.touchStart = null;
     this.justClickedOnSuggestion = false;
-  },
+  }
 
   componentDidMount() {
     global.window.addEventListener('touchstart', this.onDocumentTouchStart, false);
     global.window.addEventListener('touchend', this.onDocumentTouchEnd, false);
     global.window.addEventListener('mouseup', this.onDocumentMouseUp, false);
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.suggestions !== this.props.suggestions) {
@@ -97,17 +104,17 @@ const Autosuggest = React.createClass({
         revealSuggestions();
       }
     }
-  },
+  }
 
   componentWillUnmount() {
     global.window.removeEventListener('touchstart', this.onDocumentTouchStart, false);
     global.window.removeEventListener('touchend', this.onDocumentTouchEnd, false);
     global.window.removeEventListener('mouseup', this.onDocumentMouseUp, false);
-  },
+  }
 
   onDocumentTouchStart(event) {
     this.touchStart = this.touchStart || extractTouchCoordinates(event);
-  },
+  }
 
   onDocumentTouchEnd(event) {
     const { x, y } = extractTouchCoordinates(event);
@@ -124,11 +131,11 @@ const Autosuggest = React.createClass({
     this.justTouchedInput = false;
     this.touchStart = null;
     setTimeout(() => this.justClickedOnSuggestion = false);
-  },
+  }
 
   onDocumentMouseUp() {
     setTimeout(() => this.justClickedOnSuggestion = false);
-  },
+  }
 
   getSuggestion(sectionIndex, suggestionIndex) {
     const { suggestions, multiSection, getSectionSuggestions } = this.props;
@@ -138,7 +145,7 @@ const Autosuggest = React.createClass({
     }
 
     return suggestions[suggestionIndex];
-  },
+  }
 
   getFocusedSuggestion() {
     const { focusedSectionIndex, focusedSuggestionIndex } = this.props;
@@ -148,13 +155,13 @@ const Autosuggest = React.createClass({
     }
 
     return this.getSuggestion(focusedSectionIndex, focusedSuggestionIndex);
-  },
+  }
 
   getSuggestionValueByIndex(sectionIndex, suggestionIndex) {
     const { getSuggestionValue } = this.props;
 
     return getSuggestionValue(this.getSuggestion(sectionIndex, suggestionIndex));
-  },
+  }
 
   getSuggestionIndices(suggestionElement) {
     const sectionIndex = suggestionElement.getAttribute('data-section-index');
@@ -164,7 +171,7 @@ const Autosuggest = React.createClass({
       sectionIndex: (typeof sectionIndex === 'string' ? parseInt(sectionIndex, 10) : null),
       suggestionIndex: parseInt(suggestionIndex, 10)
     };
-  },
+  }
 
   findSuggestionElement(startNode) {
     let node = startNode;
@@ -179,7 +186,7 @@ const Autosuggest = React.createClass({
 
     console.error('Clicked element:', startNode); // eslint-disable-line no-console
     throw new Error('Couldn\'t find suggestion element');
-  },
+  }
 
   maybeCallOnChange(event, newValue, method) {
     const { value, onChange } = this.props.inputProps;
@@ -187,7 +194,7 @@ const Autosuggest = React.createClass({
     if (newValue !== value) {
       onChange && onChange(event, { newValue, method });
     }
-  },
+  }
 
   maybeCallOnSuggestionsUpdateRequested(data) {
     const { onSuggestionsUpdateRequested, shouldRenderSuggestions } = this.props;
@@ -195,14 +202,14 @@ const Autosuggest = React.createClass({
     if (shouldRenderSuggestions(data.value)) {
       onSuggestionsUpdateRequested(data);
     }
-  },
+  }
 
   willRenderSuggestions() {
     const { suggestions, inputProps, shouldRenderSuggestions } = this.props;
     const { value } = inputProps;
 
     return suggestions.length > 0 && shouldRenderSuggestions(value);
-  },
+  }
 
   saveInput(autowhatever) {
     if (autowhatever !== null) {
@@ -211,7 +218,7 @@ const Autosuggest = React.createClass({
       this.input = input;
       this.props.inputRef(input);
     }
-  },
+  }
 
   render() {
     const {
@@ -377,6 +384,6 @@ const Autosuggest = React.createClass({
                     ref={this.saveInput} />
     );
   }
-});
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Autosuggest);

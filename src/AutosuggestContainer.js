@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { createStore } from 'redux';
 import reducer from './reducerAndActions';
 import Autosuggest from './Autosuggest';
@@ -46,8 +46,8 @@ function mapToAutowhateverTheme(theme) {
   return result;
 }
 
-export default React.createClass({
-  propTypes: {
+export default class AutosuggestContainer extends Component {
+  static propTypes = {
     suggestions: PropTypes.array.isRequired,
     onSuggestionsUpdateRequested: PropTypes.func,
     getSuggestionValue: PropTypes.func.isRequired,
@@ -71,27 +71,27 @@ export default React.createClass({
     focusInputOnSuggestionClick: PropTypes.bool,
     theme: PropTypes.object,
     id: PropTypes.string
-  },
+  };
 
-  getDefaultProps() {
-    return {
-      onSuggestionsUpdateRequested: noop,
-      shouldRenderSuggestions: value => value.trim().length > 0,
-      onSuggestionSelected: noop,
-      multiSection: false,
-      renderSectionTitle() {
-        throw new Error('`renderSectionTitle` must be provided');
-      },
-      getSectionSuggestions() {
-        throw new Error('`getSectionSuggestions` must be provided');
-      },
-      focusInputOnSuggestionClick: true,
-      theme: defaultTheme,
-      id: '1'
-    };
-  },
+  static defaultProps = {
+    onSuggestionsUpdateRequested: noop,
+    shouldRenderSuggestions: value => value.trim().length > 0,
+    onSuggestionSelected: noop,
+    multiSection: false,
+    renderSectionTitle() {
+      throw new Error('`renderSectionTitle` must be provided');
+    },
+    getSectionSuggestions() {
+      throw new Error('`getSectionSuggestions` must be provided');
+    },
+    focusInputOnSuggestionClick: true,
+    theme: defaultTheme,
+    id: '1'
+  };
 
-  componentWillMount() {
+  constructor() {
+    super();
+
     const initialState = {
       isFocused: false,
       isCollapsed: true,
@@ -102,11 +102,13 @@ export default React.createClass({
     };
 
     this.store = createStore(reducer, initialState);
-  },
+
+    this.saveInput = this.saveInput.bind(this);
+  }
 
   saveInput(input) {
     this.input = input;
-  },
+  }
 
   render() {
     const {
@@ -134,4 +136,4 @@ export default React.createClass({
                    store={this.store} />
     );
   }
-});
+}
