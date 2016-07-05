@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { inputFocused, inputBlurred, inputChanged, updateFocusedSuggestion,
-         revealSuggestions, closeSuggestions } from './reducerAndActions';
+import { actionCreators } from './reducerAndActions';
 import Autowhatever from 'react-autowhatever';
 
 function mapStateToProps(state) {
@@ -16,26 +16,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    inputFocused: shouldRenderSuggestions => {
-      dispatch(inputFocused(shouldRenderSuggestions));
-    },
-    inputBlurred: () => {
-      dispatch(inputBlurred());
-    },
-    inputChanged: (shouldRenderSuggestions, lastAction) => {
-      dispatch(inputChanged(shouldRenderSuggestions, lastAction));
-    },
-    updateFocusedSuggestion: (sectionIndex, suggestionIndex, value) => {
-      dispatch(updateFocusedSuggestion(sectionIndex, suggestionIndex, value));
-    },
-    revealSuggestions: () => {
-      dispatch(revealSuggestions());
-    },
-    closeSuggestions: lastAction => {
-      dispatch(closeSuggestions(lastAction));
-    }
-  };
+  return bindActionCreators(actionCreators, dispatch);
 }
 
 class Autosuggest extends Component {
