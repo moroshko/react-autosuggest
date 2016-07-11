@@ -208,24 +208,6 @@ describe('Plain list Autosuggest', () => {
       mouseLeaveSuggestion(2);
       expectFocusedSuggestion(null);
     });
-
-    it('should be called once with the right parameters when Enter is pressed', () => {
-      onChange.reset();
-      clickEnter();
-      expect(onSuggestionSelected).to.have.been.calledOnce;
-      expect(onSuggestionSelected).to.have.been.calledWithExactly(eventInstance, {
-        suggestion: { name: 'Perl', year: 1987 },
-        suggestionValue: 'Perl',
-        sectionIndex: null,
-        method: 'enter'
-      });
-
-      expect(onChange).to.have.been.calledOnce;
-      expect(onChange).to.be.calledWith(eventInstance, {
-        newValue: 'Perl',
-        method: 'enter'
-      });
-    });
   });
 
   describe('when typing and matches do not exist', () => {
@@ -740,6 +722,8 @@ describe('Plain list Autosuggest', () => {
     });
 
     beforeEach(() => {
+      onSuggestionSelected.reset();
+      focusAndSetInputValue('p');
       onChange.reset();
     });
 
@@ -749,6 +733,23 @@ describe('Plain list Autosuggest', () => {
       expect(onChange).to.be.calledWith(eventInstance, {
         newValue: 'c',
         method: 'type'
+      });
+    });
+
+    it('should be called once with the right parameters when Enter is pressed', () => {
+      clickEnter();
+      expect(onSuggestionSelected).to.have.been.calledOnce;
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(eventInstance, {
+        suggestion: { name: 'Perl', year: 1987 },
+        suggestionValue: 'Perl',
+        sectionIndex: null,
+        method: 'enter'
+      });
+
+      expect(onChange).to.have.been.calledOnce;
+      expect(onChange).to.be.calledWith(eventInstance, {
+        newValue: 'Perl',
+        method: 'enter'
       });
     });
   });
