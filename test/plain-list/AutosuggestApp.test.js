@@ -716,6 +716,13 @@ describe('Plain list Autosuggest', () => {
       clickSuggestion(0);
       expect(onChange).not.to.have.been.called;
     });
+
+    it('should not call onChange for Enter event since value did not change', () => {
+      clickDown();
+      onChange.reset();
+      clickEnter();
+      expect(onChange).not.to.have.been.called;
+    });
   });
 
   describe('inputProps.onChange with selectFirstSuggestion', () => {
@@ -807,19 +814,6 @@ describe('Plain list Autosuggest', () => {
         suggestionValue: 'Java',
         sectionIndex: null,
         method: 'enter'
-      });
-    });
-
-    it('should not call onChange when Enter is pressed and suggestion is focused with down since value did not change', () => {
-      onChange.reset();
-      clickDown();
-      clickEnter();
-
-      // onChange should not have been called because the value didn't change
-      expect(onChange).to.have.been.calledExactlyOnce;
-      expect(onChange).to.be.calledWithExactly(eventInstance, {
-        newValue: 'Java',
-        method: 'down'
       });
     });
 
