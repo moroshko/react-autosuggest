@@ -203,6 +203,13 @@ describe('Plain list Autosuggest', () => {
       expectFocusedSuggestion('Python');
     });
 
+    it('should hide suggestions when pressing Enter after a mouse focuses a suggestion', () => {
+      mouseEnterSuggestion(2);
+      expectFocusedSuggestion('Python');
+      clickEnter();
+      expectSuggestions([]);
+    });
+
     it('should not have focused suggestions when mouse leaves a suggestion', () => {
       mouseEnterSuggestion(2);
       mouseLeaveSuggestion(2);
