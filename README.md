@@ -307,6 +307,7 @@ where:
   * `'down'` - user pressed Down
   * `'up'` - user pressed Up
   * `'escape'` - user pressed Escape
+  * `'enter'` - user pressed Enter
   * `'click'` - user clicked (or tapped) on suggestion
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
 
