@@ -120,8 +120,7 @@ class Example extends React.Component {
                    onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                    getSuggestionValue={getSuggestionValue}
                    renderSuggestion={renderSuggestion}
-                   inputProps={inputProps}
-                    selectFirstSuggestion={false} />
+                   inputProps={inputProps} />
     );
   }
 }
