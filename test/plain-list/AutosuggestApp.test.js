@@ -146,7 +146,7 @@ describe('Plain list Autosuggest', () => {
       focusAndSetInputValue('p');
     });
 
-    it('should focus on any suggestion', () => {
+    it('should focus first suggestion', () => {
       expectFocusedSuggestion('Perl');
     });
 
