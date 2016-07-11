@@ -296,7 +296,6 @@ describe('Plain list Autosuggest', () => {
   });
 
   describe('when pressing Down', () => {
-
     beforeEach(() => {
       focusAndSetInputValue('p');
     });
