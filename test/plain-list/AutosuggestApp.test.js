@@ -181,7 +181,7 @@ describe('Plain list Autosuggest', () => {
       expectSuggestions(['Perl', 'PHP', 'Python']);
     });
 
-    it('should focus suggestion when input is focused again', () => {
+    it('should focus first suggestion when input is focused again', () => {
       blurInput();
       focusInput();
       expectFocusedSuggestion('Perl');
