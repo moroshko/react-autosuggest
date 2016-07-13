@@ -139,6 +139,7 @@ class Example extends React.Component {
 * [`getSectionSuggestions`](#getSectionSuggestionsProp)
 * [`onSuggestionSelected`](#onSuggestionSelectedProp)
 * [`focusInputOnSuggestionClick`](#focusInputOnSuggestionClickProp)
+* [`selectFirstSuggestion`](#selectFirstSuggestionProp)
 * [`theme`](#themeProp)
 * [`id`](#idProp)
 
@@ -306,6 +307,7 @@ where:
   * `'down'` - user pressed Down
   * `'up'` - user pressed Up
   * `'escape'` - user pressed Escape
+  * `'enter'` - user pressed Enter
   * `'click'` - user clicked (or tapped) on suggestion
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
 
@@ -411,6 +413,15 @@ You might want to do something like this:
 ```
 
 where `isMobile` is a boolean describing whether Autosuggest operates on a mobile device or not. You can use [kaimallea/isMobile](https://github.com/kaimallea/isMobile), for example, to determine that.
+
+<a name="selectFirstSuggestionProp"></a>
+#### selectFirstSuggestion (optional)
+
+Defaulting to false, `selectFirstSuggestion={true}` will highlight the first suggestion in the list.
+
+```xml
+<Autosuggest selectFirstSuggestion={true} ... />
+```
 
 <a name="themeProp"></a>
 #### theme (optional)

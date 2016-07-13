@@ -51,6 +51,7 @@ class Autosuggest extends Component {
     renderSectionTitle: PropTypes.func.isRequired,
     getSectionSuggestions: PropTypes.func.isRequired,
     focusInputOnSuggestionClick: PropTypes.bool.isRequired,
+    selectFirstSuggestion: PropTypes.bool.isRequired,
     theme: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,
     inputRef: PropTypes.func.isRequired,
@@ -82,9 +83,11 @@ class Autosuggest extends Component {
               isCollapsed, revealSuggestions, lastAction } = nextProps;
       const { value } = inputProps;
 
-      if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter' &&
-          suggestions.length > 0 && shouldRenderSuggestions(value)) {
-        revealSuggestions();
+      if (suggestions.length > 0 && shouldRenderSuggestions(value)) {
+        this.maybeSelectFirstSuggestion();
+        if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter') {
+          revealSuggestions();
+        }
       }
     }
   }
@@ -156,6 +159,14 @@ class Autosuggest extends Component {
     }
   }
 
+  maybeSelectFirstSuggestion() {
+    const { selectFirstSuggestion, multiSection, updateFocusedSuggestion } = this.props;
+
+    if (selectFirstSuggestion) {
+      updateFocusedSuggestion(multiSection ? 0 : null, 0);
+    }
+  }
+
   willRenderSuggestions() {
     const { suggestions, inputProps, shouldRenderSuggestions } = this.props;
     const { value } = inputProps;
@@ -179,7 +190,8 @@ class Autosuggest extends Component {
       getSectionSuggestions, focusInputOnSuggestionClick, theme, isFocused,
       isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
       valueBeforeUpDown, inputFocused, inputBlurred, inputChanged,
-      updateFocusedSuggestion, revealSuggestions, closeSuggestions
+      updateFocusedSuggestion, revealSuggestions, closeSuggestions,
+      getSuggestionValue
     } = this.props;
     const { value, onBlur, onFocus, onKeyDown } = inputProps;
     const isOpen = isFocused && !isCollapsed && this.willRenderSuggestions();
@@ -190,6 +202,10 @@ class Autosuggest extends Component {
         if (!this.justClickedOnSuggestion) {
           inputFocused(shouldRenderSuggestions(value));
           onFocus && onFocus(event);
+
+          if (suggestions.length > 0) {
+            this.maybeSelectFirstSuggestion();
+          }
         }
       },
       onBlur: event => {
@@ -222,9 +238,17 @@ class Autosuggest extends Component {
               }
             } else if (suggestions.length > 0) {
               const { newFocusedSectionIndex, newFocusedItemIndex } = data;
-              const newValue = newFocusedItemIndex === null ?
-                valueBeforeUpDown :
-                this.getSuggestionValueByIndex(newFocusedSectionIndex, newFocusedItemIndex);
+
+              let newValue;
+
+              if (newFocusedItemIndex === null) {
+                // valueBeforeUpDown can be null if, for example, user
+                //  hovers on the first suggestion and then pressed Up.
+                //  if that happens, use the original input value
+                newValue = (valueBeforeUpDown === null ? value : valueBeforeUpDown);
+              } else {
+                newValue = this.getSuggestionValueByIndex(newFocusedSectionIndex, newFocusedItemIndex);
+              }
 
               updateFocusedSuggestion(newFocusedSectionIndex, newFocusedItemIndex, value);
               this.maybeCallOnChange(event, newValue, event.key === 'ArrowDown' ? 'down' : 'up');
@@ -238,13 +262,17 @@ class Autosuggest extends Component {
             closeSuggestions('enter');
 
             if (focusedSuggestion !== null) {
+              const newValue = getSuggestionValue(focusedSuggestion);
+
               onSuggestionSelected(event, {
                 suggestion: focusedSuggestion,
-                suggestionValue: value,
+                suggestionValue: newValue,
                 sectionIndex: focusedSectionIndex,
                 method: 'enter'
               });
-              this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'enter' });
+
+              this.maybeCallOnChange(event, newValue, 'enter');
+              this.maybeCallOnSuggestionsUpdateRequested({ value: newValue, reason: 'enter' });
             }
             break;
           }

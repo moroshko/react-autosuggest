@@ -54,6 +54,12 @@ export const onSuggestionsUpdateRequested = sinon.spy(({ value }) => {
   });
 });
 
+let selectFirstSuggestion = false;
+
+export function setSelectFirstSuggestion(value) {
+  selectFirstSuggestion = value;
+}
+
 export default class AutosuggestApp extends Component {
   constructor() {
     super();
@@ -84,7 +90,8 @@ export default class AutosuggestApp extends Component {
                    renderSuggestion={renderSuggestion}
                    inputProps={inputProps}
                    shouldRenderSuggestions={shouldRenderSuggestions}
-                   onSuggestionSelected={onSuggestionSelected} />
+                   onSuggestionSelected={onSuggestionSelected}
+                   selectFirstSuggestion={selectFirstSuggestion} />
     );
   }
 }
