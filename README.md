@@ -30,10 +30,11 @@ Check out the <a href="http://react-autosuggest.js.org" target="_blank">Homepage
 ## Features
 
 * <a href="https://www.w3.org/TR/wai-aria-practices/#autocomplete" target="_blank">WAI-ARIA compliant</a>, with support for ARIA attributes and keyboard interactions
-* Plugs in nicely to Flux and <a href="http://redux.js.org" target="_blank">redux</a> applications
+* Plugs in nicely to Flux and <a href="http://redux.js.org" target="_blank">Redux</a> applications
 * Full control over [suggestions rendering](#renderSuggestionProp)
 * Suggestions can be presented as <a href="http://codepen.io/moroshko/pen/LGNJMy" target="_blank">plain list</a> or <a href="http://codepen.io/moroshko/pen/qbRNjV" target="_blank">multiple sections</a>
 * Suggestions can be retrieved <a href="http://codepen.io/moroshko/pen/EPZpev" target="_blank">asynchronously</a>
+* [Focus the first suggestion](#focusFirstSuggestionProp) in the list if you wish
 * Supports styling using <a href="https://github.com/css-modules/css-modules" target="_blank">CSS Modules</a>, <a href="https://github.com/FormidableLabs/radium" target="_blank">Radium</a>, <a href="https://facebook.github.io/react/tips/inline-styles.html" target="_blank">Inline styles</a>, global CSS, [and more](#themeProp)
 * You decide [when to show suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Pass through props to the input field](#inputPropsProp) (e.g. placeholder, type, onChange, onBlur)
