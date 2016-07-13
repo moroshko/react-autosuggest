@@ -35,7 +35,7 @@ import AutosuggestApp, {
   onSuggestionsUpdateRequested
 } from './AutosuggestApp';
 
-describe('Plain list Autosuggest', () => {
+describe('Default Autosuggest', () => {
   beforeEach(() => {
     const app = TestUtils.renderIntoDocument(React.createElement(AutosuggestApp));
     const container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
@@ -140,9 +140,47 @@ describe('Plain list Autosuggest', () => {
       expectSuggestions([]);
     });
 
+    it('should not focus suggestions', () => {
+      expectFocusedSuggestion(null);
+    });
+
     it('should clear the input when Escape is pressed', () => {
       clickEscape();
       expectInputValue('');
+    });
+  });
+
+  describe('when typing and matches exist, then mousing over first selection', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('p');
+      mouseEnterSuggestion(0);
+    });
+
+    describe('when pressing up', () => {
+      beforeEach(() => {
+        clickUp();
+      });
+
+      it('should show the original input value', () => {
+        expectInputValue('p');
+      });
+    });
+  });
+
+  describe('when typing and matches exist, then mousing over last selection', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('p');
+      mouseEnterSuggestion(2);
+    });
+
+    describe('when pressing down', () => {
+      beforeEach(() => {
+        clickDown();
+      });
+
+      it('should show the original input value', () => {
+        expectInputValue('p');
+      });
     });
   });
 
@@ -282,6 +320,13 @@ describe('Plain list Autosuggest', () => {
       expect(getSuggestionValue).to.have.been.calledOnce;
       expect(getSuggestionValue).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 });
     });
+
+    it('should not be called when input is focused', () => {
+      clickDown();
+      getSuggestionValue.reset();
+      clickUp();
+      expect(getSuggestionValue).not.to.have.been.called;
+    });
   });
 
   describe('renderSuggestion', () => {
@@ -402,6 +447,13 @@ describe('Plain list Autosuggest', () => {
       focusAndSetInputValue('C++');
       onChange.reset();
       clickSuggestion(0);
+      expect(onChange).not.to.have.been.called;
+    });
+
+    it('should not be called when Enter is pressed and input value has not changed', () => {
+      clickDown();
+      onChange.reset();
+      clickEnter();
       expect(onChange).not.to.have.been.called;
     });
   });
