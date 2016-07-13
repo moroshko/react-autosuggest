@@ -243,8 +243,8 @@ class Autosuggest extends Component {
 
               if (newFocusedItemIndex === null) {
                 // valueBeforeUpDown can be null if, for example, user
-                //  hovers on the first suggestion and then pressed Up.
-                //  if that happens, use the original input value
+                // hovers on the first suggestion and then pressed Up.
+                // If that happens, use the original input value.
                 newValue = (valueBeforeUpDown === null ? value : valueBeforeUpDown);
               } else {
                 newValue = this.getSuggestionValueByIndex(newFocusedSectionIndex, newFocusedItemIndex);
