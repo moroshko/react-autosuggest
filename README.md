@@ -417,11 +417,7 @@ where `isMobile` is a boolean describing whether Autosuggest operates on a mobil
 <a name="selectFirstSuggestionProp"></a>
 #### selectFirstSuggestion (optional)
 
-Defaulting to false, `selectFirstSuggestion={true}` will highlight the first suggestion in the list.
-
-```xml
-<Autosuggest selectFirstSuggestion={true} ... />
-```
+When `selectFirstSuggestion={true}`, Autosuggest will automatically highlight the first suggestion. Defaults to `false`.
 
 <a name="themeProp"></a>
 #### theme (optional)
