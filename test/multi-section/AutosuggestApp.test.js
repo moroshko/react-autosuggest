@@ -9,6 +9,7 @@ import {
   expectContainerAttribute,
   expectInputAttribute,
   expectSuggestions,
+  expectFocusedSuggestion,
   expectSuggestionsContainerAttribute,
   getTitle,
   clickSuggestion,
@@ -25,7 +26,8 @@ import AutosuggestApp, {
   onBlur,
   onSuggestionSelected,
   renderSectionTitle,
-  getSectionSuggestions
+  getSectionSuggestions,
+  setFocusFirstSuggestion
 } from './AutosuggestApp';
 
 describe('Autosuggest with multiSection={true}', () => {
@@ -191,6 +193,26 @@ describe('Autosuggest with multiSection={true}', () => {
     it('should set suggestions container class', () => {
       focusAndSetInputValue('e');
       expectSuggestionsContainerAttribute('class', 'react-autosuggest__suggestions-container');
+    });
+  });
+
+  describe('and focusFirstSuggestion={true}', () => {
+    before(() => {
+      setFocusFirstSuggestion(true);
+    });
+
+    after(() => {
+      setFocusFirstSuggestion(false);
+    });
+
+    describe('when typing and matches exist', () => {
+      beforeEach(() => {
+        focusAndSetInputValue('p');
+      });
+
+      it('should focus on the first suggestion', () => {
+        expectFocusedSuggestion('Perl');
+      });
     });
   });
 });

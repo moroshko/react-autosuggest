@@ -53,6 +53,12 @@ export const getSectionSuggestions = sinon.spy(section => {
   return section.languages;
 });
 
+let focusFirstSuggestion = false;
+
+export function setFocusFirstSuggestion(value) {
+  focusFirstSuggestion = value;
+}
+
 export default class AutosuggestApp extends Component {
   constructor() {
     super();
@@ -84,7 +90,8 @@ export default class AutosuggestApp extends Component {
                    onSuggestionSelected={onSuggestionSelected}
                    renderSectionTitle={renderSectionTitle}
                    getSectionSuggestions={getSectionSuggestions}
-                   focusInputOnSuggestionClick={false} />
+                   focusInputOnSuggestionClick={false}
+                   focusFirstSuggestion={focusFirstSuggestion} />
     );
   }
 }
