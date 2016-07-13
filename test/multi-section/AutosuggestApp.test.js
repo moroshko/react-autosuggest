@@ -28,7 +28,7 @@ import AutosuggestApp, {
   getSectionSuggestions
 } from './AutosuggestApp';
 
-describe('Multi section Autosuggest', () => {
+describe('Autosuggest with multiSection={true}', () => {
   beforeEach(() => {
     const app = TestUtils.renderIntoDocument(React.createElement(AutosuggestApp));
     const container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
