@@ -18,7 +18,7 @@ import AutosuggestApp, {
   onSuggestionSelected
 } from './AutosuggestApp';
 
-describe('Autosuggest with selectFirstSuggestion={true}', () => {
+describe('Autosuggest with focusFirstSuggestion={true}', () => {
   beforeEach(() => {
     const app = TestUtils.renderIntoDocument(React.createElement(AutosuggestApp));
     const container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');

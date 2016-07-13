@@ -139,7 +139,7 @@ class Example extends React.Component {
 * [`getSectionSuggestions`](#getSectionSuggestionsProp)
 * [`onSuggestionSelected`](#onSuggestionSelectedProp)
 * [`focusInputOnSuggestionClick`](#focusInputOnSuggestionClickProp)
-* [`selectFirstSuggestion`](#selectFirstSuggestionProp)
+* [`focusFirstSuggestion`](#focusFirstSuggestionProp)
 * [`theme`](#themeProp)
 * [`id`](#idProp)
 
@@ -414,10 +414,10 @@ You might want to do something like this:
 
 where `isMobile` is a boolean describing whether Autosuggest operates on a mobile device or not. You can use [kaimallea/isMobile](https://github.com/kaimallea/isMobile), for example, to determine that.
 
-<a name="selectFirstSuggestionProp"></a>
-#### selectFirstSuggestion (optional)
+<a name="focusFirstSuggestionProp"></a>
+#### focusFirstSuggestion (optional)
 
-When `selectFirstSuggestion={true}`, Autosuggest will automatically highlight the first suggestion. Defaults to `false`.
+When `focusFirstSuggestion={true}`, Autosuggest will automatically highlight the first suggestion. Defaults to `false`.
 
 <a name="themeProp"></a>
 #### theme (optional)

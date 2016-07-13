@@ -51,7 +51,7 @@ class Autosuggest extends Component {
     renderSectionTitle: PropTypes.func.isRequired,
     getSectionSuggestions: PropTypes.func.isRequired,
     focusInputOnSuggestionClick: PropTypes.bool.isRequired,
-    selectFirstSuggestion: PropTypes.bool.isRequired,
+    focusFirstSuggestion: PropTypes.bool.isRequired,
     theme: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,
     inputRef: PropTypes.func.isRequired,
@@ -84,7 +84,8 @@ class Autosuggest extends Component {
       const { value } = inputProps;
 
       if (suggestions.length > 0 && shouldRenderSuggestions(value)) {
-        this.maybeSelectFirstSuggestion();
+        this.maybeFocusFirstSuggestion();
+
         if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter') {
           revealSuggestions();
         }
@@ -159,10 +160,10 @@ class Autosuggest extends Component {
     }
   }
 
-  maybeSelectFirstSuggestion() {
-    const { selectFirstSuggestion, multiSection, updateFocusedSuggestion } = this.props;
+  maybeFocusFirstSuggestion() {
+    const { focusFirstSuggestion, multiSection, updateFocusedSuggestion } = this.props;
 
-    if (selectFirstSuggestion) {
+    if (focusFirstSuggestion) {
       updateFocusedSuggestion(multiSection ? 0 : null, 0);
     }
   }
@@ -204,7 +205,7 @@ class Autosuggest extends Component {
           onFocus && onFocus(event);
 
           if (suggestions.length > 0) {
-            this.maybeSelectFirstSuggestion();
+            this.maybeFocusFirstSuggestion();
           }
         }
       },
