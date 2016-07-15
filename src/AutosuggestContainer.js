@@ -122,22 +122,23 @@ export default class AutosuggestContainer extends Component {
     } = this.props;
 
     return (
-      <Autosuggest multiSection={multiSection}
-                   shouldRenderSuggestions={shouldRenderSuggestions}
-                   suggestions={suggestions}
-                   onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
-                   getSuggestionValue={getSuggestionValue}
-                   renderSuggestion={renderSuggestion}
-                   renderSectionTitle={renderSectionTitle}
-                   getSectionSuggestions={getSectionSuggestions}
-                   inputProps={inputProps}
-                   onSuggestionSelected={onSuggestionSelected}
-                   focusInputOnSuggestionClick={focusInputOnSuggestionClick}
-                   focusFirstSuggestion={focusFirstSuggestion}
-                   theme={mapToAutowhateverTheme(theme)}
-                   id={id}
-                   inputRef={this.saveInput}
-                   store={this.store} />
+      <Autosuggest
+        multiSection={multiSection}
+        shouldRenderSuggestions={shouldRenderSuggestions}
+        suggestions={suggestions}
+        onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        renderSectionTitle={renderSectionTitle}
+        getSectionSuggestions={getSectionSuggestions}
+        inputProps={inputProps}
+        onSuggestionSelected={onSuggestionSelected}
+        focusInputOnSuggestionClick={focusInputOnSuggestionClick}
+        focusFirstSuggestion={focusFirstSuggestion}
+        theme={mapToAutowhateverTheme(theme)}
+        id={id}
+        inputRef={this.saveInput}
+        store={this.store} />
     );
   }
 }

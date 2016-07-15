@@ -73,19 +73,22 @@ export default class Basic extends Component {
           <div className={styles.description}>
             Let’s start simple. Here’s a plain list of suggestions.
           </div>
-          <Link className={styles.codepenLink}
-                href="http://codepen.io/moroshko/pen/LGNJMy" underline={false}>
+          <Link
+            className={styles.codepenLink}
+            href="http://codepen.io/moroshko/pen/LGNJMy"
+            underline={false}>
             Codepen
           </Link>
         </div>
         <div className={styles.autosuggest}>
-          <Autosuggest suggestions={suggestions}
-                       onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                       getSuggestionValue={getSuggestionValue}
-                       renderSuggestion={renderSuggestion}
-                       inputProps={inputProps}
-                       focusInputOnSuggestionClick={focusInputOnSuggestionClick}
-                       id="basic-example" />
+          <Autosuggest
+            suggestions={suggestions}
+            onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            inputProps={inputProps}
+            focusInputOnSuggestionClick={focusInputOnSuggestionClick}
+            id="basic-example" />
         </div>
       </div>
     );

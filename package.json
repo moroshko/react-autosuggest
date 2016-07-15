@@ -46,7 +46,7 @@
     "css-loader": "^0.23.1",
     "es6-promise": "^3.1.2",
     "eslint": "2.8.0",
-    "eslint-plugin-react": "^5.0.1",
+    "eslint-plugin-react": "^6.0.0-alpha.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "happypack": "^2.0.4",
