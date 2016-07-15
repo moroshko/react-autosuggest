@@ -2,17 +2,14 @@
   "env": {
     "es6": true,
     "node": true,
-    "browser": true
+    "browser": true,
+    "mocha": true
   },
   "parser": "babel-eslint",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    }
-  },
   "plugins": [
     "react"
   ],
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "rules": {
     "array-callback-return": 2,
     "brace-style": [2, "1tbs"],
@@ -43,7 +40,7 @@
     "template-curly-spacing": [2, "never"],
 
     "react/jsx-boolean-value": [2, "always"],
-    "react/jsx-uses-react": 2,
-    "react/jsx-uses-vars": 2
+    "react/jsx-space-before-closing": [2, "always"],
+    "react/sort-comp": 2
   }
 }

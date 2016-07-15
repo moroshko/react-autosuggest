@@ -1,11 +1,14 @@
 var path = require('path');
 var webpack = require('webpack');
+var autoprefixer = require('autoprefixer');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HappyPack = require('happypack');
+var host = process.env.NODE_HOST || 'localhost';
+var port = process.env.NODE_PORT || 3000;
 
 module.exports = {
   entry: [
-    'webpack-dev-server/client?http://localhost:3000',
+    `webpack-dev-server/client?http://${host}:${port}`,
     './demo/src/index'
   ],
 
@@ -27,7 +30,7 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]__[local]___[hash:base64:5]!autoprefixer!less'),
+        loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]__[local]___[hash:base64:5]!postcss!less'),
         exclude: /node_modules/
       },
       {
@@ -39,6 +42,10 @@ module.exports = {
         loader: 'url?limit=8192!svgo' // 8kb
       }
     ]
+  },
+
+  postcss: function() {
+    return [autoprefixer];
   },
 
   resolve: {

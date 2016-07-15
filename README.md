@@ -30,10 +30,11 @@ Check out the <a href="http://react-autosuggest.js.org" target="_blank">Homepage
 ## Features
 
 * <a href="https://www.w3.org/TR/wai-aria-practices/#autocomplete" target="_blank">WAI-ARIA compliant</a>, with support for ARIA attributes and keyboard interactions
-* Plugs in nicely to Flux and <a href="http://redux.js.org" target="_blank">redux</a> applications
+* Plugs in nicely to Flux and <a href="http://redux.js.org" target="_blank">Redux</a> applications
 * Full control over [suggestions rendering](#renderSuggestionProp)
 * Suggestions can be presented as <a href="http://codepen.io/moroshko/pen/LGNJMy" target="_blank">plain list</a> or <a href="http://codepen.io/moroshko/pen/qbRNjV" target="_blank">multiple sections</a>
 * Suggestions can be retrieved <a href="http://codepen.io/moroshko/pen/EPZpev" target="_blank">asynchronously</a>
+* [Focus the first suggestion](#focusFirstSuggestionProp) in the list if you wish
 * Supports styling using <a href="https://github.com/css-modules/css-modules" target="_blank">CSS Modules</a>, <a href="https://github.com/FormidableLabs/radium" target="_blank">Radium</a>, <a href="https://facebook.github.io/react/tips/inline-styles.html" target="_blank">Inline styles</a>, global CSS, [and more](#themeProp)
 * You decide [when to show suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Pass through props to the input field](#inputPropsProp) (e.g. placeholder, type, onChange, onBlur)
@@ -66,7 +67,7 @@ const languages = [
 function getSuggestions(value) {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
-  
+
   return inputLength === 0 ? [] : languages.filter(lang =>
     lang.name.toLowerCase().slice(0, inputLength) === inputValue
   );
@@ -139,6 +140,7 @@ class Example extends React.Component {
 * [`getSectionSuggestions`](#getSectionSuggestionsProp)
 * [`onSuggestionSelected`](#onSuggestionSelectedProp)
 * [`focusInputOnSuggestionClick`](#focusInputOnSuggestionClickProp)
+* [`focusFirstSuggestion`](#focusFirstSuggestionProp)
 * [`theme`](#themeProp)
 * [`id`](#idProp)
 
@@ -306,6 +308,7 @@ where:
   * `'down'` - user pressed Down
   * `'up'` - user pressed Up
   * `'escape'` - user pressed Escape
+  * `'enter'` - user pressed Enter
   * `'click'` - user clicked (or tapped) on suggestion
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
 
@@ -383,13 +386,14 @@ function getSectionSuggestions(section) {
 This function is called when suggestion is selected. It has the following signature:
 
 ```js
-function onSuggestionSelected(event, { suggestion, suggestionValue, method })
+function onSuggestionSelected(event, { suggestion, suggestionValue, sectionIndex, method })
 ```
 
 where:
 
 * `suggestion` - the selected suggestion
 * `suggestionValue` - the value of the selected suggestion (equivalent to `getSuggestionValue(suggestion)`)
+* `sectionIndex` - when rendering [multiple sections](#multiSectionProp), this will be the section index (in [`suggestions`](#suggestionsProp)) of the selected suggestion. Otherwise, it will be `null`.
 * `method` - string describing how user selected the suggestion. The possible values are:
   * `'click'` - user clicked (or tapped) on the suggestion
   * `'enter'` - user selected the suggestion using Enter
@@ -410,6 +414,11 @@ You might want to do something like this:
 ```
 
 where `isMobile` is a boolean describing whether Autosuggest operates on a mobile device or not. You can use [kaimallea/isMobile](https://github.com/kaimallea/isMobile), for example, to determine that.
+
+<a name="focusFirstSuggestionProp"></a>
+#### focusFirstSuggestion (optional)
+
+When `focusFirstSuggestion={true}`, Autosuggest will automatically highlight the first suggestion. Defaults to `false`.
 
 <a name="themeProp"></a>
 #### theme (optional)

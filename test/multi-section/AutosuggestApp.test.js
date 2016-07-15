@@ -1,6 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
+import sinon from 'sinon';
 import {
   init,
   eventInstance,
@@ -8,12 +9,14 @@ import {
   expectContainerAttribute,
   expectInputAttribute,
   expectSuggestions,
+  expectFocusedSuggestion,
   expectSuggestionsContainerAttribute,
   getTitle,
-//  getSuggestionsBySectionIndex,
   clickSuggestion,
   focusInput,
   clickEscape,
+  clickEnter,
+  clickDown,
   setInputValue,
   focusAndSetInputValue,
   isInputFocused
@@ -21,11 +24,13 @@ import {
 import AutosuggestApp, {
   onSuggestionsUpdateRequested,
   onBlur,
+  onSuggestionSelected,
   renderSectionTitle,
-  getSectionSuggestions
+  getSectionSuggestions,
+  setFocusFirstSuggestion
 } from './AutosuggestApp';
 
-describe('Multi section Autosuggest', () => {
+describe('Autosuggest with multiSection={true}', () => {
   beforeEach(() => {
     const app = TestUtils.renderIntoDocument(React.createElement(AutosuggestApp));
     const container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
@@ -44,7 +49,39 @@ describe('Multi section Autosuggest', () => {
     });
   });
 
-  describe('when focusInputOnSuggestionClick is false and suggestion is clicked', () => {
+  describe('onSuggestionSelected', () => {
+    beforeEach(() => {
+      onSuggestionSelected.reset();
+      focusInput();
+    });
+
+    it('should be called with the right sectionIndex when suggestion is clicked', () => {
+      clickSuggestion(4);
+      expect(onSuggestionSelected).to.have.been.calledWith(eventInstance, sinon.match({
+        sectionIndex: 1
+      }));
+    });
+
+    it('should be called with the right sectionIndex when Enter is pressed and suggestion is focused', () => {
+      clickDown(6);
+      clickEnter();
+      expect(onSuggestionSelected).to.have.been.calledWith(eventInstance, sinon.match({
+        sectionIndex: 2
+      }));
+    });
+  });
+
+  describe('onSuggestionsUpdateRequested', () => {
+    it('should be called once with the right parameters when Escape is pressed and suggestions are hidden and shouldRenderSuggestions returns `true` for empty value', () => {
+      focusAndSetInputValue('jr');
+      onSuggestionsUpdateRequested.reset();
+      clickEscape();
+      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
+      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: '', reason: 'escape' });
+    });
+  });
+
+  describe('when focusInputOnSuggestionClick is `false` and suggestion is clicked', () => {
     beforeEach(() => {
       onBlur.reset();
       focusAndSetInputValue('p');
@@ -135,15 +172,6 @@ describe('Multi section Autosuggest', () => {
     it('should be called once per section', () => {
       expect(getSectionSuggestions).to.have.been.calledOnce;
     });
-
-/*  See: https://github.com/facebook/react/issues/4692#issuecomment-157803622
-
-    it('return value should be used to render section suggestions', () => {
-      const firstSectionSuggestions = getSuggestionsBySectionIndex(0);
-
-      expect(firstSectionSuggestions.length).to.equal(2);
-    });
-*/
   });
 
   describe('default styling', () => {
@@ -165,6 +193,26 @@ describe('Multi section Autosuggest', () => {
     it('should set suggestions container class', () => {
       focusAndSetInputValue('e');
       expectSuggestionsContainerAttribute('class', 'react-autosuggest__suggestions-container');
+    });
+  });
+
+  describe('and focusFirstSuggestion={true}', () => {
+    before(() => {
+      setFocusFirstSuggestion(true);
+    });
+
+    after(() => {
+      setFocusFirstSuggestion(false);
+    });
+
+    describe('when typing and matches exist', () => {
+      beforeEach(() => {
+        focusAndSetInputValue('p');
+      });
+
+      it('should focus on the first suggestion', () => {
+        expectFocusedSuggestion('Perl');
+      });
     });
   });
 });
