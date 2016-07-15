@@ -19,6 +19,10 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(actionCreators, dispatch);
 }
 
+function extractTouchCoordinates({ changedTouches }) {
+  return { x: changedTouches[0].pageX, y: changedTouches[0].pageY };
+}
+
 class Autosuggest extends Component {
   static propTypes = {
     suggestions: PropTypes.array.isRequired,
@@ -56,6 +60,19 @@ class Autosuggest extends Component {
     super();
 
     this.saveInput = this.saveInput.bind(this);
+    this.onDocumentTouchStart = this.onDocumentTouchStart.bind(this);
+    this.onDocumentTouchEnd = this.onDocumentTouchEnd.bind(this);
+    this.onDocumentMouseUp = this.onDocumentMouseUp.bind(this);
+
+    this.justTouchedInput = false;
+    this.touchStart = null;
+    this.justClickedOnSuggestion = false;
+  }
+
+  componentDidMount() {
+    global.window.addEventListener('touchstart', this.onDocumentTouchStart, false);
+    global.window.addEventListener('touchend', this.onDocumentTouchEnd, false);
+    global.window.addEventListener('mouseup', this.onDocumentMouseUp, false);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -72,6 +89,37 @@ class Autosuggest extends Component {
         }
       }
     }
+  }
+
+  componentWillUnmount() {
+    global.window.removeEventListener('touchstart', this.onDocumentTouchStart, false);
+    global.window.removeEventListener('touchend', this.onDocumentTouchEnd, false);
+    global.window.removeEventListener('mouseup', this.onDocumentMouseUp, false);
+  }
+
+  onDocumentTouchStart(event) {
+    this.touchStart = this.touchStart || extractTouchCoordinates(event);
+  }
+
+  onDocumentTouchEnd(event) {
+    const { x, y } = extractTouchCoordinates(event);
+
+    if (this.props.isFocused && !this.justTouchedInput && !this.justClickedOnSuggestion &&
+      this.touchStart) {
+      const dx = Math.abs(x - this.touchStart.x);
+      const dy = Math.abs(y - this.touchStart.y);
+
+      if (dx < 20 && dy < 20) {
+        this.input.blur();
+      }
+    }
+    this.justTouchedInput = false;
+    this.touchStart = null;
+    setTimeout(() => this.justClickedOnSuggestion = false);
+  }
+
+  onDocumentMouseUp() {
+    setTimeout(() => this.justClickedOnSuggestion = false);
   }
 
   getSuggestion(sectionIndex, suggestionIndex) {
@@ -180,6 +228,7 @@ class Autosuggest extends Component {
     const items = (isOpen ? suggestions : []);
     const autowhateverInputProps = {
       ...inputProps,
+      onTouchStart: () => this.justTouchedInput = true,
       onFocus: event => {
         if (!this.justClickedOnSuggestion) {
           inputFocused(shouldRenderSuggestions(value));
@@ -316,10 +365,6 @@ class Autosuggest extends Component {
       }
 
       this.maybeCallOnSuggestionsUpdateRequested({ value: clickedSuggestionValue, reason: 'click' });
-
-      setTimeout(() => {
-        this.justClickedOnSuggestion = false;
-      });
     };
     const itemProps = ({ sectionIndex, itemIndex }) => {
       return {
