@@ -12,8 +12,6 @@ var _react2 = _interopRequireDefault(_react);
 
 var _redux = require('redux');
 
-var _reactRedux = require('react-redux');
-
 var _reducerAndActions = require('./reducerAndActions');
 
 var _reducerAndActions2 = _interopRequireDefault(_reducerAndActions);
@@ -116,28 +114,27 @@ var AutosuggestContainer = function (_Component) {
       var inputProps = _props.inputProps;
       var onSuggestionSelected = _props.onSuggestionSelected;
       var focusInputOnSuggestionClick = _props.focusInputOnSuggestionClick;
+      var focusFirstSuggestion = _props.focusFirstSuggestion;
       var theme = _props.theme;
       var id = _props.id;
 
 
-      return _react2.default.createElement(
-        _reactRedux.Provider,
-        { store: this.store },
-        _react2.default.createElement(_Autosuggest2.default, { multiSection: multiSection,
-          shouldRenderSuggestions: shouldRenderSuggestions,
-          suggestions: suggestions,
-          onSuggestionsUpdateRequested: onSuggestionsUpdateRequested,
-          getSuggestionValue: getSuggestionValue,
-          renderSuggestion: renderSuggestion,
-          renderSectionTitle: renderSectionTitle,
-          getSectionSuggestions: getSectionSuggestions,
-          inputProps: inputProps,
-          onSuggestionSelected: onSuggestionSelected,
-          focusInputOnSuggestionClick: focusInputOnSuggestionClick,
-          theme: mapToAutowhateverTheme(theme),
-          id: id,
-          inputRef: this.saveInput })
-      );
+      return _react2.default.createElement(_Autosuggest2.default, { multiSection: multiSection,
+        shouldRenderSuggestions: shouldRenderSuggestions,
+        suggestions: suggestions,
+        onSuggestionsUpdateRequested: onSuggestionsUpdateRequested,
+        getSuggestionValue: getSuggestionValue,
+        renderSuggestion: renderSuggestion,
+        renderSectionTitle: renderSectionTitle,
+        getSectionSuggestions: getSectionSuggestions,
+        inputProps: inputProps,
+        onSuggestionSelected: onSuggestionSelected,
+        focusInputOnSuggestionClick: focusInputOnSuggestionClick,
+        focusFirstSuggestion: focusFirstSuggestion,
+        theme: mapToAutowhateverTheme(theme),
+        id: id,
+        inputRef: this.saveInput,
+        store: this.store });
     }
   }]);
 
@@ -166,6 +163,7 @@ AutosuggestContainer.propTypes = {
   renderSectionTitle: _react.PropTypes.func,
   getSectionSuggestions: _react.PropTypes.func,
   focusInputOnSuggestionClick: _react.PropTypes.bool,
+  focusFirstSuggestion: _react.PropTypes.bool,
   theme: _react.PropTypes.object,
   id: _react.PropTypes.string
 };
@@ -184,6 +182,7 @@ AutosuggestContainer.defaultProps = {
   },
 
   focusInputOnSuggestionClick: true,
+  focusFirstSuggestion: false,
   theme: defaultTheme,
   id: '1'
 };
