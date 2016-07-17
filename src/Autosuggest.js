@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators } from './reducerAndActions';
 import Autowhatever from 'react-autowhatever';
@@ -13,10 +12,6 @@ function mapStateToProps(state) {
     valueBeforeUpDown: state.valueBeforeUpDown,
     lastAction: state.lastAction
   };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(actionCreators, dispatch);
 }
 
 class Autosuggest extends Component {
@@ -352,4 +347,4 @@ class Autosuggest extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Autosuggest);
+export default connect(mapStateToProps, actionCreators)(Autosuggest);
