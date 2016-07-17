@@ -12,12 +12,6 @@ function mapStateToProps({ header }) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    loadStargazers: () => dispatch(loadStargazers())
-  };
-}
-
 class Header extends Component {
   static propTypes = {
     stargazers: PropTypes.string.isRequired,
@@ -68,4 +62,4 @@ class Header extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, { loadStargazers })(Header);
