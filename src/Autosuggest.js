@@ -50,7 +50,7 @@ class Autosuggest extends Component {
   constructor() {
     super();
 
-    this.saveInput = this.saveInput.bind(this);
+    this.storeInputReference = this.storeInputReference.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -151,9 +151,9 @@ class Autosuggest extends Component {
     return suggestions.length > 0 && shouldRenderSuggestions(value);
   }
 
-  saveInput(autowhatever) {
+  storeInputReference(autowhatever) {
     if (autowhatever !== null) {
-      const input = autowhatever.refs.input;
+      const input = autowhatever.input;
 
       this.input = input;
       this.props.inputRef(input);
@@ -342,7 +342,7 @@ class Autosuggest extends Component {
         itemProps={itemProps}
         theme={theme}
         id={id}
-        ref={this.saveInput} />
+        ref={this.storeInputReference} />
     );
   }
 }

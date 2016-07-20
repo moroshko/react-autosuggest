@@ -105,10 +105,10 @@ export default class AutosuggestContainer extends Component {
 
     this.store = createStore(reducer, initialState);
 
-    this.saveInput = this.saveInput.bind(this);
+    this.storeInputReference = this.storeInputReference.bind(this);
   }
 
-  saveInput(input) {
+  storeInputReference(input) {
     this.input = input;
   }
 
@@ -137,7 +137,7 @@ export default class AutosuggestContainer extends Component {
         focusFirstSuggestion={focusFirstSuggestion}
         theme={mapToAutowhateverTheme(theme)}
         id={id}
-        inputRef={this.saveInput}
+        inputRef={this.storeInputReference}
         store={this.store} />
     );
   }

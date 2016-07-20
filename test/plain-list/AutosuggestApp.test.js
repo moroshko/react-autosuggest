@@ -9,6 +9,7 @@ import {
   expectInputValue,
   getSuggestionsContainer,
   getSuggestion,
+  expectInputReferenceToBeSet,
   expectSuggestions,
   expectFocusedSuggestion,
   mouseEnterSuggestion,
@@ -65,6 +66,10 @@ describe('Default Autosuggest', () => {
 
     it('should not show suggestions', () => {
       expectSuggestions([]);
+    });
+
+    it('should set the input reference', () => {
+      expectInputReferenceToBeSet();
     });
   });
 

@@ -100,6 +100,10 @@ export function getSuggestionsBySectionIndex(sectionIndex) {
 }
 */
 
+export function expectInputReferenceToBeSet() {
+  expect(data.app.input).to.equal(data.input);
+}
+
 export function expectSuggestions(expectedSuggestions) {
   const suggestions = getSuggestions().map(suggestion => suggestion.textContent);
 

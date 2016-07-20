@@ -60,10 +60,18 @@ export default class AutosuggestApp extends Component {
 
     app = this;
 
+    this.storeAutosuggestReference = this.storeAutosuggestReference.bind(this);
+
     this.state = {
       value: '',
       suggestions: getMatchingLanguages('')
     };
+  }
+
+  storeAutosuggestReference(autosuggest) {
+    if (autosuggest !== null) {
+      this.input = autosuggest.input;
+    }
   }
 
   render() {
@@ -85,7 +93,8 @@ export default class AutosuggestApp extends Component {
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
         shouldRenderSuggestions={shouldRenderSuggestions}
-        onSuggestionSelected={onSuggestionSelected} />
+        onSuggestionSelected={onSuggestionSelected}
+        ref={this.storeAutosuggestReference} />
     );
   }
 }
