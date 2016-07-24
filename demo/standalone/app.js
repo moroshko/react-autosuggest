@@ -120,11 +120,12 @@ class App extends React.Component { // eslint-disable-line no-undef
     };
 
     return (
-      <Autosuggest suggestions={suggestions} // eslint-disable-line react/jsx-no-undef
-                   onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                   getSuggestionValue={getSuggestionValue}
-                   renderSuggestion={renderSuggestion}
-                   inputProps={inputProps} />
+      <Autosuggest // eslint-disable-line react/jsx-no-undef
+        suggestions={suggestions}
+        onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        inputProps={inputProps} />
     );
   }
 }

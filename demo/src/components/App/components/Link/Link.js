@@ -9,7 +9,7 @@ export default function Link(props) {
     (underline ? styles.linkWithUnderline : styles.linkWithoutUnderline);
 
   return (
-    <a className={klass} href={href} target="_blank">
+    <a className={klass} href={href} target="_blank" rel="noopener noreferrer">
       {children}
     </a>
   );

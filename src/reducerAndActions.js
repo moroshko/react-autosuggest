@@ -5,20 +5,20 @@ const UPDATE_FOCUSED_SUGGESTION = 'UPDATE_FOCUSED_SUGGESTION';
 const REVEAL_SUGGESTIONS = 'REVEAL_SUGGESTIONS';
 const CLOSE_SUGGESTIONS = 'CLOSE_SUGGESTIONS';
 
-export function inputFocused(shouldRenderSuggestions) {
+function inputFocused(shouldRenderSuggestions) {
   return {
     type: INPUT_FOCUSED,
     shouldRenderSuggestions
   };
 }
 
-export function inputBlurred() {
+function inputBlurred() {
   return {
     type: INPUT_BLURRED
   };
 }
 
-export function inputChanged(shouldRenderSuggestions, lastAction) {
+function inputChanged(shouldRenderSuggestions, lastAction) {
   return {
     type: INPUT_CHANGED,
     shouldRenderSuggestions,
@@ -26,7 +26,7 @@ export function inputChanged(shouldRenderSuggestions, lastAction) {
   };
 }
 
-export function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
+function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
   return {
     type: UPDATE_FOCUSED_SUGGESTION,
     sectionIndex,
@@ -35,18 +35,27 @@ export function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
   };
 }
 
-export function revealSuggestions() {
+function revealSuggestions() {
   return {
     type: REVEAL_SUGGESTIONS
   };
 }
 
-export function closeSuggestions(lastAction) {
+function closeSuggestions(lastAction) {
   return {
     type: CLOSE_SUGGESTIONS,
     lastAction
   };
 }
+
+export const actionCreators = {
+  inputFocused,
+  inputBlurred,
+  inputChanged,
+  updateFocusedSuggestion,
+  revealSuggestions,
+  closeSuggestions
+};
 
 export default function reducer(state, action) {
   switch (action.type) {

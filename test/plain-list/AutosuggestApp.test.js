@@ -9,6 +9,7 @@ import {
   expectInputValue,
   getSuggestionsContainer,
   getSuggestion,
+  expectInputReferenceToBeSet,
   expectSuggestions,
   expectFocusedSuggestion,
   mouseEnterSuggestion,
@@ -65,6 +66,10 @@ describe('Default Autosuggest', () => {
 
     it('should not show suggestions', () => {
       expectSuggestions([]);
+    });
+
+    it('should set the input reference', () => {
+      expectInputReferenceToBeSet();
     });
   });
 
@@ -344,6 +349,14 @@ describe('Default Autosuggest', () => {
 
     it('should be called once per suggestion', () => {
       expect(renderSuggestion).to.have.been.calledOnce;
+    });
+
+    it('should be called twice when the focused item is changed', () => {
+      focusAndSetInputValue('c');
+      clickDown();
+      renderSuggestion.reset();
+      clickDown();
+      expect(renderSuggestion).to.have.callCount(2);
     });
 
     it('return value should be used to render suggestions', () => {

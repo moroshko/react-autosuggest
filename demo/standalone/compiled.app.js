@@ -142,7 +142,6 @@
 	  _inherits(App, _React$Component);
 
 	  // eslint-disable-line no-undef
-
 	  function App() {
 	    _classCallCheck(this, App);
 
@@ -189,8 +188,9 @@
 	        onChange: this.onChange
 	      };
 
-	      return React.createElement(Autosuggest, { suggestions: suggestions // eslint-disable-line react/jsx-no-undef
-	        , onSuggestionsUpdateRequested: this.onSuggestionsUpdateRequested,
+	      return React.createElement(Autosuggest // eslint-disable-line react/jsx-no-undef
+	      , { suggestions: suggestions,
+	        onSuggestionsUpdateRequested: this.onSuggestionsUpdateRequested,
 	        getSuggestionValue: getSuggestionValue,
 	        renderSuggestion: renderSuggestion,
 	        inputProps: inputProps });
