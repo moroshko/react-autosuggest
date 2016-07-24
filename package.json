@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "3.8.0",
+  "version": "3.9.0",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/index.js",
   "repository": {
@@ -10,8 +10,8 @@
   "author": "Misha Moroshko <michael.moroshko@gmail.com>",
   "scripts": {
     "start": "mkdir -p demo/dist && npm run copy-static-files && node server",
-    "lint": "eslint src demo/src demo/standalone/app.js test server.js webpack.*.js",
-    "test": "mocha test/index.js --compilers js:babel-register",
+    "lint": "eslint src test demo/src demo/standalone/app.js server.js webpack.*.js",
+    "test": "mocha 'test/**/*.test.js' --compilers js:babel-register --require test/setup.js",
     "copy-static-files": "cp demo/src/index.html demo/src/components/App/components/Examples/components/Basic/autosuggest.css demo/dist/",
     "dist": "rm -rf dist && mkdir dist && babel src -d dist",
     "demo-dist": "rm -rf demo/dist && mkdir demo/dist && npm run copy-static-files && webpack --config webpack.gh-pages.config.js",
@@ -23,7 +23,7 @@
     "prepublish": "npm run dist && npm run standalone"
   },
   "dependencies": {
-    "react-autowhatever": "^3.3.0",
+    "react-autowhatever": "^4.1.0",
     "react-redux": "^4.4.5",
     "redux": "^3.5.1"
   },
@@ -46,7 +46,7 @@
     "css-loader": "^0.23.1",
     "es6-promise": "^3.1.2",
     "eslint": "2.8.0",
-    "eslint-plugin-react": "^5.0.1",
+    "eslint-plugin-react": "^6.0.0-alpha.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "happypack": "^2.0.4",

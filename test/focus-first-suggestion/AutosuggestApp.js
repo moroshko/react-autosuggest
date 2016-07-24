@@ -57,13 +57,14 @@ export default class AutosuggestApp extends Component {
     };
 
     return (
-      <Autosuggest suggestions={suggestions}
-                   onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
-                   getSuggestionValue={getSuggestionValue}
-                   renderSuggestion={renderSuggestion}
-                   inputProps={inputProps}
-                   onSuggestionSelected={onSuggestionSelected}
-                   focusFirstSuggestion={true} />
+      <Autosuggest
+        suggestions={suggestions}
+        onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        inputProps={inputProps}
+        onSuggestionSelected={onSuggestionSelected}
+        focusFirstSuggestion={true} />
     );
   }
 }

@@ -93,20 +93,23 @@ export default class CustomRender extends Component {
             Apply any styling you wish.<br />
             For example, render images and highlight the matching string.
           </div>
-          <Link className={styles.codepenLink}
-                href="http://codepen.io/moroshko/pen/PZWbzK" underline={false}>
+          <Link
+            className={styles.codepenLink}
+            href="http://codepen.io/moroshko/pen/PZWbzK"
+            underline={false}>
             Codepen
           </Link>
         </div>
         <div className={styles.autosuggest}>
-          <Autosuggest suggestions={suggestions}
-                       onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                       getSuggestionValue={getSuggestionValue}
-                       renderSuggestion={renderSuggestion}
-                       inputProps={inputProps}
-                       focusInputOnSuggestionClick={focusInputOnSuggestionClick}
-                       theme={theme}
-                       id="custom-render-example" />
+          <Autosuggest
+            suggestions={suggestions}
+            onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            inputProps={inputProps}
+            focusInputOnSuggestionClick={focusInputOnSuggestionClick}
+            theme={theme}
+            id="custom-render-example" />
         </div>
       </div>
     );

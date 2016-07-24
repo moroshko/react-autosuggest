@@ -28,6 +28,10 @@ export const renderSuggestion = sinon.spy(suggestion => {
   );
 });
 
+function shouldRenderSuggestions() {
+  return true;
+}
+
 export const onChange = sinon.spy((event, { newValue }) => {
   app.setState({
     value: newValue
@@ -80,18 +84,19 @@ export default class AutosuggestApp extends Component {
     };
 
     return (
-      <Autosuggest multiSection={true}
-                   suggestions={suggestions}
-                   onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
-                   getSuggestionValue={getSuggestionValue}
-                   renderSuggestion={renderSuggestion}
-                   inputProps={inputProps}
-                   shouldRenderSuggestions={() => true}
-                   onSuggestionSelected={onSuggestionSelected}
-                   renderSectionTitle={renderSectionTitle}
-                   getSectionSuggestions={getSectionSuggestions}
-                   focusInputOnSuggestionClick={false}
-                   focusFirstSuggestion={focusFirstSuggestion} />
+      <Autosuggest
+        multiSection={true}
+        suggestions={suggestions}
+        onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        inputProps={inputProps}
+        shouldRenderSuggestions={shouldRenderSuggestions}
+        onSuggestionSelected={onSuggestionSelected}
+        renderSectionTitle={renderSectionTitle}
+        getSectionSuggestions={getSectionSuggestions}
+        focusInputOnSuggestionClick={false}
+        focusFirstSuggestion={focusFirstSuggestion} />
     );
   }
 }
