@@ -90,13 +90,13 @@ var AutosuggestContainer = function (_Component) {
 
     _this.store = (0, _redux.createStore)(_reducerAndActions2.default, initialState);
 
-    _this.saveInput = _this.saveInput.bind(_this);
+    _this.storeInputReference = _this.storeInputReference.bind(_this);
     return _this;
   }
 
   _createClass(AutosuggestContainer, [{
-    key: 'saveInput',
-    value: function saveInput(input) {
+    key: 'storeInputReference',
+    value: function storeInputReference(input) {
       this.input = input;
     }
   }, {
@@ -119,7 +119,8 @@ var AutosuggestContainer = function (_Component) {
       var id = _props.id;
 
 
-      return _react2.default.createElement(_Autosuggest2.default, { multiSection: multiSection,
+      return _react2.default.createElement(_Autosuggest2.default, {
+        multiSection: multiSection,
         shouldRenderSuggestions: shouldRenderSuggestions,
         suggestions: suggestions,
         onSuggestionsUpdateRequested: onSuggestionsUpdateRequested,
@@ -133,7 +134,7 @@ var AutosuggestContainer = function (_Component) {
         focusFirstSuggestion: focusFirstSuggestion,
         theme: mapToAutowhateverTheme(theme),
         id: id,
-        inputRef: this.saveInput,
+        inputRef: this.storeInputReference,
         store: this.store });
     }
   }]);

@@ -6,12 +6,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-exports.inputFocused = inputFocused;
-exports.inputBlurred = inputBlurred;
-exports.inputChanged = inputChanged;
-exports.updateFocusedSuggestion = updateFocusedSuggestion;
-exports.revealSuggestions = revealSuggestions;
-exports.closeSuggestions = closeSuggestions;
 exports.default = reducer;
 var INPUT_FOCUSED = 'INPUT_FOCUSED';
 var INPUT_BLURRED = 'INPUT_BLURRED';
@@ -62,6 +56,15 @@ function closeSuggestions(lastAction) {
     lastAction: lastAction
   };
 }
+
+var actionCreators = exports.actionCreators = {
+  inputFocused: inputFocused,
+  inputBlurred: inputBlurred,
+  inputChanged: inputChanged,
+  updateFocusedSuggestion: updateFocusedSuggestion,
+  revealSuggestions: revealSuggestions,
+  closeSuggestions: closeSuggestions
+};
 
 function reducer(state, action) {
   switch (action.type) {
