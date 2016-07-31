@@ -52,11 +52,11 @@ class Autosuggest extends Component {
     super();
 
     this.storeInputReference = this.storeInputReference.bind(this);
-    this.renderSuggestion = this.renderSuggestion.bind(this);
     this.onSuggestionMouseEnter = this.onSuggestionMouseEnter.bind(this);
     this.onSuggestionMouseLeave = this.onSuggestionMouseLeave.bind(this);
     this.onSuggestionMouseDown = this.onSuggestionMouseDown.bind(this);
     this.onSuggestionClick = this.onSuggestionClick.bind(this);
+    this.itemProps = this.itemProps.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -214,20 +214,25 @@ class Autosuggest extends Component {
     });
   }
 
-  renderSuggestion(suggestion) {
-    const { inputProps, valueBeforeUpDown } = this.props;
-    const { value } = inputProps;
-
-    return this.props.renderSuggestion(suggestion, { value, valueBeforeUpDown });
+  itemProps({ sectionIndex, itemIndex }) {
+    return {
+      'data-section-index': sectionIndex,
+      'data-suggestion-index': itemIndex,
+      onMouseEnter: this.onSuggestionMouseEnter,
+      onMouseLeave: this.onSuggestionMouseLeave,
+      onMouseDown: this.onSuggestionMouseDown,
+      onTouchStart: this.onSuggestionMouseDown, // Because on iOS `onMouseDown` is not triggered
+      onClick: this.onSuggestionClick
+    };
   }
 
   render() {
     const {
-      suggestions, inputProps, shouldRenderSuggestions, onSuggestionSelected,
-      multiSection, renderSectionTitle, id, getSectionSuggestions,
-      theme, isFocused, isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
-      valueBeforeUpDown, inputFocused, inputBlurred, inputChanged,
-      updateFocusedSuggestion, revealSuggestions, closeSuggestions,
+      suggestions, renderSuggestion, inputProps, shouldRenderSuggestions,
+      onSuggestionSelected, multiSection, renderSectionTitle, id,
+      getSectionSuggestions, theme, isFocused, isCollapsed, focusedSectionIndex,
+      focusedSuggestionIndex, valueBeforeUpDown, inputFocused, inputBlurred,
+      inputChanged, updateFocusedSuggestion, revealSuggestions, closeSuggestions,
       getSuggestionValue, alwaysRenderSuggestions
     } = this.props;
     const { value, onBlur, onFocus, onKeyDown } = inputProps;
@@ -339,29 +344,22 @@ class Autosuggest extends Component {
         onKeyDown && onKeyDown(event);
       }
     };
-    const itemProps = ({ sectionIndex, itemIndex }) => {
-      return {
-        'data-section-index': sectionIndex,
-        'data-suggestion-index': itemIndex,
-        onMouseEnter: this.onSuggestionMouseEnter,
-        onMouseLeave: this.onSuggestionMouseLeave,
-        onMouseDown: this.onSuggestionMouseDown,
-        onTouchStart: this.onSuggestionMouseDown, // Because on iOS `onMouseDown` is not triggered
-        onClick: this.onSuggestionClick
-      };
+    const renderSuggestionData = {
+      query: (valueBeforeUpDown || value).trim()
     };
 
     return (
       <Autowhatever
         multiSection={multiSection}
         items={items}
-        renderItem={this.renderSuggestion}
+        renderItem={renderSuggestion}
+        renderItemData={renderSuggestionData}
         renderSectionTitle={renderSectionTitle}
         getSectionItems={getSectionSuggestions}
         focusedSectionIndex={focusedSectionIndex}
         focusedItemIndex={focusedSuggestionIndex}
         inputProps={autowhateverInputProps}
-        itemProps={itemProps}
+        itemProps={this.itemProps}
         theme={theme}
         id={id}
         ref={this.storeInputReference} />

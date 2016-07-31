@@ -19,8 +19,7 @@ export const getSuggestionValue = sinon.spy(suggestion => {
   return suggestion.name;
 });
 
-export const renderSuggestion = sinon.spy((suggestion, { value, valueBeforeUpDown }) => {
-  const query = (valueBeforeUpDown || value).trim();
+export const renderSuggestion = sinon.spy((suggestion, { query }) => {
   const matches = highlight.match(suggestion.name, query);
   const parts = highlight.parse(suggestion.name, matches);
 

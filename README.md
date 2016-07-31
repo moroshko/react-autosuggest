@@ -73,7 +73,7 @@ function getSuggestions(value) {
   );
 }
 
-function getSuggestionValue(suggestion) { // when suggestion selected, this function tells
+function getSuggestionValue(suggestion) { // when suggestion is selected, this function tells
   return suggestion.name;                 // what should be the value of the input
 }
 
@@ -234,14 +234,14 @@ where:
 * `reason` - string describing why Autosuggest thinks you might want to update suggestions. The possible values are:
   * `'type'` - usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.
   * `'click'` - user clicked (or tapped) a suggestion
-  * `'enter'` - user pressed Enter
-  * `'escape'` - user pressed Escape
+  * `'enter'` - user pressed <kbd>Enter</kbd>
+  * `'escape'` - user pressed <kbd>Escape</kbd>
   * `'blur'` - input lost focus
 
 <a name="getSuggestionValueProp"></a>
 #### getSuggestionValue (required)
 
-When user navigates the suggestions using the Up and Down keys, <a href="https://www.w3.org/TR/wai-aria-practices/#autocomplete" target="_blank">the input should display the highlighted suggestion</a>. You design how suggestion is modelled. Therefore, it's your responsibility to tell Autosuggest how to map suggestions to input values.
+When user navigates the suggestions using the <kbd>Up</kbd> and <kbd>Down</kbd> keys, <a href="https://www.w3.org/TR/wai-aria-practices/#autocomplete" target="_blank">the input should display the highlighted suggestion</a>. You design how suggestion is modelled. Therefore, it's your responsibility to tell Autosuggest how to map suggestions to input values.
 
 This function gets:
 
@@ -263,14 +263,13 @@ Use your imagination to define how suggestions are rendered.
 `renderSuggestion` has the following signature:
 
 ```js
-function renderSuggestion(suggestion, { value, valueBeforeUpDown })
+function renderSuggestion(suggestion, { query })
 ```
 
 where:
 
 * `suggestion` - The suggestion to render
-* `value` - The current value of the input
-* `valueBeforeUpDown` - The value of the input prior to Up/Down interactions. If user didn't interact with Up/Down yet, it will be `null`. It is useful if you want to highlight input's value in the suggestion (a.k.a the match), for example.
+* `query` - Used to highlight the matching string. As user types in the input field, `query` will be equal to the trimmed value of the input. Then, if user interacts using the <kbd>Up</kbd> or <kbd>Down</kbd> keys, <a href="https://www.w3.org/TR/wai-aria-practices/#autocomplete" target="_blank">the input will get the value of the highlighted suggestion</a>, but `query` will remain to be equal to the trimmed value of the input prior to the <kbd>Up</kbd> and <kbd>Down</kbd> interactions.
 
 It should return a `ReactElement`. For example:
 
@@ -306,10 +305,10 @@ where:
 
 * `newValue` - the new value of the input field
 * `method` - string describing how the change occurred. The possible values are:
-  * `'down'` - user pressed Down
-  * `'up'` - user pressed Up
-  * `'escape'` - user pressed Escape
-  * `'enter'` - user pressed Enter
+  * `'down'` - user pressed <kbd>Down</kbd>
+  * `'up'` - user pressed <kbd>Up</kbd>
+  * `'escape'` - user pressed <kbd>Escape</kbd>
+  * `'enter'` - user pressed <kbd>Enter</kbd>
   * `'click'` - user clicked (or tapped) on suggestion
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
 
@@ -406,7 +405,7 @@ where:
 * `sectionIndex` - when rendering [multiple sections](#multiSectionProp), this will be the section index (in [`suggestions`](#suggestionsProp)) of the selected suggestion. Otherwise, it will be `null`.
 * `method` - string describing how user selected the suggestion. The possible values are:
   * `'click'` - user clicked (or tapped) on the suggestion
-  * `'enter'` - user selected the suggestion using Enter
+  * `'enter'` - user selected the suggestion using <kbd>Enter</kbd>
 
 <a name="focusInputOnSuggestionClickProp"></a>
 #### focusInputOnSuggestionClick (optional)

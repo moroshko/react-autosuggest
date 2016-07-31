@@ -342,10 +342,10 @@ describe('Default Autosuggest', () => {
     });
 
     it('should be called with the right parameters', () => {
-      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, { value: 'r', valueBeforeUpDown: null });
+      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, { query: 'r' });
       renderSuggestion.reset();
       clickDown();
-      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, { value: 'Ruby', valueBeforeUpDown: 'r' });
+      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, { query: 'r' });
     });
 
     it('should be called once per suggestion', () => {
@@ -764,7 +764,7 @@ describe('Default Autosuggest', () => {
         });
 
         it('aria-owns', () => {
-          expectInputAttribute('aria-owns', 'react-whatever-1');
+          expectInputAttribute('aria-owns', 'react-autowhatever-1');
         });
       });
 
