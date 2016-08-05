@@ -135,6 +135,7 @@ class Example extends React.Component {
 * [`renderSuggestion`](#renderSuggestionProp)
 * [`inputProps`](#inputPropsProp)
 * [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp)
+* [`alwaysRenderSuggestions`](#alwaysRenderSuggestionsProp)
 * [`multiSection`](#multiSectionProp)
 * [`renderSectionTitle`](#renderSectionTitleProp)
 * [`getSectionSuggestions`](#getSectionSuggestionsProp)
@@ -330,6 +331,15 @@ function shouldRenderSuggestions(value) {
   return value.trim().length > 2;
 }
 ```
+
+When `shouldRenderSuggestions` returns true, suggestions will be rendered only when the input field is focused. If you would like to render suggestions regardless of whether the input field is focused or not, set `alwaysRenderSuggestions={true}` (`shouldRenderSuggestions` is ignored in this case).
+
+<a name="alwaysRenderSuggestionsProp"></a>
+#### alwaysRenderSuggestions (optional)
+
+By default, suggestions are rendered only if the input field is focused.
+
+If you'd like to _always_ display suggestions, set `alwaysRenderSuggestions={true}`.
 
 <a name="multiSectionProp"></a>
 #### multiSection (optional)

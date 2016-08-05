@@ -48,6 +48,14 @@ export const shouldRenderSuggestions = sinon.spy(value => {
   return value.trim().length > 0 && value[0] !== ' ';
 });
 
+export const setAlwaysRenderSuggestions = sinon.spy((toggle, callback) => {
+  app.setState({
+    alwaysRenderSuggestions: toggle,
+    // Using "elm" to retrieve suggestions even when input is blank.
+    suggestions: getMatchingLanguages(app.state.value || 'elm')
+  }, callback);
+});
+
 export const onSuggestionsUpdateRequested = sinon.spy(({ value }) => {
   app.setState({
     suggestions: getMatchingLanguages(value)
@@ -64,7 +72,8 @@ export default class AutosuggestApp extends Component {
 
     this.state = {
       value: '',
-      suggestions: getMatchingLanguages('')
+      suggestions: getMatchingLanguages(''),
+      alwaysRenderSuggestions: false
     };
   }
 
@@ -75,7 +84,7 @@ export default class AutosuggestApp extends Component {
   }
 
   render() {
-    const { value, suggestions } = this.state;
+    const { value, suggestions, alwaysRenderSuggestions } = this.state;
     const inputProps = {
       id: 'my-awesome-autosuggest',
       placeholder: 'Type a programming language',
@@ -93,6 +102,7 @@ export default class AutosuggestApp extends Component {
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
         shouldRenderSuggestions={shouldRenderSuggestions}
+        alwaysRenderSuggestions={alwaysRenderSuggestions}
         onSuggestionSelected={onSuggestionSelected}
         ref={this.storeAutosuggestReference} />
     );
