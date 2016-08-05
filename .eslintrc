@@ -7,7 +7,7 @@
   },
   "parser": "babel-eslint",
   "plugins": [
-    "react"
+    "react", "mocha"
   ],
   "extends": ["eslint:recommended"],
   "rules": {
@@ -85,6 +85,8 @@
     "react/jsx-space-before-closing": [2, "always"],
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
-    "react/jsx-wrap-multilines": 2
+    "react/jsx-wrap-multilines": 2,
+
+    "mocha/no-exclusive-tests": "error"
   }
 }

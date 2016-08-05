@@ -32,7 +32,6 @@ import AutosuggestApp, {
   onChange,
   onBlur,
   shouldRenderSuggestions,
-  setAlwaysRenderSuggestions,
   onSuggestionSelected,
   onSuggestionsUpdateRequested
 } from './AutosuggestApp';
@@ -490,92 +489,6 @@ describe('Default Autosuggest', () => {
     it('should hide suggestions when `false` is returned', () => {
       focusAndSetInputValue(' e');
       expectSuggestions([]);
-    });
-  });
-
-  describe('when alwaysRenderSuggestions is true', () => {
-    beforeEach(done => {
-      setAlwaysRenderSuggestions(true, done);
-    });
-
-    afterEach(done => {
-      setAlwaysRenderSuggestions(false, done);
-    });
-
-    it('should render suggestions initially', () => {
-      expectSuggestions(['Elm']);
-    });
-
-    it('should render suggestions when input is focused', () => {
-      focusAndSetInputValue('e');
-      expectSuggestions(['Elm']);
-    });
-
-    it('should render suggestions when input is blurred', () => {
-      focusAndSetInputValue('e');
-      blurInput();
-      expectSuggestions(['Elm']);
-    });
-
-    it('should render suggestions even when input is blank and focused', () => {
-      focusAndSetInputValue('');
-      expectSuggestions(['Elm']);
-    });
-
-    it('should render suggestions even when input is blank and blurred', () => {
-      focusAndSetInputValue('');
-      blurInput();
-      expectSuggestions(['Elm']);
-    });
-
-    describe('when pressing Down', () => {
-      beforeEach(() => {
-        focusAndSetInputValue('p');
-      });
-
-      it('should focus on the first suggestion', () => {
-        clickDown();
-        expectFocusedSuggestion('Perl');
-      });
-    });
-
-    describe('when pressing Up', () => {
-      beforeEach(() => {
-        focusAndSetInputValue('p');
-      });
-
-      it('should focus on the last suggestion', () => {
-        clickUp();
-        expectFocusedSuggestion('Python');
-      });
-    });
-
-    describe('when pressing Enter', () => {
-      beforeEach(() => {
-        focusAndSetInputValue('p');
-      });
-
-      it('should not hide suggestions if there is a focused suggestion', () => {
-        clickDown();
-        clickEnter();
-        expectSuggestions(['Perl']);
-      });
-
-      it('should not hide suggestions if there is no focused suggestion', () => {
-        clickEnter();
-        expectSuggestions(['Perl', 'PHP', 'Python']);
-      });
-    });
-
-    describe('when suggestion is clicked', () => {
-      beforeEach(() => {
-        focusAndSetInputValue('p');
-        clickSuggestion(1);
-      });
-
-      it('should not hide suggestions', () => {
-        expectSuggestions(['PHP']);
-      });
     });
   });
 

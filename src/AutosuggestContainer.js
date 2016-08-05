@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { createStore } from 'redux';
-import reducer from './reducerAndActions';
+import reducer from './redux';
 import Autosuggest from './Autosuggest';
 
-function noop() {}
-const returnTrue = () => true;
+const noop = () => {};
+const alwaysTrue = () => true;
 
 const defaultTheme = {
   container: 'react-autosuggest__container',
@@ -94,9 +94,8 @@ export default class AutosuggestContainer extends Component {
     id: '1'
   };
 
-  constructor(props) {
-    super(props);
-    const { alwaysRenderSuggestions } = props;
+  constructor({ alwaysRenderSuggestions }) {
+    super();
 
     const initialState = {
       isFocused: false,
@@ -128,7 +127,7 @@ export default class AutosuggestContainer extends Component {
     return (
       <Autosuggest
         multiSection={multiSection}
-        shouldRenderSuggestions={alwaysRenderSuggestions ? returnTrue : shouldRenderSuggestions}
+        shouldRenderSuggestions={alwaysRenderSuggestions ? alwaysTrue : shouldRenderSuggestions}
         alwaysRenderSuggestions={alwaysRenderSuggestions}
         suggestions={suggestions}
         onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}

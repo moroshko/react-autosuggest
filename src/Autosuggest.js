@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { actionCreators } from './reducerAndActions';
+import { actionCreators } from './redux';
 import Autowhatever from 'react-autowhatever';
 
 function mapStateToProps(state) {
@@ -62,15 +62,15 @@ class Autosuggest extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.suggestions !== this.props.suggestions) {
       const {
-        suggestions, inputProps, shouldRenderSuggestions, isCollapsed,
-        revealSuggestions, lastAction, alwaysRenderSuggestions
+        suggestions, inputProps, shouldRenderSuggestions,
+        isCollapsed, revealSuggestions, lastAction
       } = nextProps;
       const { value } = inputProps;
 
-      if (alwaysRenderSuggestions || suggestions.length > 0 && shouldRenderSuggestions(value)) {
+      if (suggestions.length > 0 && shouldRenderSuggestions(value)) {
         this.maybeFocusFirstSuggestion();
 
-        if (alwaysRenderSuggestions || isCollapsed && lastAction !== 'click' && lastAction !== 'enter') {
+        if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter') {
           revealSuggestions();
         }
       }
