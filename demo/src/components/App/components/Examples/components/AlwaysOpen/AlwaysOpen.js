@@ -113,26 +113,27 @@ export default class AlwaysOpen extends Component {
           {isOpen ? (
             <div className={styles.overlay} data-overlay={true} onClick={this.onClickOverlay}>
               <div className={styles.modal}>
-                <Autosuggest suggestions={suggestions}
-                             onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                             onSuggestionSelected={this.onSuggestionSelected}
-                             getSuggestionValue={getSuggestionValue}
-                             renderSuggestion={renderSuggestion}
-                             inputProps={inputProps}
-                             alwaysRenderSuggestions={true}
-                             focusInputOnSuggestionClick={focusInputOnSuggestionClick}
-                             id="alwaysopen-example"
-                             theme={{
-                               container: 'react-autosuggest__container',
-                               containerOpen: 'react-autosuggest__container--open',
-                               input: 'react-autosuggest__input',
-                               suggestionsContainer: `react-autosuggest__suggestions-container ${styles.suggestionsContainer}`,
-                               suggestion: 'react-autosuggest__suggestion',
-                               suggestionFocused: 'react-autosuggest__suggestion--focused',
-                               sectionContainer: 'react-autosuggest__section-container',
-                               sectionTitle: 'react-autosuggest__section-title',
-                               sectionSuggestionsContainer: 'react-autosuggest__section-suggestions-container'
-                             }} />
+                <Autosuggest
+                  suggestions={suggestions}
+                  onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+                  onSuggestionSelected={this.onSuggestionSelected}
+                  getSuggestionValue={getSuggestionValue}
+                  renderSuggestion={renderSuggestion}
+                  inputProps={inputProps}
+                  alwaysRenderSuggestions={true}
+                  focusInputOnSuggestionClick={focusInputOnSuggestionClick}
+                  id="alwaysopen-example"
+                  theme={{
+                    container: 'react-autosuggest__container',
+                    containerOpen: 'react-autosuggest__container--open',
+                    input: 'react-autosuggest__input',
+                    suggestionsContainer: `react-autosuggest__suggestions-container ${styles.suggestionsContainer}`,
+                    suggestion: 'react-autosuggest__suggestion',
+                    suggestionFocused: 'react-autosuggest__suggestion--focused',
+                    sectionContainer: 'react-autosuggest__section-container',
+                    sectionTitle: 'react-autosuggest__section-title',
+                    sectionSuggestionsContainer: 'react-autosuggest__section-suggestions-container'
+                  }} />
               </div>
             </div>
           ) : null}
