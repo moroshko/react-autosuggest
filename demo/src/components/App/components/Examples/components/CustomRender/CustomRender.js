@@ -27,9 +27,8 @@ function getSuggestionValue(suggestion) {
   return `${suggestion.first} ${suggestion.last}`;
 }
 
-function renderSuggestion(suggestion, { value, valueBeforeUpDown }) {
+function renderSuggestion(suggestion, { query }) {
   const suggestionText = `${suggestion.first} ${suggestion.last}`;
-  const query = (valueBeforeUpDown || value).trim();
   const matches = highlight.match(suggestionText, query);
   const parts = highlight.parse(suggestionText, matches);
 

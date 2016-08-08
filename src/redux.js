@@ -12,9 +12,10 @@ function inputFocused(shouldRenderSuggestions) {
   };
 }
 
-function inputBlurred() {
+function inputBlurred(shouldRenderSuggestions) {
   return {
-    type: INPUT_BLURRED
+    type: INPUT_BLURRED,
+    shouldRenderSuggestions
   };
 }
 
@@ -73,7 +74,7 @@ export default function reducer(state, action) {
         focusedSectionIndex: null,
         focusedSuggestionIndex: null,
         valueBeforeUpDown: null,
-        isCollapsed: true
+        isCollapsed: !action.shouldRenderSuggestions
       };
 
     case INPUT_CHANGED:
@@ -88,10 +89,13 @@ export default function reducer(state, action) {
 
     case UPDATE_FOCUSED_SUGGESTION: {
       const { value, sectionIndex, suggestionIndex } = action;
-      const valueBeforeUpDown =
-        state.valueBeforeUpDown === null && typeof value !== 'undefined'
-          ? value
-          : state.valueBeforeUpDown;
+      let { valueBeforeUpDown } = state;
+
+      if (suggestionIndex === null) {
+        valueBeforeUpDown = null;
+      } else if (valueBeforeUpDown === null && typeof value !== 'undefined') {
+        valueBeforeUpDown = value;
+      }
 
       return {
         ...state,

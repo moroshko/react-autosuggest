@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { createStore } from 'redux';
-import reducer from './reducerAndActions';
+import reducer from './redux';
 import Autosuggest from './Autosuggest';
 
-function noop() {}
+const noop = () => {};
+const alwaysTrue = () => true;
 
 const defaultTheme = {
   container: 'react-autosuggest__container',
@@ -64,6 +65,7 @@ export default class AutosuggestContainer extends Component {
       }
     },
     shouldRenderSuggestions: PropTypes.func,
+    alwaysRenderSuggestions: PropTypes.bool,
     onSuggestionSelected: PropTypes.func,
     multiSection: PropTypes.bool,
     renderSectionTitle: PropTypes.func,
@@ -77,6 +79,7 @@ export default class AutosuggestContainer extends Component {
   static defaultProps = {
     onSuggestionsUpdateRequested: noop,
     shouldRenderSuggestions: value => value.trim().length > 0,
+    alwaysRenderSuggestions: false,
     onSuggestionSelected: noop,
     multiSection: false,
     renderSectionTitle() {
@@ -91,12 +94,12 @@ export default class AutosuggestContainer extends Component {
     id: '1'
   };
 
-  constructor() {
+  constructor({ alwaysRenderSuggestions }) {
     super();
 
     const initialState = {
       isFocused: false,
-      isCollapsed: true,
+      isCollapsed: !alwaysRenderSuggestions,
       focusedSectionIndex: null,
       focusedSuggestionIndex: null,
       valueBeforeUpDown: null,
@@ -118,13 +121,14 @@ export default class AutosuggestContainer extends Component {
       onSuggestionsUpdateRequested, getSuggestionValue, renderSuggestion,
       renderSectionTitle, getSectionSuggestions, inputProps,
       onSuggestionSelected, focusInputOnSuggestionClick, focusFirstSuggestion,
-      theme, id
+      alwaysRenderSuggestions, theme, id
     } = this.props;
 
     return (
       <Autosuggest
         multiSection={multiSection}
-        shouldRenderSuggestions={shouldRenderSuggestions}
+        shouldRenderSuggestions={alwaysRenderSuggestions ? alwaysTrue : shouldRenderSuggestions}
+        alwaysRenderSuggestions={alwaysRenderSuggestions}
         suggestions={suggestions}
         onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
         getSuggestionValue={getSuggestionValue}

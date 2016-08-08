@@ -7,7 +7,7 @@
   },
   "parser": "babel-eslint",
   "plugins": [
-    "react"
+    "react", "mocha"
   ],
   "extends": ["eslint:recommended"],
   "rules": {
@@ -47,6 +47,7 @@
     "react/no-did-mount-set-state": 2,
     "react/no-did-update-set-state": 2,
     "react/no-direct-mutation-state": 2,
+    "react/no-find-dom-node": 2,
     "react/no-is-mounted": 2,
     "react/no-multi-comp": [2, { "ignoreStateless": true }],
     "react/no-render-return-value": 2,
@@ -80,11 +81,12 @@
     "react/jsx-no-target-blank": 2,
     "react/jsx-no-undef": 2,
     "react/jsx-pascal-case": 2,
-    "react/jsx-require-extension": 2,
     "react/jsx-sort-props": 0,
     "react/jsx-space-before-closing": [2, "always"],
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
-    "react/jsx-wrap-multilines": 2
+    "react/jsx-wrap-multilines": 2,
+
+    "mocha/no-exclusive-tests": "error"
   }
 }
