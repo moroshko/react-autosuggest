@@ -2,11 +2,13 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import {
   init,
+  expectInputValue,
   expectSuggestions,
   expectFocusedSuggestion,
   clickSuggestion,
   focusInput,
   blurInput,
+  clickEscape,
   clickEnter,
   clickDown,
   clickUp,
@@ -94,6 +96,39 @@ describe('Autosuggest with alwaysRenderSuggestions={true}', () => {
     it('should not hide suggestions if there is no focused suggestion', () => {
       clickEnter();
       expectSuggestions(['Perl', 'PHP', 'Python']);
+    });
+  });
+
+  describe('when pressing Escape', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('p');
+    });
+
+    describe('without prior Up/Down interaction', () => {
+      it('should clear the input', () => {
+        clickEscape();
+        expectInputValue('');
+      });
+    });
+
+    describe('after Up/Down interaction', () => {
+      beforeEach(() => {
+        clickDown();
+        clickEscape();
+      });
+
+      it('should revert input value', () => {
+        expectInputValue('p');
+      });
+
+      it('should unfocus the focused suggestion', () => {
+        expectFocusedSuggestion(null);
+      });
+
+      it('should clear the input when Escape is pressed again', () => {
+        clickEscape();
+        expectInputValue('');
+      });
     });
   });
 

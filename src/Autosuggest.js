@@ -182,10 +182,10 @@ class Autosuggest extends Component {
 
   onSuggestionClick(event) {
     const {
-      inputProps, onSuggestionSelected, focusInputOnSuggestionClick,
-      inputBlurred, closeSuggestions
+      inputProps, shouldRenderSuggestions, onSuggestionSelected,
+      focusInputOnSuggestionClick, inputBlurred, closeSuggestions
     } = this.props;
-    const { onBlur } = inputProps;
+    const { value, onBlur } = inputProps;
     const { sectionIndex, suggestionIndex } =
       this.getSuggestionIndices(this.findSuggestionElement(event.target));
     const clickedSuggestion = this.getSuggestion(sectionIndex, suggestionIndex);
@@ -203,7 +203,7 @@ class Autosuggest extends Component {
     if (focusInputOnSuggestionClick === true) {
       this.input.focus();
     } else {
-      inputBlurred();
+      inputBlurred(shouldRenderSuggestions(value));
       onBlur && onBlur(this.onBlurEvent);
     }
 
@@ -254,7 +254,7 @@ class Autosuggest extends Component {
         this.onBlurEvent = event;
 
         if (!this.justClickedOnSuggestion) {
-          inputBlurred();
+          inputBlurred(shouldRenderSuggestions(value));
           onBlur && onBlur(event);
 
           if (valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
@@ -301,7 +301,9 @@ class Autosuggest extends Component {
           case 'Enter': {
             const focusedSuggestion = this.getFocusedSuggestion();
 
-            closeSuggestions('enter');
+            if (isOpen && !alwaysRenderSuggestions) {
+              closeSuggestions('enter');
+            }
 
             if (focusedSuggestion !== null) {
               const newValue = getSuggestionValue(focusedSuggestion);
@@ -329,7 +331,7 @@ class Autosuggest extends Component {
             }
 
             if (valueBeforeUpDown === null) { // Didn't interact with Up/Down
-              if (!isOpen) {
+              if (alwaysRenderSuggestions || !isOpen) {
                 this.maybeCallOnChange(event, '', 'escape');
                 this.maybeCallOnSuggestionsUpdateRequested({ value: '', reason: 'escape' });
               }
@@ -337,7 +339,12 @@ class Autosuggest extends Component {
               this.maybeCallOnChange(event, valueBeforeUpDown, 'escape');
             }
 
-            closeSuggestions('escape');
+            if (isOpen && !alwaysRenderSuggestions) {
+              closeSuggestions('escape');
+            } else {
+              updateFocusedSuggestion(null, null);
+            }
+
             break;
         }
 
