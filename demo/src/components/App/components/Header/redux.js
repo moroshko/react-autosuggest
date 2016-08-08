@@ -3,7 +3,7 @@ import fetch from 'isomorphic-fetch';
 const UPDATE_STARGAZERS = 'UPDATE_STARGAZERS';
 
 const initialState = {
-  stargazers: '1041'
+  stargazers: '1053'
 };
 
 export function loadStargazers() {

@@ -4,7 +4,6 @@ import React from 'react';
 import Basic from 'Basic/Basic';
 import MultipleSections from 'MultipleSections/MultipleSections';
 import CustomRender from 'CustomRender/CustomRender';
-import AlwaysOpen from 'AlwaysOpen/AlwaysOpen';
 
 export default function Examples() {
   return (
@@ -15,7 +14,6 @@ export default function Examples() {
       <Basic />
       <MultipleSections />
       <CustomRender />
-      <AlwaysOpen />
     </div>
   );
 }
