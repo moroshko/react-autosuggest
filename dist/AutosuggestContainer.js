@@ -12,9 +12,9 @@ var _react2 = _interopRequireDefault(_react);
 
 var _redux = require('redux');
 
-var _reducerAndActions = require('./reducerAndActions');
+var _redux2 = require('./redux');
 
-var _reducerAndActions2 = _interopRequireDefault(_reducerAndActions);
+var _redux3 = _interopRequireDefault(_redux2);
 
 var _Autosuggest = require('./Autosuggest');
 
@@ -28,7 +28,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-function noop() {}
+var noop = function noop() {};
+var alwaysTrue = function alwaysTrue() {
+  return true;
+};
 
 var defaultTheme = {
   container: 'react-autosuggest__container',
@@ -74,21 +77,23 @@ function mapToAutowhateverTheme(theme) {
 var AutosuggestContainer = function (_Component) {
   _inherits(AutosuggestContainer, _Component);
 
-  function AutosuggestContainer() {
+  function AutosuggestContainer(_ref) {
+    var alwaysRenderSuggestions = _ref.alwaysRenderSuggestions;
+
     _classCallCheck(this, AutosuggestContainer);
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AutosuggestContainer).call(this));
 
     var initialState = {
       isFocused: false,
-      isCollapsed: true,
+      isCollapsed: !alwaysRenderSuggestions,
       focusedSectionIndex: null,
       focusedSuggestionIndex: null,
       valueBeforeUpDown: null,
       lastAction: null
     };
 
-    _this.store = (0, _redux.createStore)(_reducerAndActions2.default, initialState);
+    _this.store = (0, _redux.createStore)(_redux3.default, initialState);
 
     _this.storeInputReference = _this.storeInputReference.bind(_this);
     return _this;
@@ -115,13 +120,15 @@ var AutosuggestContainer = function (_Component) {
       var onSuggestionSelected = _props.onSuggestionSelected;
       var focusInputOnSuggestionClick = _props.focusInputOnSuggestionClick;
       var focusFirstSuggestion = _props.focusFirstSuggestion;
+      var alwaysRenderSuggestions = _props.alwaysRenderSuggestions;
       var theme = _props.theme;
       var id = _props.id;
 
 
       return _react2.default.createElement(_Autosuggest2.default, {
         multiSection: multiSection,
-        shouldRenderSuggestions: shouldRenderSuggestions,
+        shouldRenderSuggestions: alwaysRenderSuggestions ? alwaysTrue : shouldRenderSuggestions,
+        alwaysRenderSuggestions: alwaysRenderSuggestions,
         suggestions: suggestions,
         onSuggestionsUpdateRequested: onSuggestionsUpdateRequested,
         getSuggestionValue: getSuggestionValue,
@@ -159,6 +166,7 @@ AutosuggestContainer.propTypes = {
     }
   },
   shouldRenderSuggestions: _react.PropTypes.func,
+  alwaysRenderSuggestions: _react.PropTypes.bool,
   onSuggestionSelected: _react.PropTypes.func,
   multiSection: _react.PropTypes.bool,
   renderSectionTitle: _react.PropTypes.func,
@@ -173,6 +181,7 @@ AutosuggestContainer.defaultProps = {
   shouldRenderSuggestions: function shouldRenderSuggestions(value) {
     return value.trim().length > 0;
   },
+  alwaysRenderSuggestions: false,
   onSuggestionSelected: noop,
   multiSection: false,
   renderSectionTitle: function renderSectionTitle() {

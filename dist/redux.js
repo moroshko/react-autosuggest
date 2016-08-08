@@ -21,9 +21,10 @@ function inputFocused(shouldRenderSuggestions) {
   };
 }
 
-function inputBlurred() {
+function inputBlurred(shouldRenderSuggestions) {
   return {
-    type: INPUT_BLURRED
+    type: INPUT_BLURRED,
+    shouldRenderSuggestions: shouldRenderSuggestions
   };
 }
 
@@ -80,7 +81,7 @@ function reducer(state, action) {
         focusedSectionIndex: null,
         focusedSuggestionIndex: null,
         valueBeforeUpDown: null,
-        isCollapsed: true
+        isCollapsed: !action.shouldRenderSuggestions
       });
 
     case INPUT_CHANGED:
@@ -97,8 +98,14 @@ function reducer(state, action) {
         var value = action.value;
         var sectionIndex = action.sectionIndex;
         var suggestionIndex = action.suggestionIndex;
+        var valueBeforeUpDown = state.valueBeforeUpDown;
 
-        var valueBeforeUpDown = state.valueBeforeUpDown === null && typeof value !== 'undefined' ? value : state.valueBeforeUpDown;
+
+        if (suggestionIndex === null) {
+          valueBeforeUpDown = null;
+        } else if (valueBeforeUpDown === null && typeof value !== 'undefined') {
+          valueBeforeUpDown = value;
+        }
 
         return _extends({}, state, {
           focusedSectionIndex: sectionIndex,
