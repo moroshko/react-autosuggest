@@ -17,6 +17,7 @@ function mapStateToProps(state) {
 class Autosuggest extends Component {
   static propTypes = {
     suggestions: PropTypes.array.isRequired,
+    renderSuggestionsContainer: PropTypes.func,
     onSuggestionsUpdateRequested: PropTypes.func.isRequired,
     getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
@@ -228,9 +229,9 @@ class Autosuggest extends Component {
 
   render() {
     const {
-      suggestions, renderSuggestion, inputProps, shouldRenderSuggestions,
-      onSuggestionSelected, multiSection, renderSectionTitle, id,
-      getSectionSuggestions, theme, isFocused, isCollapsed, focusedSectionIndex,
+      suggestions, renderSuggestionsContainer, renderSuggestion, inputProps,
+      shouldRenderSuggestions, onSuggestionSelected, multiSection, renderSectionTitle,
+      id, getSectionSuggestions, theme, isFocused, isCollapsed, focusedSectionIndex,
       focusedSuggestionIndex, valueBeforeUpDown, inputFocused, inputBlurred,
       inputChanged, updateFocusedSuggestion, revealSuggestions, closeSuggestions,
       getSuggestionValue, alwaysRenderSuggestions
@@ -359,6 +360,7 @@ class Autosuggest extends Component {
       <Autowhatever
         multiSection={multiSection}
         items={items}
+        renderItemsContainer={renderSuggestionsContainer}
         renderItem={renderSuggestion}
         renderItemData={renderSuggestionData}
         renderSectionTitle={renderSectionTitle}
