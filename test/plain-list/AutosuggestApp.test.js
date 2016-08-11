@@ -8,6 +8,7 @@ import {
   expectInputAttribute,
   expectInputValue,
   getSuggestionsContainer,
+  getSuggestionsList,
   getSuggestion,
   expectInputReferenceToBeSet,
   expectSuggestions,
@@ -717,8 +718,8 @@ describe('Default Autosuggest', () => {
         expectInputAttribute('aria-activedescendant', null);
       });
 
-      it('suggestions container role should be "listbox"', () => {
-        expect(getSuggestionsContainer().getAttribute('role')).to.equal('listbox');
+      it('suggestions list role should be "listbox"', () => {
+        expect(getSuggestionsList().getAttribute('role')).to.equal('listbox');
       });
 
       it('suggestions\' role should be "option"', () => {

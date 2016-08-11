@@ -11,11 +11,11 @@ const defaultTheme = {
   containerOpen: 'react-autosuggest__container--open',
   input: 'react-autosuggest__input',
   suggestionsContainer: 'react-autosuggest__suggestions-container',
+  suggestionsList: 'react-autosuggest__suggestions-list',
   suggestion: 'react-autosuggest__suggestion',
   suggestionFocused: 'react-autosuggest__suggestion--focused',
   sectionContainer: 'react-autosuggest__section-container',
-  sectionTitle: 'react-autosuggest__section-title',
-  sectionSuggestionsContainer: 'react-autosuggest__section-suggestions-container'
+  sectionTitle: 'react-autosuggest__section-title'
 };
 
 function mapToAutowhateverTheme(theme) {
@@ -35,8 +35,8 @@ function mapToAutowhateverTheme(theme) {
         result['itemFocused'] = theme[key];
         break;
 
-      case 'sectionSuggestionsContainer':
-        result['sectionItemsContainer'] = theme[key];
+      case 'suggestionsList':
+        result['itemsList'] = theme[key];
         break;
 
       default:
@@ -50,6 +50,7 @@ function mapToAutowhateverTheme(theme) {
 export default class AutosuggestContainer extends Component {
   static propTypes = {
     suggestions: PropTypes.array.isRequired,
+    renderSuggestionsContainer: PropTypes.func,
     onSuggestionsUpdateRequested: PropTypes.func,
     getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
@@ -117,7 +118,7 @@ export default class AutosuggestContainer extends Component {
 
   render() {
     const {
-      multiSection, shouldRenderSuggestions, suggestions,
+      multiSection, shouldRenderSuggestions, suggestions, renderSuggestionsContainer,
       onSuggestionsUpdateRequested, getSuggestionValue, renderSuggestion,
       renderSectionTitle, getSectionSuggestions, inputProps,
       onSuggestionSelected, focusInputOnSuggestionClick, focusFirstSuggestion,
@@ -130,6 +131,7 @@ export default class AutosuggestContainer extends Component {
         shouldRenderSuggestions={alwaysRenderSuggestions ? alwaysTrue : shouldRenderSuggestions}
         alwaysRenderSuggestions={alwaysRenderSuggestions}
         suggestions={suggestions}
+        renderSuggestionsContainer={renderSuggestionsContainer}
         onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}

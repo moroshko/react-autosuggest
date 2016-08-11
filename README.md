@@ -134,6 +134,7 @@ class Example extends React.Component {
 * [`onSuggestionsUpdateRequested`](#onSuggestionsUpdateRequestedProp)
 * [`getSuggestionValue`](#getSuggestionValueProp)
 * [`renderSuggestion`](#renderSuggestionProp)
+* [`renderSuggestionsContainer`](#renderSuggestionsContainerProp)
 * [`inputProps`](#inputPropsProp)
 * [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp)
 * [`alwaysRenderSuggestions`](#alwaysRenderSuggestionsProp)
@@ -284,6 +285,54 @@ function renderSuggestion(suggestion) {
 
 **Note:** `renderSuggestion` must be a pure function (we optimize rendering performance based on this assumption).
 
+<a name="renderSuggestionsContainerProp"></a>
+#### renderSuggestionsContainer (optional)
+
+You shouldn't use this function unless you want to customize the behaviour of the suggestions container. For example, you might want to add a custom text before/after the suggestions list, or [customize the scrolling behaviour of the suggestions container](https://github.com/moroshko/react-autosuggest/blob/master/FAQ.md#limitSuggestionsContainerScrolling).
+
+`renderSuggestionsContainer` has the following signature:
+
+```js
+function renderSuggestionsContainer(props)
+```
+
+You should pass all the `props` to the topmost element that is returned from `renderSuggestionsContainer` with the following exceptions:
+
+* `children` - these are the suggestions themselves. It's up to you where to render them.
+* `ref` - when `renderSuggestionsContainer` returns a composite component (e.g. `<IsolatedScroll ... />` as opposed to a DOM node like `<div ... />`), you should call `ref` with the topmost element that the composite component renders.
+
+Examples:
+
+```js
+function renderSuggestionsContainer({ children, ...rest }) {
+  return (
+    <div {...rest}>
+      <p>
+        Some text
+      </p>
+      {children}
+    </div>
+  );
+}
+```
+
+
+```js
+import IsolatedScroll from 'react-isolated-scroll';
+
+function renderSuggestionsContainer({ ref, ...rest }) {
+  const callRef = isolatedScroll => {
+    if (isolatedScroll !== null) {
+      ref(isolatedScroll.component);
+    }
+  };
+
+  return (
+    <IsolatedScroll {...rest} ref={callRef} />
+  );
+}
+```
+
 <a name="inputPropsProp"></a>
 #### inputProps (required)
 
@@ -334,7 +383,7 @@ function shouldRenderSuggestions(value) {
 }
 ```
 
-When `shouldRenderSuggestions` returns `true`, **suggestions will be rendered only when the input field is focused**. 
+When `shouldRenderSuggestions` returns `true`, **suggestions will be rendered only when the input field is focused**.
 
 If you would like to render suggestions regardless of whether the input field is focused or not, set `alwaysRenderSuggestions={true}` (`shouldRenderSuggestions` is ignored in this case).
 
@@ -463,15 +512,15 @@ When not specified, `theme` defaults to:
 
 ```js
 {
-  container:                   'react-autosuggest__container',
-  containerOpen:               'react-autosuggest__container--open',
-  input:                       'react-autosuggest__input',
-  suggestionsContainer:        'react-autosuggest__suggestions-container',
-  suggestion:                  'react-autosuggest__suggestion',
-  suggestionFocused:           'react-autosuggest__suggestion--focused',
-  sectionContainer:            'react-autosuggest__section-container',
-  sectionTitle:                'react-autosuggest__section-title',
-  sectionSuggestionsContainer: 'react-autosuggest__section-suggestions-container'
+  container:            'react-autosuggest__container',
+  containerOpen:        'react-autosuggest__container--open',
+  input:                'react-autosuggest__input',
+  suggestionsContainer: 'react-autosuggest__suggestions-container',
+  suggestionsList:      'react-autosuggest__suggestions-list',
+  suggestion:           'react-autosuggest__suggestion',
+  suggestionFocused:    'react-autosuggest__suggestion--focused',
+  sectionContainer:     'react-autosuggest__section-container',
+  sectionTitle:         'react-autosuggest__section-title'
 }
 ```
 

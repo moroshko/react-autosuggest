@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/index.js",
   "repository": {
@@ -23,7 +23,7 @@
     "prepublish": "npm run dist && npm run standalone"
   },
   "dependencies": {
-    "react-autowhatever": "^4.3.0",
+    "react-autowhatever": "^5.1.2",
     "react-redux": "^4.4.5",
     "redux": "^3.5.1"
   },
@@ -45,9 +45,9 @@
     "chai": "^3.5.0",
     "css-loader": "^0.23.1",
     "es6-promise": "^3.1.2",
-    "eslint": "3.2.0",
+    "eslint": "^3.2.2",
     "eslint-plugin-mocha": "^4.3.0",
-    "eslint-plugin-react": "^6.0.0-rc.0",
+    "eslint-plugin-react": "^6.0.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "happypack": "^2.0.4",
