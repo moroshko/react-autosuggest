@@ -87,6 +87,7 @@
     "react/jsx-uses-vars": 2,
     "react/jsx-wrap-multilines": 2,
 
-    "mocha/no-exclusive-tests": "error"
+    "mocha/no-exclusive-tests": "error",
+    "mocha/no-skipped-tests": "error"
   }
 }

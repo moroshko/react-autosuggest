@@ -58,6 +58,10 @@ export function getSuggestionsContainer() {
   return TestUtils.findRenderedDOMComponentWithClass(data.app, 'react-autosuggest__suggestions-container');
 }
 
+export function getSuggestionsList() {
+  return TestUtils.findRenderedDOMComponentWithClass(data.app, 'react-autosuggest__suggestions-list');
+}
+
 export function getSuggestions() {
   return TestUtils.scryRenderedDOMComponentsWithClass(data.app, 'react-autosuggest__suggestion');
 }
@@ -85,20 +89,6 @@ export function getTitle(titleIndex) {
 
   return titles[titleIndex];
 }
-
-// See: https://github.com/facebook/react/issues/4692#issuecomment-157803622
-/*
-export function getSuggestionsBySectionIndex(sectionIndex) {
-  const sections = TestUtils.scryRenderedDOMComponentsWithClass(data.app, 'react-autosuggest__section-suggestions-container');
-
-  if (sectionIndex >= sections.length) {
-    throw Error(`Cannot find section #${sectionIndex}`);
-    return null;
-  }
-
-  return TestUtils.scryRenderedDOMComponentsWithClass(sections[sectionIndex], 'react-autosuggest__suggestion');
-}
-*/
 
 export function expectInputReferenceToBeSet() {
   expect(data.app.input).to.equal(data.input);
