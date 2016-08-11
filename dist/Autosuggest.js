@@ -287,6 +287,7 @@ var Autosuggest = function (_Component) {
 
       var _props7 = this.props;
       var suggestions = _props7.suggestions;
+      var renderSuggestionsContainer = _props7.renderSuggestionsContainer;
       var renderSuggestion = _props7.renderSuggestion;
       var inputProps = _props7.inputProps;
       var shouldRenderSuggestions = _props7.shouldRenderSuggestions;
@@ -441,6 +442,7 @@ var Autosuggest = function (_Component) {
       return _react2.default.createElement(_reactAutowhatever2.default, {
         multiSection: multiSection,
         items: items,
+        renderItemsContainer: renderSuggestionsContainer,
         renderItem: renderSuggestion,
         renderItemData: renderSuggestionData,
         renderSectionTitle: renderSectionTitle,
@@ -460,6 +462,7 @@ var Autosuggest = function (_Component) {
 
 Autosuggest.propTypes = {
   suggestions: _react.PropTypes.array.isRequired,
+  renderSuggestionsContainer: _react.PropTypes.func,
   onSuggestionsUpdateRequested: _react.PropTypes.func.isRequired,
   getSuggestionValue: _react.PropTypes.func.isRequired,
   renderSuggestion: _react.PropTypes.func.isRequired,

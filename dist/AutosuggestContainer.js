@@ -38,11 +38,11 @@ var defaultTheme = {
   containerOpen: 'react-autosuggest__container--open',
   input: 'react-autosuggest__input',
   suggestionsContainer: 'react-autosuggest__suggestions-container',
+  suggestionsList: 'react-autosuggest__suggestions-list',
   suggestion: 'react-autosuggest__suggestion',
   suggestionFocused: 'react-autosuggest__suggestion--focused',
   sectionContainer: 'react-autosuggest__section-container',
-  sectionTitle: 'react-autosuggest__section-title',
-  sectionSuggestionsContainer: 'react-autosuggest__section-suggestions-container'
+  sectionTitle: 'react-autosuggest__section-title'
 };
 
 function mapToAutowhateverTheme(theme) {
@@ -62,8 +62,8 @@ function mapToAutowhateverTheme(theme) {
         result['itemFocused'] = theme[key];
         break;
 
-      case 'sectionSuggestionsContainer':
-        result['sectionItemsContainer'] = theme[key];
+      case 'suggestionsList':
+        result['itemsList'] = theme[key];
         break;
 
       default:
@@ -111,6 +111,7 @@ var AutosuggestContainer = function (_Component) {
       var multiSection = _props.multiSection;
       var shouldRenderSuggestions = _props.shouldRenderSuggestions;
       var suggestions = _props.suggestions;
+      var renderSuggestionsContainer = _props.renderSuggestionsContainer;
       var onSuggestionsUpdateRequested = _props.onSuggestionsUpdateRequested;
       var getSuggestionValue = _props.getSuggestionValue;
       var renderSuggestion = _props.renderSuggestion;
@@ -130,6 +131,7 @@ var AutosuggestContainer = function (_Component) {
         shouldRenderSuggestions: alwaysRenderSuggestions ? alwaysTrue : shouldRenderSuggestions,
         alwaysRenderSuggestions: alwaysRenderSuggestions,
         suggestions: suggestions,
+        renderSuggestionsContainer: renderSuggestionsContainer,
         onSuggestionsUpdateRequested: onSuggestionsUpdateRequested,
         getSuggestionValue: getSuggestionValue,
         renderSuggestion: renderSuggestion,
@@ -151,6 +153,7 @@ var AutosuggestContainer = function (_Component) {
 
 AutosuggestContainer.propTypes = {
   suggestions: _react.PropTypes.array.isRequired,
+  renderSuggestionsContainer: _react.PropTypes.func,
   onSuggestionsUpdateRequested: _react.PropTypes.func,
   getSuggestionValue: _react.PropTypes.func.isRequired,
   renderSuggestion: _react.PropTypes.func.isRequired,

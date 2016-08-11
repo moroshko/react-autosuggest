@@ -102,11 +102,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  containerOpen: 'react-autosuggest__container--open',
 	  input: 'react-autosuggest__input',
 	  suggestionsContainer: 'react-autosuggest__suggestions-container',
+	  suggestionsList: 'react-autosuggest__suggestions-list',
 	  suggestion: 'react-autosuggest__suggestion',
 	  suggestionFocused: 'react-autosuggest__suggestion--focused',
 	  sectionContainer: 'react-autosuggest__section-container',
-	  sectionTitle: 'react-autosuggest__section-title',
-	  sectionSuggestionsContainer: 'react-autosuggest__section-suggestions-container'
+	  sectionTitle: 'react-autosuggest__section-title'
 	};
 
 	function mapToAutowhateverTheme(theme) {
@@ -126,8 +126,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        result['itemFocused'] = theme[key];
 	        break;
 
-	      case 'sectionSuggestionsContainer':
-	        result['sectionItemsContainer'] = theme[key];
+	      case 'suggestionsList':
+	        result['itemsList'] = theme[key];
 	        break;
 
 	      default:
@@ -175,6 +175,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var multiSection = _props.multiSection;
 	      var shouldRenderSuggestions = _props.shouldRenderSuggestions;
 	      var suggestions = _props.suggestions;
+	      var renderSuggestionsContainer = _props.renderSuggestionsContainer;
 	      var onSuggestionsUpdateRequested = _props.onSuggestionsUpdateRequested;
 	      var getSuggestionValue = _props.getSuggestionValue;
 	      var renderSuggestion = _props.renderSuggestion;
@@ -194,6 +195,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        shouldRenderSuggestions: alwaysRenderSuggestions ? alwaysTrue : shouldRenderSuggestions,
 	        alwaysRenderSuggestions: alwaysRenderSuggestions,
 	        suggestions: suggestions,
+	        renderSuggestionsContainer: renderSuggestionsContainer,
 	        onSuggestionsUpdateRequested: onSuggestionsUpdateRequested,
 	        getSuggestionValue: getSuggestionValue,
 	        renderSuggestion: renderSuggestion,
@@ -215,6 +217,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	AutosuggestContainer.propTypes = {
 	  suggestions: _react.PropTypes.array.isRequired,
+	  renderSuggestionsContainer: _react.PropTypes.func,
 	  onSuggestionsUpdateRequested: _react.PropTypes.func,
 	  getSuggestionValue: _react.PropTypes.func.isRequired,
 	  renderSuggestion: _react.PropTypes.func.isRequired,
@@ -353,17 +356,45 @@ return /******/ (function(modules) { // webpackBootstrap
 	} ())
 	function runTimeout(fun) {
 	    if (cachedSetTimeout === setTimeout) {
+	        //normal enviroments in sane situations
 	        return setTimeout(fun, 0);
-	    } else {
-	        return cachedSetTimeout.call(null, fun, 0);
 	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedSetTimeout(fun, 0);
+	    } catch(e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+	            return cachedSetTimeout.call(null, fun, 0);
+	        } catch(e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+	            return cachedSetTimeout.call(this, fun, 0);
+	        }
+	    }
+
+
 	}
 	function runClearTimeout(marker) {
 	    if (cachedClearTimeout === clearTimeout) {
-	        clearTimeout(marker);
-	    } else {
-	        cachedClearTimeout.call(null, marker);
+	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
 	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedClearTimeout(marker);
+	    } catch (e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+	            return cachedClearTimeout.call(null, marker);
+	        } catch (e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+	            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+	            return cachedClearTimeout.call(this, marker);
+	        }
+	    }
+
+
+
 	}
 	var queue = [];
 	var draining = false;
@@ -750,7 +781,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * Used to resolve the
-	 * [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
 	 * of values.
 	 */
 	var objectToString = objectProto.toString;
@@ -764,8 +795,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @since 0.8.0
 	 * @category Lang
 	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a plain object,
-	 *  else `false`.
+	 * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
 	 * @example
 	 *
 	 * function Foo() {
@@ -807,17 +837,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var overArg = __webpack_require__(8);
 
-	/* Built-in method references for those with the same name as other `lodash` methods. */
-	var nativeGetPrototype = Object.getPrototypeOf;
-
-	/**
-	 * Gets the `[[Prototype]]` of `value`.
-	 *
-	 * @private
-	 * @param {*} value The value to query.
-	 * @returns {null|Object} Returns the `[[Prototype]]`.
-	 */
-	var getPrototype = overArg(nativeGetPrototype, Object);
+	/** Built-in value references. */
+	var getPrototype = overArg(Object.getPrototypeOf, Object);
 
 	module.exports = getPrototype;
 
@@ -827,7 +848,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Creates a function that invokes `func` with its first argument transformed.
+	 * Creates a unary function that invokes `func` with its argument transformed.
 	 *
 	 * @private
 	 * @param {Function} func The function to wrap.
@@ -1699,6 +1720,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var _props7 = this.props;
 	      var suggestions = _props7.suggestions;
+	      var renderSuggestionsContainer = _props7.renderSuggestionsContainer;
 	      var renderSuggestion = _props7.renderSuggestion;
 	      var inputProps = _props7.inputProps;
 	      var shouldRenderSuggestions = _props7.shouldRenderSuggestions;
@@ -1853,6 +1875,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return _react2.default.createElement(_reactAutowhatever2.default, {
 	        multiSection: multiSection,
 	        items: items,
+	        renderItemsContainer: renderSuggestionsContainer,
 	        renderItem: renderSuggestion,
 	        renderItemData: renderSuggestionData,
 	        renderSectionTitle: renderSectionTitle,
@@ -1872,6 +1895,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Autosuggest.propTypes = {
 	  suggestions: _react.PropTypes.array.isRequired,
+	  renderSuggestionsContainer: _react.PropTypes.func,
 	  onSuggestionsUpdateRequested: _react.PropTypes.func.isRequired,
 	  getSuggestionValue: _react.PropTypes.func.isRequired,
 	  renderSuggestion: _react.PropTypes.func.isRequired,
@@ -2664,16 +2688,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return true;
 	};
 	var emptyObject = {};
+	var defaultRenderItemsContainer = function defaultRenderItemsContainer(props) {
+	  return _react2.default.createElement('div', props);
+	};
 	var defaultTheme = {
 	  container: 'react-autowhatever__container',
 	  containerOpen: 'react-autowhatever__container--open',
 	  input: 'react-autowhatever__input',
 	  itemsContainer: 'react-autowhatever__items-container',
+	  itemsList: 'react-autowhatever__items-list',
 	  item: 'react-autowhatever__item',
 	  itemFocused: 'react-autowhatever__item--focused',
 	  sectionContainer: 'react-autowhatever__section-container',
-	  sectionTitle: 'react-autowhatever__section-title',
-	  sectionItemsContainer: 'react-autowhatever__section-items-container'
+	  sectionTitle: 'react-autowhatever__section-title'
 	};
 
 	var Autowhatever = function (_Component) {
@@ -2684,18 +2711,26 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Autowhatever).call(this, props));
 
+	    _this.focusedItem = null;
+
 	    _this.setSectionsItems(props);
 	    _this.setSectionIterator(props);
 	    _this.setTheme(props);
 
 	    _this.onKeyDown = _this.onKeyDown.bind(_this);
 	    _this.storeInputReference = _this.storeInputReference.bind(_this);
-	    _this.storeItemsListReference = _this.storeItemsListReference.bind(_this);
+	    _this.storeItemsContainerReference = _this.storeItemsContainerReference.bind(_this);
+	    _this.onFocusedItemChange = _this.onFocusedItemChange.bind(_this);
 	    _this.getItemId = _this.getItemId.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(Autowhatever, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.ensureFocusedItemIsVisible();
+	    }
+	  }, {
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
 	      if (nextProps.items !== this.props.items) {
@@ -2709,6 +2744,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (nextProps.theme !== this.props.theme) {
 	        this.setTheme(nextProps);
 	      }
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      this.ensureFocusedItemIsVisible();
 	    }
 	  }, {
 	    key: 'setSectionsItems',
@@ -2745,15 +2785,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.input = input;
 	      }
 	    }
-
-	    // Needed only for testing
-
 	  }, {
-	    key: 'storeItemsListReference',
-	    value: function storeItemsListReference(itemsList) {
-	      if (itemsList !== null) {
-	        this.itemsList = itemsList;
+	    key: 'storeItemsContainerReference',
+	    value: function storeItemsContainerReference(itemsContainer) {
+	      if (itemsContainer !== null) {
+	        this.itemsContainer = itemsContainer;
 	      }
+	    }
+	  }, {
+	    key: 'onFocusedItemChange',
+	    value: function onFocusedItemChange(focusedItem) {
+	      this.focusedItem = focusedItem;
 	    }
 	  }, {
 	    key: 'getItemId',
@@ -2767,14 +2809,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var section = sectionIndex === null ? '' : 'section-' + sectionIndex;
 
 	      return 'react-autowhatever-' + id + '-' + section + '-item-' + itemIndex;
-	    }
-	  }, {
-	    key: 'getItemsContainerId',
-	    value: function getItemsContainerId() {
-	      var id = this.props.id;
-
-
-	      return 'react-autowhatever-' + id;
 	    }
 	  }, {
 	    key: 'renderSections',
@@ -2798,43 +2832,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var itemProps = _props.itemProps;
 
 
-	      return _react2.default.createElement(
-	        'div',
-	        theme('react-autowhatever-' + id + '-items-container', 'itemsContainer'),
-	        items.map(function (section, sectionIndex) {
-	          if (!shouldRenderSection(section)) {
-	            return null;
-	          }
+	      return items.map(function (section, sectionIndex) {
+	        if (!shouldRenderSection(section)) {
+	          return null;
+	        }
 
-	          var keyPrefix = 'react-autowhatever-' + id + '-';
-	          var sectionKeyPrefix = keyPrefix + 'section-' + sectionIndex + '-';
+	        var keyPrefix = 'react-autowhatever-' + id + '-';
+	        var sectionKeyPrefix = keyPrefix + 'section-' + sectionIndex + '-';
 
-	          // `key` is provided by theme()
-	          /* eslint-disable react/jsx-key */
-	          return _react2.default.createElement(
-	            'div',
-	            theme(sectionKeyPrefix + 'container', 'sectionContainer'),
-	            _react2.default.createElement(_SectionTitle2.default, {
-	              section: section,
-	              renderSectionTitle: renderSectionTitle,
-	              theme: theme,
-	              sectionKeyPrefix: sectionKeyPrefix }),
-	            _react2.default.createElement(_ItemsList2.default, {
-	              id: _this2.getItemsContainerId(),
-	              items: _this2.sectionsItems[sectionIndex],
-	              itemProps: itemProps,
-	              renderItem: renderItem,
-	              renderItemData: renderItemData,
-	              sectionIndex: sectionIndex,
-	              focusedItemIndex: focusedSectionIndex === sectionIndex ? focusedItemIndex : null,
-	              getItemId: _this2.getItemId,
-	              theme: theme,
-	              keyPrefix: keyPrefix,
-	              ref: _this2.storeItemsListReference })
-	          );
-	          /* eslint-enable react/jsx-key */
-	        })
-	      );
+	        // `key` is provided by theme()
+	        /* eslint-disable react/jsx-key */
+	        return _react2.default.createElement(
+	          'div',
+	          theme(sectionKeyPrefix + 'container', 'sectionContainer'),
+	          _react2.default.createElement(_SectionTitle2.default, {
+	            section: section,
+	            renderSectionTitle: renderSectionTitle,
+	            theme: theme,
+	            sectionKeyPrefix: sectionKeyPrefix }),
+	          _react2.default.createElement(_ItemsList2.default, {
+	            items: _this2.sectionsItems[sectionIndex],
+	            itemProps: itemProps,
+	            renderItem: renderItem,
+	            renderItemData: renderItemData,
+	            sectionIndex: sectionIndex,
+	            focusedItemIndex: focusedSectionIndex === sectionIndex ? focusedItemIndex : null,
+	            onFocusedItemChange: _this2.onFocusedItemChange,
+	            getItemId: _this2.getItemId,
+	            theme: theme,
+	            keyPrefix: keyPrefix,
+	            ref: _this2.storeItemsListReference })
+	        );
+	        /* eslint-enable react/jsx-key */
+	      });
 	    }
 	  }, {
 	    key: 'renderItems',
@@ -2857,16 +2887,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	      return _react2.default.createElement(_ItemsList2.default, {
-	        id: this.getItemsContainerId(),
 	        items: items,
 	        itemProps: itemProps,
 	        renderItem: renderItem,
 	        renderItemData: renderItemData,
 	        focusedItemIndex: focusedSectionIndex === null ? focusedItemIndex : null,
+	        onFocusedItemChange: this.onFocusedItemChange,
 	        getItemId: this.getItemId,
 	        theme: theme,
-	        keyPrefix: 'react-autowhatever-' + id + '-',
-	        ref: this.storeItemsListReference });
+	        keyPrefix: 'react-autowhatever-' + id + '-' });
 	    }
 	  }, {
 	    key: 'onKeyDown',
@@ -2900,37 +2929,77 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
+	    key: 'ensureFocusedItemIsVisible',
+	    value: function ensureFocusedItemIsVisible() {
+	      var focusedItem = this.focusedItem;
+
+
+	      if (!focusedItem) {
+	        return;
+	      }
+
+	      var itemsContainer = this.itemsContainer;
+
+	      var itemOffsetRelativeToContainer = focusedItem.offsetParent === itemsContainer ? focusedItem.offsetTop : focusedItem.offsetTop - itemsContainer.offsetTop;
+
+	      var scrollTop = itemsContainer.scrollTop; // Top of the visible area
+
+	      if (itemOffsetRelativeToContainer < scrollTop) {
+	        // Item is off the top of the visible area
+	        scrollTop = itemOffsetRelativeToContainer;
+	      } else if (itemOffsetRelativeToContainer + focusedItem.offsetHeight > scrollTop + itemsContainer.offsetHeight) {
+	        // Item is off the bottom of the visible area
+	        scrollTop = itemOffsetRelativeToContainer + focusedItem.offsetHeight - itemsContainer.offsetHeight;
+	      }
+
+	      if (scrollTop !== itemsContainer.scrollTop) {
+	        itemsContainer.scrollTop = scrollTop;
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var theme = this.theme;
 	      var _props4 = this.props;
 	      var id = _props4.id;
 	      var multiSection = _props4.multiSection;
+	      var renderItemsContainer = _props4.renderItemsContainer;
 	      var focusedSectionIndex = _props4.focusedSectionIndex;
 	      var focusedItemIndex = _props4.focusedItemIndex;
 
 	      var renderedItems = multiSection ? this.renderSections() : this.renderItems();
 	      var isOpen = renderedItems !== null;
 	      var ariaActivedescendant = this.getItemId(focusedSectionIndex, focusedItemIndex);
+	      var containerProps = theme('react-autowhatever-' + id + '-container', 'container', isOpen && 'containerOpen');
+	      var itemsContainerId = 'react-autowhatever-' + id;
 	      var inputProps = _extends({
 	        type: 'text',
 	        value: '',
 	        autoComplete: 'off',
 	        role: 'combobox',
 	        'aria-autocomplete': 'list',
-	        'aria-owns': this.getItemsContainerId(),
+	        'aria-owns': itemsContainerId,
 	        'aria-expanded': isOpen,
+	        'aria-haspopup': isOpen,
 	        'aria-activedescendant': ariaActivedescendant
 	      }, theme('react-autowhatever-' + id + '-input', 'input'), this.props.inputProps, {
 	        onKeyDown: this.props.inputProps.onKeyDown && this.onKeyDown,
 	        ref: this.storeInputReference
 	      });
+	      var itemsContainerProps = _extends({
+	        id: itemsContainerId
+	      }, theme('react-autowhatever-' + id + '-items-container', 'itemsContainer'), {
+	        ref: this.storeItemsContainerReference
+	      });
+	      var itemsContainer = renderItemsContainer(_extends({}, itemsContainerProps, {
+	        children: renderedItems
+	      }));
 
 	      return _react2.default.createElement(
 	        'div',
-	        theme('react-autowhatever-' + id + '-container', 'container', isOpen && 'containerOpen'),
+	        containerProps,
 	        _react2.default.createElement('input', inputProps),
-	        renderedItems
+	        itemsContainer
 	      );
 	    }
 	  }]);
@@ -2942,6 +3011,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  id: _react.PropTypes.string, // Used in aria-* attributes. If multiple Autowhatever's are rendered on a page, they must have unique ids.
 	  multiSection: _react.PropTypes.bool, // Indicates whether a multi section layout should be rendered.
 	  items: _react.PropTypes.array.isRequired, // Array of items or sections to render.
+	  renderItemsContainer: _react.PropTypes.func, // Renders the items container.
 	  renderItem: _react.PropTypes.func, // This function renders a single item.
 	  renderItemData: _react.PropTypes.object, // Arbitrary data that will be passed to renderItem()
 	  shouldRenderSection: _react.PropTypes.func, // This function gets a section and returns whether it should be rendered, or not.
@@ -2957,6 +3027,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Autowhatever.defaultProps = {
 	  id: '1',
 	  multiSection: false,
+	  renderItemsContainer: defaultRenderItemsContainer,
 	  shouldRenderSection: alwaysTrue,
 	  renderItem: function renderItem() {
 	    throw new Error('`renderItem` must be provided');
@@ -3369,65 +3440,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ItemsList).call(this));
 
-	    _this.storeItemsContainerReference = _this.storeItemsContainerReference.bind(_this);
 	    _this.storeFocusedItemReference = _this.storeFocusedItemReference.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(ItemsList, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.ensureFocusedItemIsVisible();
-	    }
-	  }, {
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(nextProps) {
 	      return (0, _compareObjects2.default)(nextProps, this.props, ['itemProps']);
 	    }
 	  }, {
-	    key: 'componentDidUpdate',
-	    value: function componentDidUpdate() {
-	      this.ensureFocusedItemIsVisible();
-	    }
-	  }, {
-	    key: 'storeItemsContainerReference',
-	    value: function storeItemsContainerReference(itemsContainer) {
-	      if (itemsContainer !== null) {
-	        this.itemsContainer = itemsContainer;
-	      }
-	    }
-	  }, {
 	    key: 'storeFocusedItemReference',
 	    value: function storeFocusedItemReference(focusedItem) {
-	      if (focusedItem !== null) {
-	        this.focusedItem = focusedItem.item;
-	      }
-	    }
-	  }, {
-	    key: 'ensureFocusedItemIsVisible',
-	    value: function ensureFocusedItemIsVisible() {
-	      if (!this.focusedItem) {
-	        return;
-	      }
-
-	      var focusedItem = this.focusedItem;
-	      var itemsContainer = this.itemsContainer;
-
-	      var itemOffsetRelativeToContainer = focusedItem.offsetParent === itemsContainer ? focusedItem.offsetTop : focusedItem.offsetTop - itemsContainer.offsetTop;
-
-	      var scrollTop = itemsContainer.scrollTop; // Top of the visible area
-
-	      if (itemOffsetRelativeToContainer < scrollTop) {
-	        // Item is off the top of the visible area
-	        scrollTop = itemOffsetRelativeToContainer;
-	      } else if (itemOffsetRelativeToContainer + focusedItem.offsetHeight > scrollTop + itemsContainer.offsetHeight) {
-	        // Item is off the bottom of the visible area
-	        scrollTop = itemOffsetRelativeToContainer + focusedItem.offsetHeight - itemsContainer.offsetHeight;
-	      }
-
-	      if (scrollTop !== itemsContainer.scrollTop) {
-	        itemsContainer.scrollTop = scrollTop;
-	      }
+	      this.props.onFocusedItemChange(focusedItem === null ? null : focusedItem.item);
 	    }
 	  }, {
 	    key: 'render',
@@ -3435,7 +3460,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this2 = this;
 
 	      var _props = this.props;
-	      var id = _props.id;
 	      var items = _props.items;
 	      var itemProps = _props.itemProps;
 	      var renderItem = _props.renderItem;
@@ -3447,16 +3471,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var keyPrefix = _props.keyPrefix;
 
 	      var sectionPrefix = sectionIndex === null ? keyPrefix : keyPrefix + 'section-' + sectionIndex + '-';
-	      var itemsContainerClass = sectionIndex === null ? 'itemsContainer' : 'sectionItemsContainer';
 	      var isItemPropsFunction = typeof itemProps === 'function';
 
 	      return _react2.default.createElement(
 	        'ul',
-	        _extends({
-	          id: id,
-	          ref: this.storeItemsContainerReference,
-	          role: 'listbox'
-	        }, theme(sectionPrefix + 'items-container', itemsContainerClass)),
+	        _extends({ role: 'listbox' }, theme(sectionPrefix + 'items-list', 'itemsList')),
 	        items.map(function (item, itemIndex) {
 	          var isFocused = itemIndex === focusedItemIndex;
 	          var itemKey = sectionPrefix + 'item-' + itemIndex;
@@ -3487,13 +3506,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_react.Component);
 
 	ItemsList.propTypes = {
-	  id: _react.PropTypes.string.isRequired,
 	  items: _react.PropTypes.array.isRequired,
 	  itemProps: _react.PropTypes.oneOfType([_react.PropTypes.object, _react.PropTypes.func]),
 	  renderItem: _react.PropTypes.func.isRequired,
 	  renderItemData: _react.PropTypes.object.isRequired,
 	  sectionIndex: _react.PropTypes.number,
 	  focusedItemIndex: _react.PropTypes.number,
+	  onFocusedItemChange: _react.PropTypes.func.isRequired,
 	  getItemId: _react.PropTypes.func.isRequired,
 	  theme: _react.PropTypes.func.isRequired,
 	  keyPrefix: _react.PropTypes.string.isRequired
