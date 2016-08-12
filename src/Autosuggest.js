@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import shallowEqualArrays from 'shallow-equal/arrays';
 import { actionCreators } from './redux';
 import Autowhatever from 'react-autowhatever';
 
@@ -61,15 +62,18 @@ class Autosuggest extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.suggestions !== this.props.suggestions) {
-      const {
-        suggestions, inputProps, shouldRenderSuggestions,
-        isCollapsed, revealSuggestions, lastAction
-      } = nextProps;
-      const { value } = inputProps;
+    if (shallowEqualArrays(nextProps.suggestions, this.props.suggestions)) {
+      const suggestionsBecomeVisible =
+        !this.willRenderSuggestions(this.props) && this.willRenderSuggestions(nextProps);
 
-      if (suggestions.length > 0 && shouldRenderSuggestions(value)) {
+      if (suggestionsBecomeVisible) {
         this.maybeFocusFirstSuggestion();
+      }
+    } else {
+      if (this.willRenderSuggestions(nextProps)) {
+        this.maybeFocusFirstSuggestion();
+
+        const { isCollapsed, revealSuggestions, lastAction } = nextProps;
 
         if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter') {
           revealSuggestions();
@@ -153,8 +157,8 @@ class Autosuggest extends Component {
     }
   }
 
-  willRenderSuggestions() {
-    const { suggestions, inputProps, shouldRenderSuggestions } = this.props;
+  willRenderSuggestions(props) {
+    const { suggestions, inputProps, shouldRenderSuggestions } = props;
     const { value } = inputProps;
 
     return suggestions.length > 0 && shouldRenderSuggestions(value);
@@ -237,7 +241,8 @@ class Autosuggest extends Component {
       getSuggestionValue, alwaysRenderSuggestions
     } = this.props;
     const { value, onBlur, onFocus, onKeyDown } = inputProps;
-    const isOpen = alwaysRenderSuggestions || isFocused && !isCollapsed && this.willRenderSuggestions();
+    const willRenderSuggestions = this.willRenderSuggestions(this.props);
+    const isOpen = alwaysRenderSuggestions || isFocused && !isCollapsed && willRenderSuggestions;
     const items = (isOpen ? suggestions : []);
     const autowhateverInputProps = {
       ...inputProps,
@@ -276,7 +281,7 @@ class Autosuggest extends Component {
           case 'ArrowDown':
           case 'ArrowUp':
             if (isCollapsed) {
-              if (this.willRenderSuggestions()) {
+              if (willRenderSuggestions) {
                 revealSuggestions();
               }
             } else if (suggestions.length > 0) {

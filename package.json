@@ -25,7 +25,8 @@
   "dependencies": {
     "react-autowhatever": "^5.1.2",
     "react-redux": "^4.4.5",
-    "redux": "^3.5.1"
+    "redux": "^3.5.1",
+    "shallow-equal": "^1.0.0"
   },
   "peerDependencies": {
     "react": "^0.14.7 || ^15.0.1"

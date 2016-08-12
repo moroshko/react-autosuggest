@@ -11,6 +11,8 @@ import {
   focusInput,
   blurInput,
   clickEnter,
+  clickDown,
+  setInputValue,
   focusAndSetInputValue
 } from '../helpers';
 import AutosuggestApp, {
@@ -40,6 +42,20 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
       blurInput();
       focusInput();
       expectFocusedSuggestion('Perl');
+    });
+
+    it('should focus on the first suggestion when same suggestions are shown again', () => {
+      setInputValue('');
+      setInputValue('p');
+      expectFocusedSuggestion('Perl');
+    });
+  });
+
+  describe('when pressing Down', () => {
+    it('should focus on the second suggestion', () => {
+      focusAndSetInputValue('c');
+      clickDown();
+      expectFocusedSuggestion('C#');
     });
   });
 
