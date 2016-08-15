@@ -10,7 +10,7 @@ import {
   expectInputAttribute,
   expectSuggestions,
   expectFocusedSuggestion,
-  expectSuggestionsContainerAttribute,
+  getSuggestionsContainerAttribute,
   getTitle,
   clickSuggestion,
   focusInput,
@@ -32,11 +32,7 @@ import AutosuggestApp, {
 
 describe('Autosuggest with multiSection={true}', () => {
   beforeEach(() => {
-    const app = TestUtils.renderIntoDocument(React.createElement(AutosuggestApp));
-    const container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
-    const input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
-
-    init({ app, container, input });
+    init(TestUtils.renderIntoDocument(<AutosuggestApp />));
   });
 
   describe('shouldRenderSuggestions', () => {
@@ -192,7 +188,7 @@ describe('Autosuggest with multiSection={true}', () => {
 
     it('should set suggestions container class', () => {
       focusAndSetInputValue('e');
-      expectSuggestionsContainerAttribute('class', 'react-autosuggest__suggestions-container');
+      expect(getSuggestionsContainerAttribute('class')).to.equal('react-autosuggest__suggestions-container');
     });
   });
 

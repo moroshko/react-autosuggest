@@ -38,6 +38,7 @@ export const onChange = sinon.spy((event, { newValue }) => {
   });
 });
 
+export const onFocus = sinon.spy();
 export const onBlur = sinon.spy();
 export const onSuggestionSelected = sinon.spy(() => {
   addEvent('onSuggestionSelected');
@@ -81,6 +82,7 @@ export default class AutosuggestApp extends Component {
       type: 'search',
       value,
       onChange,
+      onFocus,
       onBlur
     };
 

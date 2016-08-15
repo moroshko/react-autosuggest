@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import shallowEqualArrays from 'shallow-equal/arrays';
 import { actionCreators } from './redux';
 import Autowhatever from 'react-autowhatever';
 
@@ -52,7 +53,8 @@ class Autosuggest extends Component {
   constructor() {
     super();
 
-    this.storeInputReference = this.storeInputReference.bind(this);
+    this.storeReferences = this.storeReferences.bind(this);
+    this.onDocumentMouseDown = this.onDocumentMouseDown.bind(this);
     this.onSuggestionMouseEnter = this.onSuggestionMouseEnter.bind(this);
     this.onSuggestionMouseLeave = this.onSuggestionMouseLeave.bind(this);
     this.onSuggestionMouseDown = this.onSuggestionMouseDown.bind(this);
@@ -60,22 +62,33 @@ class Autosuggest extends Component {
     this.itemProps = this.itemProps.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.suggestions !== this.props.suggestions) {
-      const {
-        suggestions, inputProps, shouldRenderSuggestions,
-        isCollapsed, revealSuggestions, lastAction
-      } = nextProps;
-      const { value } = inputProps;
+  componentDidMount() {
+    document.addEventListener('mousedown', this.onDocumentMouseDown);
+  }
 
-      if (suggestions.length > 0 && shouldRenderSuggestions(value)) {
+  componentWillReceiveProps(nextProps) {
+    if (shallowEqualArrays(nextProps.suggestions, this.props.suggestions)) {
+      const suggestionsBecomeVisible =
+        !this.willRenderSuggestions(this.props) && this.willRenderSuggestions(nextProps);
+
+      if (suggestionsBecomeVisible) {
         this.maybeFocusFirstSuggestion();
+      }
+    } else {
+      if (this.willRenderSuggestions(nextProps)) {
+        this.maybeFocusFirstSuggestion();
+
+        const { isCollapsed, revealSuggestions, lastAction } = nextProps;
 
         if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter') {
           revealSuggestions();
         }
       }
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.onDocumentMouseDown);
   }
 
   getSuggestion(sectionIndex, suggestionIndex) {
@@ -112,6 +125,23 @@ class Autosuggest extends Component {
       sectionIndex: (typeof sectionIndex === 'string' ? parseInt(sectionIndex, 10) : null),
       suggestionIndex: parseInt(suggestionIndex, 10)
     };
+  }
+
+  onDocumentMouseDown(event) {
+    this.justClickedOnSuggestionsContainer = false;
+
+    let node =
+      event.detail.target || // This is for testing only. Please show be a better way to emulate this.
+      event.target;
+
+    do {
+      if (node === this.suggestionsContainer) {
+        this.justClickedOnSuggestionsContainer = true;
+        return;
+      }
+
+      node = node.parentNode;
+    } while (node !== null);
   }
 
   findSuggestionElement(startNode) {
@@ -153,19 +183,21 @@ class Autosuggest extends Component {
     }
   }
 
-  willRenderSuggestions() {
-    const { suggestions, inputProps, shouldRenderSuggestions } = this.props;
+  willRenderSuggestions(props) {
+    const { suggestions, inputProps, shouldRenderSuggestions } = props;
     const { value } = inputProps;
 
     return suggestions.length > 0 && shouldRenderSuggestions(value);
   }
 
-  storeInputReference(autowhatever) {
+  storeReferences(autowhatever) {
     if (autowhatever !== null) {
-      const input = autowhatever.input;
+      const { input } = autowhatever;
 
       this.input = input;
       this.props.inputRef(input);
+
+      this.suggestionsContainer = autowhatever.itemsContainer;
     }
   }
 
@@ -237,12 +269,13 @@ class Autosuggest extends Component {
       getSuggestionValue, alwaysRenderSuggestions
     } = this.props;
     const { value, onBlur, onFocus, onKeyDown } = inputProps;
-    const isOpen = alwaysRenderSuggestions || isFocused && !isCollapsed && this.willRenderSuggestions();
+    const willRenderSuggestions = this.willRenderSuggestions(this.props);
+    const isOpen = alwaysRenderSuggestions || isFocused && !isCollapsed && willRenderSuggestions;
     const items = (isOpen ? suggestions : []);
     const autowhateverInputProps = {
       ...inputProps,
       onFocus: event => {
-        if (!this.justClickedOnSuggestion) {
+        if (!this.justClickedOnSuggestion && !this.justClickedOnSuggestionsContainer) {
           inputFocused(shouldRenderSuggestions(value));
           onFocus && onFocus(event);
 
@@ -252,6 +285,11 @@ class Autosuggest extends Component {
         }
       },
       onBlur: event => {
+        if (this.justClickedOnSuggestionsContainer) {
+          this.input.focus();
+          return;
+        }
+
         this.onBlurEvent = event;
 
         if (!this.justClickedOnSuggestion) {
@@ -276,7 +314,7 @@ class Autosuggest extends Component {
           case 'ArrowDown':
           case 'ArrowUp':
             if (isCollapsed) {
-              if (this.willRenderSuggestions()) {
+              if (willRenderSuggestions) {
                 revealSuggestions();
               }
             } else if (suggestions.length > 0) {
@@ -371,7 +409,7 @@ class Autosuggest extends Component {
         itemProps={this.itemProps}
         theme={theme}
         id={id}
-        ref={this.storeInputReference} />
+        ref={this.storeReferences} />
     );
   }
 }

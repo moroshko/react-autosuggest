@@ -7,15 +7,16 @@ import {
   getInnerHTML,
   expectInputAttribute,
   expectInputValue,
-  getSuggestionsContainer,
   getSuggestionsList,
   getSuggestion,
   expectInputReferenceToBeSet,
   expectSuggestions,
   expectFocusedSuggestion,
+  getSuggestionsContainerAttribute,
   mouseEnterSuggestion,
   mouseLeaveSuggestion,
   clickSuggestion,
+  clickSuggestionsContainer,
   focusInput,
   blurInput,
   clickEscape,
@@ -31,6 +32,7 @@ import AutosuggestApp, {
   getSuggestionValue,
   renderSuggestion,
   onChange,
+  onFocus,
   onBlur,
   shouldRenderSuggestions,
   onSuggestionSelected,
@@ -39,11 +41,7 @@ import AutosuggestApp, {
 
 describe('Default Autosuggest', () => {
   beforeEach(() => {
-    const app = TestUtils.renderIntoDocument(React.createElement(AutosuggestApp));
-    const container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
-    const input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
-
-    init({ app, container, input });
+    init(TestUtils.renderIntoDocument(<AutosuggestApp />));
   });
 
   describe('initially', () => {
@@ -134,6 +132,11 @@ describe('Default Autosuggest', () => {
       mouseEnterSuggestion(2);
       mouseLeaveSuggestion(2);
       expectFocusedSuggestion(null);
+    });
+
+    it('should keep the focus on input when suggestions container is clicked', () => {
+      clickSuggestionsContainer();
+      expect(isInputFocused()).to.equal(true);
     });
   });
 
@@ -472,6 +475,30 @@ describe('Default Autosuggest', () => {
     });
   });
 
+  describe('inputProps.onFocus', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('c');
+      onFocus.reset();
+    });
+
+    it('should not call onFocus when suggestions container is clicked', () => {
+      clickSuggestionsContainer();
+      expect(onFocus).not.to.have.been.called;
+    });
+  });
+
+  describe('inputProps.onBlur', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('c');
+      onBlur.reset();
+    });
+
+    it('should not call onBlur when suggestions container is clicked', () => {
+      clickSuggestionsContainer();
+      expect(onBlur).not.to.have.been.called;
+    });
+  });
+
   describe('shouldRenderSuggestions', () => {
     beforeEach(() => {
       shouldRenderSuggestions.reset();
@@ -699,7 +726,7 @@ describe('Default Autosuggest', () => {
       });
 
       it('input\'s aria-owns should be equal to suggestions container id', () => {
-        expectInputAttribute('aria-owns', getSuggestionsContainer().id);
+        expectInputAttribute('aria-owns', getSuggestionsContainerAttribute('id'));
       });
 
       it('input\'s aria-activedescendant should be equal to the focused suggestion id when using keyboard', () => {

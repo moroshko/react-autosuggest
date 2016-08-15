@@ -17,6 +17,10 @@
   outline: none;
 }
 
+.react-autosuggest__input::-ms-clear {
+  display: none;
+}
+
 .react-autosuggest__container--open .react-autosuggest__input {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;

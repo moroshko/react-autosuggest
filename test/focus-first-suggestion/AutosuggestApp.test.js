@@ -11,6 +11,8 @@ import {
   focusInput,
   blurInput,
   clickEnter,
+  clickDown,
+  setInputValue,
   focusAndSetInputValue
 } from '../helpers';
 import AutosuggestApp, {
@@ -20,11 +22,7 @@ import AutosuggestApp, {
 
 describe('Autosuggest with focusFirstSuggestion={true}', () => {
   beforeEach(() => {
-    const app = TestUtils.renderIntoDocument(React.createElement(AutosuggestApp));
-    const container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
-    const input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
-
-    init({ app, container, input });
+    init(TestUtils.renderIntoDocument(<AutosuggestApp />));
   });
 
   describe('when typing and matches exist', () => {
@@ -40,6 +38,20 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
       blurInput();
       focusInput();
       expectFocusedSuggestion('Perl');
+    });
+
+    it('should focus on the first suggestion when same suggestions are shown again', () => {
+      setInputValue('');
+      setInputValue('p');
+      expectFocusedSuggestion('Perl');
+    });
+  });
+
+  describe('when pressing Down', () => {
+    it('should focus on the second suggestion', () => {
+      focusAndSetInputValue('c');
+      clickDown();
+      expectFocusedSuggestion('C#');
     });
   });
 
