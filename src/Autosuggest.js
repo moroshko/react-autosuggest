@@ -53,12 +53,17 @@ class Autosuggest extends Component {
   constructor() {
     super();
 
-    this.storeInputReference = this.storeInputReference.bind(this);
+    this.storeReferences = this.storeReferences.bind(this);
+    this.onDocumentMouseDown = this.onDocumentMouseDown.bind(this);
     this.onSuggestionMouseEnter = this.onSuggestionMouseEnter.bind(this);
     this.onSuggestionMouseLeave = this.onSuggestionMouseLeave.bind(this);
     this.onSuggestionMouseDown = this.onSuggestionMouseDown.bind(this);
     this.onSuggestionClick = this.onSuggestionClick.bind(this);
     this.itemProps = this.itemProps.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener('mousedown', this.onDocumentMouseDown);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -80,6 +85,10 @@ class Autosuggest extends Component {
         }
       }
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.onDocumentMouseDown);
   }
 
   getSuggestion(sectionIndex, suggestionIndex) {
@@ -116,6 +125,23 @@ class Autosuggest extends Component {
       sectionIndex: (typeof sectionIndex === 'string' ? parseInt(sectionIndex, 10) : null),
       suggestionIndex: parseInt(suggestionIndex, 10)
     };
+  }
+
+  onDocumentMouseDown(event) {
+    this.justClickedOnSuggestionsContainer = false;
+
+    let node =
+      event.detail.target || // This is for testing only. Please show be a better way to emulate this.
+      event.target;
+
+    do {
+      if (node === this.suggestionsContainer) {
+        this.justClickedOnSuggestionsContainer = true;
+        return;
+      }
+
+      node = node.parentNode;
+    } while (node !== null);
   }
 
   findSuggestionElement(startNode) {
@@ -164,12 +190,14 @@ class Autosuggest extends Component {
     return suggestions.length > 0 && shouldRenderSuggestions(value);
   }
 
-  storeInputReference(autowhatever) {
+  storeReferences(autowhatever) {
     if (autowhatever !== null) {
-      const input = autowhatever.input;
+      const { input } = autowhatever;
 
       this.input = input;
       this.props.inputRef(input);
+
+      this.suggestionsContainer = autowhatever.itemsContainer;
     }
   }
 
@@ -247,7 +275,7 @@ class Autosuggest extends Component {
     const autowhateverInputProps = {
       ...inputProps,
       onFocus: event => {
-        if (!this.justClickedOnSuggestion) {
+        if (!this.justClickedOnSuggestion && !this.justClickedOnSuggestionsContainer) {
           inputFocused(shouldRenderSuggestions(value));
           onFocus && onFocus(event);
 
@@ -257,6 +285,11 @@ class Autosuggest extends Component {
         }
       },
       onBlur: event => {
+        if (this.justClickedOnSuggestionsContainer) {
+          this.input.focus();
+          return;
+        }
+
         this.onBlurEvent = event;
 
         if (!this.justClickedOnSuggestion) {
@@ -376,7 +409,7 @@ class Autosuggest extends Component {
         itemProps={this.itemProps}
         theme={theme}
         id={id}
-        ref={this.storeInputReference} />
+        ref={this.storeReferences} />
     );
   }
 }

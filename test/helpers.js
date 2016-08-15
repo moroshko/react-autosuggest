@@ -6,7 +6,7 @@ import TestUtils, { Simulate } from 'react-addons-test-utils';
 
 chai.use(sinonChai);
 
-let app, container, input;
+let app, container, input, suggestionsContainer;
 let eventsArray = [];
 
 export const clearEvents = () => {
@@ -25,6 +25,7 @@ export const init = application => {
   app = application;
   container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
   input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
+  suggestionsContainer = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__suggestions-container');
 };
 
 export const eventInstance = sinon.match.instanceOf(SyntheticEvent);
@@ -48,16 +49,12 @@ export function expectInputAttribute(attributeName, expectedValue) {
   expect(input.getAttribute(attributeName)).to.equal(expectedValue);
 }
 
-export function expectSuggestionsContainerAttribute(attributeName, expectedValue) {
-  expect(getSuggestionsContainer().getAttribute(attributeName)).to.equal(expectedValue);
+export function getSuggestionsContainerAttribute(attributeName) {
+  return suggestionsContainer.getAttribute(attributeName);
 }
 
 export function expectInputValue(expectedValue) {
   expect(input.value).to.equal(expectedValue);
-}
-
-export function getSuggestionsContainer() {
-  return TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__suggestions-container');
 }
 
 export function getSuggestionsList() {
@@ -133,6 +130,16 @@ export function clickSuggestion(suggestionIndex) {
   Simulate.click(getSuggestion(suggestionIndex));
 }
 
+export function clickSuggestionsContainer() {
+  document.dispatchEvent(new window.CustomEvent('mousedown', {
+    detail: { // must be 'detail' accoring to docs: https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events#Adding_custom_data_–_CustomEvent()
+      target: suggestionsContainer
+    }
+  }));
+  blurInput();
+  focusInput();
+}
+
 export function focusInput() {
   Simulate.focus(input);
 }
@@ -172,5 +179,5 @@ export function focusAndSetInputValue(value) {
 }
 
 export function isInputFocused() {
-  return global.document.activeElement === input;
+  return document.activeElement === input;
 }

@@ -54,7 +54,7 @@
     "happypack": "^2.0.4",
     "ismobilejs": "^0.4.0",
     "isomorphic-fetch": "^2.2.1",
-    "jsdom": "^9.0.0",
+    "jsdom": "^9.4.2",
     "less": "^2.6.1",
     "less-loader": "^2.2.3",
     "mocha": "^2.4.5",

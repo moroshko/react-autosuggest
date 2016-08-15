@@ -10,7 +10,7 @@ import {
   expectInputAttribute,
   expectSuggestions,
   expectFocusedSuggestion,
-  expectSuggestionsContainerAttribute,
+  getSuggestionsContainerAttribute,
   getTitle,
   clickSuggestion,
   focusInput,
@@ -188,7 +188,7 @@ describe('Autosuggest with multiSection={true}', () => {
 
     it('should set suggestions container class', () => {
       focusAndSetInputValue('e');
-      expectSuggestionsContainerAttribute('class', 'react-autosuggest__suggestions-container');
+      expect(getSuggestionsContainerAttribute('class')).to.equal('react-autosuggest__suggestions-container');
     });
   });
 
