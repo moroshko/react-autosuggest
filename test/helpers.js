@@ -28,7 +28,7 @@ export const init = application => {
   suggestionsContainer = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__suggestions-container');
 };
 
-export const eventInstance = sinon.match.instanceOf(SyntheticEvent);
+export const syntheticEventMatcher = sinon.match.instanceOf(SyntheticEvent);
 
 const reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 

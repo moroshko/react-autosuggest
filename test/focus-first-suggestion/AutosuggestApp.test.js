@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 import {
   init,
-  eventInstance,
+  syntheticEventMatcher,
   expectInputValue,
   expectSuggestions,
   expectFocusedSuggestion,
@@ -85,7 +85,7 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
     it('should be called once with the right parameters when Enter is pressed after autofocus', () => {
       clickEnter();
       expect(onChange).to.have.been.calledOnce;
-      expect(onChange).to.be.calledWith(eventInstance, {
+      expect(onChange).to.be.calledWith(syntheticEventMatcher, {
         newValue: 'Perl',
         method: 'enter'
       });
@@ -101,7 +101,7 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
     it('should be called once with the right parameters when Enter is pressed after autofocus', () => {
       clickEnter();
       expect(onSuggestionSelected).to.have.been.calledOnce;
-      expect(onSuggestionSelected).to.have.been.calledWithExactly(eventInstance, {
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(syntheticEventMatcher, {
         suggestion: { name: 'Perl', year: 1987 },
         suggestionValue: 'Perl',
         sectionIndex: null,

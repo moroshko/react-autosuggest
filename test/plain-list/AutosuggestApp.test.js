@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 import {
   init,
-  eventInstance,
+  syntheticEventMatcher,
   getInnerHTML,
   expectInputAttribute,
   expectInputValue,
@@ -379,7 +379,7 @@ describe('Default Autosuggest', () => {
     it('should be called once with the right parameters when user types', () => {
       focusAndSetInputValue('c+');
       expect(onChange).to.have.been.calledOnce;
-      expect(onChange).to.be.calledWithExactly(eventInstance, {
+      expect(onChange).to.be.calledWithExactly(syntheticEventMatcher, {
         newValue: 'c+',
         method: 'type'
       });
@@ -388,7 +388,7 @@ describe('Default Autosuggest', () => {
     it('should be called once with the right parameters when pressing Down focuses on a suggestion which differs from input value', () => {
       clickDown();
       expect(onChange).to.have.been.calledOnce;
-      expect(onChange).to.be.calledWithExactly(eventInstance, {
+      expect(onChange).to.be.calledWithExactly(syntheticEventMatcher, {
         newValue: 'C',
         method: 'down'
       });
@@ -397,7 +397,7 @@ describe('Default Autosuggest', () => {
     it('should be called once with the right parameters when pressing Up focuses on a suggestion which differs from input value', () => {
       clickUp();
       expect(onChange).to.have.been.calledOnce;
-      expect(onChange).to.be.calledWithExactly(eventInstance, {
+      expect(onChange).to.be.calledWithExactly(syntheticEventMatcher, {
         newValue: 'Clojure',
         method: 'up'
       });
@@ -407,7 +407,7 @@ describe('Default Autosuggest', () => {
       clickEscape();
       clickEscape();
       expect(onChange).to.have.been.calledOnce;
-      expect(onChange).to.be.calledWithExactly(eventInstance, {
+      expect(onChange).to.be.calledWithExactly(syntheticEventMatcher, {
         newValue: '',
         method: 'escape'
       });
@@ -416,7 +416,7 @@ describe('Default Autosuggest', () => {
     it('should be called once with the right parameters when suggestion which differs from input value is clicked', () => {
       clickSuggestion(2);
       expect(onChange).to.have.been.calledOnce;
-      expect(onChange).to.be.calledWithExactly(eventInstance, {
+      expect(onChange).to.be.calledWithExactly(syntheticEventMatcher, {
         newValue: 'C++',
         method: 'click'
       });
@@ -509,12 +509,12 @@ describe('Default Autosuggest', () => {
       expect(shouldRenderSuggestions).to.be.calledWithExactly('e');
     });
 
-    it('should show suggestions when `true` is returned', () => {
+    it('should show suggestions when true is returned', () => {
       focusAndSetInputValue('e');
       expectSuggestions(['Elm']);
     });
 
-    it('should hide suggestions when `false` is returned', () => {
+    it('should hide suggestions when false is returned', () => {
       focusAndSetInputValue(' e');
       expectSuggestions([]);
     });
@@ -529,7 +529,7 @@ describe('Default Autosuggest', () => {
     it('should be called once with the right parameters when suggestion is clicked', () => {
       clickSuggestion(1);
       expect(onSuggestionSelected).to.have.been.calledOnce;
-      expect(onSuggestionSelected).to.have.been.calledWithExactly(eventInstance, {
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(syntheticEventMatcher, {
         suggestion: { name: 'Javascript', year: 1995 },
         suggestionValue: 'Javascript',
         sectionIndex: null,
@@ -541,7 +541,7 @@ describe('Default Autosuggest', () => {
       clickDown();
       clickEnter();
       expect(onSuggestionSelected).to.have.been.calledOnce;
-      expect(onSuggestionSelected).to.have.been.calledWithExactly(eventInstance, {
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(syntheticEventMatcher, {
         suggestion: { name: 'Java', year: 1995 },
         suggestionValue: 'Java',
         sectionIndex: null,
@@ -604,7 +604,7 @@ describe('Default Autosuggest', () => {
       expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'Java', reason: 'blur' });
     });
 
-    it('should not be called when Escape is pressed and suggestions are hidden and shouldRenderSuggestions returns `false` for empty value', () => {
+    it('should not be called when Escape is pressed and suggestions are hidden and shouldRenderSuggestions returns false for empty value', () => {
       focusAndSetInputValue('jr');
       onSuggestionsUpdateRequested.reset();
       clickEscape();
@@ -659,7 +659,7 @@ describe('Default Autosuggest', () => {
       expect(onSuggestionsUpdateRequested).not.to.have.been.called;
     });
 
-    it('should not be called when shouldRenderSuggestions returns `false`', () => {
+    it('should not be called when shouldRenderSuggestions returns false', () => {
       onSuggestionsUpdateRequested.reset();
       focusAndSetInputValue(' ');
       expect(onSuggestionsUpdateRequested).not.to.have.been.called;
@@ -685,7 +685,7 @@ describe('Default Autosuggest', () => {
     it('should call onBlur once with the right parameters when input is blurred', () => {
       blurInput();
       expect(onBlur).to.have.been.calledOnce;
-      expect(onBlur).to.have.been.calledWithExactly(eventInstance);
+      expect(onBlur).to.have.been.calledWithExactly(syntheticEventMatcher);
     });
   });
 
