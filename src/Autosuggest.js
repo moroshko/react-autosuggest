@@ -130,18 +130,13 @@ class Autosuggest extends Component {
   onDocumentMouseDown(event) {
     this.justClickedOnSuggestionsContainer = false;
 
-    let node =
+    const clickedElement =
       event.detail.target || // This is for testing only. Please show be a better way to emulate this.
       event.target;
 
-    do {
-      if (node === this.suggestionsContainer) {
-        this.justClickedOnSuggestionsContainer = true;
-        return;
-      }
-
-      node = node.parentNode;
-    } while (node !== null);
+    if (this.suggestionsContainer.contains(clickedElement)) {
+      this.justClickedOnSuggestionsContainer = true;
+    }
   }
 
   findSuggestionElement(startNode) {
