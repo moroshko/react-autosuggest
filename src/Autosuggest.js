@@ -50,18 +50,6 @@ class Autosuggest extends Component {
     closeSuggestions: PropTypes.func.isRequired
   };
 
-  constructor() {
-    super();
-
-    this.storeReferences = this.storeReferences.bind(this);
-    this.onDocumentMouseDown = this.onDocumentMouseDown.bind(this);
-    this.onSuggestionMouseEnter = this.onSuggestionMouseEnter.bind(this);
-    this.onSuggestionMouseLeave = this.onSuggestionMouseLeave.bind(this);
-    this.onSuggestionMouseDown = this.onSuggestionMouseDown.bind(this);
-    this.onSuggestionClick = this.onSuggestionClick.bind(this);
-    this.itemProps = this.itemProps.bind(this);
-  }
-
   componentDidMount() {
     document.addEventListener('mousedown', this.onDocumentMouseDown);
   }
@@ -127,7 +115,7 @@ class Autosuggest extends Component {
     };
   }
 
-  onDocumentMouseDown(event) {
+  onDocumentMouseDown = event => {
     this.justClickedOnSuggestionsContainer = false;
 
     const clickedElement =
@@ -137,7 +125,7 @@ class Autosuggest extends Component {
     if (this.suggestionsContainer.contains(clickedElement)) {
       this.justClickedOnSuggestionsContainer = true;
     }
-  }
+  };
 
   findSuggestionElement(startNode) {
     let node = startNode;
@@ -185,7 +173,7 @@ class Autosuggest extends Component {
     return suggestions.length > 0 && shouldRenderSuggestions(value);
   }
 
-  storeReferences(autowhatever) {
+  storeReferences = autowhatever => {
     if (autowhatever !== null) {
       const { input } = autowhatever;
 
@@ -194,21 +182,21 @@ class Autosuggest extends Component {
 
       this.suggestionsContainer = autowhatever.itemsContainer;
     }
-  }
+  };
 
-  onSuggestionMouseEnter(event, { sectionIndex, itemIndex }) {
+  onSuggestionMouseEnter = (event, { sectionIndex, itemIndex }) => {
     this.props.updateFocusedSuggestion(sectionIndex, itemIndex);
-  }
+  };
 
-  onSuggestionMouseLeave() {
+  onSuggestionMouseLeave = () => {
     this.props.updateFocusedSuggestion(null, null);
-  }
+  };
 
-  onSuggestionMouseDown() {
+  onSuggestionMouseDown = () => {
     this.justClickedOnSuggestion = true;
-  }
+  };
 
-  onSuggestionClick(event) {
+  onSuggestionClick = event => {
     const {
       inputProps, shouldRenderSuggestions, onSuggestionSelected,
       focusInputOnSuggestionClick, inputBlurred, closeSuggestions
@@ -240,9 +228,9 @@ class Autosuggest extends Component {
     setTimeout(() => {
       this.justClickedOnSuggestion = false;
     });
-  }
+  };
 
-  itemProps({ sectionIndex, itemIndex }) {
+  itemProps = ({ sectionIndex, itemIndex }) => {
     return {
       'data-section-index': sectionIndex,
       'data-suggestion-index': itemIndex,
@@ -252,7 +240,7 @@ class Autosuggest extends Component {
       onTouchStart: this.onSuggestionMouseDown, // Because on iOS `onMouseDown` is not triggered
       onClick: this.onSuggestionClick
     };
-  }
+  };
 
   render() {
     const {
