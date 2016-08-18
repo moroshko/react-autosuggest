@@ -38,6 +38,7 @@ export const onChange = sinon.spy((event, { newValue }) => {
   });
 });
 
+export const onFocus = sinon.spy();
 export const onBlur = sinon.spy();
 export const onSuggestionSelected = sinon.spy(() => {
   addEvent('onSuggestionSelected');
@@ -59,19 +60,17 @@ export default class AutosuggestApp extends Component {
 
     app = this;
 
-    this.storeAutosuggestReference = this.storeAutosuggestReference.bind(this);
-
     this.state = {
       value: '',
       suggestions: getMatchingLanguages('')
     };
   }
 
-  storeAutosuggestReference(autosuggest) {
+  storeAutosuggestReference = autosuggest => {
     if (autosuggest !== null) {
       this.input = autosuggest.input;
     }
-  }
+  };
 
   render() {
     const { value, suggestions } = this.state;
@@ -81,6 +80,7 @@ export default class AutosuggestApp extends Component {
       type: 'search',
       value,
       onChange,
+      onFocus,
       onBlur
     };
 

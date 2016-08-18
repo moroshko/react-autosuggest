@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 import {
   init,
-  eventInstance,
+  syntheticEventMatcher,
   expectInputValue,
   expectSuggestions,
   expectFocusedSuggestion,
@@ -11,6 +11,8 @@ import {
   focusInput,
   blurInput,
   clickEnter,
+  clickDown,
+  setInputValue,
   focusAndSetInputValue
 } from '../helpers';
 import AutosuggestApp, {
@@ -20,11 +22,7 @@ import AutosuggestApp, {
 
 describe('Autosuggest with focusFirstSuggestion={true}', () => {
   beforeEach(() => {
-    const app = TestUtils.renderIntoDocument(React.createElement(AutosuggestApp));
-    const container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
-    const input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
-
-    init({ app, container, input });
+    init(TestUtils.renderIntoDocument(<AutosuggestApp />));
   });
 
   describe('when typing and matches exist', () => {
@@ -40,6 +38,20 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
       blurInput();
       focusInput();
       expectFocusedSuggestion('Perl');
+    });
+
+    it('should focus on the first suggestion when same suggestions are shown again', () => {
+      setInputValue('');
+      setInputValue('p');
+      expectFocusedSuggestion('Perl');
+    });
+  });
+
+  describe('when pressing Down', () => {
+    it('should focus on the second suggestion', () => {
+      focusAndSetInputValue('c');
+      clickDown();
+      expectFocusedSuggestion('C#');
     });
   });
 
@@ -73,7 +85,7 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
     it('should be called once with the right parameters when Enter is pressed after autofocus', () => {
       clickEnter();
       expect(onChange).to.have.been.calledOnce;
-      expect(onChange).to.be.calledWith(eventInstance, {
+      expect(onChange).to.be.calledWith(syntheticEventMatcher, {
         newValue: 'Perl',
         method: 'enter'
       });
@@ -89,7 +101,7 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
     it('should be called once with the right parameters when Enter is pressed after autofocus', () => {
       clickEnter();
       expect(onSuggestionSelected).to.have.been.calledOnce;
-      expect(onSuggestionSelected).to.have.been.calledWithExactly(eventInstance, {
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(syntheticEventMatcher, {
         suggestion: { name: 'Perl', year: 1987 },
         suggestionValue: 'Perl',
         sectionIndex: null,

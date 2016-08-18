@@ -58,7 +58,7 @@ export default class AutosuggestApp extends Component {
 
     return (
       <Autosuggest
-        suggestions={suggestions}
+        suggestions={suggestions.slice()}
         onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}

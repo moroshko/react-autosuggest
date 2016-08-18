@@ -6,7 +6,7 @@ import TestUtils, { Simulate } from 'react-addons-test-utils';
 
 chai.use(sinonChai);
 
-let data = null;
+let app, container, input, suggestionsContainer;
 let eventsArray = [];
 
 export const clearEvents = () => {
@@ -21,11 +21,14 @@ export const getEvents = () => {
   return eventsArray;
 };
 
-export function init(d) {
-  data = d;
-}
+export const init = application => {
+  app = application;
+  container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
+  input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
+  suggestionsContainer = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__suggestions-container');
+};
 
-export const eventInstance = sinon.match.instanceOf(SyntheticEvent);
+export const syntheticEventMatcher = sinon.match.instanceOf(SyntheticEvent);
 
 const reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 
@@ -39,31 +42,27 @@ export function getInnerHTML(element) {
 }
 
 export function expectContainerAttribute(attributeName, expectedValue) {
-  expect(data.container.getAttribute(attributeName)).to.equal(expectedValue);
+  expect(container.getAttribute(attributeName)).to.equal(expectedValue);
 }
 
 export function expectInputAttribute(attributeName, expectedValue) {
-  expect(data.input.getAttribute(attributeName)).to.equal(expectedValue);
+  expect(input.getAttribute(attributeName)).to.equal(expectedValue);
 }
 
-export function expectSuggestionsContainerAttribute(attributeName, expectedValue) {
-  expect(getSuggestionsContainer().getAttribute(attributeName)).to.equal(expectedValue);
+export function getSuggestionsContainerAttribute(attributeName) {
+  return suggestionsContainer.getAttribute(attributeName);
 }
 
 export function expectInputValue(expectedValue) {
-  expect(data.input.value).to.equal(expectedValue);
-}
-
-export function getSuggestionsContainer() {
-  return TestUtils.findRenderedDOMComponentWithClass(data.app, 'react-autosuggest__suggestions-container');
+  expect(input.value).to.equal(expectedValue);
 }
 
 export function getSuggestionsList() {
-  return TestUtils.findRenderedDOMComponentWithClass(data.app, 'react-autosuggest__suggestions-list');
+  return TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__suggestions-list');
 }
 
 export function getSuggestions() {
-  return TestUtils.scryRenderedDOMComponentsWithClass(data.app, 'react-autosuggest__suggestion');
+  return TestUtils.scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__suggestion');
 }
 
 export function getSuggestion(suggestionIndex) {
@@ -77,7 +76,7 @@ export function getSuggestion(suggestionIndex) {
 }
 
 export function getTitles() {
-  return TestUtils.scryRenderedDOMComponentsWithClass(data.app, 'react-autosuggest__section-title');
+  return TestUtils.scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__section-title');
 }
 
 export function getTitle(titleIndex) {
@@ -91,7 +90,7 @@ export function getTitle(titleIndex) {
 }
 
 export function expectInputReferenceToBeSet() {
-  expect(data.app.input).to.equal(data.input);
+  expect(app.input).to.equal(input);
 }
 
 export function expectSuggestions(expectedSuggestions) {
@@ -102,7 +101,7 @@ export function expectSuggestions(expectedSuggestions) {
 
 export function expectFocusedSuggestion(suggestion) {
   const focusedSuggestions = TestUtils
-    .scryRenderedDOMComponentsWithClass(data.app, 'react-autosuggest__suggestion--focused');
+    .scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__suggestion--focused');
 
   if (suggestion === null) {
     expect(focusedSuggestions).to.have.length(0);
@@ -124,44 +123,64 @@ export function mouseDownSuggestion(suggestionIndex) {
   Simulate.mouseDown(getSuggestion(suggestionIndex));
 }
 
+function mouseDownDocument(target) {
+  document.dispatchEvent(new window.CustomEvent('mousedown', {
+    detail: { // must be 'detail' accoring to docs: https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events#Adding_custom_data_–_CustomEvent()
+      target
+    }
+  }));
+}
+
+// It doesn't feel right to emulate all the DOM events by copying the implementation.
+// Please show me a better way to emulate this.
 export function clickSuggestion(suggestionIndex) {
+  const suggestion = getSuggestion(suggestionIndex);
+
   mouseEnterSuggestion(suggestionIndex);
+  mouseDownDocument(suggestion);
   mouseDownSuggestion(suggestionIndex);
   blurInput();
-  Simulate.click(getSuggestion(suggestionIndex));
+  focusInput();
+  Simulate.click(suggestion);
+}
+
+export function clickSuggestionsContainer() {
+  mouseDownDocument(suggestionsContainer);
+  blurInput();
+  focusInput();
 }
 
 export function focusInput() {
-  Simulate.focus(data.input);
+  Simulate.focus(input);
 }
 
 export function blurInput() {
-  Simulate.blur(data.input);
+  Simulate.blur(input);
 }
 
 export function clickEscape() {
-  Simulate.keyDown(data.input, { key: 'Escape' });
+  Simulate.keyDown(input, { key: 'Escape' });
 }
 
 export function clickEnter() {
-  Simulate.keyDown(data.input, { key: 'Enter' });
+  Simulate.keyDown(input, { key: 'Enter' });
 }
 
 export function clickDown(count = 1) {
   for (let i = 0; i < count; i++) {
-    Simulate.keyDown(data.input, { key: 'ArrowDown' });
+    Simulate.keyDown(input, { key: 'ArrowDown' });
   }
 }
 
 export function clickUp(count = 1) {
   for (let i = 0; i < count; i++) {
-    Simulate.keyDown(data.input, { key: 'ArrowUp' });
+    Simulate.keyDown(input, { key: 'ArrowUp' });
   }
 }
 
 export function setInputValue(value) {
-  data.input.value = value;
-  Simulate.change(data.input);
+  input.value = value;
+  Simulate.change(input);
 }
 
 export function focusAndSetInputValue(value) {
@@ -170,5 +189,5 @@ export function focusAndSetInputValue(value) {
 }
 
 export function isInputFocused() {
-  return global.document.activeElement === data.input;
+  return document.activeElement === input;
 }
