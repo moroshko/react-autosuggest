@@ -118,13 +118,24 @@ class Autosuggest extends Component {
   onDocumentMouseDown = event => {
     this.justClickedOnSuggestionsContainer = false;
 
-    const clickedElement =
+    let node =
       event.detail.target || // This is for testing only. Please show be a better way to emulate this.
       event.target;
 
-    if (this.suggestionsContainer.contains(clickedElement)) {
-      this.justClickedOnSuggestionsContainer = true;
-    }
+    do {
+      if (node.getAttribute('data-suggestion-index') !== null) {
+        // Suggestion was clicked
+        return;
+      }
+
+      if (node === this.suggestionsContainer) {
+        // Something else inside suggestions container was clicked
+        this.justClickedOnSuggestionsContainer = true;
+        return;
+      }
+
+      node = node.parentNode;
+    } while (node !== document);
   };
 
   findSuggestionElement(startNode) {
@@ -197,11 +208,7 @@ class Autosuggest extends Component {
   };
 
   onSuggestionClick = event => {
-    const {
-      inputProps, shouldRenderSuggestions, onSuggestionSelected,
-      focusInputOnSuggestionClick, inputBlurred, closeSuggestions
-    } = this.props;
-    const { value, onBlur } = inputProps;
+    const { onSuggestionSelected, focusInputOnSuggestionClick, closeSuggestions } = this.props;
     const { sectionIndex, suggestionIndex } =
       this.getSuggestionIndices(this.findSuggestionElement(event.target));
     const clickedSuggestion = this.getSuggestion(sectionIndex, suggestionIndex);
@@ -219,8 +226,7 @@ class Autosuggest extends Component {
     if (focusInputOnSuggestionClick === true) {
       this.input.focus();
     } else {
-      inputBlurred(shouldRenderSuggestions(value));
-      onBlur && onBlur(this.onBlurEvent);
+      this.onBlur();
     }
 
     this.maybeCallOnSuggestionsUpdateRequested({ value: clickedSuggestionValue, reason: 'click' });
@@ -228,6 +234,15 @@ class Autosuggest extends Component {
     setTimeout(() => {
       this.justClickedOnSuggestion = false;
     });
+  };
+
+  onBlur = () => {
+    const { inputProps, shouldRenderSuggestions, inputBlurred } = this.props;
+    const { value, onBlur } = inputProps;
+    const focusedSuggestion = this.getFocusedSuggestion();
+
+    inputBlurred(shouldRenderSuggestions(value));
+    onBlur && onBlur(this.blurEvent, { focusedSuggestion });
   };
 
   itemProps = ({ sectionIndex, itemIndex }) => {
@@ -247,11 +262,11 @@ class Autosuggest extends Component {
       suggestions, renderSuggestionsContainer, renderSuggestion, inputProps,
       shouldRenderSuggestions, onSuggestionSelected, multiSection, renderSectionTitle,
       id, getSectionSuggestions, theme, isFocused, isCollapsed, focusedSectionIndex,
-      focusedSuggestionIndex, valueBeforeUpDown, inputFocused, inputBlurred,
-      inputChanged, updateFocusedSuggestion, revealSuggestions, closeSuggestions,
-      getSuggestionValue, alwaysRenderSuggestions
+      focusedSuggestionIndex, valueBeforeUpDown, inputFocused, inputChanged,
+      updateFocusedSuggestion, revealSuggestions, closeSuggestions, getSuggestionValue,
+      alwaysRenderSuggestions
     } = this.props;
-    const { value, onBlur, onFocus, onKeyDown } = inputProps;
+    const { value, onFocus, onKeyDown } = inputProps;
     const willRenderSuggestions = this.willRenderSuggestions(this.props);
     const isOpen = alwaysRenderSuggestions || isFocused && !isCollapsed && willRenderSuggestions;
     const items = (isOpen ? suggestions : []);
@@ -273,11 +288,10 @@ class Autosuggest extends Component {
           return;
         }
 
-        this.onBlurEvent = event;
+        this.blurEvent = event;
 
         if (!this.justClickedOnSuggestion) {
-          inputBlurred(shouldRenderSuggestions(value));
-          onBlur && onBlur(event);
+          this.onBlur();
 
           if (valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
             this.maybeCallOnSuggestionsUpdateRequested({ value, reason: 'blur' });

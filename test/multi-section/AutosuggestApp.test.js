@@ -91,7 +91,9 @@ describe('Autosuggest with multiSection={true}', () => {
 
     it('should call onBlur once with the right parameters', () => {
       expect(onBlur).to.have.been.calledOnce;
-      expect(onBlur).to.have.been.calledWithExactly(syntheticEventMatcher);
+      expect(onBlur).to.have.been.calledWithExactly(syntheticEventMatcher, {
+        focusedSuggestion: { name: 'PHP', year: 1995 }
+      });
     });
 
     it('should call onSuggestionsUpdateRequested once with the right parameters', () => {

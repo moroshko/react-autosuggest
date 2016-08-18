@@ -685,7 +685,9 @@ describe('Default Autosuggest', () => {
     it('should call onBlur once with the right parameters when input is blurred', () => {
       blurInput();
       expect(onBlur).to.have.been.calledOnce;
-      expect(onBlur).to.have.been.calledWithExactly(syntheticEventMatcher);
+      expect(onBlur).to.have.been.calledWithExactly(syntheticEventMatcher, {
+        focusedSuggestion: null
+      });
     });
   });
 

@@ -115,11 +115,12 @@ class Example extends React.Component {
     };
 
     return (
-      <Autosuggest suggestions={suggestions}
-                   onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                   getSuggestionValue={getSuggestionValue}
-                   renderSuggestion={renderSuggestion}
-                   inputProps={inputProps} />
+      <Autosuggest
+        suggestions={suggestions}
+        onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        inputProps={inputProps} />
     );
   }
 }
@@ -338,13 +339,17 @@ Autosuggest is a <a href="https://facebook.github.io/react/docs/forms.html#contr
 ```js
 const inputProps = {
   value: inputValue,  // `inputValue` usually comes from application state
-  onChange: onChange, // called when input value changes
+  onChange: onChange, // called every time input value changes
+  onBlur: onBlur,     // called when input loses focus, e.g. when user presses Tab
   type: 'search',
   placeholder: 'Enter city or postcode'
 };
 ```
 
-`onChange` has the following signature:
+<a name="inputPropsOnChange"></a>
+##### inputProps.onChange
+
+The signature is:
 
 ```js
 function onChange(event, { newValue, method })
@@ -360,6 +365,19 @@ where:
   * `'enter'` - user pressed <kbd>Enter</kbd>
   * `'click'` - user clicked (or tapped) on suggestion
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
+
+<a name="inputPropsOnBlur"></a>
+##### inputProps.onBlur
+
+The signature is:
+
+```js
+function onBlur(event, { focusedSuggestion })
+```
+
+where:
+
+* `focusedSuggestion` - the suggestion that was highlighted just before the input lost focus, or `null` if there was no highlighted suggestion.
 
 <a name="shouldRenderSuggestionsProp"></a>
 #### shouldRenderSuggestions (optional)
