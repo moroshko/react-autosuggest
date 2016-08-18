@@ -38,7 +38,7 @@ Check out the <a href="http://react-autosuggest.js.org" target="_blank">Homepage
 * Supports styling using <a href="https://github.com/css-modules/css-modules" target="_blank">CSS Modules</a>, <a href="https://github.com/FormidableLabs/radium" target="_blank">Radium</a>, <a href="https://facebook.github.io/react/tips/inline-styles.html" target="_blank">Inline styles</a>, global CSS, [and more](#themeProp)
 * You decide [when to show suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Always render suggestions](#alwaysRenderSuggestionsProp) (useful for mobile and modals)
-* [Pass through props to the input field](#inputPropsProp) (e.g. placeholder, type, onChange, onBlur)
+* [Pass through props to the input field](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange), [onBlur](#inputPropsOnBlur))
 * [onSuggestionSelected](#onSuggestionSelectedProp) hook
 * Thoroughly tested
 
