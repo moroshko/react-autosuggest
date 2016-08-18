@@ -347,7 +347,7 @@ const inputProps = {
 ```
 
 <a name="inputPropsOnChange"></a>
-##### inputProps.onChange
+##### inputProps.onChange (required)
 
 The signature is:
 
@@ -367,7 +367,7 @@ where:
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
 
 <a name="inputPropsOnBlur"></a>
-##### inputProps.onBlur
+##### inputProps.onBlur (optional)
 
 The signature is:
 
