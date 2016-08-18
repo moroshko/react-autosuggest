@@ -84,6 +84,10 @@ var AutosuggestContainer = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AutosuggestContainer).call(this));
 
+    _this.storeInputReference = function (input) {
+      _this.input = input;
+    };
+
     var initialState = {
       isFocused: false,
       isCollapsed: !alwaysRenderSuggestions,
@@ -94,17 +98,10 @@ var AutosuggestContainer = function (_Component) {
     };
 
     _this.store = (0, _redux.createStore)(_redux3.default, initialState);
-
-    _this.storeInputReference = _this.storeInputReference.bind(_this);
     return _this;
   }
 
   _createClass(AutosuggestContainer, [{
-    key: 'storeInputReference',
-    value: function storeInputReference(input) {
-      this.input = input;
-    }
-  }, {
     key: 'render',
     value: function render() {
       var _props = this.props;
