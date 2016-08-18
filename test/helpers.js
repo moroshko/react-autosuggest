@@ -28,7 +28,7 @@ export const init = application => {
   suggestionsContainer = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__suggestions-container');
 };
 
-export const eventInstance = sinon.match.instanceOf(SyntheticEvent);
+export const syntheticEventMatcher = sinon.match.instanceOf(SyntheticEvent);
 
 const reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 
@@ -123,19 +123,29 @@ export function mouseDownSuggestion(suggestionIndex) {
   Simulate.mouseDown(getSuggestion(suggestionIndex));
 }
 
+function mouseDownDocument(target) {
+  document.dispatchEvent(new window.CustomEvent('mousedown', {
+    detail: { // must be 'detail' accoring to docs: https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events#Adding_custom_data_–_CustomEvent()
+      target
+    }
+  }));
+}
+
+// It doesn't feel right to emulate all the DOM events by copying the implementation.
+// Please show me a better way to emulate this.
 export function clickSuggestion(suggestionIndex) {
+  const suggestion = getSuggestion(suggestionIndex);
+
   mouseEnterSuggestion(suggestionIndex);
+  mouseDownDocument(suggestion);
   mouseDownSuggestion(suggestionIndex);
   blurInput();
-  Simulate.click(getSuggestion(suggestionIndex));
+  focusInput();
+  Simulate.click(suggestion);
 }
 
 export function clickSuggestionsContainer() {
-  document.dispatchEvent(new window.CustomEvent('mousedown', {
-    detail: { // must be 'detail' accoring to docs: https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events#Adding_custom_data_–_CustomEvent()
-      target: suggestionsContainer
-    }
-  }));
+  mouseDownDocument(suggestionsContainer);
   blurInput();
   focusInput();
 }

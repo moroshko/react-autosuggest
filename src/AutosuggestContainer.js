@@ -108,13 +108,11 @@ export default class AutosuggestContainer extends Component {
     };
 
     this.store = createStore(reducer, initialState);
-
-    this.storeInputReference = this.storeInputReference.bind(this);
   }
 
-  storeInputReference(input) {
+  storeInputReference = input => {
     this.input = input;
-  }
+  };
 
   render() {
     const {

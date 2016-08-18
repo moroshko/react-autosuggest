@@ -39,22 +39,19 @@ export default class Basic extends Component {
       value: '',
       suggestions: getSuggestions('')
     };
-
-    this.onChange = this.onChange.bind(this);
-    this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
   }
 
-  onChange(event, { newValue }) {
+  onChange = (event, { newValue }) => {
     this.setState({
       value: newValue
     });
-  }
+  };
 
-  onSuggestionsUpdateRequested({ value }) {
+  onSuggestionsUpdateRequested = ({ value }) => {
     this.setState({
       suggestions: getSuggestions(value)
     });
-  }
+  };
 
   render() {
     const { value, suggestions } = this.state;

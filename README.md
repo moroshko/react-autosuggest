@@ -38,7 +38,7 @@ Check out the <a href="http://react-autosuggest.js.org" target="_blank">Homepage
 * Supports styling using <a href="https://github.com/css-modules/css-modules" target="_blank">CSS Modules</a>, <a href="https://github.com/FormidableLabs/radium" target="_blank">Radium</a>, <a href="https://facebook.github.io/react/tips/inline-styles.html" target="_blank">Inline styles</a>, global CSS, [and more](#themeProp)
 * You decide [when to show suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Always render suggestions](#alwaysRenderSuggestionsProp) (useful for mobile and modals)
-* [Pass through props to the input field](#inputPropsProp) (e.g. placeholder, type, onChange, onBlur)
+* [Pass through props to the input field](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange), [onBlur](#inputPropsOnBlur))
 * [onSuggestionSelected](#onSuggestionSelectedProp) hook
 * Thoroughly tested
 
@@ -92,22 +92,19 @@ class Example extends React.Component {
       value: '',
       suggestions: getSuggestions('')
     };
-
-    this.onChange = this.onChange.bind(this);
-    this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
   }
 
-  onChange(event, { newValue }) {
+  onChange = (event, { newValue }) => {
     this.setState({
       value: newValue
     });
-  }
+  };
 
-  onSuggestionsUpdateRequested({ value }) {
+  onSuggestionsUpdateRequested = ({ value }) => {
     this.setState({
       suggestions: getSuggestions(value)
     });
-  }
+  };
 
   render() {
     const { value, suggestions } = this.state;
@@ -118,11 +115,12 @@ class Example extends React.Component {
     };
 
     return (
-      <Autosuggest suggestions={suggestions}
-                   onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                   getSuggestionValue={getSuggestionValue}
-                   renderSuggestion={renderSuggestion}
-                   inputProps={inputProps} />
+      <Autosuggest
+        suggestions={suggestions}
+        onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        inputProps={inputProps} />
     );
   }
 }
@@ -341,13 +339,17 @@ Autosuggest is a <a href="https://facebook.github.io/react/docs/forms.html#contr
 ```js
 const inputProps = {
   value: inputValue,  // `inputValue` usually comes from application state
-  onChange: onChange, // called when input value changes
+  onChange: onChange, // called every time input value changes
+  onBlur: onBlur,     // called when input loses focus, e.g. when user presses Tab
   type: 'search',
   placeholder: 'Enter city or postcode'
 };
 ```
 
-`onChange` has the following signature:
+<a name="inputPropsOnChange"></a>
+##### inputProps.onChange (required)
+
+The signature is:
 
 ```js
 function onChange(event, { newValue, method })
@@ -363,6 +365,19 @@ where:
   * `'enter'` - user pressed <kbd>Enter</kbd>
   * `'click'` - user clicked (or tapped) on suggestion
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
+
+<a name="inputPropsOnBlur"></a>
+##### inputProps.onBlur (optional)
+
+The signature is:
+
+```js
+function onBlur(event, { focusedSuggestion })
+```
+
+where:
+
+* `focusedSuggestion` - the suggestion that was highlighted just before the input lost focus, or `null` if there was no highlighted suggestion.
 
 <a name="shouldRenderSuggestionsProp"></a>
 #### shouldRenderSuggestions (optional)
