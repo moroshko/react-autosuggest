@@ -94,22 +94,19 @@ class App extends React.Component { // eslint-disable-line no-undef
       value: '',
       suggestions: getSuggestions('')
     };
-
-    this.onChange = this.onChange.bind(this);
-    this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
   }
 
-  onChange(event, { newValue }) {
+  onChange = (event, { newValue }) => {
     this.setState({
       value: newValue
     });
-  }
+  };
 
-  onSuggestionsUpdateRequested({ value }) {
+  onSuggestionsUpdateRequested = ({ value }) => {
     this.setState({
       suggestions: getSuggestions(value)
     });
-  }
+  };
 
   render() {
     const { value, suggestions } = this.state;
@@ -120,11 +117,12 @@ class App extends React.Component { // eslint-disable-line no-undef
     };
 
     return (
-      <Autosuggest suggestions={suggestions} // eslint-disable-line react/jsx-no-undef
-                   onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                   getSuggestionValue={getSuggestionValue}
-                   renderSuggestion={renderSuggestion}
-                   inputProps={inputProps} />
+      <Autosuggest // eslint-disable-line react/jsx-no-undef
+        suggestions={suggestions}
+        onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        inputProps={inputProps} />
     );
   }
 }

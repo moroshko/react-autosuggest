@@ -5,20 +5,21 @@ const UPDATE_FOCUSED_SUGGESTION = 'UPDATE_FOCUSED_SUGGESTION';
 const REVEAL_SUGGESTIONS = 'REVEAL_SUGGESTIONS';
 const CLOSE_SUGGESTIONS = 'CLOSE_SUGGESTIONS';
 
-export function inputFocused(shouldRenderSuggestions) {
+function inputFocused(shouldRenderSuggestions) {
   return {
     type: INPUT_FOCUSED,
     shouldRenderSuggestions
   };
 }
 
-export function inputBlurred() {
+function inputBlurred(shouldRenderSuggestions) {
   return {
-    type: INPUT_BLURRED
+    type: INPUT_BLURRED,
+    shouldRenderSuggestions
   };
 }
 
-export function inputChanged(shouldRenderSuggestions, lastAction) {
+function inputChanged(shouldRenderSuggestions, lastAction) {
   return {
     type: INPUT_CHANGED,
     shouldRenderSuggestions,
@@ -26,7 +27,7 @@ export function inputChanged(shouldRenderSuggestions, lastAction) {
   };
 }
 
-export function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
+function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
   return {
     type: UPDATE_FOCUSED_SUGGESTION,
     sectionIndex,
@@ -35,18 +36,27 @@ export function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
   };
 }
 
-export function revealSuggestions() {
+function revealSuggestions() {
   return {
     type: REVEAL_SUGGESTIONS
   };
 }
 
-export function closeSuggestions(lastAction) {
+function closeSuggestions(lastAction) {
   return {
     type: CLOSE_SUGGESTIONS,
     lastAction
   };
 }
+
+export const actionCreators = {
+  inputFocused,
+  inputBlurred,
+  inputChanged,
+  updateFocusedSuggestion,
+  revealSuggestions,
+  closeSuggestions
+};
 
 export default function reducer(state, action) {
   switch (action.type) {
@@ -64,7 +74,7 @@ export default function reducer(state, action) {
         focusedSectionIndex: null,
         focusedSuggestionIndex: null,
         valueBeforeUpDown: null,
-        isCollapsed: true
+        isCollapsed: !action.shouldRenderSuggestions
       };
 
     case INPUT_CHANGED:
@@ -79,10 +89,13 @@ export default function reducer(state, action) {
 
     case UPDATE_FOCUSED_SUGGESTION: {
       const { value, sectionIndex, suggestionIndex } = action;
-      const valueBeforeUpDown =
-        state.valueBeforeUpDown === null && typeof value !== 'undefined'
-          ? value
-          : state.valueBeforeUpDown;
+      let { valueBeforeUpDown } = state;
+
+      if (suggestionIndex === null) {
+        valueBeforeUpDown = null;
+      } else if (valueBeforeUpDown === null && typeof value !== 'undefined') {
+        valueBeforeUpDown = value;
+      }
 
       return {
         ...state,

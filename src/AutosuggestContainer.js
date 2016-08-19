@@ -1,20 +1,21 @@
 import React, { Component, PropTypes } from 'react';
 import { createStore } from 'redux';
-import reducer from './reducerAndActions';
+import reducer from './redux';
 import Autosuggest from './Autosuggest';
 
-function noop() {}
+const noop = () => {};
+const alwaysTrue = () => true;
 
 const defaultTheme = {
   container: 'react-autosuggest__container',
   containerOpen: 'react-autosuggest__container--open',
   input: 'react-autosuggest__input',
   suggestionsContainer: 'react-autosuggest__suggestions-container',
+  suggestionsList: 'react-autosuggest__suggestions-list',
   suggestion: 'react-autosuggest__suggestion',
   suggestionFocused: 'react-autosuggest__suggestion--focused',
   sectionContainer: 'react-autosuggest__section-container',
-  sectionTitle: 'react-autosuggest__section-title',
-  sectionSuggestionsContainer: 'react-autosuggest__section-suggestions-container'
+  sectionTitle: 'react-autosuggest__section-title'
 };
 
 function mapToAutowhateverTheme(theme) {
@@ -34,8 +35,8 @@ function mapToAutowhateverTheme(theme) {
         result['itemFocused'] = theme[key];
         break;
 
-      case 'sectionSuggestionsContainer':
-        result['sectionItemsContainer'] = theme[key];
+      case 'suggestionsList':
+        result['itemsList'] = theme[key];
         break;
 
       default:
@@ -49,6 +50,7 @@ function mapToAutowhateverTheme(theme) {
 export default class AutosuggestContainer extends Component {
   static propTypes = {
     suggestions: PropTypes.array.isRequired,
+    renderSuggestionsContainer: PropTypes.func,
     onSuggestionsUpdateRequested: PropTypes.func,
     getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
@@ -64,11 +66,13 @@ export default class AutosuggestContainer extends Component {
       }
     },
     shouldRenderSuggestions: PropTypes.func,
+    alwaysRenderSuggestions: PropTypes.bool,
     onSuggestionSelected: PropTypes.func,
     multiSection: PropTypes.bool,
     renderSectionTitle: PropTypes.func,
     getSectionSuggestions: PropTypes.func,
     focusInputOnSuggestionClick: PropTypes.bool,
+    focusFirstSuggestion: PropTypes.bool,
     theme: PropTypes.object,
     id: PropTypes.string
   };
@@ -76,6 +80,7 @@ export default class AutosuggestContainer extends Component {
   static defaultProps = {
     onSuggestionsUpdateRequested: noop,
     shouldRenderSuggestions: value => value.trim().length > 0,
+    alwaysRenderSuggestions: false,
     onSuggestionSelected: noop,
     multiSection: false,
     renderSectionTitle() {
@@ -85,16 +90,17 @@ export default class AutosuggestContainer extends Component {
       throw new Error('`getSectionSuggestions` must be provided');
     },
     focusInputOnSuggestionClick: true,
+    focusFirstSuggestion: false,
     theme: defaultTheme,
     id: '1'
   };
 
-  constructor() {
+  constructor({ alwaysRenderSuggestions }) {
     super();
 
     const initialState = {
       isFocused: false,
-      isCollapsed: true,
+      isCollapsed: !alwaysRenderSuggestions,
       focusedSectionIndex: null,
       focusedSuggestionIndex: null,
       valueBeforeUpDown: null,
@@ -102,38 +108,41 @@ export default class AutosuggestContainer extends Component {
     };
 
     this.store = createStore(reducer, initialState);
-
-    this.saveInput = this.saveInput.bind(this);
   }
 
-  saveInput(input) {
+  storeInputReference = input => {
     this.input = input;
-  }
+  };
 
   render() {
     const {
-      multiSection, shouldRenderSuggestions, suggestions,
+      multiSection, shouldRenderSuggestions, suggestions, renderSuggestionsContainer,
       onSuggestionsUpdateRequested, getSuggestionValue, renderSuggestion,
       renderSectionTitle, getSectionSuggestions, inputProps,
-      onSuggestionSelected, focusInputOnSuggestionClick, theme, id
+      onSuggestionSelected, focusInputOnSuggestionClick, focusFirstSuggestion,
+      alwaysRenderSuggestions, theme, id
     } = this.props;
 
     return (
-      <Autosuggest multiSection={multiSection}
-                   shouldRenderSuggestions={shouldRenderSuggestions}
-                   suggestions={suggestions}
-                   onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
-                   getSuggestionValue={getSuggestionValue}
-                   renderSuggestion={renderSuggestion}
-                   renderSectionTitle={renderSectionTitle}
-                   getSectionSuggestions={getSectionSuggestions}
-                   inputProps={inputProps}
-                   onSuggestionSelected={onSuggestionSelected}
-                   focusInputOnSuggestionClick={focusInputOnSuggestionClick}
-                   theme={mapToAutowhateverTheme(theme)}
-                   id={id}
-                   inputRef={this.saveInput}
-                   store={this.store} />
+      <Autosuggest
+        multiSection={multiSection}
+        shouldRenderSuggestions={alwaysRenderSuggestions ? alwaysTrue : shouldRenderSuggestions}
+        alwaysRenderSuggestions={alwaysRenderSuggestions}
+        suggestions={suggestions}
+        renderSuggestionsContainer={renderSuggestionsContainer}
+        onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        renderSectionTitle={renderSectionTitle}
+        getSectionSuggestions={getSectionSuggestions}
+        inputProps={inputProps}
+        onSuggestionSelected={onSuggestionSelected}
+        focusInputOnSuggestionClick={focusInputOnSuggestionClick}
+        focusFirstSuggestion={focusFirstSuggestion}
+        theme={mapToAutowhateverTheme(theme)}
+        id={id}
+        inputRef={this.storeInputReference}
+        store={this.store} />
     );
   }
 }

@@ -27,9 +27,8 @@ function getSuggestionValue(suggestion) {
   return `${suggestion.first} ${suggestion.last}`;
 }
 
-function renderSuggestion(suggestion, { value, valueBeforeUpDown }) {
+function renderSuggestion(suggestion, { query }) {
   const suggestionText = `${suggestion.first} ${suggestion.last}`;
-  const query = (valueBeforeUpDown || value).trim();
   const matches = highlight.match(suggestionText, query);
   const parts = highlight.parse(suggestionText, matches);
 
@@ -58,22 +57,19 @@ export default class CustomRender extends Component {
       value: '',
       suggestions: getSuggestions('')
     };
-
-    this.onChange = this.onChange.bind(this);
-    this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
   }
 
-  onChange(event, { newValue }) {
+  onChange = (event, { newValue }) => {
     this.setState({
       value: newValue
     });
-  }
+  };
 
-  onSuggestionsUpdateRequested({ value }) {
+  onSuggestionsUpdateRequested = ({ value }) => {
     this.setState({
       suggestions: getSuggestions(value)
     });
-  }
+  };
 
   render() {
     const { value, suggestions } = this.state;
@@ -93,20 +89,23 @@ export default class CustomRender extends Component {
             Apply any styling you wish.<br />
             For example, render images and highlight the matching string.
           </div>
-          <Link className={styles.codepenLink}
-                href="http://codepen.io/moroshko/pen/PZWbzK" underline={false}>
+          <Link
+            className={styles.codepenLink}
+            href="http://codepen.io/moroshko/pen/PZWbzK"
+            underline={false}>
             Codepen
           </Link>
         </div>
         <div className={styles.autosuggest}>
-          <Autosuggest suggestions={suggestions}
-                       onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                       getSuggestionValue={getSuggestionValue}
-                       renderSuggestion={renderSuggestion}
-                       inputProps={inputProps}
-                       focusInputOnSuggestionClick={focusInputOnSuggestionClick}
-                       theme={theme}
-                       id="custom-render-example" />
+          <Autosuggest
+            suggestions={suggestions}
+            onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            inputProps={inputProps}
+            focusInputOnSuggestionClick={focusInputOnSuggestionClick}
+            theme={theme}
+            id="custom-render-example" />
         </div>
       </div>
     );

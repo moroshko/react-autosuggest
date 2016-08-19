@@ -57,22 +57,19 @@ export default class MultipleSections extends Component {
       value: '',
       suggestions: getSuggestions('')
     };
-
-    this.onChange = this.onChange.bind(this);
-    this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
   }
 
-  onChange(event, { newValue }) {
+  onChange = (event, { newValue }) => {
     this.setState({
       value: newValue
     });
-  }
+  };
 
-  onSuggestionsUpdateRequested({ value }) {
+  onSuggestionsUpdateRequested = ({ value }) => {
     this.setState({
       suggestions: getSuggestions(value)
     });
-  }
+  };
 
   render() {
     const { value, suggestions } = this.state;
@@ -91,23 +88,26 @@ export default class MultipleSections extends Component {
           <div className={styles.description}>
             Suggestions can also be presented in multiple sections.
           </div>
-          <Link className={styles.codepenLink}
-                href="http://codepen.io/moroshko/pen/qbRNjV" underline={false}>
+          <Link
+            className={styles.codepenLink}
+            href="http://codepen.io/moroshko/pen/qbRNjV"
+            underline={false}>
             Codepen
           </Link>
         </div>
         <div className={styles.autosuggest}>
-          <Autosuggest multiSection={true}
-                       suggestions={suggestions}
-                       onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                       getSuggestionValue={getSuggestionValue}
-                       renderSuggestion={renderSuggestion}
-                       renderSectionTitle={renderSectionTitle}
-                       getSectionSuggestions={getSectionSuggestions}
-                       inputProps={inputProps}
-                       focusInputOnSuggestionClick={focusInputOnSuggestionClick}
-                       theme={theme}
-                       id="multiple-sections-example" />
+          <Autosuggest
+            multiSection={true}
+            suggestions={suggestions}
+            onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            renderSectionTitle={renderSectionTitle}
+            getSectionSuggestions={getSectionSuggestions}
+            inputProps={inputProps}
+            focusInputOnSuggestionClick={focusInputOnSuggestionClick}
+            theme={theme}
+            id="multiple-sections-example" />
         </div>
       </div>
     );

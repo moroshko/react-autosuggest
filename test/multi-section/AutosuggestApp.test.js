@@ -4,12 +4,13 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import {
   init,
-  eventInstance,
+  syntheticEventMatcher,
   getInnerHTML,
   expectContainerAttribute,
   expectInputAttribute,
   expectSuggestions,
-  expectSuggestionsContainerAttribute,
+  expectFocusedSuggestion,
+  getSuggestionsContainerAttribute,
   getTitle,
   clickSuggestion,
   focusInput,
@@ -25,20 +26,17 @@ import AutosuggestApp, {
   onBlur,
   onSuggestionSelected,
   renderSectionTitle,
-  getSectionSuggestions
+  getSectionSuggestions,
+  setFocusFirstSuggestion
 } from './AutosuggestApp';
 
-describe('Multi section Autosuggest', () => {
+describe('Autosuggest with multiSection={true}', () => {
   beforeEach(() => {
-    const app = TestUtils.renderIntoDocument(React.createElement(AutosuggestApp));
-    const container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
-    const input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
-
-    init({ app, container, input });
+    init(TestUtils.renderIntoDocument(<AutosuggestApp />));
   });
 
   describe('shouldRenderSuggestions', () => {
-    it('should show suggestions input is empty and `true` is returned', () => {
+    it('should show suggestions input is empty and true is returned', () => {
       focusInput();
       expectSuggestions([
         'C', 'C#', 'C++', 'Clojure', 'Elm', 'Go', 'Haskell', 'Java',
@@ -55,7 +53,7 @@ describe('Multi section Autosuggest', () => {
 
     it('should be called with the right sectionIndex when suggestion is clicked', () => {
       clickSuggestion(4);
-      expect(onSuggestionSelected).to.have.been.calledWith(eventInstance, sinon.match({
+      expect(onSuggestionSelected).to.have.been.calledWith(syntheticEventMatcher, sinon.match({
         sectionIndex: 1
       }));
     });
@@ -63,14 +61,14 @@ describe('Multi section Autosuggest', () => {
     it('should be called with the right sectionIndex when Enter is pressed and suggestion is focused', () => {
       clickDown(6);
       clickEnter();
-      expect(onSuggestionSelected).to.have.been.calledWith(eventInstance, sinon.match({
+      expect(onSuggestionSelected).to.have.been.calledWith(syntheticEventMatcher, sinon.match({
         sectionIndex: 2
       }));
     });
   });
 
   describe('onSuggestionsUpdateRequested', () => {
-    it('should be called once with the right parameters when Escape is pressed and suggestions are hidden and shouldRenderSuggestions returns `true` for empty value', () => {
+    it('should be called once with the right parameters when Escape is pressed and suggestions are hidden and shouldRenderSuggestions returns true for empty value', () => {
       focusAndSetInputValue('jr');
       onSuggestionsUpdateRequested.reset();
       clickEscape();
@@ -79,7 +77,7 @@ describe('Multi section Autosuggest', () => {
     });
   });
 
-  describe('when focusInputOnSuggestionClick is `false` and suggestion is clicked', () => {
+  describe('when focusInputOnSuggestionClick is false and suggestion is clicked', () => {
     beforeEach(() => {
       onBlur.reset();
       focusAndSetInputValue('p');
@@ -93,7 +91,9 @@ describe('Multi section Autosuggest', () => {
 
     it('should call onBlur once with the right parameters', () => {
       expect(onBlur).to.have.been.calledOnce;
-      expect(onBlur).to.have.been.calledWithExactly(eventInstance);
+      expect(onBlur).to.have.been.calledWithExactly(syntheticEventMatcher, {
+        focusedSuggestion: { name: 'PHP', year: 1995 }
+      });
     });
 
     it('should call onSuggestionsUpdateRequested once with the right parameters', () => {
@@ -190,7 +190,27 @@ describe('Multi section Autosuggest', () => {
 
     it('should set suggestions container class', () => {
       focusAndSetInputValue('e');
-      expectSuggestionsContainerAttribute('class', 'react-autosuggest__suggestions-container');
+      expect(getSuggestionsContainerAttribute('class')).to.equal('react-autosuggest__suggestions-container');
+    });
+  });
+
+  describe('and focusFirstSuggestion={true}', () => {
+    before(() => {
+      setFocusFirstSuggestion(true);
+    });
+
+    after(() => {
+      setFocusFirstSuggestion(false);
+    });
+
+    describe('when typing and matches exist', () => {
+      beforeEach(() => {
+        focusAndSetInputValue('p');
+      });
+
+      it('should focus on the first suggestion', () => {
+        expectFocusedSuggestion('Perl');
+      });
     });
   });
 });
