@@ -2,6 +2,9 @@
   <img src="https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg?style=flat-square"
        alt="Build Status" />
 </a>
+<a href="https://www.bithound.io/github/moroshko/react-autosuggest" target="_blank">
+  <img src="https://www.bithound.io/github/moroshko/react-autosuggest/badges/score.svg" alt="bitHound Overall Score">
+</a>
 <a href="http://issuestats.com/github/moroshko/react-autosuggest" target="_blank">
   <img src="http://issuestats.com/github/moroshko/react-autosuggest/badge/issue?style=flat-square"
        alt="Issues stats" />
