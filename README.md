@@ -8,6 +8,7 @@
 <a href="https://www.bithound.io/github/moroshko/react-autosuggest" target="_blank">
   <img src="https://www.bithound.io/github/moroshko/react-autosuggest/badges/score.svg" alt="bitHound Overall Score">
 </a>
+
 <a href="http://issuestats.com/github/moroshko/react-autosuggest" target="_blank">
   <img src="http://issuestats.com/github/moroshko/react-autosuggest/badge/issue?style=flat-square"
        alt="Issues stats" />
@@ -16,6 +17,7 @@
   <img src="https://img.shields.io/badge/pull%20requests%20closed%20in-5%20days-green.svg?style=flat-square"
        alt="Pull Requests stats" />
 </a>
+
 <a href="https://npmjs.org/package/react-autosuggest" target="_blank">
   <img src="https://img.shields.io/npm/dm/react-autosuggest.svg?style=flat-square"
        alt="NPM Downloads" />
