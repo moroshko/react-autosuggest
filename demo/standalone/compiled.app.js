@@ -147,35 +147,30 @@
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this));
 
+	    _this.onChange = function (event, _ref) {
+	      var newValue = _ref.newValue;
+
+	      _this.setState({
+	        value: newValue
+	      });
+	    };
+
+	    _this.onSuggestionsUpdateRequested = function (_ref2) {
+	      var value = _ref2.value;
+
+	      _this.setState({
+	        suggestions: getSuggestions(value)
+	      });
+	    };
+
 	    _this.state = {
 	      value: '',
 	      suggestions: getSuggestions('')
 	    };
-
-	    _this.onChange = _this.onChange.bind(_this);
-	    _this.onSuggestionsUpdateRequested = _this.onSuggestionsUpdateRequested.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(App, [{
-	    key: 'onChange',
-	    value: function onChange(event, _ref) {
-	      var newValue = _ref.newValue;
-
-	      this.setState({
-	        value: newValue
-	      });
-	    }
-	  }, {
-	    key: 'onSuggestionsUpdateRequested',
-	    value: function onSuggestionsUpdateRequested(_ref2) {
-	      var value = _ref2.value;
-
-	      this.setState({
-	        suggestions: getSuggestions(value)
-	      });
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _state = this.state;

@@ -2,6 +2,13 @@
   <img src="https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg?style=flat-square"
        alt="Build Status" />
 </a>
+<a href="https://codecov.io/gh/moroshko/react-autosuggest" target="_blank">
+  <img src="https://img.shields.io/codecov/c/github/moroshko/react-autosuggest/master.svg" alt="Coverage Status">
+</a>
+<a href="https://www.bithound.io/github/moroshko/react-autosuggest" target="_blank">
+  <img src="https://www.bithound.io/github/moroshko/react-autosuggest/badges/score.svg" alt="bitHound Overall Score">
+</a>
+
 <a href="http://issuestats.com/github/moroshko/react-autosuggest" target="_blank">
   <img src="http://issuestats.com/github/moroshko/react-autosuggest/badge/issue?style=flat-square"
        alt="Issues stats" />
@@ -10,6 +17,7 @@
   <img src="https://img.shields.io/badge/pull%20requests%20closed%20in-5%20days-green.svg?style=flat-square"
        alt="Pull Requests stats" />
 </a>
+
 <a href="https://npmjs.org/package/react-autosuggest" target="_blank">
   <img src="https://img.shields.io/npm/dm/react-autosuggest.svg?style=flat-square"
        alt="NPM Downloads" />
