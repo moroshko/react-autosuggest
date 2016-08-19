@@ -58,7 +58,7 @@
     "jsdom": "^9.4.2",
     "less": "^2.6.1",
     "less-loader": "^2.2.3",
-    "mocha": "^2.4.5",
+    "mocha": "^3.0.2",
     "postcss-loader": "^0.9.1",
     "react": "^15.0.1",
     "react-addons-test-utils": "^15.0.1",
