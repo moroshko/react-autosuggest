@@ -1,7 +1,8 @@
 {
   "ignore": [
     "**/node_modules/**",
-    "demo/standalone/compiled.app.js"
+    "demo/standalone/compiled.app.js",
+    "index.js"
   ],
   "test": [
     "**/test/**"
