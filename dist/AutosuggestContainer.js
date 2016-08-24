@@ -93,8 +93,7 @@ var AutosuggestContainer = function (_Component) {
       isCollapsed: !alwaysRenderSuggestions,
       focusedSectionIndex: null,
       focusedSuggestionIndex: null,
-      valueBeforeUpDown: null,
-      lastAction: null
+      valueBeforeUpDown: null
     };
 
     _this.store = (0, _redux.createStore)(_redux3.default, initialState);

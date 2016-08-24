@@ -28,11 +28,10 @@ function inputBlurred(shouldRenderSuggestions) {
   };
 }
 
-function inputChanged(shouldRenderSuggestions, lastAction) {
+function inputChanged(shouldRenderSuggestions) {
   return {
     type: INPUT_CHANGED,
-    shouldRenderSuggestions: shouldRenderSuggestions,
-    lastAction: lastAction
+    shouldRenderSuggestions: shouldRenderSuggestions
   };
 }
 
@@ -51,10 +50,9 @@ function revealSuggestions() {
   };
 }
 
-function closeSuggestions(lastAction) {
+function closeSuggestions() {
   return {
-    type: CLOSE_SUGGESTIONS,
-    lastAction: lastAction
+    type: CLOSE_SUGGESTIONS
   };
 }
 
@@ -89,8 +87,7 @@ function reducer(state, action) {
         focusedSectionIndex: null,
         focusedSuggestionIndex: null,
         valueBeforeUpDown: null,
-        isCollapsed: !action.shouldRenderSuggestions,
-        lastAction: action.lastAction
+        isCollapsed: !action.shouldRenderSuggestions
       });
 
     case UPDATE_FOCUSED_SUGGESTION:
@@ -124,8 +121,7 @@ function reducer(state, action) {
         focusedSectionIndex: null,
         focusedSuggestionIndex: null,
         valueBeforeUpDown: null,
-        isCollapsed: true,
-        lastAction: action.lastAction
+        isCollapsed: true
       });
 
     default:

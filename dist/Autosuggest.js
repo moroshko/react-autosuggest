@@ -38,8 +38,7 @@ function mapStateToProps(state) {
     isCollapsed: state.isCollapsed,
     focusedSectionIndex: state.focusedSectionIndex,
     focusedSuggestionIndex: state.focusedSuggestionIndex,
-    valueBeforeUpDown: state.valueBeforeUpDown,
-    lastAction: state.lastAction
+    valueBeforeUpDown: state.valueBeforeUpDown
   };
 }
 
@@ -95,9 +94,10 @@ var Autosuggest = function (_Component) {
     }, _this.onSuggestionMouseLeave = function () {
       _this.props.updateFocusedSuggestion(null, null);
     }, _this.onSuggestionMouseDown = function () {
-      _this.justClickedOnSuggestion = true;
+      _this.justSelectedSuggestion = true;
     }, _this.onSuggestionClick = function (event) {
       var _this$props = _this.props;
+      var alwaysRenderSuggestions = _this$props.alwaysRenderSuggestions;
       var onSuggestionSelected = _this$props.onSuggestionSelected;
       var focusInputOnSuggestionClick = _this$props.focusInputOnSuggestionClick;
       var closeSuggestions = _this$props.closeSuggestions;
@@ -117,7 +117,10 @@ var Autosuggest = function (_Component) {
         sectionIndex: sectionIndex,
         method: 'click'
       });
-      closeSuggestions('click');
+
+      if (!alwaysRenderSuggestions) {
+        closeSuggestions();
+      }
 
       if (focusInputOnSuggestionClick === true) {
         _this.input.focus();
@@ -128,7 +131,7 @@ var Autosuggest = function (_Component) {
       _this.maybeCallOnSuggestionsUpdateRequested({ value: clickedSuggestionValue, reason: 'click' });
 
       setTimeout(function () {
-        _this.justClickedOnSuggestion = false;
+        _this.justSelectedSuggestion = false;
       });
     }, _this.onBlur = function () {
       var _this$props2 = _this.props;
@@ -178,10 +181,9 @@ var Autosuggest = function (_Component) {
 
           var isCollapsed = nextProps.isCollapsed;
           var revealSuggestions = nextProps.revealSuggestions;
-          var lastAction = nextProps.lastAction;
 
 
-          if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter') {
+          if (isCollapsed && !this.justSelectedSuggestion) {
             revealSuggestions();
           }
         }
@@ -342,7 +344,7 @@ var Autosuggest = function (_Component) {
       var items = isOpen ? suggestions : [];
       var autowhateverInputProps = _extends({}, inputProps, {
         onFocus: function onFocus(event) {
-          if (!_this2.justClickedOnSuggestion && !_this2.justClickedOnSuggestionsContainer) {
+          if (!_this2.justSelectedSuggestion && !_this2.justClickedOnSuggestionsContainer) {
             inputFocused(shouldRenderSuggestions(value));
             _onFocus && _onFocus(event);
 
@@ -359,7 +361,7 @@ var Autosuggest = function (_Component) {
 
           _this2.blurEvent = event;
 
-          if (!_this2.justClickedOnSuggestion) {
+          if (!_this2.justSelectedSuggestion) {
             _this2.onBlur();
 
             if (valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
@@ -373,7 +375,7 @@ var Autosuggest = function (_Component) {
 
 
           _this2.maybeCallOnChange(event, value, 'type');
-          inputChanged(shouldRenderSuggestions(value), 'type');
+          inputChanged(shouldRenderSuggestions(value));
           _this2.maybeCallOnSuggestionsUpdateRequested({ value: value, reason: 'type' });
         },
         onKeyDown: function onKeyDown(event, data) {
@@ -411,7 +413,7 @@ var Autosuggest = function (_Component) {
                 var focusedSuggestion = _this2.getFocusedSuggestion();
 
                 if (isOpen && !alwaysRenderSuggestions) {
-                  closeSuggestions('enter');
+                  closeSuggestions();
                 }
 
                 if (focusedSuggestion !== null) {
@@ -426,6 +428,11 @@ var Autosuggest = function (_Component) {
 
                   _this2.maybeCallOnChange(event, _newValue, 'enter');
                   _this2.maybeCallOnSuggestionsUpdateRequested({ value: _newValue, reason: 'enter' });
+                  _this2.justSelectedSuggestion = true;
+
+                  setTimeout(function () {
+                    _this2.justSelectedSuggestion = false;
+                  });
                 }
                 break;
               }
@@ -451,7 +458,7 @@ var Autosuggest = function (_Component) {
               }
 
               if (isOpen && !alwaysRenderSuggestions) {
-                closeSuggestions('escape');
+                closeSuggestions();
               } else {
                 updateFocusedSuggestion(null, null);
               }
@@ -511,7 +518,6 @@ Autosuggest.propTypes = {
   focusedSectionIndex: _react.PropTypes.number,
   focusedSuggestionIndex: _react.PropTypes.number,
   valueBeforeUpDown: _react.PropTypes.string,
-  lastAction: _react.PropTypes.string,
 
   inputFocused: _react.PropTypes.func.isRequired,
   inputBlurred: _react.PropTypes.func.isRequired,

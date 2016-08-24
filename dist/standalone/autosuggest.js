@@ -157,8 +157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      isCollapsed: !alwaysRenderSuggestions,
 	      focusedSectionIndex: null,
 	      focusedSuggestionIndex: null,
-	      valueBeforeUpDown: null,
-	      lastAction: null
+	      valueBeforeUpDown: null
 	    };
 
 	    _this.store = (0, _redux.createStore)(_redux3.default, initialState);
@@ -1320,11 +1319,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}
 
-	function inputChanged(shouldRenderSuggestions, lastAction) {
+	function inputChanged(shouldRenderSuggestions) {
 	  return {
 	    type: INPUT_CHANGED,
-	    shouldRenderSuggestions: shouldRenderSuggestions,
-	    lastAction: lastAction
+	    shouldRenderSuggestions: shouldRenderSuggestions
 	  };
 	}
 
@@ -1343,10 +1341,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}
 
-	function closeSuggestions(lastAction) {
+	function closeSuggestions() {
 	  return {
-	    type: CLOSE_SUGGESTIONS,
-	    lastAction: lastAction
+	    type: CLOSE_SUGGESTIONS
 	  };
 	}
 
@@ -1381,8 +1378,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        focusedSectionIndex: null,
 	        focusedSuggestionIndex: null,
 	        valueBeforeUpDown: null,
-	        isCollapsed: !action.shouldRenderSuggestions,
-	        lastAction: action.lastAction
+	        isCollapsed: !action.shouldRenderSuggestions
 	      });
 
 	    case UPDATE_FOCUSED_SUGGESTION:
@@ -1416,8 +1412,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        focusedSectionIndex: null,
 	        focusedSuggestionIndex: null,
 	        valueBeforeUpDown: null,
-	        isCollapsed: true,
-	        lastAction: action.lastAction
+	        isCollapsed: true
 	      });
 
 	    default:
@@ -1469,8 +1464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    isCollapsed: state.isCollapsed,
 	    focusedSectionIndex: state.focusedSectionIndex,
 	    focusedSuggestionIndex: state.focusedSuggestionIndex,
-	    valueBeforeUpDown: state.valueBeforeUpDown,
-	    lastAction: state.lastAction
+	    valueBeforeUpDown: state.valueBeforeUpDown
 	  };
 	}
 
@@ -1526,9 +1520,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, _this.onSuggestionMouseLeave = function () {
 	      _this.props.updateFocusedSuggestion(null, null);
 	    }, _this.onSuggestionMouseDown = function () {
-	      _this.justClickedOnSuggestion = true;
+	      _this.justSelectedSuggestion = true;
 	    }, _this.onSuggestionClick = function (event) {
 	      var _this$props = _this.props;
+	      var alwaysRenderSuggestions = _this$props.alwaysRenderSuggestions;
 	      var onSuggestionSelected = _this$props.onSuggestionSelected;
 	      var focusInputOnSuggestionClick = _this$props.focusInputOnSuggestionClick;
 	      var closeSuggestions = _this$props.closeSuggestions;
@@ -1548,7 +1543,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        sectionIndex: sectionIndex,
 	        method: 'click'
 	      });
-	      closeSuggestions('click');
+
+	      if (!alwaysRenderSuggestions) {
+	        closeSuggestions();
+	      }
 
 	      if (focusInputOnSuggestionClick === true) {
 	        _this.input.focus();
@@ -1559,7 +1557,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _this.maybeCallOnSuggestionsUpdateRequested({ value: clickedSuggestionValue, reason: 'click' });
 
 	      setTimeout(function () {
-	        _this.justClickedOnSuggestion = false;
+	        _this.justSelectedSuggestion = false;
 	      });
 	    }, _this.onBlur = function () {
 	      var _this$props2 = _this.props;
@@ -1609,10 +1607,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	          var isCollapsed = nextProps.isCollapsed;
 	          var revealSuggestions = nextProps.revealSuggestions;
-	          var lastAction = nextProps.lastAction;
 
 
-	          if (isCollapsed && lastAction !== 'click' && lastAction !== 'enter') {
+	          if (isCollapsed && !this.justSelectedSuggestion) {
 	            revealSuggestions();
 	          }
 	        }
@@ -1773,7 +1770,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var items = isOpen ? suggestions : [];
 	      var autowhateverInputProps = _extends({}, inputProps, {
 	        onFocus: function onFocus(event) {
-	          if (!_this2.justClickedOnSuggestion && !_this2.justClickedOnSuggestionsContainer) {
+	          if (!_this2.justSelectedSuggestion && !_this2.justClickedOnSuggestionsContainer) {
 	            inputFocused(shouldRenderSuggestions(value));
 	            _onFocus && _onFocus(event);
 
@@ -1790,7 +1787,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	          _this2.blurEvent = event;
 
-	          if (!_this2.justClickedOnSuggestion) {
+	          if (!_this2.justSelectedSuggestion) {
 	            _this2.onBlur();
 
 	            if (valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
@@ -1804,7 +1801,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	          _this2.maybeCallOnChange(event, value, 'type');
-	          inputChanged(shouldRenderSuggestions(value), 'type');
+	          inputChanged(shouldRenderSuggestions(value));
 	          _this2.maybeCallOnSuggestionsUpdateRequested({ value: value, reason: 'type' });
 	        },
 	        onKeyDown: function onKeyDown(event, data) {
@@ -1842,7 +1839,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var focusedSuggestion = _this2.getFocusedSuggestion();
 
 	                if (isOpen && !alwaysRenderSuggestions) {
-	                  closeSuggestions('enter');
+	                  closeSuggestions();
 	                }
 
 	                if (focusedSuggestion !== null) {
@@ -1857,6 +1854,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                  _this2.maybeCallOnChange(event, _newValue, 'enter');
 	                  _this2.maybeCallOnSuggestionsUpdateRequested({ value: _newValue, reason: 'enter' });
+	                  _this2.justSelectedSuggestion = true;
+
+	                  setTimeout(function () {
+	                    _this2.justSelectedSuggestion = false;
+	                  });
 	                }
 	                break;
 	              }
@@ -1882,7 +1884,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              }
 
 	              if (isOpen && !alwaysRenderSuggestions) {
-	                closeSuggestions('escape');
+	                closeSuggestions();
 	              } else {
 	                updateFocusedSuggestion(null, null);
 	              }
@@ -1942,7 +1944,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  focusedSectionIndex: _react.PropTypes.number,
 	  focusedSuggestionIndex: _react.PropTypes.number,
 	  valueBeforeUpDown: _react.PropTypes.string,
-	  lastAction: _react.PropTypes.string,
 
 	  inputFocused: _react.PropTypes.func.isRequired,
 	  inputBlurred: _react.PropTypes.func.isRequired,
