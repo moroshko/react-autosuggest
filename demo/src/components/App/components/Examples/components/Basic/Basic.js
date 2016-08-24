@@ -42,6 +42,7 @@ export default class Basic extends Component {
   }
 
   onChange = (event, { newValue }) => {
+    console.log('onChange handler');
     this.setState({
       value: newValue
     });

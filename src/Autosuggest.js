@@ -76,7 +76,7 @@ class Autosuggest extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.onDocumentMouseDown);
+    document.body.removeEventListener('mousedown', this.onDocumentMouseDown);
   }
 
   getSuggestion(sectionIndex, suggestionIndex) {
@@ -118,9 +118,7 @@ class Autosuggest extends Component {
   onDocumentMouseDown = event => {
     this.justClickedOnSuggestionsContainer = false;
 
-    let node =
-      event.detail.target || // This is for testing only. Please show be a better way to emulate this.
-      event.target;
+    let node = event.target;
 
     do {
       if (node.getAttribute('data-suggestion-index') !== null) {
@@ -196,6 +194,7 @@ class Autosuggest extends Component {
   };
 
   onSuggestionMouseEnter = (event, { sectionIndex, itemIndex }) => {
+    console.log('onSuggestionMouseEnter');
     this.props.updateFocusedSuggestion(sectionIndex, itemIndex);
   };
 
@@ -258,6 +257,7 @@ class Autosuggest extends Component {
   };
 
   render() {
+    console.log('render');
     const {
       suggestions, renderSuggestionsContainer, renderSuggestion, inputProps,
       shouldRenderSuggestions, onSuggestionSelected, multiSection, renderSectionTitle,
@@ -284,7 +284,12 @@ class Autosuggest extends Component {
       },
       onBlur: event => {
         if (this.justClickedOnSuggestionsContainer) {
-          this.input.focus();
+          // setTimeout is required for testing only.
+          // Without it, this.input.focus() triggers onBlur for some reason,
+          // which causes an infinite loop.
+          setTimeout(() => {
+            this.input.focus();
+          });
           return;
         }
 

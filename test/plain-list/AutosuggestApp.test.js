@@ -1,5 +1,4 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 import {
   init,
@@ -41,7 +40,7 @@ import AutosuggestApp, {
 
 describe('Default Autosuggest', () => {
   beforeEach(() => {
-    init(TestUtils.renderIntoDocument(<AutosuggestApp />));
+    init(<AutosuggestApp />);
   });
 
   describe('initially', () => {
@@ -123,7 +122,7 @@ describe('Default Autosuggest', () => {
       expectInputValue('PHP');
     });
 
-    it('should focus on suggestion when mouse enters it', () => {
+    it.only('should focus on suggestion when mouse enters it', () => {
       mouseEnterSuggestion(2);
       expectFocusedSuggestion('Python');
     });
@@ -134,9 +133,12 @@ describe('Default Autosuggest', () => {
       expectFocusedSuggestion(null);
     });
 
-    it('should keep the focus on input when suggestions container is clicked', () => {
+    it('should keep the focus on input when suggestions container is clicked', done => {
       clickSuggestionsContainer();
-      expect(isInputFocused()).to.equal(true);
+      setTimeout(() => {
+        expect(isInputFocused()).to.equal(true);
+        done();
+      });
     });
   });
 

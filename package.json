@@ -66,6 +66,7 @@
     "react-dom": "^15.0.1",
     "react-transform-hmr": "^1.0.4",
     "redux-thunk": "^2.0.1",
+    "simulant": "^0.2.2",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.13.1",
