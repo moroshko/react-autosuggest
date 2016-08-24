@@ -1,0 +1,45 @@
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
+import { expect } from 'chai';
+import {
+  init,
+  syntheticEventMatcher,
+  clickSuggestion,
+  focusAndSetInputValue,
+  isInputFocused
+} from '../helpers';
+import AutosuggestApp, {
+  onBlur,
+  onSuggestionsUpdateRequested
+} from './AutosuggestApp';
+
+describe('Autosuggest with focusInputOnSuggestionClick={false}', () => {
+  beforeEach(() => {
+    init(TestUtils.renderIntoDocument(<AutosuggestApp />));
+  });
+
+  describe('when suggestion is clicked', () => {
+    beforeEach(() => {
+      onBlur.reset();
+      focusAndSetInputValue('p');
+      onSuggestionsUpdateRequested.reset();
+      clickSuggestion(1);
+    });
+
+    it('should not focus on input', () => {
+      expect(isInputFocused()).to.equal(false);
+    });
+
+    it('should call onBlur once with the right parameters', () => {
+      expect(onBlur).to.have.been.calledOnce;
+      expect(onBlur).to.have.been.calledWithExactly(syntheticEventMatcher, {
+        focusedSuggestion: { name: 'PHP', year: 1995 }
+      });
+    });
+
+    it('should call onSuggestionsUpdateRequested once with the right parameters', () => {
+      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
+      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'PHP', reason: 'click' });
+    });
+  });
+});
