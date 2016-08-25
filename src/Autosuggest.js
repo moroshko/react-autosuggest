@@ -54,10 +54,7 @@ class Autosuggest extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (shallowEqualArrays(nextProps.suggestions, this.props.suggestions)) {
-      const suggestionsBecomeVisible =
-        !this.willRenderSuggestions(this.props) && this.willRenderSuggestions(nextProps);
-
-      if (suggestionsBecomeVisible) {
+      if (!this.justPressedUpDown) {
         this.maybeFocusFirstSuggestion();
       }
     } else {
@@ -335,7 +332,15 @@ class Autosuggest extends Component {
               updateFocusedSuggestion(newFocusedSectionIndex, newFocusedItemIndex, value);
               this.maybeCallOnChange(event, newValue, event.key === 'ArrowDown' ? 'down' : 'up');
             }
-            event.preventDefault();
+
+            event.preventDefault(); // Prevents the cursor from moving
+
+            this.justPressedUpDown = true;
+
+            setTimeout(() => {
+              this.justPressedUpDown = false;
+            });
+
             break;
 
           case 'Enter': {
@@ -363,6 +368,7 @@ class Autosuggest extends Component {
                 this.justSelectedSuggestion = false;
               });
             }
+
             break;
           }
 

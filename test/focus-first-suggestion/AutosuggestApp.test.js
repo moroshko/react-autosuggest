@@ -27,31 +27,44 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
 
   describe('when typing and matches exist', () => {
     beforeEach(() => {
-      focusAndSetInputValue('p');
+      focusAndSetInputValue('j');
     });
 
     it('should focus on the first suggestion', () => {
-      expectFocusedSuggestion('Perl');
+      expectFocusedSuggestion('Java');
+    });
+
+    it('should focus on the first suggestion when typing a character does not change the suggestions', () => {
+      focusAndSetInputValue('ja');
+      expectFocusedSuggestion('Java');
     });
 
     it('should focus on the first suggestion when input is focused after it has been blurred', () => {
       blurInput();
       focusInput();
-      expectFocusedSuggestion('Perl');
+      expectFocusedSuggestion('Java');
     });
 
     it('should focus on the first suggestion when same suggestions are shown again', () => {
       setInputValue('');
-      setInputValue('p');
-      expectFocusedSuggestion('Perl');
+      setInputValue('j');
+      expectFocusedSuggestion('Java');
     });
   });
 
   describe('when pressing Down', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('j');
+    });
+
     it('should focus on the second suggestion', () => {
-      focusAndSetInputValue('c');
       clickDown();
-      expectFocusedSuggestion('C#');
+      expectFocusedSuggestion('Javascript');
+    });
+
+    it('should not focus on any suggestion after reaching the last suggestion', () => {
+      clickDown(2);
+      expectFocusedSuggestion(null);
     });
   });
 
