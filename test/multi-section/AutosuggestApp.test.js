@@ -19,11 +19,10 @@ import {
   clickDown,
   setInputValue,
   focusAndSetInputValue,
-  isInputFocused
+  clickClearButton
 } from '../helpers';
 import AutosuggestApp, {
   onSuggestionsUpdateRequested,
-  onBlur,
   onSuggestionSelected,
   renderSectionTitle,
   getSectionSuggestions,
@@ -77,28 +76,18 @@ describe('Autosuggest with multiSection={true}', () => {
     });
   });
 
-  describe('when focusInputOnSuggestionClick is false and suggestion is clicked', () => {
+  describe('when input is cleared after suggestion is clicked', () => {
     beforeEach(() => {
-      onBlur.reset();
-      focusAndSetInputValue('p');
-      onSuggestionsUpdateRequested.reset();
+      focusInput();
       clickSuggestion(1);
     });
 
-    it('should not focus on input', () => {
-      expect(isInputFocused()).to.equal(false);
-    });
-
-    it('should call onBlur once with the right parameters', () => {
-      expect(onBlur).to.have.been.calledOnce;
-      expect(onBlur).to.have.been.calledWithExactly(syntheticEventMatcher, {
-        focusedSuggestion: { name: 'PHP', year: 1995 }
-      });
-    });
-
-    it('should call onSuggestionsUpdateRequested once with the right parameters', () => {
-      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
-      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'PHP', reason: 'click' });
+    it('should show suggestions', () => {
+      clickClearButton();
+      expectSuggestions([
+        'C', 'C#', 'C++', 'Clojure', 'Elm', 'Go', 'Haskell', 'Java',
+        'Javascript', 'Perl', 'PHP', 'Python', 'Ruby', 'Scala'
+      ]);
     });
   });
 

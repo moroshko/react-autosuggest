@@ -23,6 +23,7 @@ import {
   clickEnter,
   clickDown,
   clickUp,
+  setInputValue,
   focusAndSetInputValue,
   isInputFocused,
   clearEvents,
@@ -137,6 +138,12 @@ describe('Default Autosuggest', () => {
     it('should keep the focus on input when suggestions container is clicked', () => {
       clickSuggestionsContainer();
       expect(isInputFocused()).to.equal(true);
+    });
+
+    it('shoud clear the focused suggestion when input value changes', () => {
+      clickDown();
+      setInputValue('Per');
+      expectFocusedSuggestion(null);
     });
   });
 

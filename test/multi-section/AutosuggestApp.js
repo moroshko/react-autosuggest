@@ -75,6 +75,15 @@ export default class AutosuggestApp extends Component {
     };
   }
 
+  onClearMouseDown = event => {
+    event.preventDefault();
+
+    this.setState({
+      value: '',
+      suggestions: getMatchingLanguages('')
+    });
+  };
+
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
@@ -84,19 +93,21 @@ export default class AutosuggestApp extends Component {
     };
 
     return (
-      <Autosuggest
-        multiSection={true}
-        suggestions={suggestions}
-        onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        inputProps={inputProps}
-        shouldRenderSuggestions={shouldRenderSuggestions}
-        onSuggestionSelected={onSuggestionSelected}
-        renderSectionTitle={renderSectionTitle}
-        getSectionSuggestions={getSectionSuggestions}
-        focusInputOnSuggestionClick={false}
-        focusFirstSuggestion={focusFirstSuggestion} />
+      <div>
+        <button onMouseDown={this.onClearMouseDown}>Clear</button>
+        <Autosuggest
+          multiSection={true}
+          suggestions={suggestions}
+          onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
+          getSuggestionValue={getSuggestionValue}
+          renderSuggestion={renderSuggestion}
+          inputProps={inputProps}
+          shouldRenderSuggestions={shouldRenderSuggestions}
+          onSuggestionSelected={onSuggestionSelected}
+          renderSectionTitle={renderSectionTitle}
+          getSectionSuggestions={getSectionSuggestions}
+          focusFirstSuggestion={focusFirstSuggestion} />
+      </div>
     );
   }
 }

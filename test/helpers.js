@@ -6,7 +6,9 @@ import TestUtils, { Simulate } from 'react-addons-test-utils';
 
 chai.use(sinonChai);
 
-let app, container, input, suggestionsContainer;
+const clock = sinon.useFakeTimers();
+
+let app, container, input, suggestionsContainer, clearButton;
 let eventsArray = [];
 
 export const clearEvents = () => {
@@ -26,6 +28,7 @@ export const init = application => {
   container = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__container');
   input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
   suggestionsContainer = TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__suggestions-container');
+  clearButton = TestUtils.scryRenderedDOMComponentsWithTag(app, 'button')[0];
 };
 
 export const syntheticEventMatcher = sinon.match.instanceOf(SyntheticEvent);
@@ -142,6 +145,7 @@ export function clickSuggestion(suggestionIndex) {
   blurInput();
   focusInput();
   Simulate.click(suggestion);
+  clock.tick(1);
 }
 
 export function clickSuggestionsContainer() {
@@ -164,6 +168,7 @@ export function clickEscape() {
 
 export function clickEnter() {
   Simulate.keyDown(input, { key: 'Enter' });
+  clock.tick(1);
 }
 
 export function clickDown(count = 1) {
@@ -190,4 +195,12 @@ export function focusAndSetInputValue(value) {
 
 export function isInputFocused() {
   return document.activeElement === input;
+}
+
+export function clickClearButton() {
+  if (clearButton) {
+    Simulate.mouseDown(clearButton);
+  } else {
+    throw new Error('Clear button doesn\'t exist');
+  }
 }

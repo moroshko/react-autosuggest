@@ -103,8 +103,7 @@ export default class AutosuggestContainer extends Component {
       isCollapsed: !alwaysRenderSuggestions,
       focusedSectionIndex: null,
       focusedSuggestionIndex: null,
-      valueBeforeUpDown: null,
-      lastAction: null
+      valueBeforeUpDown: null
     };
 
     this.store = createStore(reducer, initialState);
