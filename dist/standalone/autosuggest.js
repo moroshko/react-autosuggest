@@ -1596,9 +1596,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
 	      if ((0, _arrays2.default)(nextProps.suggestions, this.props.suggestions)) {
-	        var suggestionsBecomeVisible = !this.willRenderSuggestions(this.props) && this.willRenderSuggestions(nextProps);
-
-	        if (suggestionsBecomeVisible) {
+	        if (!this.justPressedUpDown) {
 	          this.maybeFocusFirstSuggestion();
 	        }
 	      } else {
@@ -1831,7 +1829,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                updateFocusedSuggestion(newFocusedSectionIndex, newFocusedItemIndex, value);
 	                _this2.maybeCallOnChange(event, newValue, event.key === 'ArrowDown' ? 'down' : 'up');
 	              }
-	              event.preventDefault();
+
+	              event.preventDefault(); // Prevents the cursor from moving
+
+	              _this2.justPressedUpDown = true;
+
+	              setTimeout(function () {
+	                _this2.justPressedUpDown = false;
+	              });
+
 	              break;
 
 	            case 'Enter':
@@ -1860,6 +1866,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    _this2.justSelectedSuggestion = false;
 	                  });
 	                }
+
 	                break;
 	              }
 
