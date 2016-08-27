@@ -28,11 +28,12 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var noop = function noop() {};
 var alwaysTrue = function alwaysTrue() {
   return true;
 };
-
+var defaultShouldRenderSuggestions = function defaultShouldRenderSuggestions(value) {
+  return value.trim().length > 0;
+};
 var defaultTheme = {
   container: 'react-autosuggest__container',
   containerOpen: 'react-autosuggest__container--open',
@@ -82,7 +83,7 @@ var AutosuggestContainer = function (_Component) {
 
     _classCallCheck(this, AutosuggestContainer);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AutosuggestContainer).call(this));
+    var _this = _possibleConstructorReturn(this, (AutosuggestContainer.__proto__ || Object.getPrototypeOf(AutosuggestContainer)).call(this));
 
     _this.storeInputReference = function (input) {
       _this.input = input;
@@ -104,11 +105,12 @@ var AutosuggestContainer = function (_Component) {
     key: 'render',
     value: function render() {
       var _props = this.props;
+      var suggestions = _props.suggestions;
+      var onSuggestionsFetchRequested = _props.onSuggestionsFetchRequested;
+      var onSuggestionsClearRequested = _props.onSuggestionsClearRequested;
       var multiSection = _props.multiSection;
       var shouldRenderSuggestions = _props.shouldRenderSuggestions;
-      var suggestions = _props.suggestions;
       var renderSuggestionsContainer = _props.renderSuggestionsContainer;
-      var onSuggestionsUpdateRequested = _props.onSuggestionsUpdateRequested;
       var getSuggestionValue = _props.getSuggestionValue;
       var renderSuggestion = _props.renderSuggestion;
       var renderSectionTitle = _props.renderSectionTitle;
@@ -123,12 +125,13 @@ var AutosuggestContainer = function (_Component) {
 
 
       return _react2.default.createElement(_Autosuggest2.default, {
+        suggestions: suggestions,
+        onSuggestionsFetchRequested: onSuggestionsFetchRequested,
+        onSuggestionsClearRequested: onSuggestionsClearRequested,
         multiSection: multiSection,
         shouldRenderSuggestions: alwaysRenderSuggestions ? alwaysTrue : shouldRenderSuggestions,
         alwaysRenderSuggestions: alwaysRenderSuggestions,
-        suggestions: suggestions,
         renderSuggestionsContainer: renderSuggestionsContainer,
-        onSuggestionsUpdateRequested: onSuggestionsUpdateRequested,
         getSuggestionValue: getSuggestionValue,
         renderSuggestion: renderSuggestion,
         renderSectionTitle: renderSectionTitle,
@@ -149,8 +152,22 @@ var AutosuggestContainer = function (_Component) {
 
 AutosuggestContainer.propTypes = {
   suggestions: _react.PropTypes.array.isRequired,
+  onSuggestionsFetchRequested: function onSuggestionsFetchRequested(props, propName) {
+    var onSuggestionsFetchRequested = props[propName];
+
+    if (typeof onSuggestionsFetchRequested !== 'function') {
+      throw new Error('\'onSuggestionsFetchRequested\' must be implemented. See: https://github.com/moroshko/react-autosuggest#onSuggestionsFetchRequestedProp');
+    }
+  },
+  onSuggestionsClearRequested: function onSuggestionsClearRequested(props, propName) {
+    var onSuggestionsClearRequested = props[propName];
+
+    if (props.alwaysRenderSuggestions === false && typeof onSuggestionsClearRequested !== 'function') {
+      throw new Error('\'onSuggestionsClearRequested\' must be implemented. See: https://github.com/moroshko/react-autosuggest#onSuggestionsClearRequestedProp');
+    }
+  },
+  onSuggestionSelected: _react.PropTypes.func,
   renderSuggestionsContainer: _react.PropTypes.func,
-  onSuggestionsUpdateRequested: _react.PropTypes.func,
   getSuggestionValue: _react.PropTypes.func.isRequired,
   renderSuggestion: _react.PropTypes.func.isRequired,
   inputProps: function inputProps(props, propName) {
@@ -166,30 +183,30 @@ AutosuggestContainer.propTypes = {
   },
   shouldRenderSuggestions: _react.PropTypes.func,
   alwaysRenderSuggestions: _react.PropTypes.bool,
-  onSuggestionSelected: _react.PropTypes.func,
   multiSection: _react.PropTypes.bool,
-  renderSectionTitle: _react.PropTypes.func,
-  getSectionSuggestions: _react.PropTypes.func,
+  renderSectionTitle: function renderSectionTitle(props, propName) {
+    var renderSectionTitle = props[propName];
+
+    if (props.multiSection === true && typeof renderSectionTitle !== 'function') {
+      throw new Error('\'renderSectionTitle\' must be implemented. See: https://github.com/moroshko/react-autosuggest#renderSectionTitleProp');
+    }
+  },
+  getSectionSuggestions: function getSectionSuggestions(props, propName) {
+    var getSectionSuggestions = props[propName];
+
+    if (props.multiSection === true && typeof getSectionSuggestions !== 'function') {
+      throw new Error('\'getSectionSuggestions\' must be implemented. See: https://github.com/moroshko/react-autosuggest#getSectionSuggestionsProp');
+    }
+  },
   focusInputOnSuggestionClick: _react.PropTypes.bool,
   focusFirstSuggestion: _react.PropTypes.bool,
   theme: _react.PropTypes.object,
   id: _react.PropTypes.string
 };
 AutosuggestContainer.defaultProps = {
-  onSuggestionsUpdateRequested: noop,
-  shouldRenderSuggestions: function shouldRenderSuggestions(value) {
-    return value.trim().length > 0;
-  },
+  shouldRenderSuggestions: defaultShouldRenderSuggestions,
   alwaysRenderSuggestions: false,
-  onSuggestionSelected: noop,
   multiSection: false,
-  renderSectionTitle: function renderSectionTitle() {
-    throw new Error('`renderSectionTitle` must be provided');
-  },
-  getSectionSuggestions: function getSectionSuggestions() {
-    throw new Error('`getSectionSuggestions` must be provided');
-  },
-
   focusInputOnSuggestionClick: true,
   focusFirstSuggestion: false,
   theme: defaultTheme,

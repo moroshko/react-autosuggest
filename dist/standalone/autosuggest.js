@@ -92,11 +92,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var noop = function noop() {};
 	var alwaysTrue = function alwaysTrue() {
 	  return true;
 	};
-
+	var defaultShouldRenderSuggestions = function defaultShouldRenderSuggestions(value) {
+	  return value.trim().length > 0;
+	};
 	var defaultTheme = {
 	  container: 'react-autosuggest__container',
 	  containerOpen: 'react-autosuggest__container--open',
@@ -146,7 +147,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _classCallCheck(this, AutosuggestContainer);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AutosuggestContainer).call(this));
+	    var _this = _possibleConstructorReturn(this, (AutosuggestContainer.__proto__ || Object.getPrototypeOf(AutosuggestContainer)).call(this));
 
 	    _this.storeInputReference = function (input) {
 	      _this.input = input;
@@ -168,11 +169,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
+	      var suggestions = _props.suggestions;
+	      var onSuggestionsFetchRequested = _props.onSuggestionsFetchRequested;
+	      var onSuggestionsClearRequested = _props.onSuggestionsClearRequested;
 	      var multiSection = _props.multiSection;
 	      var shouldRenderSuggestions = _props.shouldRenderSuggestions;
-	      var suggestions = _props.suggestions;
 	      var renderSuggestionsContainer = _props.renderSuggestionsContainer;
-	      var onSuggestionsUpdateRequested = _props.onSuggestionsUpdateRequested;
 	      var getSuggestionValue = _props.getSuggestionValue;
 	      var renderSuggestion = _props.renderSuggestion;
 	      var renderSectionTitle = _props.renderSectionTitle;
@@ -187,12 +189,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	      return _react2.default.createElement(_Autosuggest2.default, {
+	        suggestions: suggestions,
+	        onSuggestionsFetchRequested: onSuggestionsFetchRequested,
+	        onSuggestionsClearRequested: onSuggestionsClearRequested,
 	        multiSection: multiSection,
 	        shouldRenderSuggestions: alwaysRenderSuggestions ? alwaysTrue : shouldRenderSuggestions,
 	        alwaysRenderSuggestions: alwaysRenderSuggestions,
-	        suggestions: suggestions,
 	        renderSuggestionsContainer: renderSuggestionsContainer,
-	        onSuggestionsUpdateRequested: onSuggestionsUpdateRequested,
 	        getSuggestionValue: getSuggestionValue,
 	        renderSuggestion: renderSuggestion,
 	        renderSectionTitle: renderSectionTitle,
@@ -213,8 +216,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	AutosuggestContainer.propTypes = {
 	  suggestions: _react.PropTypes.array.isRequired,
+	  onSuggestionsFetchRequested: function onSuggestionsFetchRequested(props, propName) {
+	    var onSuggestionsFetchRequested = props[propName];
+
+	    if (typeof onSuggestionsFetchRequested !== 'function') {
+	      throw new Error('\'onSuggestionsFetchRequested\' must be implemented. See: https://github.com/moroshko/react-autosuggest#onSuggestionsFetchRequestedProp');
+	    }
+	  },
+	  onSuggestionsClearRequested: function onSuggestionsClearRequested(props, propName) {
+	    var onSuggestionsClearRequested = props[propName];
+
+	    if (props.alwaysRenderSuggestions === false && typeof onSuggestionsClearRequested !== 'function') {
+	      throw new Error('\'onSuggestionsClearRequested\' must be implemented. See: https://github.com/moroshko/react-autosuggest#onSuggestionsClearRequestedProp');
+	    }
+	  },
+	  onSuggestionSelected: _react.PropTypes.func,
 	  renderSuggestionsContainer: _react.PropTypes.func,
-	  onSuggestionsUpdateRequested: _react.PropTypes.func,
 	  getSuggestionValue: _react.PropTypes.func.isRequired,
 	  renderSuggestion: _react.PropTypes.func.isRequired,
 	  inputProps: function inputProps(props, propName) {
@@ -230,30 +247,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	  shouldRenderSuggestions: _react.PropTypes.func,
 	  alwaysRenderSuggestions: _react.PropTypes.bool,
-	  onSuggestionSelected: _react.PropTypes.func,
 	  multiSection: _react.PropTypes.bool,
-	  renderSectionTitle: _react.PropTypes.func,
-	  getSectionSuggestions: _react.PropTypes.func,
+	  renderSectionTitle: function renderSectionTitle(props, propName) {
+	    var renderSectionTitle = props[propName];
+
+	    if (props.multiSection === true && typeof renderSectionTitle !== 'function') {
+	      throw new Error('\'renderSectionTitle\' must be implemented. See: https://github.com/moroshko/react-autosuggest#renderSectionTitleProp');
+	    }
+	  },
+	  getSectionSuggestions: function getSectionSuggestions(props, propName) {
+	    var getSectionSuggestions = props[propName];
+
+	    if (props.multiSection === true && typeof getSectionSuggestions !== 'function') {
+	      throw new Error('\'getSectionSuggestions\' must be implemented. See: https://github.com/moroshko/react-autosuggest#getSectionSuggestionsProp');
+	    }
+	  },
 	  focusInputOnSuggestionClick: _react.PropTypes.bool,
 	  focusFirstSuggestion: _react.PropTypes.bool,
 	  theme: _react.PropTypes.object,
 	  id: _react.PropTypes.string
 	};
 	AutosuggestContainer.defaultProps = {
-	  onSuggestionsUpdateRequested: noop,
-	  shouldRenderSuggestions: function shouldRenderSuggestions(value) {
-	    return value.trim().length > 0;
-	  },
+	  shouldRenderSuggestions: defaultShouldRenderSuggestions,
 	  alwaysRenderSuggestions: false,
-	  onSuggestionSelected: noop,
 	  multiSection: false,
-	  renderSectionTitle: function renderSectionTitle() {
-	    throw new Error('`renderSectionTitle` must be provided');
-	  },
-	  getSectionSuggestions: function getSectionSuggestions() {
-	    throw new Error('`getSectionSuggestions` must be provided');
-	  },
-
 	  focusInputOnSuggestionClick: true,
 	  focusFirstSuggestion: false,
 	  theme: defaultTheme,
@@ -1472,7 +1489,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _inherits(Autosuggest, _Component);
 
 	  function Autosuggest() {
-	    var _Object$getPrototypeO;
+	    var _ref;
 
 	    var _temp, _this, _ret;
 
@@ -1482,7 +1499,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      args[_key] = arguments[_key];
 	    }
 
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Autosuggest)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.onDocumentMouseDown = function (event) {
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Autosuggest.__proto__ || Object.getPrototypeOf(Autosuggest)).call.apply(_ref, [this].concat(args))), _this), _this.onDocumentMouseDown = function (event) {
 	      _this.justClickedOnSuggestionsContainer = false;
 
 	      var node = event.detail.target || // This is for testing only. Please show be a better way to emulate this.
@@ -1512,21 +1529,43 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _this.suggestionsContainer = autowhatever.itemsContainer;
 	      }
-	    }, _this.onSuggestionMouseEnter = function (event, _ref) {
-	      var sectionIndex = _ref.sectionIndex;
-	      var itemIndex = _ref.itemIndex;
+	    }, _this.onSuggestionMouseEnter = function (event, _ref2) {
+	      var sectionIndex = _ref2.sectionIndex;
+	      var itemIndex = _ref2.itemIndex;
 
 	      _this.props.updateFocusedSuggestion(sectionIndex, itemIndex);
-	    }, _this.onSuggestionMouseLeave = function () {
+	    }, _this.resetFocusedSuggestion = function () {
 	      _this.props.updateFocusedSuggestion(null, null);
+	    }, _this.focusFirstSuggestion = function () {
+	      _this.props.updateFocusedSuggestion(_this.props.multiSection ? 0 : null, 0);
 	    }, _this.onSuggestionMouseDown = function () {
 	      _this.justSelectedSuggestion = true;
-	    }, _this.onSuggestionClick = function (event) {
+	    }, _this.onSuggestionsClearRequested = function () {
+	      var onSuggestionsClearRequested = _this.props.onSuggestionsClearRequested;
+
+
+	      onSuggestionsClearRequested && onSuggestionsClearRequested();
+	    }, _this.onSuggestionSelected = function (event, data) {
 	      var _this$props = _this.props;
 	      var alwaysRenderSuggestions = _this$props.alwaysRenderSuggestions;
 	      var onSuggestionSelected = _this$props.onSuggestionSelected;
-	      var focusInputOnSuggestionClick = _this$props.focusInputOnSuggestionClick;
-	      var closeSuggestions = _this$props.closeSuggestions;
+	      var onSuggestionsFetchRequested = _this$props.onSuggestionsFetchRequested;
+
+
+	      onSuggestionSelected && onSuggestionSelected(event, data);
+
+	      if (alwaysRenderSuggestions) {
+	        onSuggestionsFetchRequested({ value: data.suggestionValue });
+	      } else {
+	        _this.onSuggestionsClearRequested();
+	      }
+
+	      _this.resetFocusedSuggestion();
+	    }, _this.onSuggestionClick = function (event) {
+	      var _this$props2 = _this.props;
+	      var alwaysRenderSuggestions = _this$props2.alwaysRenderSuggestions;
+	      var focusInputOnSuggestionClick = _this$props2.focusInputOnSuggestionClick;
+	      var closeSuggestions = _this$props2.closeSuggestions;
 
 	      var _this$getSuggestionIn = _this.getSuggestionIndices(_this.findSuggestionElement(event.target));
 
@@ -1537,7 +1576,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var clickedSuggestionValue = _this.props.getSuggestionValue(clickedSuggestion);
 
 	      _this.maybeCallOnChange(event, clickedSuggestionValue, 'click');
-	      onSuggestionSelected(event, {
+	      _this.onSuggestionSelected(event, {
 	        suggestion: clickedSuggestion,
 	        suggestionValue: clickedSuggestionValue,
 	        sectionIndex: sectionIndex,
@@ -1554,16 +1593,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.onBlur();
 	      }
 
-	      _this.maybeCallOnSuggestionsUpdateRequested({ value: clickedSuggestionValue, reason: 'click' });
-
 	      setTimeout(function () {
 	        _this.justSelectedSuggestion = false;
 	      });
 	    }, _this.onBlur = function () {
-	      var _this$props2 = _this.props;
-	      var inputProps = _this$props2.inputProps;
-	      var shouldRenderSuggestions = _this$props2.shouldRenderSuggestions;
-	      var inputBlurred = _this$props2.inputBlurred;
+	      var _this$props3 = _this.props;
+	      var inputProps = _this$props3.inputProps;
+	      var shouldRenderSuggestions = _this$props3.shouldRenderSuggestions;
+	      var inputBlurred = _this$props3.inputBlurred;
 	      var value = inputProps.value;
 	      var onBlur = inputProps.onBlur;
 
@@ -1571,15 +1608,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      inputBlurred(shouldRenderSuggestions(value));
 	      onBlur && onBlur(_this.blurEvent, { focusedSuggestion: focusedSuggestion });
-	    }, _this.itemProps = function (_ref2) {
-	      var sectionIndex = _ref2.sectionIndex;
-	      var itemIndex = _ref2.itemIndex;
+	    }, _this.itemProps = function (_ref3) {
+	      var sectionIndex = _ref3.sectionIndex;
+	      var itemIndex = _ref3.itemIndex;
 
 	      return {
 	        'data-section-index': sectionIndex,
 	        'data-suggestion-index': itemIndex,
 	        onMouseEnter: _this.onSuggestionMouseEnter,
-	        onMouseLeave: _this.onSuggestionMouseLeave,
+	        onMouseLeave: _this.resetFocusedSuggestion,
 	        onMouseDown: _this.onSuggestionMouseDown,
 	        onTouchStart: _this.onSuggestionMouseDown, // Because on iOS `onMouseDown` is not triggered
 	        onClick: _this.onSuggestionClick
@@ -1596,12 +1633,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
 	      if ((0, _arrays2.default)(nextProps.suggestions, this.props.suggestions)) {
-	        if (!this.justPressedUpDown) {
-	          this.maybeFocusFirstSuggestion();
+	        if (nextProps.focusFirstSuggestion && nextProps.focusedSuggestionIndex === null && nextProps.inputProps.value !== this.props.inputProps.value && nextProps.valueBeforeUpDown === this.props.valueBeforeUpDown) {
+	          this.focusFirstSuggestion();
 	        }
 	      } else {
 	        if (this.willRenderSuggestions(nextProps)) {
-	          this.maybeFocusFirstSuggestion();
+	          if (nextProps.focusFirstSuggestion) {
+	            this.focusFirstSuggestion();
+	          }
 
 	          var isCollapsed = nextProps.isCollapsed;
 	          var revealSuggestions = nextProps.revealSuggestions;
@@ -1695,31 +1734,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
-	    key: 'maybeCallOnSuggestionsUpdateRequested',
-	    value: function maybeCallOnSuggestionsUpdateRequested(data) {
-	      var _props3 = this.props;
-	      var onSuggestionsUpdateRequested = _props3.onSuggestionsUpdateRequested;
-	      var shouldRenderSuggestions = _props3.shouldRenderSuggestions;
-
-
-	      if (shouldRenderSuggestions(data.value)) {
-	        onSuggestionsUpdateRequested(data);
-	      }
-	    }
-	  }, {
-	    key: 'maybeFocusFirstSuggestion',
-	    value: function maybeFocusFirstSuggestion() {
-	      var _props4 = this.props;
-	      var focusFirstSuggestion = _props4.focusFirstSuggestion;
-	      var multiSection = _props4.multiSection;
-	      var updateFocusedSuggestion = _props4.updateFocusedSuggestion;
-
-
-	      if (focusFirstSuggestion) {
-	        updateFocusedSuggestion(multiSection ? 0 : null, 0);
-	      }
-	    }
-	  }, {
 	    key: 'willRenderSuggestions',
 	    value: function willRenderSuggestions(props) {
 	      var suggestions = props.suggestions;
@@ -1735,30 +1749,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function render() {
 	      var _this2 = this;
 
-	      var _props5 = this.props;
-	      var suggestions = _props5.suggestions;
-	      var renderSuggestionsContainer = _props5.renderSuggestionsContainer;
-	      var renderSuggestion = _props5.renderSuggestion;
-	      var inputProps = _props5.inputProps;
-	      var shouldRenderSuggestions = _props5.shouldRenderSuggestions;
-	      var onSuggestionSelected = _props5.onSuggestionSelected;
-	      var multiSection = _props5.multiSection;
-	      var renderSectionTitle = _props5.renderSectionTitle;
-	      var id = _props5.id;
-	      var getSectionSuggestions = _props5.getSectionSuggestions;
-	      var theme = _props5.theme;
-	      var isFocused = _props5.isFocused;
-	      var isCollapsed = _props5.isCollapsed;
-	      var focusedSectionIndex = _props5.focusedSectionIndex;
-	      var focusedSuggestionIndex = _props5.focusedSuggestionIndex;
-	      var valueBeforeUpDown = _props5.valueBeforeUpDown;
-	      var inputFocused = _props5.inputFocused;
-	      var inputChanged = _props5.inputChanged;
-	      var updateFocusedSuggestion = _props5.updateFocusedSuggestion;
-	      var revealSuggestions = _props5.revealSuggestions;
-	      var closeSuggestions = _props5.closeSuggestions;
-	      var getSuggestionValue = _props5.getSuggestionValue;
-	      var alwaysRenderSuggestions = _props5.alwaysRenderSuggestions;
+	      var _props3 = this.props;
+	      var suggestions = _props3.suggestions;
+	      var renderSuggestionsContainer = _props3.renderSuggestionsContainer;
+	      var onSuggestionsFetchRequested = _props3.onSuggestionsFetchRequested;
+	      var renderSuggestion = _props3.renderSuggestion;
+	      var inputProps = _props3.inputProps;
+	      var shouldRenderSuggestions = _props3.shouldRenderSuggestions;
+	      var multiSection = _props3.multiSection;
+	      var renderSectionTitle = _props3.renderSectionTitle;
+	      var id = _props3.id;
+	      var getSectionSuggestions = _props3.getSectionSuggestions;
+	      var theme = _props3.theme;
+	      var isFocused = _props3.isFocused;
+	      var isCollapsed = _props3.isCollapsed;
+	      var focusedSectionIndex = _props3.focusedSectionIndex;
+	      var focusedSuggestionIndex = _props3.focusedSuggestionIndex;
+	      var valueBeforeUpDown = _props3.valueBeforeUpDown;
+	      var inputFocused = _props3.inputFocused;
+	      var inputChanged = _props3.inputChanged;
+	      var updateFocusedSuggestion = _props3.updateFocusedSuggestion;
+	      var revealSuggestions = _props3.revealSuggestions;
+	      var closeSuggestions = _props3.closeSuggestions;
+	      var getSuggestionValue = _props3.getSuggestionValue;
+	      var alwaysRenderSuggestions = _props3.alwaysRenderSuggestions;
 	      var value = inputProps.value;
 	      var _onFocus = inputProps.onFocus;
 	      var _onKeyDown = inputProps.onKeyDown;
@@ -1771,10 +1785,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          if (!_this2.justSelectedSuggestion && !_this2.justClickedOnSuggestionsContainer) {
 	            inputFocused(shouldRenderSuggestions(value));
 	            _onFocus && _onFocus(event);
-
-	            if (suggestions.length > 0) {
-	              _this2.maybeFocusFirstSuggestion();
-	            }
+	            onSuggestionsFetchRequested({ value: value });
 	          }
 	        },
 	        onBlur: function onBlur(event) {
@@ -1787,27 +1798,31 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	          if (!_this2.justSelectedSuggestion) {
 	            _this2.onBlur();
-
-	            if (valueBeforeUpDown !== null && value !== valueBeforeUpDown) {
-	              _this2.maybeCallOnSuggestionsUpdateRequested({ value: value, reason: 'blur' });
-	            }
+	            _this2.onSuggestionsClearRequested();
 	          }
 	        },
 	        onChange: function onChange(event) {
 	          var value = event.target.value;
 	          var shouldRenderSuggestions = _this2.props.shouldRenderSuggestions;
 
+	          var shouldRender = shouldRenderSuggestions(value);
 
 	          _this2.maybeCallOnChange(event, value, 'type');
-	          inputChanged(shouldRenderSuggestions(value));
-	          _this2.maybeCallOnSuggestionsUpdateRequested({ value: value, reason: 'type' });
+	          inputChanged(shouldRender);
+
+	          if (shouldRender) {
+	            onSuggestionsFetchRequested({ value: value });
+	          } else {
+	            _this2.onSuggestionsClearRequested();
+	          }
 	        },
 	        onKeyDown: function onKeyDown(event, data) {
 	          switch (event.key) {
 	            case 'ArrowDown':
 	            case 'ArrowUp':
 	              if (isCollapsed) {
-	                if (willRenderSuggestions) {
+	                if (shouldRenderSuggestions(value)) {
+	                  onSuggestionsFetchRequested({ value: value });
 	                  revealSuggestions();
 	                }
 	              } else if (suggestions.length > 0) {
@@ -1832,12 +1847,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	              event.preventDefault(); // Prevents the cursor from moving
 
-	              _this2.justPressedUpDown = true;
-
-	              setTimeout(function () {
-	                _this2.justPressedUpDown = false;
-	              });
-
 	              break;
 
 	            case 'Enter':
@@ -1851,7 +1860,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (focusedSuggestion !== null) {
 	                  var _newValue = getSuggestionValue(focusedSuggestion);
 
-	                  onSuggestionSelected(event, {
+	                  _this2.onSuggestionSelected(event, {
 	                    suggestion: focusedSuggestion,
 	                    suggestionValue: _newValue,
 	                    sectionIndex: focusedSectionIndex,
@@ -1859,7 +1868,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                  });
 
 	                  _this2.maybeCallOnChange(event, _newValue, 'enter');
-	                  _this2.maybeCallOnSuggestionsUpdateRequested({ value: _newValue, reason: 'enter' });
+
 	                  _this2.justSelectedSuggestion = true;
 
 	                  setTimeout(function () {
@@ -1871,32 +1880,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	              }
 
 	            case 'Escape':
-	              if (isOpen) {
-	                // If input.type === 'search', the browser clears the input
-	                // when Escape is pressed. We want to disable this default
-	                // behaviour so that, when suggestions are shown, we just hide
-	                // them, without clearing the input.
-	                event.preventDefault();
-	              }
-
-	              if (valueBeforeUpDown === null) {
-	                // Didn't interact with Up/Down
-	                if (alwaysRenderSuggestions || !isOpen) {
-	                  _this2.maybeCallOnChange(event, '', 'escape');
-	                  _this2.maybeCallOnSuggestionsUpdateRequested({ value: '', reason: 'escape' });
+	              {
+	                if (isOpen) {
+	                  // If input.type === 'search', the browser clears the input
+	                  // when Escape is pressed. We want to disable this default
+	                  // behaviour so that, when suggestions are shown, we just hide
+	                  // them, without clearing the input.
+	                  event.preventDefault();
 	                }
-	              } else {
-	                // Interacted with Up/Down
-	                _this2.maybeCallOnChange(event, valueBeforeUpDown, 'escape');
-	              }
 
-	              if (isOpen && !alwaysRenderSuggestions) {
-	                closeSuggestions();
-	              } else {
-	                updateFocusedSuggestion(null, null);
-	              }
+	                var willCloseSuggestions = isOpen && !alwaysRenderSuggestions;
 
-	              break;
+	                if (valueBeforeUpDown === null) {
+	                  // Didn't interact with Up/Down
+	                  if (!willCloseSuggestions) {
+	                    var _newValue2 = '';
+
+	                    _this2.maybeCallOnChange(event, _newValue2, 'escape');
+
+	                    if (shouldRenderSuggestions(_newValue2)) {
+	                      onSuggestionsFetchRequested({ value: _newValue2 });
+	                    } else {
+	                      _this2.onSuggestionsClearRequested();
+	                    }
+	                  }
+	                } else {
+	                  // Interacted with Up/Down
+	                  _this2.maybeCallOnChange(event, valueBeforeUpDown, 'escape');
+	                }
+
+	                if (willCloseSuggestions) {
+	                  _this2.onSuggestionsClearRequested();
+	                  closeSuggestions();
+	                } else {
+	                  updateFocusedSuggestion(null, null);
+	                }
+
+	                break;
+	              }
 	          }
 
 	          _onKeyDown && _onKeyDown(event);
@@ -1929,17 +1950,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Autosuggest.propTypes = {
 	  suggestions: _react.PropTypes.array.isRequired,
+	  onSuggestionsFetchRequested: _react.PropTypes.func.isRequired,
+	  onSuggestionsClearRequested: _react.PropTypes.func,
+	  onSuggestionSelected: _react.PropTypes.func,
 	  renderSuggestionsContainer: _react.PropTypes.func,
-	  onSuggestionsUpdateRequested: _react.PropTypes.func.isRequired,
 	  getSuggestionValue: _react.PropTypes.func.isRequired,
 	  renderSuggestion: _react.PropTypes.func.isRequired,
 	  inputProps: _react.PropTypes.object.isRequired,
 	  shouldRenderSuggestions: _react.PropTypes.func.isRequired,
 	  alwaysRenderSuggestions: _react.PropTypes.bool.isRequired,
-	  onSuggestionSelected: _react.PropTypes.func.isRequired,
 	  multiSection: _react.PropTypes.bool.isRequired,
-	  renderSectionTitle: _react.PropTypes.func.isRequired,
-	  getSectionSuggestions: _react.PropTypes.func.isRequired,
+	  renderSectionTitle: _react.PropTypes.func,
+	  getSectionSuggestions: _react.PropTypes.func,
 	  focusInputOnSuggestionClick: _react.PropTypes.bool.isRequired,
 	  focusFirstSuggestion: _react.PropTypes.bool.isRequired,
 	  theme: _react.PropTypes.object.isRequired,
