@@ -3,9 +3,8 @@ import { createStore } from 'redux';
 import reducer from './redux';
 import Autosuggest from './Autosuggest';
 
-const noop = () => {};
 const alwaysTrue = () => true;
-
+const defaultShouldRenderSuggestions = value => value.trim().length > 0;
 const defaultTheme = {
   container: 'react-autosuggest__container',
   containerOpen: 'react-autosuggest__container--open',
@@ -50,8 +49,22 @@ function mapToAutowhateverTheme(theme) {
 export default class AutosuggestContainer extends Component {
   static propTypes = {
     suggestions: PropTypes.array.isRequired,
+    onSuggestionsFetchRequested: (props, propName) => {
+      const onSuggestionsFetchRequested = props[propName];
+
+      if (typeof onSuggestionsFetchRequested !== 'function') {
+        throw new Error('\'onSuggestionsFetchRequested\' must be implemented. See: https://github.com/moroshko/react-autosuggest#onSuggestionsFetchRequestedProp');
+      }
+    },
+    onSuggestionsClearRequested: (props, propName) => {
+      const onSuggestionsClearRequested = props[propName];
+
+      if (props.alwaysRenderSuggestions === false && typeof onSuggestionsClearRequested !== 'function') {
+        throw new Error('\'onSuggestionsClearRequested\' must be implemented. See: https://github.com/moroshko/react-autosuggest#onSuggestionsClearRequestedProp');
+      }
+    },
+    onSuggestionSelected: PropTypes.func,
     renderSuggestionsContainer: PropTypes.func,
-    onSuggestionsUpdateRequested: PropTypes.func,
     getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
     inputProps: (props, propName) => {
@@ -67,10 +80,21 @@ export default class AutosuggestContainer extends Component {
     },
     shouldRenderSuggestions: PropTypes.func,
     alwaysRenderSuggestions: PropTypes.bool,
-    onSuggestionSelected: PropTypes.func,
     multiSection: PropTypes.bool,
-    renderSectionTitle: PropTypes.func,
-    getSectionSuggestions: PropTypes.func,
+    renderSectionTitle: (props, propName) => {
+      const renderSectionTitle = props[propName];
+
+      if (props.multiSection === true && typeof renderSectionTitle !== 'function') {
+        throw new Error('\'renderSectionTitle\' must be implemented. See: https://github.com/moroshko/react-autosuggest#renderSectionTitleProp');
+      }
+    },
+    getSectionSuggestions: (props, propName) => {
+      const getSectionSuggestions = props[propName];
+
+      if (props.multiSection === true && typeof getSectionSuggestions !== 'function') {
+        throw new Error('\'getSectionSuggestions\' must be implemented. See: https://github.com/moroshko/react-autosuggest#getSectionSuggestionsProp');
+      }
+    },
     focusInputOnSuggestionClick: PropTypes.bool,
     focusFirstSuggestion: PropTypes.bool,
     theme: PropTypes.object,
@@ -78,17 +102,9 @@ export default class AutosuggestContainer extends Component {
   };
 
   static defaultProps = {
-    onSuggestionsUpdateRequested: noop,
-    shouldRenderSuggestions: value => value.trim().length > 0,
+    shouldRenderSuggestions: defaultShouldRenderSuggestions,
     alwaysRenderSuggestions: false,
-    onSuggestionSelected: noop,
     multiSection: false,
-    renderSectionTitle() {
-      throw new Error('`renderSectionTitle` must be provided');
-    },
-    getSectionSuggestions() {
-      throw new Error('`getSectionSuggestions` must be provided');
-    },
     focusInputOnSuggestionClick: true,
     focusFirstSuggestion: false,
     theme: defaultTheme,
@@ -115,21 +131,22 @@ export default class AutosuggestContainer extends Component {
 
   render() {
     const {
-      multiSection, shouldRenderSuggestions, suggestions, renderSuggestionsContainer,
-      onSuggestionsUpdateRequested, getSuggestionValue, renderSuggestion,
-      renderSectionTitle, getSectionSuggestions, inputProps,
-      onSuggestionSelected, focusInputOnSuggestionClick, focusFirstSuggestion,
+      suggestions, onSuggestionsFetchRequested, onSuggestionsClearRequested,
+      multiSection, shouldRenderSuggestions, renderSuggestionsContainer,
+      getSuggestionValue, renderSuggestion, renderSectionTitle, getSectionSuggestions,
+      inputProps, onSuggestionSelected, focusInputOnSuggestionClick, focusFirstSuggestion,
       alwaysRenderSuggestions, theme, id
     } = this.props;
 
     return (
       <Autosuggest
+        suggestions={suggestions}
+        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+        onSuggestionsClearRequested={onSuggestionsClearRequested}
         multiSection={multiSection}
         shouldRenderSuggestions={alwaysRenderSuggestions ? alwaysTrue : shouldRenderSuggestions}
         alwaysRenderSuggestions={alwaysRenderSuggestions}
-        suggestions={suggestions}
         renderSuggestionsContainer={renderSuggestionsContainer}
-        onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         renderSectionTitle={renderSectionTitle}

@@ -40,18 +40,25 @@ export const onChange = sinon.spy((event, { newValue }) => {
 
 export const onFocus = sinon.spy();
 export const onBlur = sinon.spy();
-export const onSuggestionSelected = sinon.spy(() => {
-  addEvent('onSuggestionSelected');
-});
 
 export const shouldRenderSuggestions = sinon.spy(value => {
   return value.trim().length > 0 && value[0] !== ' ';
 });
 
-export const onSuggestionsUpdateRequested = sinon.spy(({ value }) => {
+export const onSuggestionsFetchRequested = sinon.spy(({ value }) => {
   app.setState({
     suggestions: getMatchingLanguages(value)
   });
+});
+
+export const onSuggestionsClearRequested = sinon.spy(() => {
+  app.setState({
+    suggestions: []
+  });
+});
+
+export const onSuggestionSelected = sinon.spy(() => {
+  addEvent('onSuggestionSelected');
 });
 
 export default class AutosuggestApp extends Component {
@@ -62,7 +69,7 @@ export default class AutosuggestApp extends Component {
 
     this.state = {
       value: '',
-      suggestions: getMatchingLanguages('')
+      suggestions: []
     };
   }
 
@@ -87,12 +94,13 @@ export default class AutosuggestApp extends Component {
     return (
       <Autosuggest
         suggestions={suggestions}
-        onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
+        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+        onSuggestionsClearRequested={onSuggestionsClearRequested}
+        onSuggestionSelected={onSuggestionSelected}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
         shouldRenderSuggestions={shouldRenderSuggestions}
-        onSuggestionSelected={onSuggestionSelected}
         ref={this.storeAutosuggestReference} />
     );
   }

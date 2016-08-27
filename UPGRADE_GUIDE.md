@@ -42,7 +42,6 @@
 * `cache` was removed. Caching is not part of `react-autosuggest` anymore. You'll have to implement this yourself. [Example](http://codepen.io/moroshko/pen/JGEmeX)
 * Input debouncing is not part of `react-autosuggest` anymore. You'll have to implement this yourself. [Example](http://codepen.io/moroshko/pen/KVaGJE)
 * Support for delayed requests is not part of `react-autosuggest` anymore. You'll have to implement this yourself. [Example](http://codepen.io/moroshko/pen/EPZpev)
-* `scrollBar` doesn't exist in 3.x yet, but hopefully will be supported soon.
 * Some `theme` properties have changed:
 
 ```

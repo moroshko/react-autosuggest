@@ -37,7 +37,7 @@ export default class Basic extends Component {
 
     this.state = {
       value: '',
-      suggestions: getSuggestions('')
+      suggestions: []
     };
   }
 
@@ -47,9 +47,15 @@ export default class Basic extends Component {
     });
   };
 
-  onSuggestionsUpdateRequested = ({ value }) => {
+  onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
       suggestions: getSuggestions(value)
+    });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: []
     });
   };
 
@@ -80,7 +86,8 @@ export default class Basic extends Component {
         <div className={styles.autosuggest}>
           <Autosuggest
             suggestions={suggestions}
-            onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
             getSuggestionValue={getSuggestionValue}
             renderSuggestion={renderSuggestion}
             inputProps={inputProps}
