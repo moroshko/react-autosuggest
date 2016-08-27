@@ -145,7 +145,7 @@
 	  function App() {
 	    _classCallCheck(this, App);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this));
+	    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
 	    _this.onChange = function (event, _ref) {
 	      var newValue = _ref.newValue;
@@ -155,11 +155,17 @@
 	      });
 	    };
 
-	    _this.onSuggestionsUpdateRequested = function (_ref2) {
+	    _this.onSuggestionsFetchRequested = function (_ref2) {
 	      var value = _ref2.value;
 
 	      _this.setState({
 	        suggestions: getSuggestions(value)
+	      });
+	    };
+
+	    _this.onSuggestionsClearRequested = function () {
+	      _this.setState({
+	        suggestions: []
 	      });
 	    };
 
@@ -185,7 +191,8 @@
 
 	      return React.createElement(Autosuggest // eslint-disable-line react/jsx-no-undef
 	      , { suggestions: suggestions,
-	        onSuggestionsUpdateRequested: this.onSuggestionsUpdateRequested,
+	        onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
+	        onSuggestionsClearRequested: this.onSuggestionsClearRequested,
 	        getSuggestionValue: getSuggestionValue,
 	        renderSuggestion: renderSuggestion,
 	        inputProps: inputProps });

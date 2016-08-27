@@ -55,7 +55,7 @@ export default class MultipleSections extends Component {
 
     this.state = {
       value: '',
-      suggestions: getSuggestions('')
+      suggestions: []
     };
   }
 
@@ -65,9 +65,15 @@ export default class MultipleSections extends Component {
     });
   };
 
-  onSuggestionsUpdateRequested = ({ value }) => {
+  onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
       suggestions: getSuggestions(value)
+    });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: []
     });
   };
 
@@ -99,7 +105,8 @@ export default class MultipleSections extends Component {
           <Autosuggest
             multiSection={true}
             suggestions={suggestions}
-            onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
             getSuggestionValue={getSuggestionValue}
             renderSuggestion={renderSuggestion}
             renderSectionTitle={renderSectionTitle}

@@ -22,7 +22,7 @@ import {
   clickClearButton
 } from '../helpers';
 import AutosuggestApp, {
-  onSuggestionsUpdateRequested,
+  onSuggestionsFetchRequested,
   onSuggestionSelected,
   renderSectionTitle,
   getSectionSuggestions,
@@ -66,13 +66,13 @@ describe('Autosuggest with multiSection={true}', () => {
     });
   });
 
-  describe('onSuggestionsUpdateRequested', () => {
+  describe('onSuggestionsFetchRequested', () => {
     it('should be called once with the right parameters when Escape is pressed and suggestions are hidden and shouldRenderSuggestions returns true for empty value', () => {
       focusAndSetInputValue('jr');
-      onSuggestionsUpdateRequested.reset();
+      onSuggestionsFetchRequested.reset();
       clickEscape();
-      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
-      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: '', reason: 'escape' });
+      expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
+      expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({ value: '' });
     });
   });
 

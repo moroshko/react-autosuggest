@@ -102,9 +102,15 @@ class App extends React.Component { // eslint-disable-line no-undef
     });
   };
 
-  onSuggestionsUpdateRequested = ({ value }) => {
+  onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
       suggestions: getSuggestions(value)
+    });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: []
     });
   };
 
@@ -119,7 +125,8 @@ class App extends React.Component { // eslint-disable-line no-undef
     return (
       <Autosuggest // eslint-disable-line react/jsx-no-undef
         suggestions={suggestions}
-        onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps} />
