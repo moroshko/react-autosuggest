@@ -38,6 +38,7 @@ Check out the <a href="http://react-autosuggest.js.org" target="_blank">Homepage
 ## Features
 
 * <a href="https://www.w3.org/TR/wai-aria-practices/#autocomplete" target="_blank">WAI-ARIA compliant</a>, with support for ARIA attributes and keyboard interactions
+* Mobile friendly
 * Plugs in nicely to Flux and <a href="http://redux.js.org" target="_blank">Redux</a> applications
 * Full control over [suggestions rendering](#renderSuggestionProp)
 * Suggestions can be presented as <a href="http://codepen.io/moroshko/pen/LGNJMy" target="_blank">plain list</a> or <a href="http://codepen.io/moroshko/pen/qbRNjV" target="_blank">multiple sections</a>
@@ -47,7 +48,6 @@ Check out the <a href="http://react-autosuggest.js.org" target="_blank">Homepage
 * You decide [when to show suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Always render suggestions](#alwaysRenderSuggestionsProp) (useful for mobile and modals)
 * [Pass through arbitrary props to the input field](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange), [onBlur](#inputPropsOnBlur), or any other)
-* [onSuggestionSelected](#onSuggestionSelectedProp) hook
 * Thoroughly tested
 
 ## Installation
