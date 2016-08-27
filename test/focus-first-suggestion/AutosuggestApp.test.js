@@ -8,8 +8,10 @@ import {
   expectSuggestions,
   expectFocusedSuggestion,
   mouseEnterSuggestion,
+  mouseLeaveSuggestion,
   focusInput,
   blurInput,
+  clickEscape,
   clickEnter,
   clickDown,
   setInputValue,
@@ -50,6 +52,17 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
       setInputValue('j');
       expectFocusedSuggestion('Java');
     });
+
+    it('should focus on suggestion when mouse enters it', () => {
+      mouseEnterSuggestion(1);
+      expectFocusedSuggestion('Javascript');
+    });
+
+    it('should not have focused suggestions when mouse leaves a suggestion', () => {
+      mouseEnterSuggestion(1);
+      mouseLeaveSuggestion(1);
+      expectFocusedSuggestion(null);
+    });
   });
 
   describe('when pressing Down', () => {
@@ -65,6 +78,12 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
     it('should not focus on any suggestion after reaching the last suggestion', () => {
       clickDown(2);
       expectFocusedSuggestion(null);
+    });
+
+    it('should focus on the first suggestion when suggestions are revealed', () => {
+      clickEscape();
+      clickDown();
+      expectFocusedSuggestion('Java');
     });
   });
 

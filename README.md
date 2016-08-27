@@ -38,6 +38,7 @@ Check out the <a href="http://react-autosuggest.js.org" target="_blank">Homepage
 ## Features
 
 * <a href="https://www.w3.org/TR/wai-aria-practices/#autocomplete" target="_blank">WAI-ARIA compliant</a>, with support for ARIA attributes and keyboard interactions
+* Mobile friendly
 * Plugs in nicely to Flux and <a href="http://redux.js.org" target="_blank">Redux</a> applications
 * Full control over [suggestions rendering](#renderSuggestionProp)
 * Suggestions can be presented as <a href="http://codepen.io/moroshko/pen/LGNJMy" target="_blank">plain list</a> or <a href="http://codepen.io/moroshko/pen/qbRNjV" target="_blank">multiple sections</a>
@@ -46,8 +47,7 @@ Check out the <a href="http://react-autosuggest.js.org" target="_blank">Homepage
 * Supports styling using <a href="https://github.com/css-modules/css-modules" target="_blank">CSS Modules</a>, <a href="https://github.com/FormidableLabs/radium" target="_blank">Radium</a>, <a href="https://facebook.github.io/react/tips/inline-styles.html" target="_blank">Inline styles</a>, global CSS, [and more](#themeProp)
 * You decide [when to show suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Always render suggestions](#alwaysRenderSuggestionsProp) (useful for mobile and modals)
-* [Pass through props to the input field](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange), [onBlur](#inputPropsOnBlur))
-* [onSuggestionSelected](#onSuggestionSelectedProp) hook
+* [Pass through arbitrary props to the input field](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange), [onBlur](#inputPropsOnBlur), or any other)
 * Thoroughly tested
 
 ## Installation
@@ -98,7 +98,7 @@ class Example extends React.Component {
 
     this.state = {
       value: '',
-      suggestions: getSuggestions('')
+      suggestions: []
     };
   }
 
@@ -108,9 +108,15 @@ class Example extends React.Component {
     });
   };
 
-  onSuggestionsUpdateRequested = ({ value }) => {
+  onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
       suggestions: getSuggestions(value)
+    });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: []
     });
   };
 
@@ -126,6 +132,7 @@ class Example extends React.Component {
       <Autosuggest
         suggestions={suggestions}
         onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps} />
@@ -137,7 +144,9 @@ class Example extends React.Component {
 ## Props
 
 * [`suggestions`](#suggestionsProp)
-* [`onSuggestionsUpdateRequested`](#onSuggestionsUpdateRequestedProp)
+* [`onSuggestionsFetchRequested`](#onSuggestionsFetchRequestedProp)
+* [`onSuggestionsClearRequested`](#onSuggestionsClearRequestedProp)
+* [`onSuggestionSelected`](#onSuggestionSelectedProp)
 * [`getSuggestionValue`](#getSuggestionValueProp)
 * [`renderSuggestion`](#renderSuggestionProp)
 * [`renderSuggestionsContainer`](#renderSuggestionsContainerProp)
@@ -147,7 +156,6 @@ class Example extends React.Component {
 * [`multiSection`](#multiSectionProp)
 * [`renderSectionTitle`](#renderSectionTitleProp)
 * [`getSectionSuggestions`](#getSectionSuggestionsProp)
-* [`onSuggestionSelected`](#onSuggestionSelectedProp)
 * [`focusInputOnSuggestionClick`](#focusInputOnSuggestionClickProp)
 * [`focusFirstSuggestion`](#focusFirstSuggestionProp)
 * [`theme`](#themeProp)
@@ -156,7 +164,7 @@ class Example extends React.Component {
 <a name="suggestionsProp"></a>
 #### suggestions (required)
 
-An array of suggestions to display.
+Array of suggestions to display. The only requirement is that `suggestions` is an array. Items in this array can take an arbitrary shape.
 
 For a plain list of suggestions, every item in `suggestions` should be a single suggestion. It's up to you what shape every suggestion takes. For example:
 
@@ -218,44 +226,30 @@ const suggestions = [
 ];
 ```
 
-**Note:**
+<a name="onSuggestionsFetchRequestedProp"></a>
+#### onSuggestionsFetchRequested (required)
 
-* It's totally up to you what shape suggestions take!
-* The initial value of `suggestions` should match the initial value of `inputProps.value`. This will make sure that, if input has a non-empty initial value, and it's focused, the right suggestions are displayed.
-
-<a name="onSuggestionsUpdateRequestedProp"></a>
-#### onSuggestionsUpdateRequested (optional)
-
-Normally, you would want to update [`suggestions`](#suggestionsProp) as user types. You might also want to update suggestions when user selects a suggestion or the input loses focus (so that, next time the input gets focus, suggestions will be up to date).
-
-Autosuggest will call `onSuggestionsUpdateRequested` every time it thinks you might want to update suggestions.
-
-`onSuggestionsUpdateRequested` has the following signature:
+This function will be called every time you need to update [`suggestions`](#suggestionsProp). It has the following signature:
 
 ```js
-function onSuggestionsUpdateRequested({ value, reason })
+function onSuggestionsFetchRequested({ value })
 ```
 
-where:
+where `value` is current value of the input.
 
-* `value` - The current value of the input
-* `reason` - string describing why Autosuggest thinks you might want to update suggestions. The possible values are:
-  * `'type'` - usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.
-  * `'click'` - user clicked (or tapped) a suggestion
-  * `'enter'` - user pressed <kbd>Enter</kbd>
-  * `'escape'` - user pressed <kbd>Escape</kbd>
-  * `'blur'` - input lost focus
+<a name="onSuggestionsClearRequestedProp"></a>
+#### onSuggestionsClearRequested (required unless `alwaysRenderSuggestions={true}`)
+
+This function will be called every time you need to clear [`suggestions`](#suggestionsProp).
+
+All you have to do in this function is to set `suggestions` to an empty array.
 
 <a name="getSuggestionValueProp"></a>
 #### getSuggestionValue (required)
 
 When user navigates the suggestions using the <kbd>Up</kbd> and <kbd>Down</kbd> keys, <a href="https://www.w3.org/TR/wai-aria-practices/#autocomplete" target="_blank">the input should display the highlighted suggestion</a>. You design how suggestion is modelled. Therefore, it's your responsibility to tell Autosuggest how to map suggestions to input values.
 
-This function gets:
-
-* `suggestion` - The suggestion in question
-
-It should return a string. For example:
+This function gets the suggestion in question, and it should return a string. For example:
 
 ```js
 function getSuggestionValue(suggestion) {
@@ -268,7 +262,7 @@ function getSuggestionValue(suggestion) {
 
 Use your imagination to define how suggestions are rendered.
 
-`renderSuggestion` has the following signature:
+The signature is:
 
 ```js
 function renderSuggestion(suggestion, { query })
@@ -279,7 +273,7 @@ where:
 * `suggestion` - The suggestion to render
 * `query` - Used to highlight the matching string. As user types in the input field, `query` will be equal to the trimmed value of the input. Then, if user interacts using the <kbd>Up</kbd> or <kbd>Down</kbd> keys, <a href="https://www.w3.org/TR/wai-aria-practices/#autocomplete" target="_blank">the input will get the value of the highlighted suggestion</a>, but `query` will remain to be equal to the trimmed value of the input prior to the <kbd>Up</kbd> and <kbd>Down</kbd> interactions.
 
-It should return a `ReactElement`. For example:
+It should return a string or a `ReactElement`. For example:
 
 ```js
 function renderSuggestion(suggestion) {
@@ -289,14 +283,14 @@ function renderSuggestion(suggestion) {
 }
 ```
 
-**Note:** `renderSuggestion` must be a pure function (we optimize rendering performance based on this assumption).
+**Important:** `renderSuggestion` must be a pure function (we optimize rendering performance based on this assumption).
 
 <a name="renderSuggestionsContainerProp"></a>
 #### renderSuggestionsContainer (optional)
 
 You shouldn't use this function unless you want to customize the behaviour of the suggestions container. For example, you might want to add a custom text before/after the suggestions list, or [customize the scrolling behaviour of the suggestions container](https://github.com/moroshko/react-autosuggest/blob/master/FAQ.md#limitSuggestionsContainerScrolling).
 
-`renderSuggestionsContainer` has the following signature:
+The signature is:
 
 ```js
 function renderSuggestionsContainer(props)
@@ -342,13 +336,13 @@ function renderSuggestionsContainer({ ref, ...rest }) {
 <a name="inputPropsProp"></a>
 #### inputProps (required)
 
-Autosuggest is a <a href="https://facebook.github.io/react/docs/forms.html#controlled-components" target="_blank">controlled component</a>. Therefore, you should pass at least a `value` and an `onChange` callback to the input field. You can pass additional props as well. For example:
+Autosuggest is a <a href="https://facebook.github.io/react/docs/forms.html#controlled-components" target="_blank">controlled component</a>. Therefore, you should pass at least a `value` and an `onChange` callback to the input field. You can pass any other props as well. For example:
 
 ```js
 const inputProps = {
-  value: inputValue,  // `inputValue` usually comes from application state
-  onChange: onChange, // called every time input value changes
-  onBlur: onBlur,     // called when input loses focus, e.g. when user presses Tab
+  value,          // usually comes from the application state
+  onChange,       // called every time input value changes
+  onBlur,         // called when input loses focus, e.g. when user presses Tab
   type: 'search',
   placeholder: 'Enter city or postcode'
 };
@@ -366,7 +360,7 @@ function onChange(event, { newValue, method })
 where:
 
 * `newValue` - the new value of the input field
-* `method` - string describing how the change occurred. The possible values are:
+* `method` - string describing how the change has occurred. The possible values are:
   * `'down'` - user pressed <kbd>Down</kbd>
   * `'up'` - user pressed <kbd>Up</kbd>
   * `'escape'` - user pressed <kbd>Escape</kbd>
@@ -392,11 +386,7 @@ where:
 
 By default, suggestions are rendered when input field isn't blank. Feel free to override this behaviour.
 
-This function gets:
-
-* `value` - The current value of the input
-
-It should return a boolean.
+This function gets the current value of the input, and it should return a boolean.
 
 For example, to display suggestions only when input is at least 3 characters long, do:
 
@@ -415,6 +405,8 @@ If you would like to render suggestions regardless of whether the input field is
 
 Set `alwaysRenderSuggestions={true}` if you'd like to always render the suggestions.
 
+**Important:** Make sure to set the initial value of `suggestions` to match the initial value of `inputProps.value`.
+
 <a name="multiSectionProp"></a>
 #### multiSection (optional)
 
@@ -427,12 +419,7 @@ If you'd like to have multiple sections (with optional titles), set `multiSectio
 
 When rendering [multiple sections](#multiSectionProp), you need to tell Autosuggest how to render a section title.
 
-This function gets:
-
-* `section` - The section to render (an item in the [suggestions](#suggestionsProp) array)
-
-
-It should return a `ReactElement`. For example:
+This function gets the section to render (an item in the [suggestions](#suggestionsProp) array), and it should return a string or a `ReactElement`. For example:
 
 ```js
 function renderSectionTitle(section) {
@@ -449,12 +436,7 @@ If `renderSectionTitle` returns `null` or `undefined`, section title is not rend
 
 When rendering [multiple sections](#multiSectionProp), you need to tell Autosuggest where to find the suggestions for a given section.
 
-This function gets:
-
-* `section` - The section to render (an item in the [suggestions](#suggestionsProp) array)
-
-
-It should return an array of suggestions to render in the given section. For example:
+This function gets the section to render (an item in the [suggestions](#suggestionsProp) array), and it should return an array of suggestions to render in the given section. For example:
 
 ```js
 function getSectionSuggestions(section) {
@@ -485,13 +467,11 @@ where:
 <a name="focusInputOnSuggestionClickProp"></a>
 #### focusInputOnSuggestionClick (optional)
 
-By default, `focusInputOnSuggestionClick={true}`, which means that, every time suggestion is clicked, the input will get the focus back.
+By default, `focusInputOnSuggestionClick={true}`, which means that, every time suggestion is clicked (or tapped), the input field keeps the focus.
 
-To prevent the focus going back to the input, set `focusInputOnSuggestionClick={false}`.
+On mobile devices, when input is focused the native keyboard appears. You'll probably want to lose the focus when suggestion is tapped in order to hide the keyboard.
 
-This may be useful on mobile devices where the keyboard appears when input is focused.
-
-You might want to do something like this:
+You can do something like this:
 
 ```xml
 <Autosuggest focusInputOnSuggestionClick={!isMobile} ... />
@@ -573,12 +553,6 @@ npm start
 ```
 
 Now, open `http://localhost:3000/demo/dist/index.html` and start hacking!
-
-## Running Tests
-
-```shell
-npm test
-```
 
 ## License
 

@@ -29,13 +29,19 @@ export const onChange = sinon.spy((event, { newValue }) => {
   });
 });
 
-export const onSuggestionSelected = sinon.spy();
-
-export const onSuggestionsUpdateRequested = sinon.spy(({ value }) => {
+export const onSuggestionsFetchRequested = sinon.spy(({ value }) => {
   app.setState({
     suggestions: getMatchingLanguages(value)
   });
 });
+
+export const onSuggestionsClearRequested = sinon.spy(() => {
+  app.setState({
+    suggestions: []
+  });
+});
+
+export const onSuggestionSelected = sinon.spy();
 
 export default class AutosuggestApp extends Component {
   constructor() {
@@ -45,7 +51,7 @@ export default class AutosuggestApp extends Component {
 
     this.state = {
       value: '',
-      suggestions: getMatchingLanguages('')
+      suggestions: []
     };
   }
 
@@ -59,11 +65,12 @@ export default class AutosuggestApp extends Component {
     return (
       <Autosuggest
         suggestions={suggestions.slice()}
-        onSuggestionsUpdateRequested={onSuggestionsUpdateRequested}
+        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+        onSuggestionsClearRequested={onSuggestionsClearRequested}
+        onSuggestionSelected={onSuggestionSelected}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
-        onSuggestionSelected={onSuggestionSelected}
         focusFirstSuggestion={true} />
     );
   }
