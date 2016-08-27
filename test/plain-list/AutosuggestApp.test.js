@@ -36,8 +36,9 @@ import AutosuggestApp, {
   onFocus,
   onBlur,
   shouldRenderSuggestions,
-  onSuggestionSelected,
-  onSuggestionsUpdateRequested
+  onSuggestionsFetchRequested,
+  onSuggestionsClearRequested,
+  onSuggestionSelected
 } from './AutosuggestApp';
 
 describe('Default Autosuggest', () => {
@@ -577,99 +578,134 @@ describe('Default Autosuggest', () => {
     });
   });
 
-  describe('onSuggestionsUpdateRequested', () => {
+  describe('onSuggestionsFetchRequested', () => {
+    it('should be called once with the right parameters when input gets focus', () => {
+      onSuggestionsFetchRequested.reset();
+      focusInput();
+      expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
+      expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({ value: '' });
+    });
+
     it('should be called once with the right parameters when user types', () => {
-      onSuggestionsUpdateRequested.reset();
-      focusAndSetInputValue('j');
-      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
-      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'j', reason: 'type' });
+      focusInput();
+      onSuggestionsFetchRequested.reset();
+      setInputValue('j');
+      expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
+      expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({ value: 'j' });
     });
 
-    it('should be called once with the right parameters when suggestion is clicked', () => {
+    it('should be called once with the right parameters when Up is pressed to reveal suggestions', () => {
       focusAndSetInputValue('j');
-      onSuggestionsUpdateRequested.reset();
       clickSuggestion(1);
-      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
-      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'Javascript', reason: 'click' });
+      onSuggestionsFetchRequested.reset();
+      clickDown();
+      expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
+      expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({ value: 'Javascript' });
     });
 
-    it('should be called once with the right parameters when Enter is pressed and suggestion is focused', () => {
+    it('should not be called when Down is pressed to highlight the next suggestion', () => {
       focusAndSetInputValue('j');
+      onSuggestionsFetchRequested.reset();
       clickDown();
-      onSuggestionsUpdateRequested.reset();
-      clickEnter();
-      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
-      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'Java', reason: 'enter' });
+      expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
-    it('should be called once with the right parameters when input is blurred, user interacted with Up/Down, and the value before Up/Down is not equal to current input value', () => {
+    it('should not be called when Up is pressed to highlight the previous suggestion', () => {
+      focusAndSetInputValue('j');
+      onSuggestionsFetchRequested.reset();
+      clickUp();
+      expect(onSuggestionsFetchRequested).not.to.have.been.called;
+    });
+
+    it('should not be called when input is blurred, user interacted with Up/Down, and the value before Up/Down is not equal to current input value', () => {
       focusAndSetInputValue('j');
       clickDown();
-      onSuggestionsUpdateRequested.reset();
+      onSuggestionsFetchRequested.reset();
       blurInput();
-      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
-      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'Java', reason: 'blur' });
+      expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
     it('should not be called when Escape is pressed and suggestions are hidden and shouldRenderSuggestions returns false for empty value', () => {
       focusAndSetInputValue('jr');
-      onSuggestionsUpdateRequested.reset();
+      onSuggestionsFetchRequested.reset();
       clickEscape();
-      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
-    });
-
-    it('should not be called when Up/Down is pressed', () => {
-      focusAndSetInputValue('j');
-      onSuggestionsUpdateRequested.reset();
-      clickDown();
-      clickDown();
-      clickUp();
-      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+      expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
     it('should not be called when Enter is pressed and there is no focused suggestion', () => {
       focusAndSetInputValue('j');
-      onSuggestionsUpdateRequested.reset();
+      onSuggestionsFetchRequested.reset();
       clickEnter();
-      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+      expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
     it('should not be called when Enter is pressed and there is no focused suggestion after Up/Down interaction', () => {
       focusAndSetInputValue('j');
-      onSuggestionsUpdateRequested.reset();
+      onSuggestionsFetchRequested.reset();
       clickDown();
       clickDown();
       clickDown();
       clickEnter();
-      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+      expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
     it('should not be called when input is blurred and user did not interact with Up/Down', () => {
       focusAndSetInputValue('j');
-      onSuggestionsUpdateRequested.reset();
+      onSuggestionsFetchRequested.reset();
       blurInput();
-      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+      expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
     it('should not be called when input is blurred, user interacted with Up/Down, but the value before Up/Down is equal to current input value', () => {
       focusAndSetInputValue('Java');
       clickDown();
-      onSuggestionsUpdateRequested.reset();
+      onSuggestionsFetchRequested.reset();
       blurInput();
-      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+      expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
-    it('should not be called when Escape is pressed and suggestions are shown', () => {
+    it('should not be called when Escape is pressed to close suggestions', () => {
       focusAndSetInputValue('j');
-      onSuggestionsUpdateRequested.reset();
+      onSuggestionsFetchRequested.reset();
       clickEscape();
-      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+      expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
     it('should not be called when shouldRenderSuggestions returns false', () => {
-      onSuggestionsUpdateRequested.reset();
-      focusAndSetInputValue(' ');
-      expect(onSuggestionsUpdateRequested).not.to.have.been.called;
+      focusInput();
+      onSuggestionsFetchRequested.reset();
+      setInputValue(' ');
+      expect(onSuggestionsFetchRequested).not.to.have.been.called;
+    });
+  });
+
+  describe('onSuggestionsClearRequested', () => {
+    it('should be called once when input is blurred', () => {
+      focusAndSetInputValue('p');
+      onSuggestionsClearRequested.reset();
+      blurInput();
+      expect(onSuggestionsClearRequested).to.have.been.calledOnce;
+    });
+
+    it('should be called once when suggestion is clicked', () => {
+      focusAndSetInputValue('p');
+      onSuggestionsClearRequested.reset();
+      clickSuggestion(1);
+      expect(onSuggestionsClearRequested).to.have.been.calledOnce;
+    });
+
+    it('should be called once when shouldRenderSuggestions returns false', () => {
+      focusInput();
+      onSuggestionsClearRequested.reset();
+      setInputValue(' ');
+      expect(onSuggestionsClearRequested).to.have.been.calledOnce;
+    });
+
+    it('should be called once when Escape is pressed to close suggestions', () => {
+      focusAndSetInputValue('p');
+      onSuggestionsClearRequested.reset();
+      clickEscape();
+      expect(onSuggestionsClearRequested).to.have.been.calledOnce;
     });
   });
 

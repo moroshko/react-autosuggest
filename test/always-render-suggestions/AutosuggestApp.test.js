@@ -83,7 +83,7 @@ describe('Autosuggest with alwaysRenderSuggestions={true}', () => {
       focusAndSetInputValue('p');
     });
 
-    it('should not hide suggestions if there is a focused suggestion', () => {
+    it('should update suggestions if there is a focused suggestion', () => {
       clickDown();
       clickEnter();
       expectSuggestions(['Perl']);
@@ -133,6 +133,13 @@ describe('Autosuggest with alwaysRenderSuggestions={true}', () => {
       focusAndSetInputValue('p');
       clickSuggestion(1);
       expectSuggestions(['PHP']);
+    });
+
+    it('should reset the focused suggestion', () => {
+      focusAndSetInputValue('j');
+      clickSuggestion(1);
+      clickDown();
+      expectFocusedSuggestion('Javascript');
     });
   });
 });

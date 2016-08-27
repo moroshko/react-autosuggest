@@ -55,7 +55,7 @@ export default class CustomRender extends Component {
 
     this.state = {
       value: '',
-      suggestions: getSuggestions('')
+      suggestions: []
     };
   }
 
@@ -65,9 +65,19 @@ export default class CustomRender extends Component {
     });
   };
 
-  onSuggestionsUpdateRequested = ({ value }) => {
+  onSuggestionsFetchRequested = ({ value }) => {
+    setTimeout(() => {
+      if (value === this.state.value) {
+        this.setState({
+          suggestions: getSuggestions(value)
+        });
+      }
+    }, 200);
+  };
+
+  onSuggestionsClearRequested = () => {
     this.setState({
-      suggestions: getSuggestions(value)
+      suggestions: []
     });
   };
 
@@ -99,7 +109,8 @@ export default class CustomRender extends Component {
         <div className={styles.autosuggest}>
           <Autosuggest
             suggestions={suggestions}
-            onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
             getSuggestionValue={getSuggestionValue}
             renderSuggestion={renderSuggestion}
             inputProps={inputProps}

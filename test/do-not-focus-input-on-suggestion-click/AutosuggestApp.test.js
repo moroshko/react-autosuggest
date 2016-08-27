@@ -10,7 +10,7 @@ import {
 } from '../helpers';
 import AutosuggestApp, {
   onBlur,
-  onSuggestionsUpdateRequested
+  onSuggestionsClearRequested
 } from './AutosuggestApp';
 
 describe('Autosuggest with focusInputOnSuggestionClick={false}', () => {
@@ -20,9 +20,9 @@ describe('Autosuggest with focusInputOnSuggestionClick={false}', () => {
 
   describe('when suggestion is clicked', () => {
     beforeEach(() => {
-      onBlur.reset();
       focusAndSetInputValue('p');
-      onSuggestionsUpdateRequested.reset();
+      onBlur.reset();
+      onSuggestionsClearRequested.reset();
       clickSuggestion(1);
     });
 
@@ -37,9 +37,8 @@ describe('Autosuggest with focusInputOnSuggestionClick={false}', () => {
       });
     });
 
-    it('should call onSuggestionsUpdateRequested once with the right parameters', () => {
-      expect(onSuggestionsUpdateRequested).to.have.been.calledOnce;
-      expect(onSuggestionsUpdateRequested).to.have.been.calledWithExactly({ value: 'PHP', reason: 'click' });
+    it('should call onSuggestionsClearRequested once', () => {
+      expect(onSuggestionsClearRequested).to.have.been.calledOnce;
     });
   });
 });
