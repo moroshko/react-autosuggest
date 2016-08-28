@@ -99,10 +99,10 @@
     "react-component"
   ],
   "nyc": {
-    "lines": 100,
-    "statements": 100,
+    "lines": 95,
+    "statements": 95,
     "functions": 100,
-    "branches": 100,
+    "branches": 91,
     "include": [
       "src/*.js"
     ],
