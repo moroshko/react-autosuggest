@@ -579,13 +579,6 @@ describe('Default Autosuggest', () => {
   });
 
   describe('onSuggestionsFetchRequested', () => {
-    it('should be called once with the right parameters when input gets focus', () => {
-      onSuggestionsFetchRequested.reset();
-      focusInput();
-      expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
-      expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({ value: '' });
-    });
-
     it('should be called once with the right parameters when user types', () => {
       focusInput();
       onSuggestionsFetchRequested.reset();
@@ -601,6 +594,19 @@ describe('Default Autosuggest', () => {
       clickDown();
       expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
       expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({ value: 'Javascript' });
+    });
+
+    it('should not be called when input gets focus and shouldRenderSuggestions returns false', () => {
+      onSuggestionsFetchRequested.reset();
+      focusInput();
+      expect(onSuggestionsFetchRequested).not.to.have.been.called;
+    });
+
+    it('should not be called when user types and shouldRenderSuggestions returns false', () => {
+      focusInput();
+      onSuggestionsFetchRequested.reset();
+      setInputValue(' ');
+      expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
     it('should not be called when Down is pressed to highlight the next suggestion', () => {
@@ -668,13 +674,6 @@ describe('Default Autosuggest', () => {
       focusAndSetInputValue('j');
       onSuggestionsFetchRequested.reset();
       clickEscape();
-      expect(onSuggestionsFetchRequested).not.to.have.been.called;
-    });
-
-    it('should not be called when shouldRenderSuggestions returns false', () => {
-      focusInput();
-      onSuggestionsFetchRequested.reset();
-      setInputValue(' ');
       expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
   });

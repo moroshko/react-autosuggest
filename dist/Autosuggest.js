@@ -75,7 +75,7 @@ var Autosuggest = function (_Component) {
         }
 
         node = node.parentNode;
-      } while (node !== document);
+      } while (node !== null && node !== document);
     }, _this.storeReferences = function (autowhatever) {
       if (autowhatever !== null) {
         var input = autowhatever.input;
@@ -190,7 +190,7 @@ var Autosuggest = function (_Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
       if ((0, _arrays2.default)(nextProps.suggestions, this.props.suggestions)) {
-        if (nextProps.focusFirstSuggestion && nextProps.focusedSuggestionIndex === null && nextProps.inputProps.value !== this.props.inputProps.value && nextProps.valueBeforeUpDown === this.props.valueBeforeUpDown) {
+        if (nextProps.focusFirstSuggestion && nextProps.suggestions.length > 0 && nextProps.focusedSuggestionIndex === null && nextProps.inputProps.value !== this.props.inputProps.value && nextProps.valueBeforeUpDown === this.props.valueBeforeUpDown) {
           this.focusFirstSuggestion();
         }
       } else {
@@ -342,7 +342,10 @@ var Autosuggest = function (_Component) {
           if (!_this2.justSelectedSuggestion && !_this2.justClickedOnSuggestionsContainer) {
             inputFocused(shouldRenderSuggestions(value));
             _onFocus && _onFocus(event);
-            onSuggestionsFetchRequested({ value: value });
+
+            if (shouldRenderSuggestions(value)) {
+              onSuggestionsFetchRequested({ value: value });
+            }
           }
         },
         onBlur: function onBlur(event) {
@@ -360,7 +363,6 @@ var Autosuggest = function (_Component) {
         },
         onChange: function onChange(event) {
           var value = event.target.value;
-          var shouldRenderSuggestions = _this2.props.shouldRenderSuggestions;
 
           var shouldRender = shouldRenderSuggestions(value);
 

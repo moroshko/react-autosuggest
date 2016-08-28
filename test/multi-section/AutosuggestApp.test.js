@@ -67,6 +67,13 @@ describe('Autosuggest with multiSection={true}', () => {
   });
 
   describe('onSuggestionsFetchRequested', () => {
+    it('should be called once with the right parameters when input gets focus and shouldRenderSuggestions returns true', () => {
+      onSuggestionsFetchRequested.reset();
+      focusInput();
+      expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
+      expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({ value: '' });
+    });
+
     it('should be called once with the right parameters when Escape is pressed and suggestions are hidden and shouldRenderSuggestions returns true for empty value', () => {
       focusAndSetInputValue('jr');
       onSuggestionsFetchRequested.reset();
