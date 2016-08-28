@@ -11,7 +11,7 @@
   "scripts": {
     "start": "mkdir -p demo/dist && npm run copy-static-files && node server",
     "lint": "eslint src test demo/src demo/standalone/app.js server.js webpack.*.js",
-    "test": "istanbul cover _mocha 'test/**/*.test.js' -- --compilers js:babel-register --require test/setup.js && istanbul check-coverage --statement 92 --branch 80 --function 86 --line 95",
+    "test": "nyc mocha 'test/**/*.test.js'",
     "copy-static-files": "cp demo/src/index.html demo/src/components/App/components/Examples/components/Basic/autosuggest.css demo/dist/",
     "dist": "rm -rf dist && mkdir dist && babel src -d dist",
     "demo-dist": "rm -rf demo/dist && mkdir demo/dist && npm run copy-static-files && webpack --config webpack.gh-pages.config.js",
@@ -55,11 +55,11 @@
     "happypack": "^2.0.4",
     "ismobilejs": "^0.4.0",
     "isomorphic-fetch": "^2.2.1",
-    "istanbul": "^1.1.0-alpha.1",
     "jsdom": "^9.4.2",
     "less": "^2.6.1",
     "less-loader": "^2.2.3",
     "mocha": "^3.0.2",
+    "nyc": "^8.1.0",
     "openurl": "^1.1.1",
     "postcss-loader": "^0.10.1",
     "react": "^15.0.1",
@@ -98,5 +98,26 @@
     "react-auto-complete",
     "react-component"
   ],
+  "nyc": {
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100,
+    "include": [
+      "src/*.js"
+    ],
+    "exclude": [
+      "test/**/*.js"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "require": [
+      "babel-register",
+      "./test/setup.js"
+    ],
+    "check-coverage": true
+  },
   "license": "MIT"
 }
