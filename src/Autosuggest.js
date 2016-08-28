@@ -56,6 +56,7 @@ class Autosuggest extends Component {
   componentWillReceiveProps(nextProps) {
     if (shallowEqualArrays(nextProps.suggestions, this.props.suggestions)) {
       if (nextProps.focusFirstSuggestion &&
+          nextProps.suggestions.length > 0 &&
           nextProps.focusedSuggestionIndex === null &&
           nextProps.inputProps.value !== this.props.inputProps.value &&
           nextProps.valueBeforeUpDown === this.props.valueBeforeUpDown) {
@@ -286,7 +287,10 @@ class Autosuggest extends Component {
         if (!this.justSelectedSuggestion && !this.justClickedOnSuggestionsContainer) {
           inputFocused(shouldRenderSuggestions(value));
           onFocus && onFocus(event);
-          onSuggestionsFetchRequested({ value });
+
+          if (shouldRenderSuggestions(value)) {
+            onSuggestionsFetchRequested({ value });
+          }
         }
       },
       onBlur: event => {
@@ -304,7 +308,6 @@ class Autosuggest extends Component {
       },
       onChange: event => {
         const { value } = event.target;
-        const { shouldRenderSuggestions } = this.props;
         const shouldRender = shouldRenderSuggestions(value);
 
         this.maybeCallOnChange(event, value, 'type');
