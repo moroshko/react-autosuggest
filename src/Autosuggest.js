@@ -137,7 +137,7 @@ class Autosuggest extends Component {
       }
 
       node = node.parentNode;
-    } while (node !== document);
+    } while (node !== null && node !== document);
   };
 
   findSuggestionElement(startNode) {
