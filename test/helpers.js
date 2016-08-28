@@ -11,6 +11,8 @@ const clock = sinon.useFakeTimers();
 let app, container, input, suggestionsContainer, clearButton;
 let eventsArray = [];
 
+export const tick = clock.tick;
+
 export const clearEvents = () => {
   eventsArray = [];
 };
@@ -72,7 +74,14 @@ export function getSuggestion(suggestionIndex) {
   const suggestions = getSuggestions();
 
   if (suggestionIndex >= suggestions.length) {
-    throw Error(`Cannot find suggestion #${suggestionIndex}`);
+    throw Error(`
+      Cannot find suggestion #${suggestionIndex}.
+      ${
+        suggestions.length === 0 ?
+        'No suggestions found.' :
+        `Only ${suggestions.length} suggestion${suggestions.length === 1 ? '' : 's'} found.`
+      }
+    `);
   }
 
   return suggestions[suggestionIndex];
