@@ -3,7 +3,7 @@
        alt="Build Status" />
 </a>
 <a href="https://codecov.io/gh/moroshko/react-autosuggest" target="_blank">
-  <img src="https://img.shields.io/codecov/c/github/moroshko/react-autosuggest/master.svg" alt="Coverage Status">
+  <img src="https://img.shields.io/codecov/c/github/moroshko/react-autosuggest/master.svg?style=flat-square" alt="Coverage Status">
 </a>
 <a href="https://www.bithound.io/github/moroshko/react-autosuggest" target="_blank">
   <img src="https://www.bithound.io/github/moroshko/react-autosuggest/badges/score.svg" alt="bitHound Overall Score">
