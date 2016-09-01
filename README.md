@@ -148,7 +148,7 @@ class Example extends React.Component {
     return (
       <Autosuggest
         suggestions={suggestions}
-        onSuggestionsUpdateRequested={this.onSuggestionsFetchRequested}
+        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
