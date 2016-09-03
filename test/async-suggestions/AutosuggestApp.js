@@ -74,7 +74,8 @@ export default class AutosuggestApp extends Component {
         onSuggestionsClearRequested={onSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
-        inputProps={inputProps} />
+        inputProps={inputProps}
+        focusFirstSuggestion={true} />
     );
   }
 }
