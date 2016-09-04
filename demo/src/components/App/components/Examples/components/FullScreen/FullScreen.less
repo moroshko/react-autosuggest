@@ -1,0 +1,136 @@
+@import '~variables';
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 34 * @columns;
+  margin: (16 * @rows) (0.5 * @column) 0;
+
+  @media @examples-vertical {
+    flex-direction: column;
+    width: 14 * @columns;
+  }
+
+  @media @small {
+    margin-top: 12 * @rows;
+  }
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  width: 15 * @columns;
+}
+
+.title {
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 5 * @rows;
+
+  @media @small {
+    font-size: 25px;
+  }
+}
+
+.description {
+  margin-top: @row;
+  font-size: 20px;
+}
+
+.codepenLink {
+  margin-top: @row;
+  font-size: 20px;
+  color: #209FD3;
+  align-self: flex-start;
+}
+
+.demoContainer {
+  margin-top: 6 * @rows;
+  width: 14 * @columns;
+
+  @media @examples-vertical {
+    margin-top: 3 * @rows;
+    margin-left: 0;
+  }
+}
+
+.countryTitle {
+  font-size: 12px;
+  font-weight: 400;
+  color: #777;
+  margin-top: 8px;
+}
+
+.selected {
+  display: flex;
+  align-items: center;
+  margin-top: 21px;
+}
+
+.selectedText {
+  margin-left: 10px;
+}
+
+.button {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 300;
+  color: #209FD3;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.changeButton {
+  composes: button;
+  margin-top: 21px;
+}
+
+.overlay {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.modal {
+  height: 100%;
+}
+
+.modalTitle {
+  margin-top: 5 * @rows;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.modalBody {
+  margin-top: 2 * @rows;
+  height: calc(~"100%" - 16 * @rows);
+}
+
+.cancelButton {
+  composes: button;
+  position: absolute;
+  top: 2 * @rows;
+  right: @column;
+}
+
+.flag {
+  display: inline-block;
+  height: 27px;
+  width: 36px; // 4/3 * height
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.suggestion {
+  display: flex;
+  align-items: center;
+  padding: @row @column;
+}
+
+.suggestionText {
+  margin-left: 10px;
+}

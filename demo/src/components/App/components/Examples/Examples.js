@@ -1,9 +1,10 @@
 import styles from './Examples.less';
 
 import React from 'react';
-import Basic from 'Basic/Basic';
+{/*import Basic from 'Basic/Basic';
 import MultipleSections from 'MultipleSections/MultipleSections';
-import CustomRender from 'CustomRender/CustomRender';
+import CustomRender from 'CustomRender/CustomRender';*/}
+import FullScreen from 'FullScreen/FullScreen';
 
 export default function Examples() {
   return (
@@ -11,9 +12,10 @@ export default function Examples() {
       <h2 className={styles.header}>
         Examples
       </h2>
-      <Basic />
+      {/*<Basic />
       <MultipleSections />
-      <CustomRender />
+      <CustomRender />*/}
+      <FullScreen />
     </div>
   );
 }
