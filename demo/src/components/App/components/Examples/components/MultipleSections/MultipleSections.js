@@ -93,6 +93,7 @@ export default class MultipleSections extends Component {
           </div>
           <div className={styles.description}>
             Suggestions can also be presented in multiple sections.
+            Note that we focus the first suggestion by default here.
           </div>
           <Link
             className={styles.codepenLink}
@@ -112,6 +113,7 @@ export default class MultipleSections extends Component {
             renderSectionTitle={renderSectionTitle}
             getSectionSuggestions={getSectionSuggestions}
             inputProps={inputProps}
+            focusFirstSuggestion={true}
             focusInputOnSuggestionClick={focusInputOnSuggestionClick}
             theme={theme}
             id="multiple-sections-example" />

@@ -31,7 +31,7 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        loader: 'url?limit=8192!svgo' // 8kb
+        loader: 'url?limit=512000!svgo' // 500kb
       }
     ]
   },
