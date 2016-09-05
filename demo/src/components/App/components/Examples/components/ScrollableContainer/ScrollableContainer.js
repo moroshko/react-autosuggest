@@ -1,16 +1,12 @@
-import styles from './FullScreen.less';
+import styles from './ScrollableContainer.less';
 import theme from './theme.less';
 import flags from './flags.less';
 
 import React, { Component } from 'react';
-import Modal from 'react-aria-modal';
-import isMobile from 'ismobilejs';
-import Link from 'Link/Link';
+import Modal from 'react-modal';
 import Autosuggest from 'AutosuggestContainer';
 import countries from './countries';
 import { escapeRegexCharacters } from 'utils/utils';
-
-const focusInputOnSuggestionClick = !isMobile.any;
 
 const getSuggestions = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -35,7 +31,31 @@ const renderSuggestion = suggestion => {
   );
 };
 
-export default class FullScreen extends Component {
+const modalStyle = {
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#fff',
+    fontFamily: '"Open Sans", sans-serif'
+  },
+  content: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    border: 0,
+    padding: 0,
+    overflow: 'hidden',
+    outline: 'none',
+    height: '100%'
+  }
+};
+
+export default class ScrollableContainer extends Component {
   constructor() {
     super();
 
@@ -91,21 +111,16 @@ export default class FullScreen extends Component {
     };
 
     return (
-      <div id="full-screen-example" className={styles.container}>
+      <div id="scrollable-container-example" className={styles.container}>
         <div className={styles.textContainer}>
           <div className={styles.title}>
-            Full Screen
+            Scrollable container
           </div>
           <div className={styles.description}>
-            Sometimes, it is useful to show suggestions even when
-            the input field is not focused.
+            When the suggestions list is long, you may want to make it scrollable.
+            Note that the suggestions are rendered even when the input field
+            is not focused.
           </div>
-          <Link
-            className={styles.codepenLink}
-            href=""
-            underline={false}>
-            Codepen
-          </Link>
         </div>
         <div className={styles.demoContainer}>
           <div className={styles.countryTitle}>COUNTRY</div>
@@ -118,15 +133,11 @@ export default class FullScreen extends Component {
           </button>
         </div>
         <Modal
-          underlayClass={styles.overlay}
-          underlayColor="#fff"
-          dialogClass={styles.modal}
-          mounted={isModalOpen}
-          titleText="Country"
-          underlayClickExits={false}
-          escapeExits={false}
-          onExit={this.closeModal}
-          applicationNode={this.appNode}>
+          isOpen={isModalOpen}
+          onRequestClose={this.closeModal}
+          shouldCloseOnOverlayClick={false}
+          closeTimeoutMS={1} {/* otherwise the modal is not closed when suggestion is selected by pressing Enter */}
+          style={modalStyle}>
           <div className={styles.modalTitle}>
             Please select a country:
           </div>
@@ -139,9 +150,8 @@ export default class FullScreen extends Component {
               renderSuggestion={renderSuggestion}
               inputProps={inputProps}
               alwaysRenderSuggestions={true}
-              focusInputOnSuggestionClick={focusInputOnSuggestionClick}
               theme={theme}
-              id="full-screen-example" />
+              id="scrollable-container-example" />
           </div>
           <button className={styles.cancelButton} onClick={this.closeModal}>
             Cancel
