@@ -73,7 +73,7 @@
     "react/jsx-equals-spacing": [2, "never"],
     "react/jsx-filename-extension": [2, { "extensions": [".js"] }],
     "react/jsx-first-prop-new-line": [2, "multiline"],
-    "react/jsx-handler-names": [2, { "eventHandlerPrefix": "on", "eventHandlerPropPrefix": "on" }],
+    "react/jsx-handler-names": 0,
     "react/jsx-indent": [2, 2],
     "react/jsx-indent-props": [2, 2],
     "react/jsx-key": 2,
