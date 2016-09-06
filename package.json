@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/index.js",
   "repository": {
@@ -62,9 +62,10 @@
     "nyc": "^8.1.0",
     "openurl": "^1.1.1",
     "postcss-loader": "^0.10.1",
-    "react": "^15.0.1",
-    "react-addons-test-utils": "^15.0.1",
-    "react-dom": "^15.0.1",
+    "react": "^15.3.1",
+    "react-addons-test-utils": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "react-modal": "^1.4.0",
     "react-transform-hmr": "^1.0.4",
     "redux-thunk": "^2.0.1",
     "sinon": "^1.17.3",

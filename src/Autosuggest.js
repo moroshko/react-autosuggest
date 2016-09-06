@@ -73,6 +73,8 @@ class Autosuggest extends Component {
         if (isCollapsed && !this.justSelectedSuggestion) {
           revealSuggestions();
         }
+      } else {
+        this.resetFocusedSuggestion();
       }
     }
   }

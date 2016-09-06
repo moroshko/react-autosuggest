@@ -59,5 +59,14 @@ describe('Autosuggest that gets suggestions asynchronously', () => {
       tick(500);
       expectSuggestions([]);
     });
+
+    it('should not error if suggestions were cleared after having suggestions', () => {
+      focusAndSetInputValue('p');
+      tick(100);
+      focusAndSetInputValue('pz');
+      tick(100);
+      clickEnter();
+      expectSuggestions([]);
+    });
   });
 });

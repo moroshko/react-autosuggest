@@ -2,6 +2,7 @@
   "ignore": [
     "**/node_modules/**",
     "demo/standalone/compiled.app.js",
+    "demo/src/components/App/components/Examples/components/ScrollableContainer/countries.js",
     "index.js"
   ],
   "test": [
@@ -9,7 +10,7 @@
   ],
   "critics": {
     "wc": {
-      "limit": 500
+      "limit": 5000
     }
   }
 }
