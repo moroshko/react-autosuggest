@@ -37,13 +37,6 @@
   font-size: 20px;
 }
 
-.codepenLink {
-  margin-top: @row;
-  font-size: 20px;
-  color: #209FD3;
-  align-self: flex-start;
-}
-
 .demoContainer {
   margin-top: 6 * @rows;
   width: 14 * @columns;
@@ -54,21 +47,14 @@
   }
 }
 
-.countryTitle {
-  font-size: 12px;
+.question {
+  font-size: 20px;
   font-weight: 400;
-  color: #777;
-  margin-top: 8px;
 }
 
-.selected {
-  display: flex;
-  align-items: center;
-  margin-top: 21px;
-}
-
-.selectedText {
-  margin-left: 10px;
+.answer {
+  margin-top: 2px;
+  line-height: 3 * @rows;
 }
 
 .button {
@@ -86,9 +72,9 @@
   }
 }
 
-.changeButton {
+.editButton {
   composes: button;
-  margin-top: 21px;
+  margin-top: 11px;
 }
 
 .modalTitle {
@@ -108,22 +94,4 @@
   position: absolute;
   top: 2 * @rows;
   right: @column;
-}
-
-.flag {
-  display: inline-block;
-  height: 27px;
-  width: 36px; // 4/3 * height
-  background-size: 100%;
-  background-repeat: no-repeat;
-}
-
-.suggestion {
-  display: flex;
-  align-items: center;
-  padding: @row @column;
-}
-
-.suggestionText {
-  margin-left: 10px;
 }

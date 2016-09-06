@@ -1,6 +1,5 @@
 import styles from './ScrollableContainer.less';
 import theme from './theme.less';
-import flags from './flags.less';
 
 import React, { Component } from 'react';
 import Modal from 'react-modal';
@@ -22,14 +21,7 @@ const getSuggestions = value => {
 
 const getSuggestionValue = suggestion => suggestion.name;
 
-const renderSuggestion = suggestion => {
-  return (
-    <div className={styles.suggestion}>
-      <span className={flags[suggestion.code]} />
-      <span className={styles.suggestionText}>{suggestion.name}</span>
-    </div>
-  );
-};
+const renderSuggestion = suggestion => suggestion.name;
 
 const modalStyle = {
   overlay: {
@@ -58,8 +50,6 @@ const modalStyle = {
 export default class ScrollableContainer extends Component {
   constructor() {
     super();
-
-    this.appNode = document.getElementById('demo');
 
     this.state = {
       isModalOpen: false,
@@ -123,13 +113,10 @@ export default class ScrollableContainer extends Component {
           </div>
         </div>
         <div className={styles.demoContainer}>
-          <div className={styles.countryTitle}>COUNTRY</div>
-          <div className={styles.selected}>
-            <span className={flags[selected.code]} />
-            <span className={styles.selectedText}>{selected.name}</span>
-          </div>
-          <button className={styles.changeButton} onClick={this.openModal}>
-            Change
+          <div className={styles.question}>Where do you live?</div>
+          <div className={styles.answer}>{selected.name}</div>
+          <button className={styles.editButton} onClick={this.openModal}>
+            Edit
           </button>
         </div>
         <Modal
