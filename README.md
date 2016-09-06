@@ -10,7 +10,7 @@
 </a>
 
 <a href="http://issuestats.com/github/moroshko/react-autosuggest" target="_blank">
-  <img src="https://img.shields.io/issuestats/p/long/github/strongloop/express.svg?style=flat-square"
+  <img src="https://img.shields.io/issuestats/p/long/github/moroshko/react-autosuggest.svg?style=flat-square"
        alt="Pull Requests stats" />
 </a>
 <a href="http://issuestats.com/github/moroshko/react-autosuggest" target="_blank">
