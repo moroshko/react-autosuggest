@@ -123,7 +123,7 @@ class Autosuggest extends Component {
     this.justClickedOnSuggestionsContainer = false;
 
     let node =
-      event.detail.target || // This is for testing only. Please show be a better way to emulate this.
+      event.detail.target || // This is for testing only. Please show me a better way to emulate this.
       event.target;
 
     do {
