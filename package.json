@@ -11,7 +11,7 @@
   "scripts": {
     "start": "mkdir -p demo/dist && npm run copy-static-files && node server",
     "lint": "eslint src test demo/src demo/standalone/app.js server.js webpack.*.js",
-    "test": "nyc mocha 'test/**/*.test.js'",
+    "test": "nyc mocha \"test/**/*.test.js\"",
     "copy-static-files": "cp demo/src/index.html demo/src/components/App/components/Examples/components/Basic/autosuggest.css demo/dist/",
     "dist": "rm -rf dist && mkdir dist && babel src -d dist",
     "demo-dist": "rm -rf demo/dist && mkdir demo/dist && npm run copy-static-files && webpack --config webpack.gh-pages.config.js",
