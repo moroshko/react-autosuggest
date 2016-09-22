@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component, PropTypes } from 'react';
 import { createStore } from 'redux';
 import reducer from './redux';
@@ -111,7 +113,7 @@ export default class AutosuggestContainer extends Component {
     id: '1'
   };
 
-  constructor({ alwaysRenderSuggestions }) {
+  constructor({ alwaysRenderSuggestions }: { alwaysRenderSuggestions: boolean }) {
     super();
 
     const initialState = {

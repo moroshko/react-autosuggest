@@ -1,3 +1,21 @@
+// @flow
+
+type State = {
+  isFocused: boolean,
+  isCollapsed: boolean,
+  focusedSectionIndex: ?number,
+  focusedSuggestionIndex: ?number,
+  valueBeforeUpDown: ?string
+};
+
+type Action = {
+  type: string,
+  shouldRenderSuggestions: ?boolean,
+  value: ?string,
+  sectionIndex: ?number,
+  suggestionIndex: ?number
+};
+
 const INPUT_FOCUSED = 'INPUT_FOCUSED';
 const INPUT_BLURRED = 'INPUT_BLURRED';
 const INPUT_CHANGED = 'INPUT_CHANGED';
@@ -5,28 +23,28 @@ const UPDATE_FOCUSED_SUGGESTION = 'UPDATE_FOCUSED_SUGGESTION';
 const REVEAL_SUGGESTIONS = 'REVEAL_SUGGESTIONS';
 const CLOSE_SUGGESTIONS = 'CLOSE_SUGGESTIONS';
 
-function inputFocused(shouldRenderSuggestions) {
+function inputFocused(shouldRenderSuggestions: boolean) {
   return {
     type: INPUT_FOCUSED,
     shouldRenderSuggestions
   };
 }
 
-function inputBlurred(shouldRenderSuggestions) {
+function inputBlurred(shouldRenderSuggestions: boolean) {
   return {
     type: INPUT_BLURRED,
     shouldRenderSuggestions
   };
 }
 
-function inputChanged(shouldRenderSuggestions) {
+function inputChanged(shouldRenderSuggestions: boolean) {
   return {
     type: INPUT_CHANGED,
     shouldRenderSuggestions
   };
 }
 
-function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
+function updateFocusedSuggestion(sectionIndex: ?number, suggestionIndex: ?number, value: string) {
   return {
     type: UPDATE_FOCUSED_SUGGESTION,
     sectionIndex,
@@ -56,7 +74,7 @@ export const actionCreators = {
   closeSuggestions
 };
 
-export default function reducer(state, action) {
+export default function reducer(state: State, action: Action) {
   switch (action.type) {
     case INPUT_FOCUSED:
       return {
@@ -85,7 +103,7 @@ export default function reducer(state, action) {
       };
 
     case UPDATE_FOCUSED_SUGGESTION: {
-      const { value, sectionIndex, suggestionIndex } = action;
+      const { value, sectionIndex, suggestionIndex }: { value: ?string, sectionIndex: ?number, suggestionIndex: ?number } = action;
       let { valueBeforeUpDown } = state;
 
       if (suggestionIndex === null) {
