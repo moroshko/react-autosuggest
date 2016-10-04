@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import sinon from 'sinon';
-import highlight  from 'autosuggest-highlight';
+import match from 'autosuggest-highlight/match';
+import parse from 'autosuggest-highlight/parse';
 import Autosuggest from '../../src/AutosuggestContainer';
 import languages from './languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
@@ -20,8 +21,8 @@ export const getSuggestionValue = sinon.spy(suggestion => {
 });
 
 export const renderSuggestion = sinon.spy((suggestion, { query }) => {
-  const matches = highlight.match(suggestion.name, query);
-  const parts = highlight.parse(suggestion.name, matches);
+  const matches = match(suggestion.name, query);
+  const parts = parse(suggestion.name, matches);
 
   return parts.map((part, index) => {
     return part.highlight ?
