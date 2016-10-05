@@ -158,10 +158,10 @@ class Autosuggest extends Component {
   }
 
   maybeCallOnChange(event, newValue, method) {
-    const { value, onChange } = this.props.inputProps;
+    const { value, onInput } = this.props.inputProps;
 
     if (newValue !== value) {
-      onChange && onChange(event, { newValue, method });
+      onInput && onInput(event, { newValue, method });
     }
   }
 
@@ -308,7 +308,7 @@ class Autosuggest extends Component {
           this.onSuggestionsClearRequested();
         }
       },
-      onChange: event => {
+      onInput: event => {
         const { value } = event.target;
         const shouldRender = shouldRenderSuggestions(value);
 

@@ -74,8 +74,8 @@ export default class AutosuggestContainer extends Component {
         throw new Error('\'inputProps\' must have \'value\'.');
       }
 
-      if (!inputProps.hasOwnProperty('onChange')) {
-        throw new Error('\'inputProps\' must have \'onChange\'.');
+      if (!inputProps.hasOwnProperty('onInput')) {
+        throw new Error('\'inputProps\' must have \'onInput\'.');
       }
     },
     shouldRenderSuggestions: PropTypes.func,
