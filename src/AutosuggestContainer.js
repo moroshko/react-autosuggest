@@ -78,6 +78,10 @@ export default class AutosuggestContainer extends Component {
         throw new Error('\'inputProps\' must have \'onChange\'.');
       }
     },
+    inputElement: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.string
+    ]),
     shouldRenderSuggestions: PropTypes.func,
     alwaysRenderSuggestions: PropTypes.bool,
     multiSection: PropTypes.bool,
@@ -134,7 +138,7 @@ export default class AutosuggestContainer extends Component {
       suggestions, onSuggestionsFetchRequested, onSuggestionsClearRequested,
       multiSection, shouldRenderSuggestions, renderSuggestionsContainer,
       getSuggestionValue, renderSuggestion, renderSectionTitle, getSectionSuggestions,
-      inputProps, onSuggestionSelected, focusInputOnSuggestionClick, focusFirstSuggestion,
+      inputProps, inputElement, onSuggestionSelected, focusInputOnSuggestionClick, focusFirstSuggestion,
       alwaysRenderSuggestions, theme, id
     } = this.props;
 
@@ -152,6 +156,7 @@ export default class AutosuggestContainer extends Component {
         renderSectionTitle={renderSectionTitle}
         getSectionSuggestions={getSectionSuggestions}
         inputProps={inputProps}
+        inputElement={inputElement}
         onSuggestionSelected={onSuggestionSelected}
         focusInputOnSuggestionClick={focusInputOnSuggestionClick}
         focusFirstSuggestion={focusFirstSuggestion}
