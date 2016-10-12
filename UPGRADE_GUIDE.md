@@ -1,3 +1,34 @@
+# Upgrading from 5.x to 6.x
+
+* `onSuggestionsUpdateRequested` was replaced with `onSuggestionsFetchRequested` and `onSuggestionsClearRequested`
+
+  ```diff
+  - onSuggestionsUpdateRequested = ({ value, reason }) => {
+  + onSuggestionsFetchRequested = ({ value }) => {   // `reason` is not exposed anymore
+      this.setState({
+        suggestions: getSuggestions(value)
+      });
+    };
+  
+  + onSuggestionsClearRequested = () => {
+  +   this.setState({
+  +     suggestions: []
+  +   });
+  + };
+  
+    <Autosuggest
+  -   onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+  +   onSuggestionsFetchRequested={this.onSuggestionsUpdateRequested}
+  +   onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+      ...
+    />
+  ```
+  
+  `onSuggestionsFetchRequested` is very similar to `onSuggestionsUpdateRequested`, except that it doesn't expose `reason` anymore.
+  
+  `onSuggestionsClearRequested` must be specified (unless you set `alwaysRenderSuggestions={true}`), and all it has to do is to set `suggestions` to an empty array.
+
+
 # Upgrading from 2.x to 3.x
 
 * `suggestions` are an array now, not a function. [See docs.](https://github.com/moroshko/react-autosuggest/blob/master/README.md#suggestionsProp)
