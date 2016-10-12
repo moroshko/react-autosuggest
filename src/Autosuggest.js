@@ -24,6 +24,10 @@ class Autosuggest extends Component {
     getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
     inputProps: PropTypes.object.isRequired,
+    inputElement: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.string
+    ]).isRequired,
     shouldRenderSuggestions: PropTypes.func.isRequired,
     alwaysRenderSuggestions: PropTypes.bool.isRequired,
     multiSection: PropTypes.bool.isRequired,
@@ -440,6 +444,7 @@ class Autosuggest extends Component {
         inputProps={autowhateverInputProps}
         itemProps={this.itemProps}
         theme={theme}
+        inputElement={this.props.inputElement}
         id={id}
         ref={this.storeReferences} />
     );

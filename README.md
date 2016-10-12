@@ -48,6 +48,7 @@ Check out the <a href="http://react-autosuggest.js.org" target="_blank">Homepage
 * You decide [when to show suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Always render suggestions](#alwaysRenderSuggestionsProp) (useful for mobile and modals)
 * [Pass through arbitrary props to the input field](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange), [onBlur](#inputPropsOnBlur), or any other)
+* You can use a [custom input element](#inputElementProp)
 * Thoroughly tested
 
 ## Installation
@@ -167,6 +168,7 @@ class Example extends React.Component {
 | [`getSuggestionValue`](#getSuggestionValueProp) | Function | ✓ | Implement it to teach Autosuggest what should be the input value when suggestion is clicked. |
 | [`renderSuggestion`](#renderSuggestionProp) | Function | ✓ | Use your imagination to define how suggestions are rendered. |
 | [`inputProps`](#inputPropsProp) | Object | ✓ | Pass through arbitrary props to the input field. It must contain at least `value` and `onChange`. |
+| [`inputElement`](#inputElementProp) | String or React Component | | Use a custom input, instead of an html input element. |
 | [`onSuggestionSelected`](#onSuggestionSelectedProp) | Function | | Will be called every time suggestion is selected via mouse or keyboard. |
 | [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp) | Function | | When input field is focused, Autosuggest will consult this function when to render suggestions. Use it, for example, if you want to display suggestions when input value is at least 2 characters long. |
 | [`alwaysRenderSuggestions`](#alwaysRenderSuggestionsProp) | Boolean | | Set it to `true` if you'd like to render suggestions even when the input field is not focused. |
@@ -353,6 +355,26 @@ function onBlur(event, { focusedSuggestion })
 where:
 
 * `focusedSuggestion` - the suggestion that was highlighted just before the input field lost focus, or `null` if there was no highlighted suggestion.
+
+<a name="inputElementProp"></a>
+#### inputElement (optional)
+
+Define a custom input element that will be used instead of an html `<input />`:
+
+```
+<Autosuggest inputElement={MyCustomInput} inputProps={inputProps} />
+```
+
+`MyCustomInput` may either be a class extending `React.Component` or a stateless function component.
+
+The `inputProps` will be passed to your component's `props`.
+If the custom component wraps an html input, ensure that at least `value` and `onChange` are passed to it.
+
+You may also use a string as `inputElement` to use a different html tag, if that makes sense for you:
+
+```
+<Autosuggest inputElement="textarea" inputProps={inputProps} />
+```
 
 <a name="onSuggestionSelectedProp"></a>
 #### onSuggestionSelected (optional)

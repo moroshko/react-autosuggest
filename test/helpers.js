@@ -54,6 +54,12 @@ export function expectInputAttribute(attributeName, expectedValue) {
   expect(input.getAttribute(attributeName)).to.equal(expectedValue);
 }
 
+export function expectInputElement(type) {
+  const customInput = TestUtils.findRenderedComponentWithType(app, type);
+
+  expect(customInput).to.exist;
+}
+
 export function getSuggestionsContainerAttribute(attributeName) {
   return suggestionsContainer.getAttribute(attributeName);
 }
