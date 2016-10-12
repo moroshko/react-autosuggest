@@ -112,7 +112,8 @@ export default class AutosuggestContainer extends Component {
     focusInputOnSuggestionClick: true,
     focusFirstSuggestion: false,
     theme: defaultTheme,
-    id: '1'
+    id: '1',
+    inputElement: 'input'
   };
 
   constructor({ alwaysRenderSuggestions }) {

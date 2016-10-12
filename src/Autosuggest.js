@@ -27,7 +27,7 @@ class Autosuggest extends Component {
     inputElement: PropTypes.oneOfType([
       PropTypes.func,
       PropTypes.string
-    ]),
+    ]).isRequired,
     shouldRenderSuggestions: PropTypes.func.isRequired,
     alwaysRenderSuggestions: PropTypes.bool.isRequired,
     multiSection: PropTypes.bool.isRequired,
