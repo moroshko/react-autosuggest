@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import sinon from 'sinon';
 import Autosuggest from '../../src/AutosuggestContainer';
+import CustomInput from './CustomInput';
 import languages from '../plain-list/languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
 
@@ -13,29 +13,27 @@ function getMatchingLanguages(value) {
 
 let app = null;
 
-export const getSuggestionValue = sinon.spy(suggestion => {
-  return suggestion.name;
-});
-
-export const renderSuggestion = sinon.spy(suggestion => {
-  return (
-    <span>{suggestion.name}</span>
-  );
-});
-
-export const onChange = sinon.spy((event, { newValue }) => {
+const onChange = (event, { newValue }) => {
   app.setState({
     value: newValue
   });
-});
+};
 
-export const onSuggestionsFetchRequested = sinon.spy(({ value }) => {
+const onSuggestionsFetchRequested = ({ value }) => {
   app.setState({
     suggestions: getMatchingLanguages(value)
   });
-});
+};
 
-export const onSuggestionSelected = sinon.spy();
+const onSuggestionsClearRequested = () => {
+  app.setState({
+    suggestions: []
+  });
+};
+
+const getSuggestionValue = suggestion => suggestion.name;
+
+const renderSuggestion = suggestion => suggestion.name;
 
 export default class AutosuggestApp extends Component {
   constructor() {
@@ -45,7 +43,7 @@ export default class AutosuggestApp extends Component {
 
     this.state = {
       value: '',
-      suggestions: getMatchingLanguages('')
+      suggestions: []
     };
   }
 
@@ -60,11 +58,11 @@ export default class AutosuggestApp extends Component {
       <Autosuggest
         suggestions={suggestions}
         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-        onSuggestionSelected={onSuggestionSelected}
+        onSuggestionsClearRequested={onSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
+        inputComponent={CustomInput}
         inputProps={inputProps}
-        alwaysRenderSuggestions={true}
       />
     );
   }

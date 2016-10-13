@@ -1,56 +1,42 @@
-<a href="https://codeship.com/projects/67868" target="_blank">
-  <img src="https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg?style=flat-square"
-       alt="Build Status" />
-</a>
-<a href="https://codecov.io/gh/moroshko/react-autosuggest" target="_blank">
-  <img src="https://img.shields.io/codecov/c/github/moroshko/react-autosuggest/master.svg?style=flat-square" alt="Coverage Status">
-</a>
-<a href="https://www.bithound.io/github/moroshko/react-autosuggest" target="_blank">
-  <img src="https://www.bithound.io/github/moroshko/react-autosuggest/badges/score.svg" alt="bitHound Overall Score">
-</a>
+[![Build Status](https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg?style=flat-square)](https://codeship.com/projects/67868)
+[![Coverage Status](https://img.shields.io/codecov/c/github/moroshko/react-autosuggest/master.svg?style=flat-square)](https://codecov.io/gh/moroshko/react-autosuggest)
+[![bitHound Overall Score](https://www.bithound.io/github/moroshko/react-autosuggest/badges/score.svg)](https://www.bithound.io/github/moroshko/react-autosuggest)
 
-<a href="http://issuestats.com/github/moroshko/react-autosuggest" target="_blank">
-  <img src="https://img.shields.io/issuestats/p/long/github/moroshko/react-autosuggest.svg?style=flat-square"
-       alt="Pull Requests stats" />
-</a>
-<a href="http://issuestats.com/github/moroshko/react-autosuggest" target="_blank">
-  <img src="https://img.shields.io/issuestats/i/long/github/moroshko/react-autosuggest.svg?style=flat-square"
-       alt="Issues stats" />
-</a>
+[![Pull Requests stats](https://img.shields.io/issuestats/p/long/github/moroshko/react-autosuggest.svg?style=flat-square)](http://issuestats.com/github/moroshko/react-autosuggest)
+[![Issues stats](https://img.shields.io/issuestats/i/long/github/moroshko/react-autosuggest.svg?style=flat-square)](http://issuestats.com/github/moroshko/react-autosuggest)
 
-<a href="https://npmjs.org/package/react-autosuggest" target="_blank">
-  <img src="https://img.shields.io/npm/dm/react-autosuggest.svg?style=flat-square"
-       alt="NPM Downloads" />
-</a>
-<a href="https://npmjs.org/package/react-autosuggest" target="_blank">
-  <img src="https://img.shields.io/npm/v/react-autosuggest.svg?style=flat-square"
-       alt="NPM Version" />
-</a>
+[![npm Downloads](https://img.shields.io/npm/dm/react-autosuggest.svg?style=flat-square)](https://npmjs.org/package/react-autosuggest)
+[![npm Version](https://img.shields.io/npm/v/react-autosuggest.svg?style=flat-square)](https://npmjs.org/package/react-autosuggest)
 
 # React Autosuggest
 
-WAI-ARIA compliant autosuggest component built in React.
-
 ## Demo
 
-Check out the <a href="http://react-autosuggest.js.org" target="_blank">Homepage</a> and the <a href="http://codepen.io/collection/DkkYaQ" target="_blank">Codepen examples</a>.
+Check out the [Homepage](http://react-autosuggest.js.org) and the [Codepen examples](http://codepen.io/collection/DkkYaQ).
 
 ## Features
 
-* <a href="https://www.w3.org/TR/wai-aria-practices/#autocomplete" target="_blank">WAI-ARIA compliant</a>, with support for ARIA attributes and keyboard interactions
+* [WAI-ARIA compliant](https://www.w3.org/TR/wai-aria-practices/#autocomplete), with support for ARIA attributes and keyboard interactions
 * Mobile friendly
-* Plugs in nicely to Flux and <a href="http://redux.js.org" target="_blank">Redux</a> applications
+* Plugs in nicely to Flux and [Redux](http://redux.js.org) applications
 * Full control over [suggestions rendering](#renderSuggestionProp)
-* Suggestions can be presented as <a href="http://codepen.io/moroshko/pen/LGNJMy" target="_blank">plain list</a> or <a href="http://codepen.io/moroshko/pen/qbRNjV" target="_blank">multiple sections</a>
-* Suggestions can be retrieved <a href="http://codepen.io/moroshko/pen/EPZpev" target="_blank">asynchronously</a>
+* Suggestions can be presented as [plain list](http://codepen.io/moroshko/pen/LGNJMy) or [multiple sections](http://codepen.io/moroshko/pen/qbRNjV)
+* Suggestions can be retrieved [asynchronously](http://codepen.io/moroshko/pen/EPZpev)
 * [Focus the first suggestion](#focusFirstSuggestionProp) in the list if you wish
-* Supports styling using <a href="https://github.com/css-modules/css-modules" target="_blank">CSS Modules</a>, <a href="https://github.com/FormidableLabs/radium" target="_blank">Radium</a>, <a href="https://facebook.github.io/react/tips/inline-styles.html" target="_blank">Inline styles</a>, global CSS, [and more](#themeProp)
+* Supports styling using [CSS Modules](https://github.com/css-modules/css-modules), [Radium](https://github.com/FormidableLabs/radium), [Inline styles](https://facebook.github.io/react/tips/inline-styles.html), global CSS, [and more](#themeProp)
 * You decide [when to show suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Always render suggestions](#alwaysRenderSuggestionsProp) (useful for mobile and modals)
-* [Pass through arbitrary props to the input field](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange), [onBlur](#inputPropsOnBlur), or any other)
+* [Pass through arbitrary props to the input element](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange), [onBlur](#inputPropsOnBlur), or any other)
+* You can use a [custom input component](#inputComponentProp)
 * Thoroughly tested
 
 ## Installation
+
+```shell
+yarn add react-autosuggest
+```
+
+or
 
 ```shell
 npm install react-autosuggest --save
@@ -75,28 +61,26 @@ const languages = [
 ];
 
 // Teach Autosuggest how to calculate suggestions for any given input value.
-function getSuggestions(value) {
+const getSuggestions = value => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
 
   return inputLength === 0 ? [] : languages.filter(lang =>
     lang.name.toLowerCase().slice(0, inputLength) === inputValue
   );
-}
+};
 
-// When suggestion is clicked, Autosuggest needs to populate the input field
+// When suggestion is clicked, Autosuggest needs to populate the input element
 // based on the clicked suggestion. Teach Autosuggest how to calculate the
 // input value for every given suggestion.
-function getSuggestionValue(suggestion) {
-  return suggestion.name;
-}
+const getSuggestionValue = suggestion => suggestion.name;
 
 // Use your imagination to render suggestions.
-function renderSuggestion(suggestion) {
-  return (
-    <span>{suggestion.name}</span>
-  );
-}
+const renderSuggestion = suggestion => (
+  <div>
+    {suggestion.name}
+  </div>
+);
 
 class Example extends React.Component {
   constructor() {
@@ -137,7 +121,7 @@ class Example extends React.Component {
   render() {
     const { value, suggestions } = this.state;
 
-    // Autosuggest will pass through all these props to the input field.
+    // Autosuggest will pass through all these props to the input element.
     const inputProps = {
       placeholder: 'Type a programming language',
       value,
@@ -152,7 +136,8 @@ class Example extends React.Component {
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
-        inputProps={inputProps} />
+        inputProps={inputProps}
+      />
     );
   }
 }
@@ -167,12 +152,13 @@ class Example extends React.Component {
 | [`onSuggestionsClearRequested`](#onSuggestionsClearRequestedProp) | Function | ✓[*](#onSuggestionsClearRequestedPropNote) | Will be called every time you need to set `suggestions` to `[]`. |
 | [`getSuggestionValue`](#getSuggestionValueProp) | Function | ✓ | Implement it to teach Autosuggest what should be the input value when suggestion is clicked. |
 | [`renderSuggestion`](#renderSuggestionProp) | Function | ✓ | Use your imagination to define how suggestions are rendered. |
-| [`inputProps`](#inputPropsProp) | Object | ✓ | Pass through arbitrary props to the input field. It must contain at least `value` and `onChange`. |
+| [`inputComponent`](#inputComponentProp) | React Component | | Use it only if you need to customize the input element. |
+| [`inputProps`](#inputPropsProp) | Object | ✓ | Pass through arbitrary props to the input element. It must contain at least `value` and `onChange`. |
 | [`onSuggestionSelected`](#onSuggestionSelectedProp) | Function | | Will be called every time suggestion is selected via mouse or keyboard. |
-| [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp) | Function | | When input field is focused, Autosuggest will consult this function when to render suggestions. Use it, for example, if you want to display suggestions when input value is at least 2 characters long. |
-| [`alwaysRenderSuggestions`](#alwaysRenderSuggestionsProp) | Boolean | | Set it to `true` if you'd like to render suggestions even when the input field is not focused. |
+| [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp) | Function | | When the input element is focused, Autosuggest will consult this function when to render suggestions. Use it, for example, if you want to display suggestions when input value is at least 2 characters long. |
+| [`alwaysRenderSuggestions`](#alwaysRenderSuggestionsProp) | Boolean | | Set it to `true` if you'd like to render suggestions even when the input element is not focused. |
 | [`focusFirstSuggestion`](#focusFirstSuggestionProp) | Boolean | | Set it to `true` if you'd like Autosuggest to automatically highlight the first suggestion. |
-| [`focusInputOnSuggestionClick`](#focusInputOnSuggestionClickProp) | Boolean | | Set it to `false` if you don't want Autosuggest to keep the input field focused when suggestions are clicked/tapped. |
+| [`focusInputOnSuggestionClick`](#focusInputOnSuggestionClickProp) | Boolean | | Set it to `false` if you don't want Autosuggest to keep the input element focused when suggestions are clicked/tapped. |
 | [`multiSection`](#multiSectionProp) | Boolean | | Set it to `true` if you'd like to display suggestions in multiple sections (with optional titles). |
 | [`renderSectionTitle`](#renderSectionTitleProp) | Function | ✓<br>when `multiSection={true}` | Use your imagination to define how section titles are rendered. |
 | [`getSectionSuggestions`](#getSectionSuggestionsProp) | Function | ✓<br>when `multiSection={true}` | Implement it to teach Autosuggest where to find the suggestions for every section. |
@@ -269,7 +255,7 @@ All you have to do in this function is to set `suggestions` to `[]`.
 <a name="getSuggestionValueProp"></a>
 #### getSuggestionValue (required)
 
-When user navigates the suggestions using the <kbd>Up</kbd> and <kbd>Down</kbd> keys, <a href="https://www.w3.org/TR/wai-aria-practices/#autocomplete" target="_blank">the input value should be set according to the highlighted suggestion</a>. You design how suggestion is modelled. Therefore, it's your responsibility to tell Autosuggest how to map suggestions to input values.
+When user navigates the suggestions using the <kbd>Up</kbd> and <kbd>Down</kbd> keys, [the input value should be set according to the highlighted suggestion](https://www.w3.org/TR/wai-aria-practices/#autocomplete). You design how suggestion is modelled. Therefore, it's your responsibility to tell Autosuggest how to map suggestions to input values.
 
 This function gets the suggestion in question, and it should return a string. For example:
 
@@ -293,7 +279,7 @@ function renderSuggestion(suggestion, { query })
 where:
 
 * `suggestion` - The suggestion to render
-* `query` - Used to highlight the matching string. As user types in the input field, `query` will be equal to the trimmed value of the input. Then, if user interacts using the <kbd>Up</kbd> or <kbd>Down</kbd> keys, <a href="https://www.w3.org/TR/wai-aria-practices/#autocomplete" target="_blank">the input field will get the value of the highlighted suggestion</a>, but `query` will remain to be equal to the trimmed value of the input field prior to the <kbd>Up</kbd> and <kbd>Down</kbd> interactions.
+* `query` - Used to highlight the matching string. As user types in the input element, `query` will be equal to the trimmed value of the input. Then, if user interacts using the <kbd>Up</kbd> or <kbd>Down</kbd> keys, [the input element will get the value of the highlighted suggestion](https://www.w3.org/TR/wai-aria-practices/#autocomplete), but `query` will remain to be equal to the trimmed value of the input element prior to the <kbd>Up</kbd> and <kbd>Down</kbd> interactions.
 
 It should return a string or a `ReactElement`. For example:
 
@@ -307,16 +293,35 @@ function renderSuggestion(suggestion) {
 
 **Important:** `renderSuggestion` must be a pure function (we optimize rendering performance based on this assumption).
 
+<a name="inputComponentProp"></a>
+#### inputComponent (optional)
+
+You shouldn't specify `inputComponent` unless you want to customize the input element.
+
+To keep Autosuggest [accessible](https://www.w3.org/TR/wai-aria-practices/#autocomplete), `inputComponent` should render an input element and pass through all its props to it.
+
+Example:
+
+```js
+const inputComponent = props => (
+  <div>
+    <input {...props} />
+    <div>custom stuff</div>
+  </div>
+);
+  
+```
+
 <a name="inputPropsProp"></a>
 #### inputProps (required)
 
-Autosuggest is a <a href="https://facebook.github.io/react/docs/forms.html#controlled-components" target="_blank">controlled component</a>. Therefore, you should pass at least a `value` and an `onChange` callback to the input field. You can pass any other props as well. For example:
+Autosuggest is a [controlled component](https://facebook.github.io/react/docs/forms.html#controlled-components). Therefore, you should pass at least a `value` and an `onChange` callback to the input element. You can pass any other props as well. For example:
 
 ```js
 const inputProps = {
   value,          // usually comes from the application state
   onChange,       // called every time the input value changes
-  onBlur,         // called when the input field loses focus, e.g. when user presses Tab
+  onBlur,         // called when the input element loses focus, e.g. when user presses Tab
   type: 'search',
   placeholder: 'Enter city or postcode'
 };
@@ -333,14 +338,14 @@ function onChange(event, { newValue, method })
 
 where:
 
-* `newValue` - the new value of the input field
+* `newValue` - the new value of the input element
 * `method` - string describing how the change has occurred. The possible values are:
   * `'down'` - user pressed <kbd>Down</kbd>
   * `'up'` - user pressed <kbd>Up</kbd>
   * `'escape'` - user pressed <kbd>Escape</kbd>
   * `'enter'` - user pressed <kbd>Enter</kbd>
   * `'click'` - user clicked (or tapped) on suggestion
-  * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the field, etc.)
+  * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the input element, etc.)
 
 <a name="inputPropsOnBlur"></a>
 ##### inputProps.onBlur (optional)
@@ -353,7 +358,7 @@ function onBlur(event, { focusedSuggestion })
 
 where:
 
-* `focusedSuggestion` - the suggestion that was highlighted just before the input field lost focus, or `null` if there was no highlighted suggestion.
+* `focusedSuggestion` - the suggestion that was highlighted just before the input element lost focus, or `null` if there was no highlighted suggestion.
 
 <a name="onSuggestionSelectedProp"></a>
 #### onSuggestionSelected (optional)
@@ -376,7 +381,7 @@ where:
 <a name="shouldRenderSuggestionsProp"></a>
 #### shouldRenderSuggestions (optional)
 
-By default, suggestions are rendered when input field isn't blank. Feel free to override this behaviour.
+By default, suggestions are rendered when the input element isn't blank. Feel free to override this behaviour.
 
 This function gets the current value of the input, and it should return a boolean.
 
@@ -388,9 +393,9 @@ function shouldRenderSuggestions(value) {
 }
 ```
 
-When `shouldRenderSuggestions` returns `true`, **suggestions will be rendered only when the input field is focused**.
+When `shouldRenderSuggestions` returns `true`, **suggestions will be rendered only when the input element is focused**.
 
-If you would like to render suggestions regardless of whether the input field is focused or not, set `alwaysRenderSuggestions={true}` (`shouldRenderSuggestions` is ignored in this case).
+If you would like to render suggestions regardless of whether the input element is focused or not, set `alwaysRenderSuggestions={true}` (`shouldRenderSuggestions` is ignored in this case).
 
 <a name="alwaysRenderSuggestionsProp"></a>
 #### alwaysRenderSuggestions (optional)
@@ -407,9 +412,9 @@ When `focusFirstSuggestion={true}`, Autosuggest will automatically highlight the
 <a name="focusInputOnSuggestionClickProp"></a>
 #### focusInputOnSuggestionClick (optional)
 
-By default, `focusInputOnSuggestionClick={true}`, which means that, every time suggestion is clicked (or tapped), the input field keeps the focus.
+By default, `focusInputOnSuggestionClick={true}`, which means that, every time suggestion is clicked (or tapped), the input element keeps the focus.
 
-On mobile devices, when the input field is focused, the native keyboard appears. You'll probably want to lose the focus when suggestion is tapped in order to hide the keyboard.
+On mobile devices, when the input element is focused, the native keyboard appears. You'll probably want to lose the focus when suggestion is tapped in order to hide the keyboard.
 
 You can do something like this:
 
@@ -461,7 +466,7 @@ function getSectionSuggestions(section) {
 <a name="renderSuggestionsContainerProp"></a>
 #### renderSuggestionsContainer (optional)
 
-You shouldn't use this function unless you want to customize the content or behaviour of the suggestions container beyond rendering the suggestions themselves. For example, you might want to add a custom text before/after the suggestions list, or [customize the scrolling behaviour of the suggestions container](https://github.com/moroshko/react-autosuggest/blob/master/FAQ.md#limitSuggestionsContainerScrolling).
+You shouldn't specify `renderSuggestionsContainer` unless you want to customize the content or behaviour of the suggestions container beyond rendering the suggestions themselves. For example, you might want to add a custom text before/after the suggestions list, or [customize the scrolling behaviour of the suggestions container](https://github.com/moroshko/react-autosuggest/blob/master/FAQ.md#limitSuggestionsContainerScrolling).
 
 The signature is:
 
@@ -511,7 +516,7 @@ function renderSuggestionsContainer({ ref, ...rest }) {
 
 Autosuggest comes with no styles.
 
-It uses <a href="https://github.com/markdalgleish/react-themeable" target="_blank">react-themeable</a> to allow you to style your Autosuggest component using <a href="https://github.com/css-modules/css-modules" target="_blank">CSS Modules</a>, <a href="https://github.com/FormidableLabs/radium" target="_blank">Radium</a>, <a href="https://github.com/js-next/react-style" target="_blank">React Style</a>, <a href="https://github.com/jsstyles/jss" target="_blank">JSS</a>, <a href="https://facebook.github.io/react/tips/inline-styles.html" target="_blank">Inline styles</a>, or even global CSS.
+It uses [react-themeable](https://github.com/markdalgleish/react-themeable) to allow you to style your Autosuggest component using [CSS Modules](https://github.com/css-modules/css-modules), [Radium](https://github.com/FormidableLabs/radium), [React Style](https://github.com/js-next/react-style), [JSS](https://github.com/jsstyles/jss), [Inline styles](https://facebook.github.io/react/tips/inline-styles.html), or even global CSS.
 
 For example, to style the Autosuggest using CSS Modules, do:
 
@@ -578,4 +583,4 @@ Now, open `http://localhost:3000/demo/dist/index.html` and start hacking!
 
 ## License
 
-<a href="http://moroshko.mit-license.org" target="_blank">MIT</a>
+[MIT](http://moroshko.mit-license.org)

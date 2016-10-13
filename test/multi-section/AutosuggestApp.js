@@ -114,7 +114,8 @@ export default class AutosuggestApp extends Component {
           shouldRenderSuggestions={shouldRenderSuggestions}
           renderSectionTitle={renderSectionTitle}
           getSectionSuggestions={getSectionSuggestions}
-          focusFirstSuggestion={focusFirstSuggestion} />
+          focusFirstSuggestion={focusFirstSuggestion}
+        />
       </div>
     );
   }

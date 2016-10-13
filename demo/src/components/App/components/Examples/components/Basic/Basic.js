@@ -79,7 +79,8 @@ export default class Basic extends Component {
           <Link
             className={styles.codepenLink}
             href="http://codepen.io/moroshko/pen/LGNJMy"
-            underline={false}>
+            underline={false}
+          >
             Codepen
           </Link>
         </div>
@@ -92,7 +93,8 @@ export default class Basic extends Component {
             renderSuggestion={renderSuggestion}
             inputProps={inputProps}
             focusInputOnSuggestionClick={focusInputOnSuggestionClick}
-            id="basic-example" />
+            id="basic-example"
+          />
         </div>
       </div>
     );

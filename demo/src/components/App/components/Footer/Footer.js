@@ -11,7 +11,8 @@ export default function Footer() {
         <Link
           className={styles.link}
           href="https://twitter.com/moroshko"
-          underline={false}>
+          underline={false}
+        >
           @moroshko
         </Link>
       </div>
@@ -20,7 +21,8 @@ export default function Footer() {
         <Link
           className={styles.link}
           href="https://twitter.com/ThatBaldUXGuy"
-          underline={false}>
+          underline={false}
+        >
           @thatbalduxguy
         </Link>
       </div>
@@ -29,7 +31,8 @@ export default function Footer() {
         <Link
           className={styles.link}
           href="http://moroshko.mit-license.org/"
-          underline={false}>
+          underline={false}
+        >
           MIT license
         </Link>
       </div>

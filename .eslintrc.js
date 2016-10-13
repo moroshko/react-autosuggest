@@ -7,8 +7,7 @@ module.exports = {
   },
   parser: 'babel-eslint',
   plugins: [
-    'react',
-    'mocha'
+    'react'
   ],
   extends: [
     'eslint:recommended'
@@ -29,6 +28,28 @@ module.exports = {
     'no-console': 2,
     'no-global-assign': 2,
     'no-multiple-empty-lines': [2, { 'max': 1 }],
+    'no-restricted-properties': [2,
+      {
+        object: 'describe',
+        property: 'only',
+        message: 'Please run all tests!'
+      },
+      {
+        object: 'describe',
+        property: 'skip',
+        message: 'Please run all tests!'
+      },
+      {
+        object: 'it',
+        property: 'only',
+        message: 'Please run all tests!'
+      },
+      {
+        object: 'it',
+        property: 'skip',
+        message: 'Please run all tests!'
+      }
+    ],
     'no-template-curly-in-string': 2,
     'no-trailing-spaces': 2,
     'no-unused-vars': 2,
@@ -73,7 +94,7 @@ module.exports = {
     'react/style-prop-object': 2,
 
     'react/jsx-boolean-value': [2, 'always'],
-    'react/jsx-closing-bracket-location': [2, { 'selfClosing': 'after-props', 'nonEmpty': 'after-props' }],
+    'react/jsx-closing-bracket-location': [2, 'tag-aligned'],
     'react/jsx-curly-spacing': [2, 'never', { 'allowMultiline': true }],
     'react/jsx-equals-spacing': [2, 'never'],
     'react/jsx-filename-extension': [2, { 'extensions': ['.js'] }],
@@ -93,9 +114,6 @@ module.exports = {
     'react/jsx-space-before-closing': [2, 'always'],
     'react/jsx-uses-react': 2,
     'react/jsx-uses-vars': 2,
-    'react/jsx-wrap-multilines': 2,
-
-    'mocha/no-exclusive-tests': 'error',
-    'mocha/no-skipped-tests': 'error'
+    'react/jsx-wrap-multilines': 2
   }
 };

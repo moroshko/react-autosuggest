@@ -107,7 +107,7 @@
 	  year: 2003
 	}];
 
-	// https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
+	// https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters
 	function escapeRegexCharacters(str) {
 	  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 	}
@@ -195,7 +195,8 @@
 	        onSuggestionsClearRequested: this.onSuggestionsClearRequested,
 	        getSuggestionValue: getSuggestionValue,
 	        renderSuggestion: renderSuggestion,
-	        inputProps: inputProps });
+	        inputProps: inputProps
+	      });
 	    }
 	  }]);
 

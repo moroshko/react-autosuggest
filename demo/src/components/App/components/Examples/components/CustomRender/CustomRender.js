@@ -3,7 +3,8 @@ import theme from './theme.less';
 
 import React, { Component } from 'react';
 import isMobile from 'ismobilejs';
-import highlight  from 'autosuggest-highlight';
+import match from 'autosuggest-highlight/match';
+import parse from 'autosuggest-highlight/parse';
 import Link from 'Link/Link';
 import Autosuggest from 'AutosuggestContainer';
 import people from './people';
@@ -29,8 +30,8 @@ function getSuggestionValue(suggestion) {
 
 function renderSuggestion(suggestion, { query }) {
   const suggestionText = `${suggestion.first} ${suggestion.last}`;
-  const matches = highlight.match(suggestionText, query);
-  const parts = highlight.parse(suggestionText, matches);
+  const matches = match(suggestionText, query);
+  const parts = parse(suggestionText, matches);
 
   return (
     <span className={theme.suggestionContent + ' ' + theme[suggestion.twitter]}>
@@ -102,7 +103,8 @@ export default class CustomRender extends Component {
           <Link
             className={styles.codepenLink}
             href="http://codepen.io/moroshko/pen/PZWbzK"
-            underline={false}>
+            underline={false}
+          >
             Codepen
           </Link>
         </div>
@@ -116,7 +118,8 @@ export default class CustomRender extends Component {
             inputProps={inputProps}
             focusInputOnSuggestionClick={focusInputOnSuggestionClick}
             theme={theme}
-            id="custom-render-example" />
+            id="custom-render-example"
+          />
         </div>
       </div>
     );

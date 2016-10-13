@@ -18,7 +18,8 @@ export default function Features() {
           <div className={styles.featureDescription}>
             <Link
               className={styles.link}
-              href="http://www.w3.org/TR/wai-aria-practices/#autocomplete">
+              href="http://www.w3.org/TR/wai-aria-practices/#autocomplete"
+            >
               WAI-ARIA compliant
             </Link>
             , with support for ARIA attributes and keyboard interactions.
@@ -47,7 +48,8 @@ export default function Features() {
         {'Check out the '}
         <Link
           className={styles.link}
-          href="https://github.com/moroshko/react-autosuggest#features">
+          href="https://github.com/moroshko/react-autosuggest#features"
+        >
           GitHub page
         </Link>
         {' for a full list of features.'}
