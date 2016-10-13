@@ -103,7 +103,8 @@ export default class CustomRender extends Component {
           <Link
             className={styles.codepenLink}
             href="http://codepen.io/moroshko/pen/PZWbzK"
-            underline={false}>
+            underline={false}
+          >
             Codepen
           </Link>
         </div>
@@ -117,7 +118,8 @@ export default class CustomRender extends Component {
             inputProps={inputProps}
             focusInputOnSuggestionClick={focusInputOnSuggestionClick}
             theme={theme}
-            id="custom-render-example" />
+            id="custom-render-example"
+          />
         </div>
       </div>
     );

@@ -124,7 +124,8 @@ export default class ScrollableContainer extends Component {
           onRequestClose={this.closeModal}
           shouldCloseOnOverlayClick={false}
           closeTimeoutMS={1/* otherwise the modal is not closed when suggestion is selected by pressing Enter */}
-          style={modalStyle}>
+          style={modalStyle}
+        >
           <div className={styles.modalTitle}>
             Please select a country:
           </div>
@@ -138,7 +139,8 @@ export default class ScrollableContainer extends Component {
               inputProps={inputProps}
               alwaysRenderSuggestions={true}
               theme={theme}
-              id="scrollable-container-example" />
+              id="scrollable-container-example"
+            />
           </div>
           <button className={styles.cancelButton} onClick={this.closeModal}>
             Cancel

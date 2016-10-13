@@ -102,7 +102,8 @@ export default class AutosuggestApp extends Component {
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
         shouldRenderSuggestions={shouldRenderSuggestions}
-        ref={this.storeAutosuggestReference} />
+        ref={this.storeAutosuggestReference}
+      />
     );
   }
 }

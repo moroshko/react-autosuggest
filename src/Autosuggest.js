@@ -24,10 +24,7 @@ class Autosuggest extends Component {
     getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
     inputProps: PropTypes.object.isRequired,
-    inputElement: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.string
-    ]).isRequired,
+    inputComponent: PropTypes.func,
     shouldRenderSuggestions: PropTypes.func.isRequired,
     alwaysRenderSuggestions: PropTypes.bool.isRequired,
     multiSection: PropTypes.bool.isRequired,
@@ -277,11 +274,11 @@ class Autosuggest extends Component {
   render() {
     const {
       suggestions, renderSuggestionsContainer, onSuggestionsFetchRequested,
-      renderSuggestion, inputProps, shouldRenderSuggestions, multiSection,
-      renderSectionTitle, id, getSectionSuggestions, theme, isFocused, isCollapsed,
-      focusedSectionIndex, focusedSuggestionIndex, valueBeforeUpDown, inputFocused,
-      inputChanged, updateFocusedSuggestion, revealSuggestions, closeSuggestions,
-      getSuggestionValue, alwaysRenderSuggestions
+      renderSuggestion, inputComponent, inputProps, shouldRenderSuggestions,
+      multiSection, renderSectionTitle, id, getSectionSuggestions, theme,
+      isFocused, isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
+      valueBeforeUpDown, inputFocused, inputChanged, updateFocusedSuggestion,
+      revealSuggestions, closeSuggestions, getSuggestionValue, alwaysRenderSuggestions
     } = this.props;
     const { value, onFocus, onKeyDown } = inputProps;
     const willRenderSuggestions = this.willRenderSuggestions(this.props);
@@ -441,12 +438,13 @@ class Autosuggest extends Component {
         getSectionItems={getSectionSuggestions}
         focusedSectionIndex={focusedSectionIndex}
         focusedItemIndex={focusedSuggestionIndex}
+        inputComponent={inputComponent}
         inputProps={autowhateverInputProps}
         itemProps={this.itemProps}
         theme={theme}
-        inputElement={this.props.inputElement}
         id={id}
-        ref={this.storeReferences} />
+        ref={this.storeReferences}
+      />
     );
   }
 }

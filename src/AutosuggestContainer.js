@@ -78,10 +78,7 @@ export default class AutosuggestContainer extends Component {
         throw new Error('\'inputProps\' must have \'onChange\'.');
       }
     },
-    inputElement: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.string
-    ]),
+    inputComponent: PropTypes.func,
     shouldRenderSuggestions: PropTypes.func,
     alwaysRenderSuggestions: PropTypes.bool,
     multiSection: PropTypes.bool,
@@ -112,8 +109,7 @@ export default class AutosuggestContainer extends Component {
     focusInputOnSuggestionClick: true,
     focusFirstSuggestion: false,
     theme: defaultTheme,
-    id: '1',
-    inputElement: 'input'
+    id: '1'
   };
 
   constructor({ alwaysRenderSuggestions }) {
@@ -139,8 +135,8 @@ export default class AutosuggestContainer extends Component {
       suggestions, onSuggestionsFetchRequested, onSuggestionsClearRequested,
       multiSection, shouldRenderSuggestions, renderSuggestionsContainer,
       getSuggestionValue, renderSuggestion, renderSectionTitle, getSectionSuggestions,
-      inputProps, inputElement, onSuggestionSelected, focusInputOnSuggestionClick, focusFirstSuggestion,
-      alwaysRenderSuggestions, theme, id
+      inputComponent, inputProps, onSuggestionSelected, focusInputOnSuggestionClick,
+      focusFirstSuggestion, alwaysRenderSuggestions, theme, id
     } = this.props;
 
     return (
@@ -156,15 +152,16 @@ export default class AutosuggestContainer extends Component {
         renderSuggestion={renderSuggestion}
         renderSectionTitle={renderSectionTitle}
         getSectionSuggestions={getSectionSuggestions}
+        inputComponent={inputComponent}
         inputProps={inputProps}
-        inputElement={inputElement}
         onSuggestionSelected={onSuggestionSelected}
         focusInputOnSuggestionClick={focusInputOnSuggestionClick}
         focusFirstSuggestion={focusFirstSuggestion}
         theme={mapToAutowhateverTheme(theme)}
         id={id}
         inputRef={this.storeInputReference}
-        store={this.store} />
+        store={this.store}
+      />
     );
   }
 }

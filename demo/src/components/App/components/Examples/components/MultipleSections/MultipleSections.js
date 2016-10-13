@@ -98,7 +98,8 @@ export default class MultipleSections extends Component {
           <Link
             className={styles.codepenLink}
             href="http://codepen.io/moroshko/pen/qbRNjV"
-            underline={false}>
+            underline={false}
+          >
             Codepen
           </Link>
         </div>
@@ -116,7 +117,8 @@ export default class MultipleSections extends Component {
             focusFirstSuggestion={true}
             focusInputOnSuggestionClick={focusInputOnSuggestionClick}
             theme={theme}
-            id="multiple-sections-example" />
+            id="multiple-sections-example"
+          />
         </div>
       </div>
     );
