@@ -1,6 +1,7 @@
 [![Build Status](https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg?style=flat-square)](https://codeship.com/projects/67868)
 [![Coverage Status](https://img.shields.io/codecov/c/github/moroshko/react-autosuggest/master.svg?style=flat-square)](https://codecov.io/gh/moroshko/react-autosuggest)
 [![bitHound Overall Score](https://www.bithound.io/github/moroshko/react-autosuggest/badges/score.svg)](https://www.bithound.io/github/moroshko/react-autosuggest)
+[![npms Score](https://badges.npms.io/react.svg?style=flat-square)](https://npms.io/search?q=react-autosuggest)
 
 [![Pull Requests stats](https://img.shields.io/issuestats/p/long/github/moroshko/react-autosuggest.svg?style=flat-square)](http://issuestats.com/github/moroshko/react-autosuggest)
 [![Issues stats](https://img.shields.io/issuestats/i/long/github/moroshko/react-autosuggest.svg?style=flat-square)](http://issuestats.com/github/moroshko/react-autosuggest)
@@ -309,7 +310,7 @@ const inputComponent = props => (
     <div>custom stuff</div>
   </div>
 );
-  
+
 ```
 
 <a name="inputPropsProp"></a>
