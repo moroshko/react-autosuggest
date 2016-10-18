@@ -1,6 +1,10 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import { init, expectInputReferenceToBeSet } from '../helpers';
+import {
+  init,
+  expectInputAttribute,
+  expectInputReferenceToBeSet
+} from '../helpers';
 import AutosuggestApp from './AutosuggestApp';
 
 describe('Autosuggest with renderInputComponent', () => {
@@ -9,6 +13,10 @@ describe('Autosuggest with renderInputComponent', () => {
   });
 
   describe('initially', () => {
+    it('should set input\'s id', () => {
+      expectInputAttribute('id', 'my-custom-input');
+    });
+
     it('should set the input reference', () => {
       expectInputReferenceToBeSet();
     });

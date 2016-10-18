@@ -36,8 +36,7 @@ const renderSuggestion = suggestion => suggestion.name;
 
 const renderInputComponent = inputProps => (
   <div>
-    <input {...inputProps} />
-    <div id="custom-stuff">custom stuff</div>
+    <input id="my-custom-input" {...inputProps} />
   </div>
 );
 
