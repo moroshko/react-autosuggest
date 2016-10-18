@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "6.1.0",
+  "version": "7.0.0",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/index.js",
   "repository": {
@@ -23,7 +23,7 @@
     "prepublish": "npm run dist && npm run standalone"
   },
   "dependencies": {
-    "react-autowhatever": "^6.0.0",
+    "react-autowhatever": "^7.0.0",
     "react-redux": "^4.4.5",
     "redux": "^3.6.0",
     "shallow-equal": "^1.0.0"
@@ -47,20 +47,20 @@
     "chai": "^3.5.0",
     "css-loader": "^0.25.0",
     "es6-promise": "^4.0.5",
-    "eslint": "^3.7.1",
+    "eslint": "^3.8.1",
     "eslint-plugin-react": "6.3.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
     "happypack": "^2.2.1",
     "ismobilejs": "^0.4.0",
     "isomorphic-fetch": "^2.2.1",
-    "jsdom": "^9.6.0",
+    "jsdom": "^9.8.0",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "mocha": "^3.1.2",
     "nyc": "^8.3.1",
     "openurl": "^1.1.1",
-    "postcss-loader": "^0.13.0",
+    "postcss-loader": "^1.0.0",
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.3.2",
     "react-dom": "^15.3.2",
@@ -71,7 +71,7 @@
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.13.1",
     "svgo": "^0.7.1",
-    "svgo-loader": "^1.1.0",
+    "svgo-loader": "^1.1.1",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.2"
@@ -100,7 +100,7 @@
   ],
   "nyc": {
     "statements": 95,
-    "branches": 91,
+    "branches": 90,
     "functions": 100,
     "lines": 95,
     "include": [

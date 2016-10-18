@@ -1,6 +1,7 @@
 [![Build Status](https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg?style=flat-square)](https://codeship.com/projects/67868)
 [![Coverage Status](https://img.shields.io/codecov/c/github/moroshko/react-autosuggest/master.svg?style=flat-square)](https://codecov.io/gh/moroshko/react-autosuggest)
 [![bitHound Overall Score](https://www.bithound.io/github/moroshko/react-autosuggest/badges/score.svg)](https://www.bithound.io/github/moroshko/react-autosuggest)
+[![npms Score](https://badges.npms.io/react.svg?style=flat-square)](https://npms.io/search?q=react-autosuggest)
 
 [![Pull Requests stats](https://img.shields.io/issuestats/p/long/github/moroshko/react-autosuggest.svg?style=flat-square)](http://issuestats.com/github/moroshko/react-autosuggest)
 [![Issues stats](https://img.shields.io/issuestats/i/long/github/moroshko/react-autosuggest.svg?style=flat-square)](http://issuestats.com/github/moroshko/react-autosuggest)
@@ -26,8 +27,7 @@ Check out the [Homepage](http://react-autosuggest.js.org) and the [Codepen examp
 * Supports styling using [CSS Modules](https://github.com/css-modules/css-modules), [Radium](https://github.com/FormidableLabs/radium), [Inline styles](https://facebook.github.io/react/tips/inline-styles.html), global CSS, [and more](#themeProp)
 * You decide [when to show suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Always render suggestions](#alwaysRenderSuggestionsProp) (useful for mobile and modals)
-* [Pass through arbitrary props to the input element](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange), [onBlur](#inputPropsOnBlur), or any other)
-* You can use a [custom input component](#inputComponentProp)
+* [Pass through arbitrary props to the input element](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange), [onBlur](#inputPropsOnBlur), or any other), or [take full control on the rendering of the input](#renderInputComponentProp) (useful for integration with other libraries)
 * Thoroughly tested
 
 ## Installation
@@ -152,7 +152,6 @@ class Example extends React.Component {
 | [`onSuggestionsClearRequested`](#onSuggestionsClearRequestedProp) | Function | ✓[*](#onSuggestionsClearRequestedPropNote) | Will be called every time you need to set `suggestions` to `[]`. |
 | [`getSuggestionValue`](#getSuggestionValueProp) | Function | ✓ | Implement it to teach Autosuggest what should be the input value when suggestion is clicked. |
 | [`renderSuggestion`](#renderSuggestionProp) | Function | ✓ | Use your imagination to define how suggestions are rendered. |
-| [`inputComponent`](#inputComponentProp) | React Component | | Use it only if you need to customize the input element. |
 | [`inputProps`](#inputPropsProp) | Object | ✓ | Pass through arbitrary props to the input element. It must contain at least `value` and `onChange`. |
 | [`onSuggestionSelected`](#onSuggestionSelectedProp) | Function | | Will be called every time suggestion is selected via mouse or keyboard. |
 | [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp) | Function | | When the input element is focused, Autosuggest will consult this function when to render suggestions. Use it, for example, if you want to display suggestions when input value is at least 2 characters long. |
@@ -162,6 +161,7 @@ class Example extends React.Component {
 | [`multiSection`](#multiSectionProp) | Boolean | | Set it to `true` if you'd like to display suggestions in multiple sections (with optional titles). |
 | [`renderSectionTitle`](#renderSectionTitleProp) | Function | ✓<br>when `multiSection={true}` | Use your imagination to define how section titles are rendered. |
 | [`getSectionSuggestions`](#getSectionSuggestionsProp) | Function | ✓<br>when `multiSection={true}` | Implement it to teach Autosuggest where to find the suggestions for every section. |
+| [`renderInputComponent`](#renderInputComponentProp) | Function | | Use it only if you need to customize the rendering of the input element. |
 | [`renderSuggestionsContainer`](#renderSuggestionsContainerProp) | Function | | Use it if you want to customize things inside the suggestions container beyond rendering the suggestions themselves. |
 | [`theme`](#themeProp) | Object | | Use your imagination to style the Autosuggest. |
 | [`id`](#idProp) | String | | Use it only if you have multiple Autosuggest components on a page. |
@@ -292,25 +292,6 @@ function renderSuggestion(suggestion) {
 ```
 
 **Important:** `renderSuggestion` must be a pure function (we optimize rendering performance based on this assumption).
-
-<a name="inputComponentProp"></a>
-#### inputComponent (optional)
-
-You shouldn't specify `inputComponent` unless you want to customize the input element.
-
-To keep Autosuggest [accessible](https://www.w3.org/TR/wai-aria-practices/#autocomplete), `inputComponent` should render an input element and pass through all its props to it.
-
-Example:
-
-```js
-const inputComponent = props => (
-  <div>
-    <input {...props} />
-    <div>custom stuff</div>
-  </div>
-);
-  
-```
 
 <a name="inputPropsProp"></a>
 #### inputProps (required)
@@ -462,6 +443,30 @@ function getSectionSuggestions(section) {
 ```
 
 **Note:** Sections with no suggestions are not rendered.
+
+<a name="renderInputComponentProp"></a>
+#### renderInputComponent (optional)
+
+You shouldn't specify `renderInputComponent` unless you want to customize the rendering of the input element.
+
+To keep Autosuggest [accessible](https://www.w3.org/TR/wai-aria-practices/#autocomplete), `renderInputComponent` should:
+
+* render an input element
+* pass through all the provided `inputProps` to the input element
+
+Example:
+
+```js
+const renderInputComponent = inputProps => (
+  <div>
+    <input {...inputProps} />
+    <div>custom stuff</div>
+  </div>
+);
+
+```
+
+**Note:** When using `renderInputComponent`, you still need to specify the usual [`inputProps`](#inputPropsProp). Autosuggest will merge the `inputProps` that you provide with other props that are needed for accessibility (e.g. `'aria-activedescendant'`), and will pass the **merged `inputProps`** to `renderInputComponent`.
 
 <a name="renderSuggestionsContainerProp"></a>
 #### renderSuggestionsContainer (optional)

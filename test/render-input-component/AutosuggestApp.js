@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Autosuggest from '../../src/AutosuggestContainer';
-import CustomInput from './CustomInput';
 import languages from '../plain-list/languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
 
@@ -35,6 +34,12 @@ const getSuggestionValue = suggestion => suggestion.name;
 
 const renderSuggestion = suggestion => suggestion.name;
 
+const renderInputComponent = inputProps => (
+  <div>
+    <input id="my-custom-input" {...inputProps} />
+  </div>
+);
+
 export default class AutosuggestApp extends Component {
   constructor() {
     super();
@@ -46,6 +51,12 @@ export default class AutosuggestApp extends Component {
       suggestions: []
     };
   }
+
+  storeAutosuggestReference = autosuggest => {
+    if (autosuggest !== null) {
+      this.input = autosuggest.input;
+    }
+  };
 
   render() {
     const { value, suggestions } = this.state;
@@ -61,8 +72,9 @@ export default class AutosuggestApp extends Component {
         onSuggestionsClearRequested={onSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
-        inputComponent={CustomInput}
+        renderInputComponent={renderInputComponent}
         inputProps={inputProps}
+        ref={this.storeAutosuggestReference}
       />
     );
   }
