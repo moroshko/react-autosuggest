@@ -13,12 +13,6 @@ function mapStateToProps({ header }) {
 }
 
 class Header extends Component {
-  static propTypes = {
-    stargazers: PropTypes.string.isRequired,
-
-    loadStargazers: PropTypes.func.isRequired
-  };
-
   componentDidMount() {
     this.props.loadStargazers();
   }
@@ -63,6 +57,13 @@ class Header extends Component {
       </div>
     );
   }
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  Header.propTypes = {
+    stargazers: PropTypes.string.isRequired,
+    loadStargazers: PropTypes.func.isRequired
+  };
 }
 
 export default connect(mapStateToProps, { loadStargazers })(Header);

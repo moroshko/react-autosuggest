@@ -15,41 +15,6 @@ function mapStateToProps(state) {
 }
 
 class Autosuggest extends Component {
-  static propTypes = {
-    suggestions: PropTypes.array.isRequired,
-    onSuggestionsFetchRequested: PropTypes.func.isRequired,
-    onSuggestionsClearRequested: PropTypes.func,
-    onSuggestionSelected: PropTypes.func,
-    renderSuggestionsContainer: PropTypes.func,
-    getSuggestionValue: PropTypes.func.isRequired,
-    renderSuggestion: PropTypes.func.isRequired,
-    inputProps: PropTypes.object.isRequired,
-    inputComponent: PropTypes.func,
-    shouldRenderSuggestions: PropTypes.func.isRequired,
-    alwaysRenderSuggestions: PropTypes.bool.isRequired,
-    multiSection: PropTypes.bool.isRequired,
-    renderSectionTitle: PropTypes.func,
-    getSectionSuggestions: PropTypes.func,
-    focusInputOnSuggestionClick: PropTypes.bool.isRequired,
-    focusFirstSuggestion: PropTypes.bool.isRequired,
-    theme: PropTypes.object.isRequired,
-    id: PropTypes.string.isRequired,
-    inputRef: PropTypes.func.isRequired,
-
-    isFocused: PropTypes.bool.isRequired,
-    isCollapsed: PropTypes.bool.isRequired,
-    focusedSectionIndex: PropTypes.number,
-    focusedSuggestionIndex: PropTypes.number,
-    valueBeforeUpDown: PropTypes.string,
-
-    inputFocused: PropTypes.func.isRequired,
-    inputBlurred: PropTypes.func.isRequired,
-    inputChanged: PropTypes.func.isRequired,
-    updateFocusedSuggestion: PropTypes.func.isRequired,
-    revealSuggestions: PropTypes.func.isRequired,
-    closeSuggestions: PropTypes.func.isRequired
-  };
-
   componentDidMount() {
     document.addEventListener('mousedown', this.onDocumentMouseDown);
   }
@@ -273,12 +238,13 @@ class Autosuggest extends Component {
 
   render() {
     const {
-      suggestions, renderSuggestionsContainer, onSuggestionsFetchRequested,
-      renderSuggestion, inputComponent, inputProps, shouldRenderSuggestions,
-      multiSection, renderSectionTitle, id, getSectionSuggestions, theme,
-      isFocused, isCollapsed, focusedSectionIndex, focusedSuggestionIndex,
-      valueBeforeUpDown, inputFocused, inputChanged, updateFocusedSuggestion,
-      revealSuggestions, closeSuggestions, getSuggestionValue, alwaysRenderSuggestions
+      suggestions, renderInputComponent, renderSuggestionsContainer,
+      onSuggestionsFetchRequested, renderSuggestion, inputProps,
+      shouldRenderSuggestions, multiSection, renderSectionTitle, id,
+      getSectionSuggestions, theme, isFocused, isCollapsed, focusedSectionIndex,
+      focusedSuggestionIndex, valueBeforeUpDown, inputFocused, inputChanged,
+      updateFocusedSuggestion, revealSuggestions, closeSuggestions,
+      getSuggestionValue, alwaysRenderSuggestions
     } = this.props;
     const { value, onFocus, onKeyDown } = inputProps;
     const willRenderSuggestions = this.willRenderSuggestions(this.props);
@@ -431,6 +397,7 @@ class Autosuggest extends Component {
       <Autowhatever
         multiSection={multiSection}
         items={items}
+        renderInputComponent={renderInputComponent}
         renderItemsContainer={renderSuggestionsContainer}
         renderItem={renderSuggestion}
         renderItemData={renderSuggestionData}
@@ -438,7 +405,6 @@ class Autosuggest extends Component {
         getSectionItems={getSectionSuggestions}
         focusedSectionIndex={focusedSectionIndex}
         focusedItemIndex={focusedSuggestionIndex}
-        inputComponent={inputComponent}
         inputProps={autowhateverInputProps}
         itemProps={this.itemProps}
         theme={theme}
@@ -447,6 +413,43 @@ class Autosuggest extends Component {
       />
     );
   }
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  Autosuggest.propTypes = {
+    suggestions: PropTypes.array.isRequired,
+    onSuggestionsFetchRequested: PropTypes.func.isRequired,
+    onSuggestionsClearRequested: PropTypes.func,
+    onSuggestionSelected: PropTypes.func,
+    renderInputComponent: PropTypes.func,
+    renderSuggestionsContainer: PropTypes.func,
+    getSuggestionValue: PropTypes.func.isRequired,
+    renderSuggestion: PropTypes.func.isRequired,
+    inputProps: PropTypes.object.isRequired,
+    shouldRenderSuggestions: PropTypes.func.isRequired,
+    alwaysRenderSuggestions: PropTypes.bool.isRequired,
+    multiSection: PropTypes.bool.isRequired,
+    renderSectionTitle: PropTypes.func,
+    getSectionSuggestions: PropTypes.func,
+    focusInputOnSuggestionClick: PropTypes.bool.isRequired,
+    focusFirstSuggestion: PropTypes.bool.isRequired,
+    theme: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
+    inputRef: PropTypes.func.isRequired,
+
+    isFocused: PropTypes.bool.isRequired,
+    isCollapsed: PropTypes.bool.isRequired,
+    focusedSectionIndex: PropTypes.number,
+    focusedSuggestionIndex: PropTypes.number,
+    valueBeforeUpDown: PropTypes.string,
+
+    inputFocused: PropTypes.func.isRequired,
+    inputBlurred: PropTypes.func.isRequired,
+    inputChanged: PropTypes.func.isRequired,
+    updateFocusedSuggestion: PropTypes.func.isRequired,
+    revealSuggestions: PropTypes.func.isRequired,
+    closeSuggestions: PropTypes.func.isRequired
+  };
 }
 
 export default connect(mapStateToProps, actionCreators)(Autosuggest);
