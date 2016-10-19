@@ -15,14 +15,12 @@ const Link = props => {
   );
 };
 
-if (process.env.NODE_ENV !== 'production') {
-  Link.propTypes = {
-    className: PropTypes.string,
-    href: PropTypes.string.isRequired,
-    underline: PropTypes.bool.isRequired,
-    children: PropTypes.node
-  };
-}
+Link.propTypes = {
+  className: PropTypes.string,
+  href: PropTypes.string.isRequired,
+  underline: PropTypes.bool.isRequired,
+  children: PropTypes.node
+};
 
 Link.defaultProps = {
   className: null,

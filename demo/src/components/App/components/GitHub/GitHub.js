@@ -16,11 +16,9 @@ const GitHub = props => {
   );
 };
 
-if (process.env.NODE_ENV !== 'production') {
-  GitHub.propTypes = {
-    user: PropTypes.string.isRequired,
-    repo: PropTypes.string.isRequired
-  };
-}
+GitHub.propTypes = {
+  user: PropTypes.string.isRequired,
+  repo: PropTypes.string.isRequired
+};
 
 export default GitHub;
