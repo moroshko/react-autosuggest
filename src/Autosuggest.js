@@ -4,15 +4,13 @@ import shallowEqualArrays from 'shallow-equal/arrays';
 import { actionCreators } from './redux';
 import Autowhatever from 'react-autowhatever';
 
-function mapStateToProps(state) {
-  return {
-    isFocused: state.isFocused,
-    isCollapsed: state.isCollapsed,
-    focusedSectionIndex: state.focusedSectionIndex,
-    focusedSuggestionIndex: state.focusedSuggestionIndex,
-    valueBeforeUpDown: state.valueBeforeUpDown
-  };
-}
+const mapStateToProps = state => ({
+  isFocused: state.isFocused,
+  isCollapsed: state.isCollapsed,
+  focusedSectionIndex: state.focusedSectionIndex,
+  focusedSuggestionIndex: state.focusedSuggestionIndex,
+  valueBeforeUpDown: state.valueBeforeUpDown
+});
 
 class Autosuggest extends Component {
   componentDidMount() {

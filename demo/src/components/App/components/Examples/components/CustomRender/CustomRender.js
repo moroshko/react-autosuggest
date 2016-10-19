@@ -12,7 +12,7 @@ import { escapeRegexCharacters } from 'utils/utils';
 
 const focusInputOnSuggestionClick = !isMobile.any;
 
-function getSuggestions(value) {
+const getSuggestions = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
 
   if (escapedValue === '') {
@@ -22,13 +22,11 @@ function getSuggestions(value) {
   const regex = new RegExp('\\b' + escapedValue, 'i');
 
   return people.filter(person => regex.test(getSuggestionValue(person)));
-}
+};
 
-function getSuggestionValue(suggestion) {
-  return `${suggestion.first} ${suggestion.last}`;
-}
+const getSuggestionValue = suggestion => `${suggestion.first} ${suggestion.last}`;
 
-function renderSuggestion(suggestion, { query }) {
+const renderSuggestion = (suggestion, { query }) => {
   const suggestionText = `${suggestion.first} ${suggestion.last}`;
   const matches = match(suggestionText, query);
   const parts = parse(suggestionText, matches);
@@ -48,7 +46,7 @@ function renderSuggestion(suggestion, { query }) {
       </span>
     </span>
   );
-}
+};
 
 export default class CustomRender extends Component {
   constructor() {

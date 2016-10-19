@@ -51,7 +51,7 @@ export const actionCreators = {
   closeSuggestions
 };
 
-export default function reducer(state, action) {
+const reducer = (state, action) => {
   switch (action.type) {
     case INPUT_FOCUSED:
       return {
@@ -124,4 +124,6 @@ export default function reducer(state, action) {
     default:
       return state;
   }
-}
+};
+
+export default reducer;

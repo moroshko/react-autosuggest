@@ -38,39 +38,32 @@ export const syntheticEventMatcher = sinon.match.instanceOf(SyntheticEvent);
 const reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 
 // See: http://stackoverflow.com/q/28979533/247243
-function stripReactAttributes(html) {
-  return html.replace(reactAttributesRegex, '');
-}
+const stripReactAttributes = html => html.replace(reactAttributesRegex, '');
 
-export function getInnerHTML(element) {
-  return stripReactAttributes(element.innerHTML);
-}
+export const getInnerHTML = element => stripReactAttributes(element.innerHTML);
 
-export function expectContainerAttribute(attributeName, expectedValue) {
+export const expectContainerAttribute = (attributeName, expectedValue) => {
   expect(container.getAttribute(attributeName)).to.equal(expectedValue);
-}
+};
 
-export function expectInputAttribute(attributeName, expectedValue) {
+export const expectInputAttribute = (attributeName, expectedValue) => {
   expect(input.getAttribute(attributeName)).to.equal(expectedValue);
-}
+};
 
-export function getSuggestionsContainerAttribute(attributeName) {
-  return suggestionsContainer.getAttribute(attributeName);
-}
+export const getSuggestionsContainerAttribute = attributeName =>
+  suggestionsContainer.getAttribute(attributeName);
 
-export function expectInputValue(expectedValue) {
+export const expectInputValue = expectedValue => {
   expect(input.value).to.equal(expectedValue);
-}
+};
 
-export function getSuggestionsList() {
-  return TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__suggestions-list');
-}
+export const getSuggestionsList = () =>
+  TestUtils.findRenderedDOMComponentWithClass(app, 'react-autosuggest__suggestions-list');
 
-export function getSuggestions() {
-  return TestUtils.scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__suggestion');
-}
+export const getSuggestions = () =>
+ TestUtils.scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__suggestion');
 
-export function getSuggestion(suggestionIndex) {
+export const getSuggestion = suggestionIndex => {
   const suggestions = getSuggestions();
 
   if (suggestionIndex >= suggestions.length) {
@@ -85,13 +78,12 @@ export function getSuggestion(suggestionIndex) {
   }
 
   return suggestions[suggestionIndex];
-}
+};
 
-export function getTitles() {
-  return TestUtils.scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__section-title');
-}
+export const getTitles = () =>
+  TestUtils.scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__section-title');
 
-export function getTitle(titleIndex) {
+export const getTitle = titleIndex => {
   const titles = getTitles();
 
   if (titleIndex >= titles.length) {
@@ -99,19 +91,19 @@ export function getTitle(titleIndex) {
   }
 
   return titles[titleIndex];
-}
+};
 
-export function expectInputReferenceToBeSet() {
+export const expectInputReferenceToBeSet = () => {
   expect(app.input).to.equal(input);
-}
+};
 
-export function expectSuggestions(expectedSuggestions) {
+export const expectSuggestions = expectedSuggestions => {
   const suggestions = getSuggestions().map(suggestion => suggestion.textContent);
 
   expect(suggestions).to.deep.equal(expectedSuggestions);
-}
+};
 
-export function expectFocusedSuggestion(suggestion) {
+export const expectFocusedSuggestion = suggestion => {
   const focusedSuggestions = TestUtils
     .scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__suggestion--focused');
 
@@ -121,31 +113,31 @@ export function expectFocusedSuggestion(suggestion) {
     expect(focusedSuggestions).to.have.length(1);
     expect(focusedSuggestions[0].textContent).to.equal(suggestion);
   }
-}
+};
 
-export function mouseEnterSuggestion(suggestionIndex) {
+export const mouseEnterSuggestion = suggestionIndex => {
   Simulate.mouseEnter(getSuggestion(suggestionIndex));
-}
+};
 
-export function mouseLeaveSuggestion(suggestionIndex) {
+export const mouseLeaveSuggestion = suggestionIndex => {
   Simulate.mouseLeave(getSuggestion(suggestionIndex));
-}
+};
 
-export function mouseDownSuggestion(suggestionIndex) {
+export const mouseDownSuggestion = suggestionIndex => {
   Simulate.mouseDown(getSuggestion(suggestionIndex));
-}
+};
 
-function mouseDownDocument(target) {
+const mouseDownDocument = target => {
   document.dispatchEvent(new window.CustomEvent('mousedown', {
     detail: { // must be 'detail' accoring to docs: https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events#Adding_custom_data_–_CustomEvent()
       target
     }
   }));
-}
+};
 
 // It doesn't feel right to emulate all the DOM events by copying the implementation.
 // Please show me a better way to emulate this.
-export function clickSuggestion(suggestionIndex) {
+export const clickSuggestion = suggestionIndex => {
   const suggestion = getSuggestion(suggestionIndex);
 
   mouseEnterSuggestion(suggestionIndex);
@@ -155,61 +147,59 @@ export function clickSuggestion(suggestionIndex) {
   focusInput();
   Simulate.click(suggestion);
   clock.tick(1);
-}
+};
 
-export function clickSuggestionsContainer() {
+export const clickSuggestionsContainer = () => {
   mouseDownDocument(suggestionsContainer);
   blurInput();
   focusInput();
-}
+};
 
-export function focusInput() {
+export const focusInput = () => {
   Simulate.focus(input);
-}
+};
 
-export function blurInput() {
+export const blurInput = () => {
   Simulate.blur(input);
-}
+};
 
-export function clickEscape() {
+export const clickEscape = () => {
   Simulate.keyDown(input, { key: 'Escape' });
-}
+};
 
-export function clickEnter() {
+export const clickEnter = () => {
   Simulate.keyDown(input, { key: 'Enter' });
   clock.tick(1);
-}
+};
 
-export function clickDown(count = 1) {
+export const clickDown = (count = 1) => {
   for (let i = 0; i < count; i++) {
     Simulate.keyDown(input, { key: 'ArrowDown' });
   }
-}
+};
 
-export function clickUp(count = 1) {
+export const clickUp = (count = 1) => {
   for (let i = 0; i < count; i++) {
     Simulate.keyDown(input, { key: 'ArrowUp' });
   }
-}
+};
 
-export function setInputValue(value) {
+export const setInputValue = value => {
   input.value = value;
   Simulate.change(input);
-}
+};
 
-export function focusAndSetInputValue(value) {
+export const focusAndSetInputValue = value => {
   focusInput();
   setInputValue(value);
-}
+};
 
-export function isInputFocused() {
-  return document.activeElement === input;
-}
+export const isInputFocused = () => document.activeElement === input;
 
-export function clickClearButton() {
+export const clickClearButton = () => {
   if (clearButton) {
     Simulate.mouseDown(clearButton);
   } else {
     throw new Error('Clear button doesn\'t exist');
   }
-}
+};

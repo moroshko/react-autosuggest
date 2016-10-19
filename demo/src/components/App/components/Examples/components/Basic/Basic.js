@@ -9,7 +9,7 @@ import { escapeRegexCharacters } from 'utils/utils';
 
 const focusInputOnSuggestionClick = !isMobile.any;
 
-function getSuggestions(value) {
+const getSuggestions = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
 
   if (escapedValue === '') {
@@ -19,17 +19,13 @@ function getSuggestions(value) {
   const regex = new RegExp('^' + escapedValue, 'i');
 
   return languages.filter(language => regex.test(language.name));
-}
+};
 
-function getSuggestionValue(suggestion) {
-  return suggestion.name;
-}
+const getSuggestionValue = suggestion => suggestion.name;
 
-function renderSuggestion(suggestion) {
-  return (
-    <span>{suggestion.name}</span>
-  );
-}
+const renderSuggestion = suggestion => (
+  <span>{suggestion.name}</span>
+);
 
 export default class Basic extends Component {
   constructor() {

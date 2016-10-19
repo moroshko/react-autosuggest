@@ -15,13 +15,11 @@ const appReducer = combineReducers({
 
 const store = applyMiddleware(thunk)(createStore)(appReducer);
 
-function Demo() {
-  return (
-    <Provider store={store}>
-      <App />
-    </Provider>
-  );
-}
+const Demo = () => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
 
 render(
   <Demo />,

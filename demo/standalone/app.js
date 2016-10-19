@@ -60,11 +60,9 @@ const languages = [
 ];
 
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters
-function escapeRegexCharacters(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
+const escapeRegexCharacters = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-function getSuggestions(value) {
+const getSuggestions = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
 
   if (escapedValue === '') {
@@ -74,17 +72,13 @@ function getSuggestions(value) {
   const regex = new RegExp('^' + escapedValue, 'i');
 
   return languages.filter(language => regex.test(language.name));
-}
+};
 
-function getSuggestionValue(suggestion) {
-  return suggestion.name;
-}
+const getSuggestionValue = suggestion => suggestion.name;
 
-function renderSuggestion(suggestion) {
-  return (
-    <span>{suggestion.name}</span>
-  );
-}
+const renderSuggestion = suggestion => (
+  <span>{suggestion.name}</span>
+);
 
 class App extends React.Component { // eslint-disable-line no-undef
   constructor() {

@@ -2,7 +2,7 @@ import styles from './Link.less';
 
 import React, { PropTypes } from 'react';
 
-export default function Link(props) {
+const Link = props => {
   const { className, href, underline, children } = props;
   const klass =
     (className === null ? '' : className + ' ') +
@@ -13,7 +13,7 @@ export default function Link(props) {
       {children}
     </a>
   );
-}
+};
 
 if (process.env.NODE_ENV !== 'production') {
   Link.propTypes = {
@@ -28,3 +28,5 @@ Link.defaultProps = {
   className: null,
   underline: true
 };
+
+export default Link;

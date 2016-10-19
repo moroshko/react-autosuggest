@@ -17,7 +17,7 @@ const defaultTheme = {
   sectionTitle: 'react-autosuggest__section-title'
 };
 
-function mapToAutowhateverTheme(theme) {
+const mapToAutowhateverTheme = theme => {
   let result = {};
 
   for (const key in theme) {
@@ -44,7 +44,7 @@ function mapToAutowhateverTheme(theme) {
   }
 
   return result;
-}
+};
 
 export default class AutosuggestContainer extends Component {
   static defaultProps = {

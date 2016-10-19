@@ -6,11 +6,9 @@ import Link from 'Link/Link';
 import GitHub from 'GitHub/GitHub';
 import { loadStargazers } from './redux';
 
-function mapStateToProps({ header }) {
-  return {
-    stargazers: header.stargazers
-  };
-}
+const mapStateToProps = ({ header }) => ({
+  stargazers: header.stargazers
+});
 
 class Header extends Component {
   componentDidMount() {
