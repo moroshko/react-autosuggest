@@ -4,7 +4,7 @@ import Autosuggest from '../../src/AutosuggestContainer';
 import languages from './languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
 
-function getMatchingLanguages(value) {
+const getMatchingLanguages = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
   const regex = new RegExp('^' + escapedValue, 'i');
 
@@ -14,7 +14,7 @@ function getMatchingLanguages(value) {
       languages: section.languages.filter(language => regex.test(language.name))
     };
   }).filter(section => section.languages.length > 0);
-}
+};
 
 let app = null;
 
@@ -28,9 +28,7 @@ export const renderSuggestion = sinon.spy(suggestion => {
   );
 });
 
-function shouldRenderSuggestions() {
-  return true;
-}
+const alwaysTrue = () => true;
 
 export const onChange = sinon.spy((event, { newValue }) => {
   app.setState({
@@ -66,9 +64,9 @@ export const getSectionSuggestions = sinon.spy(section => {
 
 let focusFirstSuggestion = false;
 
-export function setFocusFirstSuggestion(value) {
+export const setFocusFirstSuggestion = value => {
   focusFirstSuggestion = value;
-}
+};
 
 export default class AutosuggestApp extends Component {
   constructor() {
@@ -111,7 +109,7 @@ export default class AutosuggestApp extends Component {
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}
           inputProps={inputProps}
-          shouldRenderSuggestions={shouldRenderSuggestions}
+          shouldRenderSuggestions={alwaysTrue}
           renderSectionTitle={renderSectionTitle}
           getSectionSuggestions={getSectionSuggestions}
           focusFirstSuggestion={focusFirstSuggestion}

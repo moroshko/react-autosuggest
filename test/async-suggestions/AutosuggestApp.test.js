@@ -61,8 +61,6 @@ describe('Autosuggest that gets suggestions asynchronously', () => {
     });
 
     it('should not error if suggestions were cleared after having suggestions', () => {
-      focusAndSetInputValue('p');
-      tick(100);
       focusAndSetInputValue('pz');
       tick(100);
       clickEnter();
