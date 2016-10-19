@@ -10,7 +10,7 @@ import { escapeRegexCharacters } from 'utils/utils';
 
 const focusInputOnSuggestionClick = !isMobile.any;
 
-function getSuggestions(value) {
+const getSuggestions = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
 
   if (escapedValue === '') {
@@ -27,27 +27,19 @@ function getSuggestions(value) {
       };
     })
     .filter(section => section.languages.length > 0);
-}
+};
 
-function getSuggestionValue(suggestion) {
-  return suggestion.name;
-}
+const getSuggestionValue = suggestion => suggestion.name;
 
-function renderSuggestion(suggestion) {
-  return (
-    <span>{suggestion.name}</span>
-  );
-}
+const renderSuggestion = suggestion => (
+  <span>{suggestion.name}</span>
+);
 
-function renderSectionTitle(section) {
-  return (
-    <strong>{section.title}</strong>
-  );
-}
+const renderSectionTitle = section => (
+  <strong>{section.title}</strong>
+);
 
-function getSectionSuggestions(section) {
-  return section.languages;
-}
+const getSectionSuggestions = section => section.languages;
 
 export default class MultipleSections extends Component {
   constructor() {

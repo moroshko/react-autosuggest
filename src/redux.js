@@ -2,61 +2,56 @@ const INPUT_FOCUSED = 'INPUT_FOCUSED';
 const INPUT_BLURRED = 'INPUT_BLURRED';
 const INPUT_CHANGED = 'INPUT_CHANGED';
 const UPDATE_FOCUSED_SUGGESTION = 'UPDATE_FOCUSED_SUGGESTION';
+const RESET_FOCUSED_SUGGESTION = 'RESET_FOCUSED_SUGGESTION';
 const REVEAL_SUGGESTIONS = 'REVEAL_SUGGESTIONS';
 const CLOSE_SUGGESTIONS = 'CLOSE_SUGGESTIONS';
 
-function inputFocused(shouldRenderSuggestions) {
-  return {
-    type: INPUT_FOCUSED,
-    shouldRenderSuggestions
-  };
-}
+const inputFocused = shouldRenderSuggestions => ({
+  type: INPUT_FOCUSED,
+  shouldRenderSuggestions
+});
 
-function inputBlurred(shouldRenderSuggestions) {
-  return {
-    type: INPUT_BLURRED,
-    shouldRenderSuggestions
-  };
-}
+const inputBlurred = shouldRenderSuggestions => ({
+  type: INPUT_BLURRED,
+  shouldRenderSuggestions
+});
 
-function inputChanged(shouldRenderSuggestions) {
-  return {
-    type: INPUT_CHANGED,
-    shouldRenderSuggestions
-  };
-}
+const inputChanged = shouldRenderSuggestions => ({
+  type: INPUT_CHANGED,
+  shouldRenderSuggestions
+});
 
-function updateFocusedSuggestion(sectionIndex, suggestionIndex, value) {
-  return {
-    type: UPDATE_FOCUSED_SUGGESTION,
-    sectionIndex,
-    suggestionIndex,
-    value
-  };
-}
+const updateFocusedSuggestion = (sectionIndex, suggestionIndex, value) => ({
+  type: UPDATE_FOCUSED_SUGGESTION,
+  sectionIndex,
+  suggestionIndex,
+  value
+});
 
-function revealSuggestions() {
-  return {
-    type: REVEAL_SUGGESTIONS
-  };
-}
+const resetFocusedSuggestion = (shouldResetValueBeforeUpDown = true) => ({
+  type: RESET_FOCUSED_SUGGESTION,
+  shouldResetValueBeforeUpDown
+});
 
-function closeSuggestions() {
-  return {
-    type: CLOSE_SUGGESTIONS
-  };
-}
+const revealSuggestions = () => ({
+  type: REVEAL_SUGGESTIONS
+});
+
+const closeSuggestions = () => ({
+  type: CLOSE_SUGGESTIONS
+});
 
 export const actionCreators = {
   inputFocused,
   inputBlurred,
   inputChanged,
   updateFocusedSuggestion,
+  resetFocusedSuggestion,
   revealSuggestions,
   closeSuggestions
 };
 
-export default function reducer(state, action) {
+const reducer = (state, action) => {
   switch (action.type) {
     case INPUT_FOCUSED:
       return {
@@ -85,7 +80,7 @@ export default function reducer(state, action) {
       };
 
     case UPDATE_FOCUSED_SUGGESTION: {
-      const { value, sectionIndex, suggestionIndex } = action;
+      const { sectionIndex, suggestionIndex, value } = action;
       let { valueBeforeUpDown } = state;
 
       if (suggestionIndex === null) {
@@ -99,6 +94,15 @@ export default function reducer(state, action) {
         focusedSectionIndex: sectionIndex,
         focusedSuggestionIndex: suggestionIndex,
         valueBeforeUpDown
+      };
+    }
+
+    case RESET_FOCUSED_SUGGESTION: {
+      return {
+        ...state,
+        focusedSectionIndex: null,
+        focusedSuggestionIndex: null,
+        valueBeforeUpDown: action.shouldResetValueBeforeUpDown ? null : state.valueBeforeUpDown
       };
     }
 
@@ -120,4 +124,6 @@ export default function reducer(state, action) {
     default:
       return state;
   }
-}
+};
+
+export default reducer;

@@ -4,17 +4,51 @@ import shallowEqualArrays from 'shallow-equal/arrays';
 import { actionCreators } from './redux';
 import Autowhatever from 'react-autowhatever';
 
-function mapStateToProps(state) {
-  return {
-    isFocused: state.isFocused,
-    isCollapsed: state.isCollapsed,
-    focusedSectionIndex: state.focusedSectionIndex,
-    focusedSuggestionIndex: state.focusedSuggestionIndex,
-    valueBeforeUpDown: state.valueBeforeUpDown
-  };
-}
+const mapStateToProps = state => ({
+  isFocused: state.isFocused,
+  isCollapsed: state.isCollapsed,
+  focusedSectionIndex: state.focusedSectionIndex,
+  focusedSuggestionIndex: state.focusedSuggestionIndex,
+  valueBeforeUpDown: state.valueBeforeUpDown
+});
 
 class Autosuggest extends Component {
+  static propTypes = {
+    suggestions: PropTypes.array.isRequired,
+    onSuggestionsFetchRequested: PropTypes.func.isRequired,
+    onSuggestionsClearRequested: PropTypes.func,
+    onSuggestionSelected: PropTypes.func,
+    renderInputComponent: PropTypes.func,
+    renderSuggestionsContainer: PropTypes.func,
+    getSuggestionValue: PropTypes.func.isRequired,
+    renderSuggestion: PropTypes.func.isRequired,
+    inputProps: PropTypes.object.isRequired,
+    shouldRenderSuggestions: PropTypes.func.isRequired,
+    alwaysRenderSuggestions: PropTypes.bool.isRequired,
+    multiSection: PropTypes.bool.isRequired,
+    renderSectionTitle: PropTypes.func,
+    getSectionSuggestions: PropTypes.func,
+    focusInputOnSuggestionClick: PropTypes.bool.isRequired,
+    focusFirstSuggestion: PropTypes.bool.isRequired,
+    theme: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
+    inputRef: PropTypes.func.isRequired,
+
+    isFocused: PropTypes.bool.isRequired,
+    isCollapsed: PropTypes.bool.isRequired,
+    focusedSectionIndex: PropTypes.number,
+    focusedSuggestionIndex: PropTypes.number,
+    valueBeforeUpDown: PropTypes.string,
+
+    inputFocused: PropTypes.func.isRequired,
+    inputBlurred: PropTypes.func.isRequired,
+    inputChanged: PropTypes.func.isRequired,
+    updateFocusedSuggestion: PropTypes.func.isRequired,
+    resetFocusedSuggestion: PropTypes.func.isRequired,
+    revealSuggestions: PropTypes.func.isRequired,
+    closeSuggestions: PropTypes.func.isRequired
+  };
+
   componentDidMount() {
     document.addEventListener('mousedown', this.onDocumentMouseDown);
   }
@@ -40,7 +74,7 @@ class Autosuggest extends Component {
           revealSuggestions();
         }
       } else {
-        this.resetFocusedSuggestion();
+        nextProps.resetFocusedSuggestion();
       }
     }
   }
@@ -127,7 +161,7 @@ class Autosuggest extends Component {
     const { value, onChange } = this.props.inputProps;
 
     if (newValue !== value) {
-      onChange && onChange(event, { newValue, method });
+      onChange(event, { newValue, method });
     }
   }
 
@@ -153,10 +187,6 @@ class Autosuggest extends Component {
     this.props.updateFocusedSuggestion(sectionIndex, itemIndex);
   };
 
-  resetFocusedSuggestion = () => {
-    this.props.updateFocusedSuggestion(null, null);
-  };
-
   focusFirstSuggestion = () => {
     this.props.updateFocusedSuggestion(this.props.multiSection ? 0 : null, 0);
   };
@@ -172,7 +202,10 @@ class Autosuggest extends Component {
   };
 
   onSuggestionSelected = (event, data) => {
-    const { alwaysRenderSuggestions, onSuggestionSelected, onSuggestionsFetchRequested } = this.props;
+    const {
+      alwaysRenderSuggestions, onSuggestionSelected,
+      onSuggestionsFetchRequested, resetFocusedSuggestion
+    } = this.props;
 
     onSuggestionSelected && onSuggestionSelected(event, data);
 
@@ -182,7 +215,7 @@ class Autosuggest extends Component {
       this.onSuggestionsClearRequested();
     }
 
-    this.resetFocusedSuggestion();
+    resetFocusedSuggestion();
   };
 
   onSuggestionClick = event => {
@@ -224,12 +257,16 @@ class Autosuggest extends Component {
     onBlur && onBlur(this.blurEvent, { focusedSuggestion });
   };
 
+  resetFocusedSuggestionOnMouseLeave = () => {
+    this.props.resetFocusedSuggestion(false);
+  };
+
   itemProps = ({ sectionIndex, itemIndex }) => {
     return {
       'data-section-index': sectionIndex,
       'data-suggestion-index': itemIndex,
       onMouseEnter: this.onSuggestionMouseEnter,
-      onMouseLeave: this.resetFocusedSuggestion,
+      onMouseLeave: this.resetFocusedSuggestionOnMouseLeave,
       onMouseDown: this.onSuggestionMouseDown,
       onTouchStart: this.onSuggestionMouseDown, // Because on iOS `onMouseDown` is not triggered
       onClick: this.onSuggestionClick
@@ -243,8 +280,8 @@ class Autosuggest extends Component {
       shouldRenderSuggestions, multiSection, renderSectionTitle, id,
       getSectionSuggestions, theme, isFocused, isCollapsed, focusedSectionIndex,
       focusedSuggestionIndex, valueBeforeUpDown, inputFocused, inputChanged,
-      updateFocusedSuggestion, revealSuggestions, closeSuggestions,
-      getSuggestionValue, alwaysRenderSuggestions
+      updateFocusedSuggestion, resetFocusedSuggestion, revealSuggestions,
+      closeSuggestions, getSuggestionValue, alwaysRenderSuggestions
     } = this.props;
     const { value, onFocus, onKeyDown } = inputProps;
     const willRenderSuggestions = this.willRenderSuggestions(this.props);
@@ -379,7 +416,7 @@ class Autosuggest extends Component {
               this.onSuggestionsClearRequested();
               closeSuggestions();
             } else {
-              updateFocusedSuggestion(null, null);
+              resetFocusedSuggestion();
             }
 
             break;
@@ -413,43 +450,6 @@ class Autosuggest extends Component {
       />
     );
   }
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  Autosuggest.propTypes = {
-    suggestions: PropTypes.array.isRequired,
-    onSuggestionsFetchRequested: PropTypes.func.isRequired,
-    onSuggestionsClearRequested: PropTypes.func,
-    onSuggestionSelected: PropTypes.func,
-    renderInputComponent: PropTypes.func,
-    renderSuggestionsContainer: PropTypes.func,
-    getSuggestionValue: PropTypes.func.isRequired,
-    renderSuggestion: PropTypes.func.isRequired,
-    inputProps: PropTypes.object.isRequired,
-    shouldRenderSuggestions: PropTypes.func.isRequired,
-    alwaysRenderSuggestions: PropTypes.bool.isRequired,
-    multiSection: PropTypes.bool.isRequired,
-    renderSectionTitle: PropTypes.func,
-    getSectionSuggestions: PropTypes.func,
-    focusInputOnSuggestionClick: PropTypes.bool.isRequired,
-    focusFirstSuggestion: PropTypes.bool.isRequired,
-    theme: PropTypes.object.isRequired,
-    id: PropTypes.string.isRequired,
-    inputRef: PropTypes.func.isRequired,
-
-    isFocused: PropTypes.bool.isRequired,
-    isCollapsed: PropTypes.bool.isRequired,
-    focusedSectionIndex: PropTypes.number,
-    focusedSuggestionIndex: PropTypes.number,
-    valueBeforeUpDown: PropTypes.string,
-
-    inputFocused: PropTypes.func.isRequired,
-    inputBlurred: PropTypes.func.isRequired,
-    inputChanged: PropTypes.func.isRequired,
-    updateFocusedSuggestion: PropTypes.func.isRequired,
-    revealSuggestions: PropTypes.func.isRequired,
-    closeSuggestions: PropTypes.func.isRequired
-  };
 }
 
 export default connect(mapStateToProps, actionCreators)(Autosuggest);

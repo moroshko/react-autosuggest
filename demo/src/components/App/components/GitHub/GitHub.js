@@ -2,7 +2,7 @@ import styles from './GitHub.less';
 
 import React, { PropTypes } from 'react';
 
-export default function GitHub(props) {
+const GitHub = props => {
   const { user, repo } = props;
 
   return (
@@ -14,11 +14,11 @@ export default function GitHub(props) {
       </svg>
     </a>
   );
-}
+};
 
-if (process.env.NODE_ENV !== 'production') {
-  GitHub.propTypes = {
-    user: PropTypes.string.isRequired,
-    repo: PropTypes.string.isRequired
-  };
-}
+GitHub.propTypes = {
+  user: PropTypes.string.isRequired,
+  repo: PropTypes.string.isRequired
+};
+
+export default GitHub;

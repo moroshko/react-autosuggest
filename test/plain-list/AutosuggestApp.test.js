@@ -372,9 +372,14 @@ describe('Default Autosuggest', () => {
     });
 
     it('return value should be used to render suggestions', () => {
-      const firstSuggestion = getSuggestion(0);
+      expect(getInnerHTML(getSuggestion(0))).to.equal('<strong>R</strong><span>uby</span>');
+    });
 
-      expect(getInnerHTML(firstSuggestion)).to.equal('<strong>R</strong><span>uby</span>');
+    it('should not change the query when mouse leaves a suggestion', () => {
+      clickDown();
+      mouseEnterSuggestion(0);
+      mouseLeaveSuggestion(0);
+      expect(getInnerHTML(getSuggestion(0))).to.equal('<strong>R</strong><span>uby</span>');
     });
   });
 

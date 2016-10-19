@@ -7,12 +7,12 @@ import languages from './languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
 import { addEvent } from '../helpers';
 
-function getMatchingLanguages(value) {
+const getMatchingLanguages = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
   const regex = new RegExp('^' + escapedValue, 'i');
 
   return languages.filter(language => regex.test(language.name));
-}
+};
 
 let app = null;
 

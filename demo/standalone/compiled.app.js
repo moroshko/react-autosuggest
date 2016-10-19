@@ -108,11 +108,11 @@
 	}];
 
 	// https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters
-	function escapeRegexCharacters(str) {
+	var escapeRegexCharacters = function escapeRegexCharacters(str) {
 	  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-	}
+	};
 
-	function getSuggestions(value) {
+	var getSuggestions = function getSuggestions(value) {
 	  var escapedValue = escapeRegexCharacters(value.trim());
 
 	  if (escapedValue === '') {
@@ -124,19 +124,19 @@
 	  return languages.filter(function (language) {
 	    return regex.test(language.name);
 	  });
-	}
+	};
 
-	function getSuggestionValue(suggestion) {
+	var getSuggestionValue = function getSuggestionValue(suggestion) {
 	  return suggestion.name;
-	}
+	};
 
-	function renderSuggestion(suggestion) {
+	var renderSuggestion = function renderSuggestion(suggestion) {
 	  return React.createElement(
 	    'span',
 	    null,
 	    suggestion.name
 	  );
-	}
+	};
 
 	var App = function (_React$Component) {
 	  _inherits(App, _React$Component);
