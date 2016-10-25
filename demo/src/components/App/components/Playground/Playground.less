@@ -1,0 +1,63 @@
+@import '~variables';
+
+@vertical: ~"(max-width: 719px)";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: (11 * @rows) 0;
+  color: #212121;
+
+  @media @small {
+    padding: (7 * @rows) 0;
+  }
+}
+
+.header {
+  margin: 0;
+  font-size: 50px;
+  font-weight: 300;
+
+  @media @small {
+    font-size: 34px;
+  }
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  width: 34 * @columns;
+  margin: (11 * @rows) (0.5 * @column) 0;
+
+  @media @vertical {
+    flex-direction: column;
+    width: 14 * @columns;
+    margin-top: 9 * @rows;
+  }
+
+  @media @small {
+    margin-top: 7 * @rows;
+  }
+}
+
+.togglesContainer {
+  display: flex;
+  flex-direction: column;
+  width: 15 * @columns;
+}
+
+.autosuggestContainer {
+  @media @vertical {
+    margin-left: 0;
+  }
+}
+
+.highlightedText {
+  color: red;
+  font-weight: 400;
+}
+
+.population {
+  font-size: 12px;
+}

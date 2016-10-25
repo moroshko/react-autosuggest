@@ -3,7 +3,7 @@ import styles from './App.less';
 import React from 'react';
 import Header from 'Header/Header';
 import Features from 'Features/Features';
-import Examples from 'Examples/Examples';
+import Playground from 'Playground/Playground';
 import Footer from 'Footer/Footer';
 
 export default function App() {
@@ -11,7 +11,7 @@ export default function App() {
     <div className={styles.container}>
       <Header />
       <Features />
-      <Examples />
+      <Playground />
       <Footer />
     </div>
   );
