@@ -1,7 +1,6 @@
 import styles from './TextareaRender.less';
 
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import Autosuggest from 'AutosuggestContainer';
 
 const data = [
@@ -64,8 +63,7 @@ export default class TextareaRender extends Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    const node     = ReactDOM.findDOMNode(this.refs.autosuggest);
-    const textarea = node.querySelector('textarea');
+    const textarea = this.autosuggest.input;
 
     if (textarea) {
       const token = getTokenForSuggestions(value, textarea.selectionStart);
@@ -78,12 +76,12 @@ export default class TextareaRender extends Component {
     }
   };
 
-  onSuggestionSelected = (e, { suggestionValue, method }) => {
-    const node     = ReactDOM.findDOMNode(this.refs.autosuggest);
-    const textarea = node.querySelector('textarea');
+  onSuggestionSelected = (e, { suggestionValue }) => {
+    const textarea = this.autosuggest.input;
 
     if (textarea) {
       const str = this.state.text;
+
       this.setState({ text: [str.slice(0, textarea.selectionStart), suggestionValue, str.slice(textarea.selectionStart)].join('') });
     }
   };
@@ -92,7 +90,11 @@ export default class TextareaRender extends Component {
     this.setState({ text: e.target.value });
   };
 
-  render () {
+  setRef = c => {
+    this.autosuggest = c;
+  };
+
+  render() {
     const inputProps = {
       value: this.state.text,
       onChange: this.handleChange
@@ -110,8 +112,9 @@ export default class TextareaRender extends Component {
         </div>
         <div className={styles.autosuggest}>
           <Autosuggest
-            ref='autosuggest'
+            ref={this.setRef}
             suggestions={this.state.suggestions}
+            focusFirstSuggestion={true}
             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
             onSuggestionSelected={this.onSuggestionSelected}
