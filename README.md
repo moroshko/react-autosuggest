@@ -484,7 +484,7 @@ You should pass all the `props` to the topmost element that is returned from `re
 * `children` - these are the suggestions themselves. It's up to you where to render them.
 * `ref` - when `renderSuggestionsContainer` returns a composite component (e.g. `<IsolatedScroll ... />` as opposed to a DOM node like `<div ... />`), you should call `ref` with the topmost element that the composite component renders.
 
-Examples:
+Example:
 
 ```js
 function renderSuggestionsContainer({ children, ...rest }) {
