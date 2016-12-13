@@ -19,10 +19,10 @@ const Footer = () => (
       {'Page design by '}
       <Link
         className={styles.link}
-        href="https://twitter.com/ThatBaldUXGuy"
+        href="https://twitter.com/vedranio"
         underline={false}
       >
-        @thatbalduxguy
+        @vedranio
       </Link>
     </div>
     <div className={styles.licensed}>

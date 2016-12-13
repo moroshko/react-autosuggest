@@ -121,6 +121,7 @@ export default class ScrollableContainer extends Component {
         </div>
         <Modal
           isOpen={isModalOpen}
+          contentLabel="Modal"
           onRequestClose={this.closeModal}
           shouldCloseOnOverlayClick={false}
           closeTimeoutMS={1/* otherwise the modal is not closed when suggestion is selected by pressing Enter */}

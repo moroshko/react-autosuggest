@@ -4,5 +4,4 @@ coverage
 dist
 demo/dist
 npm-debug.log
-.happypack
 yarn.lock

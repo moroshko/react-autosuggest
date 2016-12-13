@@ -3,9 +3,6 @@
 [![bitHound Overall Score](https://www.bithound.io/github/moroshko/react-autosuggest/badges/score.svg)](https://www.bithound.io/github/moroshko/react-autosuggest)
 [![npms Score](https://badges.npms.io/react.svg?style=flat-square)](https://npms.io/search?q=react-autosuggest)
 
-[![Pull Requests stats](https://img.shields.io/issuestats/p/long/github/moroshko/react-autosuggest.svg?style=flat-square)](http://issuestats.com/github/moroshko/react-autosuggest)
-[![Issues stats](https://img.shields.io/issuestats/i/long/github/moroshko/react-autosuggest.svg?style=flat-square)](http://issuestats.com/github/moroshko/react-autosuggest)
-
 [![npm Downloads](https://img.shields.io/npm/dm/react-autosuggest.svg?style=flat-square)](https://npmjs.org/package/react-autosuggest)
 [![npm Version](https://img.shields.io/npm/v/react-autosuggest.svg?style=flat-square)](https://npmjs.org/package/react-autosuggest)
 
@@ -484,7 +481,7 @@ You should pass all the `props` to the topmost element that is returned from `re
 * `children` - these are the suggestions themselves. It's up to you where to render them.
 * `ref` - when `renderSuggestionsContainer` returns a composite component (e.g. `<IsolatedScroll ... />` as opposed to a DOM node like `<div ... />`), you should call `ref` with the topmost element that the composite component renders.
 
-Examples:
+Example:
 
 ```js
 function renderSuggestionsContainer({ children, ...rest }) {

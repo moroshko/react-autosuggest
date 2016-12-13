@@ -179,9 +179,9 @@
 	  _createClass(App, [{
 	    key: 'render',
 	    value: function render() {
-	      var _state = this.state;
-	      var value = _state.value;
-	      var suggestions = _state.suggestions;
+	      var _state = this.state,
+	          value = _state.value,
+	          suggestions = _state.suggestions;
 
 	      var inputProps = {
 	        placeholder: 'Type \'c\'',

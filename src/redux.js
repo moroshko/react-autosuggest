@@ -21,11 +21,11 @@ const inputChanged = shouldRenderSuggestions => ({
   shouldRenderSuggestions
 });
 
-const updateFocusedSuggestion = (sectionIndex, suggestionIndex, value) => ({
+const updateFocusedSuggestion = (sectionIndex, suggestionIndex, prevValue) => ({
   type: UPDATE_FOCUSED_SUGGESTION,
   sectionIndex,
   suggestionIndex,
-  value
+  prevValue
 });
 
 const resetFocusedSuggestion = (shouldResetValueBeforeUpDown = true) => ({
@@ -80,13 +80,13 @@ const reducer = (state, action) => {
       };
 
     case UPDATE_FOCUSED_SUGGESTION: {
-      const { sectionIndex, suggestionIndex, value } = action;
+      const { sectionIndex, suggestionIndex, prevValue } = action;
       let { valueBeforeUpDown } = state;
 
       if (suggestionIndex === null) {
         valueBeforeUpDown = null;
-      } else if (valueBeforeUpDown === null && typeof value !== 'undefined') {
-        valueBeforeUpDown = value;
+      } else if (valueBeforeUpDown === null && typeof prevValue !== 'undefined') {
+        valueBeforeUpDown = prevValue;
       }
 
       return {
