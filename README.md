@@ -3,9 +3,6 @@
 [![bitHound Overall Score](https://www.bithound.io/github/moroshko/react-autosuggest/badges/score.svg)](https://www.bithound.io/github/moroshko/react-autosuggest)
 [![npms Score](https://badges.npms.io/react.svg?style=flat-square)](https://npms.io/search?q=react-autosuggest)
 
-[![Pull Requests stats](https://img.shields.io/issuestats/p/long/github/moroshko/react-autosuggest.svg?style=flat-square)](http://issuestats.com/github/moroshko/react-autosuggest)
-[![Issues stats](https://img.shields.io/issuestats/i/long/github/moroshko/react-autosuggest.svg?style=flat-square)](http://issuestats.com/github/moroshko/react-autosuggest)
-
 [![npm Downloads](https://img.shields.io/npm/dm/react-autosuggest.svg?style=flat-square)](https://npmjs.org/package/react-autosuggest)
 [![npm Version](https://img.shields.io/npm/v/react-autosuggest.svg?style=flat-square)](https://npmjs.org/package/react-autosuggest)
 

@@ -2,7 +2,6 @@ var path = require('path');
 var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var HappyPack = require('happypack');
 var host = process.env.NODE_HOST || 'localhost';
 var port = process.env.NODE_PORT || 3000;
 
@@ -22,7 +21,7 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'happypack/loader',
+        loader: 'babel',
         include: [
           path.join(__dirname, 'src'), // Must be an absolute path
           path.join(__dirname, 'demo', 'src') // Must be an absolute path
@@ -61,14 +60,6 @@ module.exports = {
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin('app.css'),
-    new HappyPack({
-      loaders: [
-        {
-          path: path.resolve(__dirname, 'node_modules/babel-loader/index.js'), // Must be an absolute path
-          query: '?presets[]=es2015,presets[]=stage-0,presets[]=react'
-        }
-      ]
-    })
+    new ExtractTextPlugin('app.css')
   ]
 };

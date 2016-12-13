@@ -22,7 +22,7 @@ const Footer = () => (
         href="https://twitter.com/vedranio"
         underline={false}
       >
-        @thatbalduxguy
+        @vedranio
       </Link>
     </div>
     <div className={styles.licensed}>
