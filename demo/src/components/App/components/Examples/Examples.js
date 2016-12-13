@@ -5,6 +5,7 @@ import Basic from 'Basic/Basic';
 import MultipleSections from 'MultipleSections/MultipleSections';
 import CustomRender from 'CustomRender/CustomRender';
 import ScrollableContainer from 'ScrollableContainer/ScrollableContainer';
+import TextareaRender from 'TextareaRender/TextareaRender';
 
 const Examples = () => (
   <div className={styles.container}>
@@ -15,6 +16,7 @@ const Examples = () => (
     <MultipleSections />
     <CustomRender />
     <ScrollableContainer />
+    <TextareaRender />
   </div>
 );
 

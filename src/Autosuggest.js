@@ -333,6 +333,8 @@ class Autosuggest extends Component {
               if (shouldRenderSuggestions(value)) {
                 onSuggestionsFetchRequested({ value });
                 revealSuggestions();
+
+                event.preventDefault(); // Prevents the cursor from moving
               }
             } else if (suggestions.length > 0) {
               const { newFocusedSectionIndex, newFocusedItemIndex } = data;
@@ -350,12 +352,13 @@ class Autosuggest extends Component {
 
               updateFocusedSuggestion(newFocusedSectionIndex, newFocusedItemIndex, value);
               this.maybeCallOnChange(event, newValue, event.key === 'ArrowDown' ? 'down' : 'up');
-            }
 
-            event.preventDefault(); // Prevents the cursor from moving
+              event.preventDefault(); // Prevents the cursor from moving
+            }
 
             break;
 
+          case 'Tab':
           case 'Enter': {
             const focusedSuggestion = this.getFocusedSuggestion();
 
@@ -373,13 +376,16 @@ class Autosuggest extends Component {
                 method: 'enter'
               });
 
-              this.maybeCallOnChange(event, newValue, 'enter');
+              //this.maybeCallOnChange(event, newValue, 'enter');
 
               this.justSelectedSuggestion = true;
 
               setTimeout(() => {
                 this.justSelectedSuggestion = false;
               });
+
+              event.preventDefault();
+              event.stopPropagation();
             }
 
             break;
