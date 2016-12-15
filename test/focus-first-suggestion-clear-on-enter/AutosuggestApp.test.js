@@ -15,13 +15,13 @@ describe('Autosuggest with focusFirstSuggestion={true} and clear on Enter', () =
   });
 
   describe('when pressing Enter to select a suggestion', () => {
-    it('should clear input after selecting first suggestion', () => {
+    it('should clear the input after selecting first suggestion', () => {
       focusAndSetInputValue('c');
       clickEnter();
       expectInputValue('');
     });
 
-    it('should clear input after selecting second suggestion', () => {
+    it('should clear the input after selecting second suggestion', () => {
       focusAndSetInputValue('c');
       clickDown();
       clickEnter();
