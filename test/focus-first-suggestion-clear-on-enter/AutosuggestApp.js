@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import Autosuggest from '../../src/AutosuggestContainer';
 import languages from '../plain-list/languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
+import { addEvent } from '../helpers';
 
 const getMatchingLanguages = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -13,35 +14,35 @@ const getMatchingLanguages = value => {
 
 let app = null;
 
-export const getSuggestionValue = sinon.spy(suggestion => {
-  return suggestion.name;
-});
+export const getSuggestionValue = suggestion => suggestion.name;
 
-export const renderSuggestion = sinon.spy(suggestion => {
-  return (
-    <span>{suggestion.name}</span>
-  );
-});
+export const renderSuggestion = suggestion => (
+  <span>{suggestion.name}</span>
+);
 
 export const onChange = sinon.spy((event, { newValue }) => {
+  addEvent('onChange');
+
   app.setState({
     value: newValue
   });
 });
 
-export const onSuggestionsFetchRequested = sinon.spy(({ value }) => {
+export const onSuggestionsFetchRequested = ({ value }) => {
   app.setState({
     suggestions: getMatchingLanguages(value)
   });
-});
+};
 
-export const onSuggestionsClearRequested = sinon.spy(() => {
+export const onSuggestionsClearRequested = () => {
   app.setState({
     suggestions: []
   });
-});
+};
 
 export const onSuggestionSelected = sinon.spy(() => {
+  addEvent('onSuggestionSelected');
+
   app.setState({ value: '' });
 });
 

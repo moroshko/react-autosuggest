@@ -1,32 +1,53 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
+import { expect } from 'chai';
 import {
   init,
   expectInputValue,
-  clickDown,
   clickEnter,
-  focusAndSetInputValue
+  clickDown,
+  focusAndSetInputValue,
+  clearEvents,
+  getEvents
 } from '../helpers';
-import AutosuggestApp from './AutosuggestApp';
+import AutosuggestApp, {
+  onChange,
+  onSuggestionSelected
+} from './AutosuggestApp';
 
 describe('Autosuggest with focusFirstSuggestion={true} and clear on Enter', () => {
   beforeEach(() => {
     init(TestUtils.renderIntoDocument(<AutosuggestApp />));
   });
 
-  describe('when pressing Enter to select a suggestion', () => {
-    it('should clear the input after selecting first suggestion', () => {
+  describe('when pressing Enter', () => {
+    beforeEach(() => {
       focusAndSetInputValue('c');
+    });
+
+    it('should clear the input after selecting the first suggestion', () => {
       clickEnter();
       expectInputValue('');
     });
 
-    it('should clear the input after selecting second suggestion', () => {
-      focusAndSetInputValue('c');
+    it('should clear the input after selecting the second suggestion', () => {
       clickDown();
       clickEnter();
       expectInputValue('');
     });
   });
 
+  describe('onSuggestionSelected', () => {
+    beforeEach(() => {
+      onSuggestionSelected.reset();
+      focusAndSetInputValue('j');
+    });
+
+    it('should be called after inputProps.onChange when Enter is pressed', () => {
+      onChange.reset();
+      clearEvents();
+      clickEnter();
+      expect(getEvents()).to.deep.equal(['onChange', 'onSuggestionSelected']);
+    });
+  });
 });
