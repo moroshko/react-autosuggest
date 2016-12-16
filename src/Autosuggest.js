@@ -366,14 +366,13 @@ class Autosuggest extends Component {
             if (focusedSuggestion !== null) {
               const newValue = getSuggestionValue(focusedSuggestion);
 
+              this.maybeCallOnChange(event, newValue, 'enter');
               this.onSuggestionSelected(event, {
                 suggestion: focusedSuggestion,
                 suggestionValue: newValue,
                 sectionIndex: focusedSectionIndex,
                 method: 'enter'
               });
-
-              this.maybeCallOnChange(event, newValue, 'enter');
 
               this.justSelectedSuggestion = true;
 
