@@ -344,7 +344,7 @@ where:
 This function is called when suggestion is selected. It has the following signature:
 
 ```js
-function onSuggestionSelected(event, { suggestion, suggestionValue, suggestionIndex,sectionIndex, method })
+function onSuggestionSelected(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method })
 ```
 
 where:
