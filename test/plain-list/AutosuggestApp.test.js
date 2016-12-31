@@ -545,6 +545,7 @@ describe('Default Autosuggest', () => {
       expect(onSuggestionSelected).to.have.been.calledWithExactly(syntheticEventMatcher, {
         suggestion: { name: 'Javascript', year: 1995 },
         suggestionValue: 'Javascript',
+        suggestionIndex: 1,
         sectionIndex: null,
         method: 'click'
       });
@@ -557,6 +558,7 @@ describe('Default Autosuggest', () => {
       expect(onSuggestionSelected).to.have.been.calledWithExactly(syntheticEventMatcher, {
         suggestion: { name: 'Java', year: 1995 },
         suggestionValue: 'Java',
+        suggestionIndex: 0,
         sectionIndex: null,
         method: 'enter'
       });
