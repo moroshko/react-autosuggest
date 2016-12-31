@@ -344,14 +344,14 @@ where:
 This function is called when suggestion is selected. It has the following signature:
 
 ```js
-function onSuggestionSelected(event, { suggestion, suggestionValue, sectionIndex, method })
+function onSuggestionSelected(event, { suggestion, suggestionValue, suggestionIndex,sectionIndex, method })
 ```
 
 where:
 
 * `suggestion` - the selected suggestion
 * `suggestionValue` - the value of the selected suggestion (equivalent to `getSuggestionValue(suggestion)`)
-* `suggestionIndex` - the index of the selected suggestion in the `suggestions` array )
+* `suggestionIndex` - the index of the selected suggestion in the `suggestions` array
 * `sectionIndex` - when rendering [multiple sections](#multiSectionProp), this will be the section index (in [`suggestions`](#suggestionsProp)) of the selected suggestion. Otherwise, it will be `null`.
 * `method` - string describing how user selected the suggestion. The possible values are:
   * `'click'` - user clicked (or tapped) on the suggestion
