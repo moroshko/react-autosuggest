@@ -136,6 +136,7 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
       expect(onSuggestionSelected).to.have.been.calledWithExactly(syntheticEventMatcher, {
         suggestion: { name: 'Perl', year: 1987 },
         suggestionValue: 'Perl',
+        suggestionIndex: 0,
         sectionIndex: null,
         method: 'enter'
       });

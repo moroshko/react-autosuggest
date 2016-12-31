@@ -229,6 +229,7 @@ class Autosuggest extends Component {
     this.onSuggestionSelected(event, {
       suggestion: clickedSuggestion,
       suggestionValue: clickedSuggestionValue,
+      suggestionIndex: suggestionIndex,
       sectionIndex,
       method: 'click'
     });
@@ -371,6 +372,7 @@ class Autosuggest extends Component {
               this.onSuggestionSelected(event, {
                 suggestion: focusedSuggestion,
                 suggestionValue: newValue,
+                suggestionIndex: focusedSuggestionIndex,
                 sectionIndex: focusedSectionIndex,
                 method: 'enter'
               });
