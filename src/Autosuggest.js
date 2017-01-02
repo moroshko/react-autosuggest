@@ -229,6 +229,7 @@ class Autosuggest extends Component {
     this.onSuggestionSelected(event, {
       suggestion: clickedSuggestion,
       suggestionValue: clickedSuggestionValue,
+      suggestionIndex: suggestionIndex,
       sectionIndex,
       method: 'click'
     });
@@ -366,14 +367,15 @@ class Autosuggest extends Component {
             if (focusedSuggestion !== null) {
               const newValue = getSuggestionValue(focusedSuggestion);
 
+              this.maybeCallOnChange(event, newValue, 'enter');
+
               this.onSuggestionSelected(event, {
                 suggestion: focusedSuggestion,
                 suggestionValue: newValue,
+                suggestionIndex: focusedSuggestionIndex,
                 sectionIndex: focusedSectionIndex,
                 method: 'enter'
               });
-
-              this.maybeCallOnChange(event, newValue, 'enter');
 
               this.justSelectedSuggestion = true;
 

@@ -1,6 +1,5 @@
 [![Build Status](https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg?style=flat-square)](https://codeship.com/projects/67868)
 [![Coverage Status](https://img.shields.io/codecov/c/github/moroshko/react-autosuggest/master.svg?style=flat-square)](https://codecov.io/gh/moroshko/react-autosuggest)
-[![bitHound Overall Score](https://www.bithound.io/github/moroshko/react-autosuggest/badges/score.svg)](https://www.bithound.io/github/moroshko/react-autosuggest)
 [![npms Score](https://badges.npms.io/react.svg?style=flat-square)](https://npms.io/search?q=react-autosuggest)
 
 [![npm Downloads](https://img.shields.io/npm/dm/react-autosuggest.svg?style=flat-square)](https://npmjs.org/package/react-autosuggest)
@@ -344,13 +343,14 @@ where:
 This function is called when suggestion is selected. It has the following signature:
 
 ```js
-function onSuggestionSelected(event, { suggestion, suggestionValue, sectionIndex, method })
+function onSuggestionSelected(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method })
 ```
 
 where:
 
 * `suggestion` - the selected suggestion
 * `suggestionValue` - the value of the selected suggestion (equivalent to `getSuggestionValue(suggestion)`)
+* `suggestionIndex` - the index of the selected suggestion in the `suggestions` array
 * `sectionIndex` - when rendering [multiple sections](#multiSectionProp), this will be the section index (in [`suggestions`](#suggestionsProp)) of the selected suggestion. Otherwise, it will be `null`.
 * `method` - string describing how user selected the suggestion. The possible values are:
   * `'click'` - user clicked (or tapped) on the suggestion
