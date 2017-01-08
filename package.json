@@ -24,8 +24,6 @@
   },
   "dependencies": {
     "react-autowhatever": "^7.0.0",
-    "react-redux": "^5.0.1",
-    "redux": "^3.6.0",
     "shallow-equal": "^1.0.0"
   },
   "peerDependencies": {
@@ -66,7 +64,6 @@
     "react-dom": "^15.4.1",
     "react-modal": "^1.6.4",
     "react-transform-hmr": "^1.0.4",
-    "redux-thunk": "^2.1.0",
     "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.13.1",
@@ -99,7 +96,7 @@
     "react-component"
   ],
   "nyc": {
-    "statements": 96,
+    "statements": 95,
     "branches": 91,
     "functions": 100,
     "lines": 95,

@@ -1,1 +1,1 @@
-module.exports = require('./AutosuggestContainer').default;
+module.exports = require('./Autosuggest').default;
