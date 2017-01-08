@@ -1,27 +1,33 @@
 import styles from './Header.less';
 
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import fetch from 'isomorphic-fetch';
 import Link from 'Link/Link';
 import GitHub from 'GitHub/GitHub';
-import { loadStargazers } from './redux';
 
-const mapStateToProps = ({ header }) => ({
-  stargazers: header.stargazers
-});
+export default class Header extends Component {
+  constructor() {
+    super();
 
-class Header extends Component {
-  static propTypes = {
-    stargazers: PropTypes.string.isRequired,
-    loadStargazers: PropTypes.func.isRequired
-  };
+    this.state = {
+      stargazers: '1481'
+    };
+  }
 
   componentDidMount() {
-    this.props.loadStargazers();
+    fetch('https://api.github.com/repos/moroshko/react-autosuggest')
+      .then(response => response.json())
+      .then(response => {
+        if (response.stargazers_count) {
+          this.setState({
+            stargazers: String(response.stargazers_count)
+          });
+        }
+      });
   }
 
   render() {
-    const { stargazers } = this.props;
+    const { stargazers } = this.state;
 
     return (
       <div className={styles.container}>
@@ -61,5 +67,3 @@ class Header extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps, { loadStargazers })(Header);

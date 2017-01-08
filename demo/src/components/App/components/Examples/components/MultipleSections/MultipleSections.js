@@ -4,7 +4,7 @@ import theme from './theme.less';
 import React, { Component } from 'react';
 import isMobile from 'ismobilejs';
 import Link from 'Link/Link';
-import Autosuggest from 'AutosuggestContainer';
+import Autosuggest from 'Autosuggest';
 import languages from './languages';
 import { escapeRegexCharacters } from 'utils/utils';
 

@@ -3,7 +3,7 @@ import theme from './theme.less';
 
 import React, { Component } from 'react';
 import Modal from 'react-modal';
-import Autosuggest from 'AutosuggestContainer';
+import Autosuggest from 'Autosuggest';
 import countries from './countries';
 import { escapeRegexCharacters } from 'utils/utils';
 

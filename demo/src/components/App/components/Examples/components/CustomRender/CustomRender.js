@@ -6,7 +6,7 @@ import isMobile from 'ismobilejs';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import Link from 'Link/Link';
-import Autosuggest from 'AutosuggestContainer';
+import Autosuggest from 'Autosuggest';
 import people from './people';
 import { escapeRegexCharacters } from 'utils/utils';
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import sinon from 'sinon';
-import Autosuggest from '../../src/AutosuggestContainer';
+import Autosuggest from '../../src/Autosuggest';
 import languages from '../plain-list/languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
 

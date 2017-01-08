@@ -11,7 +11,7 @@ const clock = sinon.useFakeTimers();
 let app, container, input, suggestionsContainer, clearButton;
 let eventsArray = [];
 
-export const tick = clock.tick;
+export const { tick } = clock;
 
 export const clearEvents = () => {
   eventsArray = [];

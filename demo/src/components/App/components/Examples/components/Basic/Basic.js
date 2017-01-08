@@ -3,7 +3,7 @@ import styles from './Basic.less';
 import React, { Component } from 'react';
 import isMobile from 'ismobilejs';
 import Link from 'Link/Link';
-import Autosuggest from 'AutosuggestContainer';
+import Autosuggest from 'Autosuggest';
 import languages from './languages';
 import { escapeRegexCharacters } from 'utils/utils';
 
@@ -89,6 +89,7 @@ export default class Basic extends Component {
             renderSuggestion={renderSuggestion}
             inputProps={inputProps}
             focusInputOnSuggestionClick={focusInputOnSuggestionClick}
+            focusFirstSuggestion={true}
             id="basic-example"
           />
         </div>

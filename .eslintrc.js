@@ -56,6 +56,7 @@ module.exports = {
     'no-whitespace-before-property': 2,
     'newline-after-var': [2, 'always'],
     'object-curly-spacing': [2, 'always'],
+    'prefer-destructuring': [2, { array: false, object: true }],
     'prefer-rest-params': 2,
     'quote-props': [2, 'as-needed'],
     'quotes': [2, 'single'],
@@ -81,7 +82,7 @@ module.exports = {
     'react/no-set-state': 0,
     'react/no-string-refs': 2,
     'react/no-unknown-property': 2,
-    'react/no-unused-prop-types': 0, // https://github.com/yannickcr/eslint-plugin-react/pull/835
+    'react/no-unused-prop-types': 0, // https://github.com/yannickcr/eslint-plugin-react/issues/944
     'react/prefer-es6-class': [2, 'always'],
     'react/prefer-stateless-function': 2,
     'react/prop-types': 2,
