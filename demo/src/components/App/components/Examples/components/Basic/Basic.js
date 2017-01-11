@@ -89,7 +89,6 @@ export default class Basic extends Component {
             renderSuggestion={renderSuggestion}
             inputProps={inputProps}
             focusInputOnSuggestionClick={focusInputOnSuggestionClick}
-            focusFirstSuggestion={true}
             id="basic-example"
           />
         </div>
