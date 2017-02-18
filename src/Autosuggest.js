@@ -265,7 +265,7 @@ export default class Autosuggest extends Component {
       event.detail && event.detail.target || // This is for testing only. Please show me a better way to emulate this.
       event.target;
 
-    do {
+    while (node !== null && node !== document) {
       if (node.getAttribute('data-suggestion-index') !== null) {
         // Suggestion was clicked
         return;
@@ -278,7 +278,7 @@ export default class Autosuggest extends Component {
       }
 
       node = node.parentNode;
-    } while (node !== null && node !== document);
+    }
   };
 
   findSuggestionElement(startNode) {
