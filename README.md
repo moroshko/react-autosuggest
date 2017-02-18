@@ -380,7 +380,13 @@ If you would like to render suggestions regardless of whether the input element 
 
 Set `alwaysRenderSuggestions={true}` if you'd like to always render the suggestions.
 
-**Important:** Make sure to set the initial value of `suggestions` to match the initial value of `inputProps.value`.
+**Important:** Make sure that the initial value of `suggestions` corresponds to the initial value of `inputProps.value`. For example, if you'd like to show all the suggestions when the input is empty, your initial state should be something like:
+```js
+this.state = {
+  value: '',
+  suggestions: allSuggestions
+};
+```
 
 <a name="focusFirstSuggestionProp"></a>
 #### focusFirstSuggestion (optional)
