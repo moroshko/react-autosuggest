@@ -20,7 +20,7 @@ Check out the [Homepage](http://react-autosuggest.js.org) and the [Codepen examp
 * Suggestions can be presented as [plain list](http://codepen.io/moroshko/pen/LGNJMy) or [multiple sections](http://codepen.io/moroshko/pen/qbRNjV)
 * Suggestions can be retrieved [asynchronously](http://codepen.io/moroshko/pen/EPZpev)
 * [Focus the first suggestion](#focusFirstSuggestionProp) in the list if you wish
-* Supports styling using [CSS Modules](https://github.com/css-modules/css-modules), [Radium](https://github.com/FormidableLabs/radium), [Inline styles](https://facebook.github.io/react/tips/inline-styles.html), global CSS, [and more](#themeProp)
+* Supports styling using [CSS Modules](https://github.com/css-modules/css-modules), [Radium](https://github.com/FormidableLabs/radium), [Inline styles](https://facebook.github.io/react/docs/dom-elements.html#style), global CSS, [and more](#themeProp)
 * You decide [when to show suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Always render suggestions](#alwaysRenderSuggestionsProp) (useful for mobile and modals)
 * [Pass through arbitrary props to the input element](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange), [onBlur](#inputPropsOnBlur), or any other), or [take full control on the rendering of the input](#renderInputComponentProp) (useful for integration with other libraries)
@@ -524,7 +524,7 @@ function renderSuggestionsContainer({ ref, ...rest }) {
 
 Autosuggest comes with no styles.
 
-It uses [react-themeable](https://github.com/markdalgleish/react-themeable) to allow you to style your Autosuggest component using [CSS Modules](https://github.com/css-modules/css-modules), [Radium](https://github.com/FormidableLabs/radium), [React Style](https://github.com/js-next/react-style), [JSS](https://github.com/jsstyles/jss), [Inline styles](https://facebook.github.io/react/tips/inline-styles.html), or even global CSS.
+It uses [react-themeable](https://github.com/markdalgleish/react-themeable) to allow you to style your Autosuggest component using [CSS Modules](https://github.com/css-modules/css-modules), [Radium](https://github.com/FormidableLabs/radium), [React Style](https://github.com/js-next/react-style), [JSS](https://github.com/jsstyles/jss), [Inline styles](https://facebook.github.io/react/docs/dom-elements.html#style), or even global CSS.
 
 For example, to style the Autosuggest using CSS Modules, do:
 
