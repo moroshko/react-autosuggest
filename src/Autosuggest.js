@@ -573,7 +573,7 @@ export default class Autosuggest extends Component {
       }
     };
     const renderSuggestionData = {
-      query: (valueBeforeUpDown || value).trim()
+      query: (valueBeforeUpDown || value || "").trim()
     };
 
     return (
