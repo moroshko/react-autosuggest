@@ -15,7 +15,7 @@ import AutosuggestApp, {
   onSuggestionSelected
 } from './AutosuggestApp';
 
-describe('Autosuggest with focusFirstSuggestion={true} and clear on Enter', () => {
+describe('Autosuggest with highlightFirstSuggestion={true} and clear on Enter', () => {
   beforeEach(() => {
     init(TestUtils.renderIntoDocument(<AutosuggestApp />));
   });

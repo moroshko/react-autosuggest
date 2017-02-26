@@ -17,37 +17,37 @@
   border-radius: @border-radius;
   -webkit-appearance: none;
 
-  &:focus {
-    outline: none;
-  }
-
   &::-ms-clear {
     display: none;
   }
+}
 
-  .containerOpen & {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
+.inputOpen {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.inputFocused {
+  outline: none;
 }
 
 .suggestionsContainer {
   display: none;
+}
 
-  .containerOpen & {
-    display: block;
-    position: absolute;
-    top: 51px;
-    width: 280px;
-    border: 1px solid @border-color;
-    background-color: #fff;
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 300;
-    font-size: @font-size;
-    border-bottom-left-radius: @border-radius;
-    border-bottom-right-radius: @border-radius;
-    z-index: 2;
-  }
+.suggestionsContainerOpen {
+  display: block;
+  position: absolute;
+  top: 51px;
+  width: 280px;
+  border: 1px solid @border-color;
+  background-color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  font-size: @font-size;
+  border-bottom-left-radius: @border-radius;
+  border-bottom-right-radius: @border-radius;
+  z-index: 2;
 }
 
 .suggestionsList {
@@ -61,17 +61,20 @@
   padding: 10px 20px;
 }
 
-.suggestionFocused {
+.suggestionHighlighted {
   background-color: #ddd;
+}
+
+.sectionContainer {
+  border-top: 1px dashed #ccc;
+}
+
+.sectionContainerFirst {
+  border-top: 0;
 }
 
 .sectionTitle {
   padding: 10px 0 0 10px;
   font-size: 12px;
   color: #777;
-  border-top: 1px dashed #ccc;
-
-  .sectionContainer:first-child & {
-    border-top: 0;
-  }
 }

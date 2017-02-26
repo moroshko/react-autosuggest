@@ -85,7 +85,7 @@ module.exports = {
     'react/no-unused-prop-types': 0, // https://github.com/yannickcr/eslint-plugin-react/issues/944
     'react/prefer-es6-class': [2, 'always'],
     'react/prefer-stateless-function': 2,
-    'react/prop-types': 2,
+    'react/prop-types': [2, { skipUndeclared: true }],
     'react/react-in-jsx-scope': 2,
     'react/require-optimization': 0,
     'react/require-render-return': 2,

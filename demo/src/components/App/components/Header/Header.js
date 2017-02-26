@@ -10,7 +10,7 @@ export default class Header extends Component {
     super();
 
     this.state = {
-      stargazers: '1620'
+      stargazers: '1637'
     };
   }
 

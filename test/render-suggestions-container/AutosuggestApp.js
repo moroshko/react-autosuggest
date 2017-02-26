@@ -3,7 +3,6 @@ import sinon from 'sinon';
 import Autosuggest from '../../src/Autosuggest';
 import languages from '../plain-list/languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
-import { addEvent } from '../helpers';
 
 const getMatchingLanguages = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -14,37 +13,36 @@ const getMatchingLanguages = value => {
 
 let app = null;
 
-export const getSuggestionValue = suggestion => suggestion.name;
-
-export const renderSuggestion = suggestion => (
-  <span>{suggestion.name}</span>
-);
-
-export const onChange = sinon.spy((event, { newValue }) => {
-  addEvent('onChange');
-
+const onChange = (event, { newValue }) => {
   app.setState({
     value: newValue
   });
-});
+};
 
-export const onSuggestionsFetchRequested = ({ value }) => {
+const onSuggestionsFetchRequested = ({ value }) => {
   app.setState({
     suggestions: getMatchingLanguages(value)
   });
 };
 
-export const onSuggestionsClearRequested = () => {
+const onSuggestionsClearRequested = () => {
   app.setState({
     suggestions: []
   });
 };
 
-export const onSuggestionSelected = sinon.spy(() => {
-  addEvent('onSuggestionSelected');
+const getSuggestionValue = suggestion => suggestion.name;
 
-  app.setState({ value: '' });
-});
+const renderSuggestion = suggestion => suggestion.name;
+
+export const renderSuggestionsContainer = sinon.spy(({ containerProps, children, query }) => (
+  <div {...containerProps}>
+    {children}
+    <div className="my-suggestions-container-footer">
+      Press Enter to search <strong className="my-query">{query}</strong>
+    </div>
+  </div>
+));
 
 export default class AutosuggestApp extends Component {
   constructor() {
@@ -58,6 +56,12 @@ export default class AutosuggestApp extends Component {
     };
   }
 
+  storeAutosuggestReference = autosuggest => {
+    if (autosuggest !== null) {
+      this.input = autosuggest.input;
+    }
+  };
+
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
@@ -67,14 +71,14 @@ export default class AutosuggestApp extends Component {
 
     return (
       <Autosuggest
-        suggestions={suggestions.slice()}
+        suggestions={suggestions}
         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
         onSuggestionsClearRequested={onSuggestionsClearRequested}
-        onSuggestionSelected={onSuggestionSelected}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
+        renderSuggestionsContainer={renderSuggestionsContainer}
         inputProps={inputProps}
-        highlightFirstSuggestion={true}
+        ref={this.storeAutosuggestReference}
       />
     );
   }

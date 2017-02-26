@@ -16,37 +16,37 @@
   border-radius: @border-radius;
   -webkit-appearance: none;
 
-  &:focus {
-    outline: none;
-  }
-
   &::-ms-clear {
     display: none;
   }
+}
 
-  .containerOpen & {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
+.inputOpen {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.inputFocused {
+  outline: none;
 }
 
 .suggestionsContainer {
   display: none;
+}
 
-  .containerOpen & {
-    display: block;
-    position: absolute;
-    top: 51px;
-    width: 280px;
-    border: 1px solid @border-color;
-    background-color: #fff;
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 300;
-    font-size: 20px;
-    border-bottom-left-radius: @border-radius;
-    border-bottom-right-radius: @border-radius;
-    z-index: 2;
-  }
+.suggestionsContainerOpen {
+  display: block;
+  position: absolute;
+  top: 51px;
+  width: 280px;
+  border: 1px solid @border-color;
+  background-color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  border-bottom-left-radius: @border-radius;
+  border-bottom-right-radius: @border-radius;
+  z-index: 2;
 }
 
 .suggestionsList {
@@ -59,13 +59,14 @@
   cursor: pointer;
   padding: 10px 20px;
   height: 48px;
-
-  &:not(:first-child) {
-    border-top: 1px solid #ddd;
-  }
+  border-top: 1px solid #ddd;
 }
 
-.suggestionFocused {
+.suggestionFirst {
+  border-top: 0;
+}
+
+.suggestionHighlighted {
   background-color: #0C7EAF;
   color: #fff;
 }
@@ -101,7 +102,7 @@
   color: #ee0000;
   font-weight: 400;
 
-  .suggestionFocused & {
+  .suggestionHighlighted & {
     color: #120000;
   }
 }
