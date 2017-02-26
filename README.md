@@ -167,7 +167,7 @@ class Example extends React.Component {
 
 Array of suggestions to display. The only requirement is that `suggestions` is an array. Items in this array can take an arbitrary shape.
 
-For a plain list of suggestions, every item in `suggestions` should be a single suggestion. It's up to you what shape every suggestion takes. For example:
+For a plain list of suggestions, every item in `suggestions` represents a single suggestion. It's up to you what shape every suggestion takes. For example:
 
 ```js
 const suggestions = [
@@ -189,7 +189,7 @@ const suggestions = [
 ];
 ```
 
-To display [multiple sections](#multiSectionProp), every item in `suggestions` should be a single section. Again, it's up to you what shape every section takes. For example:
+For [multiple sections](#multiSectionProp), every item in `suggestions` represents a single section. Again, it's up to you what shape every section takes. For example:
 
 ```js
 const suggestions = [
@@ -292,7 +292,7 @@ function renderSuggestion(suggestion) {
 <a name="inputPropsProp"></a>
 #### inputProps (required)
 
-Autosuggest is a [controlled component](https://facebook.github.io/react/docs/forms.html#controlled-components). Therefore, you should pass at least a `value` and an `onChange` callback to the input element. You can pass any other props as well. For example:
+Autosuggest is a [controlled component](https://facebook.github.io/react/docs/forms.html#controlled-components). Therefore, you MUST pass at least a `value` and an `onChange` callback to the input element. You can pass any other props as well. For example:
 
 ```js
 const inputProps = {
@@ -452,7 +452,7 @@ function getSectionSuggestions(section) {
 
 You shouldn't specify `renderInputComponent` unless you want to customize the rendering of the input element.
 
-To keep Autosuggest [accessible](https://www.w3.org/TR/wai-aria-practices/#autocomplete), `renderInputComponent` should:
+To keep Autosuggest [accessible](https://www.w3.org/TR/wai-aria-practices/#autocomplete), `renderInputComponent` MUST:
 
 * render an input element
 * pass through all the provided `inputProps` to the input element
