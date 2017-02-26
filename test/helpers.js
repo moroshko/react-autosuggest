@@ -34,6 +34,13 @@ export const init = application => {
 };
 
 export const syntheticEventMatcher = sinon.match.instanceOf(SyntheticEvent);
+export const childrenMatcher = sinon.match.any;
+export const containerPropsMatcher = sinon.match({
+  id: sinon.match.string,
+  key: sinon.match.string,
+  className: sinon.match.string,
+  ref: sinon.match.func
+});
 
 const reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 
@@ -41,6 +48,9 @@ const reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 const stripReactAttributes = html => html.replace(reactAttributesRegex, '');
 
 export const getInnerHTML = element => stripReactAttributes(element.innerHTML);
+
+export const getElementWithClass = className =>
+  TestUtils.findRenderedDOMComponentWithClass(app, className);
 
 export const expectContainerAttribute = (attributeName, expectedValue) => {
   expect(container.getAttribute(attributeName)).to.equal(expectedValue);
@@ -80,6 +90,10 @@ export const getSuggestion = suggestionIndex => {
   return suggestions[suggestionIndex];
 };
 
+export const expectSuggestionAttribute = (suggestionIndex, attributeName, expectedValue) => {
+  expect(getSuggestion(suggestionIndex).getAttribute(attributeName)).to.equal(expectedValue);
+};
+
 export const getTitles = () =>
   TestUtils.scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__section-title');
 
@@ -103,15 +117,15 @@ export const expectSuggestions = expectedSuggestions => {
   expect(suggestions).to.deep.equal(expectedSuggestions);
 };
 
-export const expectFocusedSuggestion = suggestion => {
-  const focusedSuggestions = TestUtils
-    .scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__suggestion--focused');
+export const expectHighlightedSuggestion = suggestion => {
+  const highlightedSuggestions = TestUtils
+    .scryRenderedDOMComponentsWithClass(app, 'react-autosuggest__suggestion--highlighted');
 
   if (suggestion === null) {
-    expect(focusedSuggestions).to.have.length(0);
+    expect(highlightedSuggestions).to.have.length(0);
   } else {
-    expect(focusedSuggestions).to.have.length(1);
-    expect(focusedSuggestions[0].textContent).to.equal(suggestion);
+    expect(highlightedSuggestions).to.have.length(1);
+    expect(highlightedSuggestions[0].textContent).to.equal(suggestion);
   }
 };
 

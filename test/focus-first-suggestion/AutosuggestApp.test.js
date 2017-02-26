@@ -6,7 +6,7 @@ import {
   syntheticEventMatcher,
   expectInputValue,
   expectSuggestions,
-  expectFocusedSuggestion,
+  expectHighlightedSuggestion,
   mouseEnterSuggestion,
   mouseLeaveSuggestion,
   focusInput,
@@ -22,7 +22,7 @@ import AutosuggestApp, {
   onSuggestionSelected
 } from './AutosuggestApp';
 
-describe('Autosuggest with focusFirstSuggestion={true}', () => {
+describe('Autosuggest with highlightFirstSuggestion={true}', () => {
   beforeEach(() => {
     init(TestUtils.renderIntoDocument(<AutosuggestApp />));
   });
@@ -32,36 +32,36 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
       focusAndSetInputValue('j');
     });
 
-    it('should focus on the first suggestion', () => {
-      expectFocusedSuggestion('Java');
+    it('should highlight the first suggestion', () => {
+      expectHighlightedSuggestion('Java');
     });
 
-    it('should focus on the first suggestion when typing a character does not change the suggestions', () => {
+    it('should highlight the first suggestion when typing a character does not change the suggestions', () => {
       focusAndSetInputValue('ja');
-      expectFocusedSuggestion('Java');
+      expectHighlightedSuggestion('Java');
     });
 
-    it('should focus on the first suggestion when input is focused after it has been blurred', () => {
+    it('should highlight the first suggestion when input is focused after it has been blurred', () => {
       blurInput();
       focusInput();
-      expectFocusedSuggestion('Java');
+      expectHighlightedSuggestion('Java');
     });
 
-    it('should focus on the first suggestion when same suggestions are shown again', () => {
+    it('should highlight the first suggestion when same suggestions are shown again', () => {
       setInputValue('');
       setInputValue('j');
-      expectFocusedSuggestion('Java');
+      expectHighlightedSuggestion('Java');
     });
 
-    it('should focus on suggestion when mouse enters it', () => {
+    it('should highlight a suggestion when mouse enters it', () => {
       mouseEnterSuggestion(1);
-      expectFocusedSuggestion('Javascript');
+      expectHighlightedSuggestion('Javascript');
     });
 
-    it('should not have focused suggestions when mouse leaves a suggestion', () => {
+    it('should not have highlighted suggestions when mouse leaves a suggestion', () => {
       mouseEnterSuggestion(1);
       mouseLeaveSuggestion(1);
-      expectFocusedSuggestion(null);
+      expectHighlightedSuggestion(null);
     });
   });
 
@@ -70,31 +70,31 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
       focusAndSetInputValue('j');
     });
 
-    it('should focus on the second suggestion', () => {
+    it('should highlight the second suggestion', () => {
       clickDown();
-      expectFocusedSuggestion('Javascript');
+      expectHighlightedSuggestion('Javascript');
     });
 
-    it('should not focus on any suggestion after reaching the last suggestion', () => {
+    it('should not highlight any suggestion after reaching the last suggestion', () => {
       clickDown(2);
-      expectFocusedSuggestion(null);
+      expectHighlightedSuggestion(null);
     });
 
-    it('should focus on the first suggestion when suggestions are revealed', () => {
+    it('should highlight the first suggestion when suggestions are revealed', () => {
       clickEscape();
       clickDown();
-      expectFocusedSuggestion('Java');
+      expectHighlightedSuggestion('Java');
     });
   });
 
   describe('when pressing Enter', () => {
-    it('should hide suggestions if the first suggestion was autofocused', () => {
+    it('should hide suggestions if the first suggestion was autohighlighted', () => {
       focusAndSetInputValue('p');
       clickEnter();
       expectSuggestions([]);
     });
 
-    it('should hide suggestions if mouse entered another suggestion after autofocus', () => {
+    it('should hide suggestions if mouse entered another suggestion after autohighlight', () => {
       focusAndSetInputValue('p');
       mouseEnterSuggestion(2);
       clickEnter();
@@ -114,7 +114,7 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
       onChange.reset();
     });
 
-    it('should be called once with the right parameters when Enter is pressed after autofocus', () => {
+    it('should be called once with the right parameters when Enter is pressed after autohighlight', () => {
       clickEnter();
       expect(onChange).to.have.been.calledOnce;
       expect(onChange).to.be.calledWith(syntheticEventMatcher, {
@@ -130,7 +130,7 @@ describe('Autosuggest with focusFirstSuggestion={true}', () => {
       onSuggestionSelected.reset();
     });
 
-    it('should be called once with the right parameters when Enter is pressed after autofocus', () => {
+    it('should be called once with the right parameters when Enter is pressed after autohighlight', () => {
       clickEnter();
       expect(onSuggestionSelected).to.have.been.calledOnce;
       expect(onSuggestionSelected).to.have.been.calledWithExactly(syntheticEventMatcher, {

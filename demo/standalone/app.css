@@ -14,7 +14,7 @@
   -webkit-appearance: none;
 }
 
-.react-autosuggest__input:focus {
+.react-autosuggest__input--focused {
   outline: none;
 }
 
@@ -22,7 +22,7 @@
   display: none;
 }
 
-.react-autosuggest__container--open .react-autosuggest__input {
+.react-autosuggest__input--open {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -31,7 +31,7 @@
   display: none;
 }
 
-.react-autosuggest__container--open .react-autosuggest__suggestions-container {
+.react-autosuggest__suggestions-container--open {
   display: block;
   position: relative;
   top: -1px;
@@ -57,6 +57,6 @@
   padding: 10px 20px;
 }
 
-.react-autosuggest__suggestion--focused {
+.react-autosuggest__suggestion--highlighted {
   background-color: #ddd;
 }

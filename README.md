@@ -19,8 +19,8 @@ Check out the [Homepage](http://react-autosuggest.js.org) and the [Codepen examp
 * Full control over [suggestions rendering](#renderSuggestionProp)
 * Suggestions can be presented as [plain list](http://codepen.io/moroshko/pen/LGNJMy) or [multiple sections](http://codepen.io/moroshko/pen/qbRNjV)
 * Suggestions can be retrieved [asynchronously](http://codepen.io/moroshko/pen/EPZpev)
-* [Focus the first suggestion](#focusFirstSuggestionProp) in the list if you wish
-* Supports styling using [CSS Modules](https://github.com/css-modules/css-modules), [Radium](https://github.com/FormidableLabs/radium), [Inline styles](https://facebook.github.io/react/tips/inline-styles.html), global CSS, [and more](#themeProp)
+* [Highlight the first suggestion](#highlightFirstSuggestionProp) in the list if you wish
+* Supports styling using [CSS Modules](https://github.com/css-modules/css-modules), [Radium](https://github.com/FormidableLabs/radium), [Aphrodite](https://github.com/Khan/aphrodite), [JSS](https://github.com/cssinjs/jss), [and more](#themeProp)
 * You decide [when to show suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Always render suggestions](#alwaysRenderSuggestionsProp) (useful for mobile and modals)
 * [Pass through arbitrary props to the input element](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange), [onBlur](#inputPropsOnBlur), or any other), or [take full control on the rendering of the input](#renderInputComponentProp) (useful for integration with other libraries)
@@ -152,7 +152,7 @@ class Example extends React.Component {
 | [`onSuggestionSelected`](#onSuggestionSelectedProp) | Function | | Will be called every time suggestion is selected via mouse or keyboard. |
 | [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp) | Function | | When the input element is focused, Autosuggest will consult this function when to render suggestions. Use it, for example, if you want to display suggestions when input value is at least 2 characters long. |
 | [`alwaysRenderSuggestions`](#alwaysRenderSuggestionsProp) | Boolean | | Set it to `true` if you'd like to render suggestions even when the input element is not focused. |
-| [`focusFirstSuggestion`](#focusFirstSuggestionProp) | Boolean | | Set it to `true` if you'd like Autosuggest to automatically highlight the first suggestion. |
+| [`highlightFirstSuggestion`](#highlightFirstSuggestionProp) | Boolean | | Set it to `true` if you'd like Autosuggest to automatically highlight the first suggestion. |
 | [`focusInputOnSuggestionClick`](#focusInputOnSuggestionClickProp) | Boolean | | Set it to `false` if you don't want Autosuggest to keep the input element focused when suggestions are clicked/tapped. |
 | [`multiSection`](#multiSectionProp) | Boolean | | Set it to `true` if you'd like to display suggestions in multiple sections (with optional titles). |
 | [`renderSectionTitle`](#renderSectionTitleProp) | Function | ✓<br>when `multiSection={true}` | Use your imagination to define how section titles are rendered. |
@@ -167,7 +167,7 @@ class Example extends React.Component {
 
 Array of suggestions to display. The only requirement is that `suggestions` is an array. Items in this array can take an arbitrary shape.
 
-For a plain list of suggestions, every item in `suggestions` should be a single suggestion. It's up to you what shape every suggestion takes. For example:
+For a plain list of suggestions, every item in `suggestions` represents a single suggestion. It's up to you what shape every suggestion takes. For example:
 
 ```js
 const suggestions = [
@@ -189,7 +189,7 @@ const suggestions = [
 ];
 ```
 
-To display [multiple sections](#multiSectionProp), every item in `suggestions` should be a single section. Again, it's up to you what shape every section takes. For example:
+For [multiple sections](#multiSectionProp), every item in `suggestions` represents a single section. Again, it's up to you what shape every section takes. For example:
 
 ```js
 const suggestions = [
@@ -292,7 +292,7 @@ function renderSuggestion(suggestion) {
 <a name="inputPropsProp"></a>
 #### inputProps (required)
 
-Autosuggest is a [controlled component](https://facebook.github.io/react/docs/forms.html#controlled-components). Therefore, you should pass at least a `value` and an `onChange` callback to the input element. You can pass any other props as well. For example:
+Autosuggest is a [controlled component](https://facebook.github.io/react/docs/forms.html#controlled-components). Therefore, you MUST pass at least a `value` and an `onChange` callback to the input element. You can pass any other props as well. For example:
 
 ```js
 const inputProps = {
@@ -330,12 +330,12 @@ where:
 The signature is:
 
 ```js
-function onBlur(event, { focusedSuggestion })
+function onBlur(event, { highlightedSuggestion })
 ```
 
 where:
 
-* `focusedSuggestion` - the suggestion that was highlighted just before the input element lost focus, or `null` if there was no highlighted suggestion.
+* `highlightedSuggestion` - the suggestion that was highlighted just before the input element lost focus, or `null` if there was no highlighted suggestion.
 
 <a name="onSuggestionSelectedProp"></a>
 #### onSuggestionSelected (optional)
@@ -388,10 +388,10 @@ this.state = {
 };
 ```
 
-<a name="focusFirstSuggestionProp"></a>
-#### focusFirstSuggestion (optional)
+<a name="highlightFirstSuggestionProp"></a>
+#### highlightFirstSuggestion (optional)
 
-When `focusFirstSuggestion={true}`, Autosuggest will automatically highlight the first suggestion. Defaults to `false`.
+When `highlightFirstSuggestion={true}`, Autosuggest will automatically highlight the first suggestion. Defaults to `false`.
 
 <a name="focusInputOnSuggestionClickProp"></a>
 #### focusInputOnSuggestionClick (optional)
@@ -452,7 +452,7 @@ function getSectionSuggestions(section) {
 
 You shouldn't specify `renderInputComponent` unless you want to customize the rendering of the input element.
 
-To keep Autosuggest [accessible](https://www.w3.org/TR/wai-aria-practices/#autocomplete), `renderInputComponent` should:
+To keep Autosuggest [accessible](https://www.w3.org/TR/wai-aria-practices/#autocomplete), `renderInputComponent` MUST:
 
 * render an input element
 * pass through all the provided `inputProps` to the input element
@@ -474,39 +474,44 @@ const renderInputComponent = inputProps => (
 <a name="renderSuggestionsContainerProp"></a>
 #### renderSuggestionsContainer (optional)
 
-You shouldn't specify `renderSuggestionsContainer` unless you want to customize the content or behaviour of the suggestions container beyond rendering the suggestions themselves. For example, you might want to add a custom text before/after the suggestions list, or [customize the scrolling behaviour of the suggestions container](https://github.com/moroshko/react-autosuggest/blob/master/FAQ.md#limitSuggestionsContainerScrolling).
+You shouldn't specify `renderSuggestionsContainer` unless you want to customize the content or behaviour of the suggestions container beyond rendering the suggestions themselves. For example, you might want to add a custom text before/after the suggestions list, or to [customize the scrolling behaviour of the suggestions container](https://github.com/moroshko/react-autosuggest/blob/master/FAQ.md#limitSuggestionsContainerScrolling).
 
 The signature is:
 
 ```js
-function renderSuggestionsContainer(props)
+function renderSuggestionsContainer({ containerProps, children, query })
 ```
 
-You should pass all the `props` to the topmost element that is returned from `renderSuggestionsContainer` with the following exceptions:
+where:
 
-* `children` - these are the suggestions themselves. It's up to you where to render them.
-* `ref` - when `renderSuggestionsContainer` returns a composite component (e.g. `<IsolatedScroll ... />` as opposed to a DOM node like `<div ... />`), you should call `ref` with the topmost element that the composite component renders.
+* `containerProps` - props that you MUST pass to the topmost element that is returned from `renderSuggestionsContainer`.
+* `children` - the suggestions themselves. It's up to you where to render them.
+* `query` - Same as `query` in [`renderSuggestion`](#renderSuggestionProp).
 
-Example:
+For example:
 
 ```js
-function renderSuggestionsContainer({ children, ...rest }) {
+function renderSuggestionsContainer({ containerProps , children, query }) {
   return (
-    <div {...rest}>
-      <p>
-        Some text
-      </p>
+    <div {... containerProps}>
       {children}
+      <div>
+        Press Enter to search <strong>{query}</strong>
+      </div>
     </div>
   );
 }
 ```
 
+When `renderSuggestionsContainer` returns a composite component (e.g. `<IsolatedScroll ... />` as opposed to a DOM node like `<div ... />`), you MUST call `containerProps.ref` with the topmost element that the composite component renders.
+
+For example:
 
 ```js
 import IsolatedScroll from 'react-isolated-scroll';
 
-function renderSuggestionsContainer({ ref, ...rest }) {
+function renderSuggestionsContainer({ containerProps, children }) {
+  const { ref, ...restContainerProps } = containerProps;
   const callRef = isolatedScroll => {
     if (isolatedScroll !== null) {
       ref(isolatedScroll.component);
@@ -514,7 +519,9 @@ function renderSuggestionsContainer({ ref, ...rest }) {
   };
 
   return (
-    <IsolatedScroll {...rest} ref={callRef} />
+    <IsolatedScroll ref={callRef} {...restContainerProps}>
+      {children}
+    </IsolatedScroll>
   );
 }
 ```
@@ -524,7 +531,7 @@ function renderSuggestionsContainer({ ref, ...rest }) {
 
 Autosuggest comes with no styles.
 
-It uses [react-themeable](https://github.com/markdalgleish/react-themeable) to allow you to style your Autosuggest component using [CSS Modules](https://github.com/css-modules/css-modules), [Radium](https://github.com/FormidableLabs/radium), [React Style](https://github.com/js-next/react-style), [JSS](https://github.com/jsstyles/jss), [Inline styles](https://facebook.github.io/react/tips/inline-styles.html), or even global CSS.
+It uses [react-themeable](https://github.com/markdalgleish/react-themeable) that allows you to style your Autosuggest component using [CSS Modules](https://github.com/css-modules/css-modules), [Radium](https://github.com/FormidableLabs/radium), [Aphrodite](https://github.com/Khan/aphrodite), [JSS](https://github.com/cssinjs/jss), [Inline styles](https://facebook.github.io/react/docs/dom-elements.html#style), and global CSS.
 
 For example, to style the Autosuggest using CSS Modules, do:
 
@@ -535,7 +542,7 @@ For example, to style the Autosuggest using CSS Modules, do:
 .input { ... }
 .suggestionsContainer { ... }
 .suggestion { ... }
-.suggestionFocused { ... }
+.suggestionHighlighted { ... }
 ...
 ```
 
@@ -550,15 +557,20 @@ When not specified, `theme` defaults to:
 
 ```js
 {
-  container:            'react-autosuggest__container',
-  containerOpen:        'react-autosuggest__container--open',
-  input:                'react-autosuggest__input',
-  suggestionsContainer: 'react-autosuggest__suggestions-container',
-  suggestionsList:      'react-autosuggest__suggestions-list',
-  suggestion:           'react-autosuggest__suggestion',
-  suggestionFocused:    'react-autosuggest__suggestion--focused',
-  sectionContainer:     'react-autosuggest__section-container',
-  sectionTitle:         'react-autosuggest__section-title'
+  container:                'react-autosuggest__container',
+  containerOpen:            'react-autosuggest__container--open',
+  input:                    'react-autosuggest__input',
+  inputOpen:                'react-autosuggest__input--open',
+  inputFocused:             'react-autosuggest__input--focused',
+  suggestionsContainer:     'react-autosuggest__suggestions-container',
+  suggestionsContainerOpen: 'react-autosuggest__suggestions-container--open',
+  suggestionsList:          'react-autosuggest__suggestions-list',
+  suggestion:               'react-autosuggest__suggestion',
+  suggestionFirst:          'react-autosuggest__suggestion--first',
+  suggestionHighlighted:    'react-autosuggest__suggestion--highlighted',
+  sectionContainer:         'react-autosuggest__section-container',
+  sectionContainerFirst:    'react-autosuggest__section-container--first',
+  sectionTitle:             'react-autosuggest__section-title'
 }
 ```
 

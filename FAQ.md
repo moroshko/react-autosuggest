@@ -25,7 +25,8 @@ When the suggestions container has a scroll bar, and you scroll beyond the start
 ```js
 import IsolatedScroll from 'react-isolated-scroll';
 
-function renderSuggestionsContainer({ ref, ...rest }) {
+function renderSuggestionsContainer({ containerProps, children }) {
+  const { ref, ...restContainerProps } = containerProps;
   const callRef = isolatedScroll => {
     if (isolatedScroll !== null) {
       ref(isolatedScroll.component);
@@ -33,7 +34,9 @@ function renderSuggestionsContainer({ ref, ...rest }) {
   };
 
   return (
-    <IsolatedScroll {...rest} ref={callRef} />
+    <IsolatedScroll ref={callRef} {...restContainerProps}>
+      {children}
+    </IsolatedScroll>
   );
 }
 
