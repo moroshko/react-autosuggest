@@ -21,6 +21,7 @@ import {
   blurInput,
   clickEscape,
   clickEnter,
+  clickTab,
   clickDown,
   clickUp,
   setInputValue,
@@ -574,6 +575,32 @@ describe('Default Autosuggest', () => {
       clickDown();
       clickDown();
       clickEnter();
+      expect(onSuggestionSelected).not.to.have.been.called;
+    });
+
+    it('should be called once with the right parameters when Tab is pressed and suggestion is highlighted', () => {
+      clickDown();
+      clickTab();
+      expect(onSuggestionSelected).to.have.been.calledOnce;
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(syntheticEventMatcher, {
+        suggestion: { name: 'Java', year: 1995 },
+        suggestionValue: 'Java',
+        suggestionIndex: 0,
+        sectionIndex: null,
+        method: 'enter'
+      });
+    });
+
+    it('should not be called when Tab is pressed and there is no highlighted suggestion', () => {
+      clickTab();
+      expect(onSuggestionSelected).not.to.have.been.called;
+    });
+
+    it('should not be called when Tab is pressed and there is no highlighted suggestion after Up/Down interaction', () => {
+      clickDown();
+      clickDown();
+      clickDown();
+      clickTab();
       expect(onSuggestionSelected).not.to.have.been.called;
     });
 

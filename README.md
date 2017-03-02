@@ -355,6 +355,7 @@ where:
 * `method` - string describing how user selected the suggestion. The possible values are:
   * `'click'` - user clicked (or tapped) on the suggestion
   * `'enter'` - user selected the suggestion using <kbd>Enter</kbd>
+  * `'tab'` - user selected the suggestion using <kbd>Tab</kbd>
 
 <a name="shouldRenderSuggestionsProp"></a>
 #### shouldRenderSuggestions (optional)

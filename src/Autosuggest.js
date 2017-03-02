@@ -479,6 +479,7 @@ export default class Autosuggest extends Component {
 
             break;
 
+          case 'Tab':
           case 'Enter': {
             const highlightedSuggestion = this.getHighlightedSuggestion();
 
