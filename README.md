@@ -38,6 +38,12 @@ or
 npm install react-autosuggest --save
 ```
 
+You can also use the standalone UMD build:
+
+```html
+<script src="https://unpkg.com/react-autosuggest/dist/standalone/autosuggest.js"></script>
+```
+
 ## Basic Usage
 
 ```js
