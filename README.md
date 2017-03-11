@@ -13,7 +13,7 @@ Check out the [Homepage](http://react-autosuggest.js.org) and the [Codepen examp
 
 ## Features
 
-* [WAI-ARIA compliant](https://www.w3.org/TR/wai-aria-practices/#autocomplete), with support for ARIA attributes and keyboard interactions
+* [WAI-ARIA compliant](https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete), with support for ARIA attributes and keyboard interactions
 * Mobile friendly
 * Plugs in nicely to Flux and [Redux](http://redux.js.org) applications
 * Full control over [suggestions rendering](#renderSuggestionProp)
@@ -257,7 +257,7 @@ All you have to do in this function is to set `suggestions` to `[]`.
 <a name="getSuggestionValueProp"></a>
 #### getSuggestionValue (required)
 
-When user navigates the suggestions using the <kbd>Up</kbd> and <kbd>Down</kbd> keys, [the input value should be set according to the highlighted suggestion](https://www.w3.org/TR/wai-aria-practices/#autocomplete). You design how suggestion is modelled. Therefore, it's your responsibility to tell Autosuggest how to map suggestions to input values.
+When user navigates the suggestions using the <kbd>Up</kbd> and <kbd>Down</kbd> keys, [the input value should be set according to the highlighted suggestion](https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete). You design how suggestion is modelled. Therefore, it's your responsibility to tell Autosuggest how to map suggestions to input values.
 
 This function gets the suggestion in question, and it should return a string. For example:
 
@@ -281,7 +281,7 @@ function renderSuggestion(suggestion, { query })
 where:
 
 * `suggestion` - The suggestion to render
-* `query` - Used to highlight the matching string. As user types in the input element, `query` will be equal to the trimmed value of the input. Then, if user interacts using the <kbd>Up</kbd> or <kbd>Down</kbd> keys, [the input element will get the value of the highlighted suggestion](https://www.w3.org/TR/wai-aria-practices/#autocomplete), but `query` will remain to be equal to the trimmed value of the input element prior to the <kbd>Up</kbd> and <kbd>Down</kbd> interactions.
+* `query` - Used to highlight the matching string. As user types in the input element, `query` will be equal to the trimmed value of the input. Then, if user interacts using the <kbd>Up</kbd> or <kbd>Down</kbd> keys, [the input element will get the value of the highlighted suggestion](https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete), but `query` will remain to be equal to the trimmed value of the input element prior to the <kbd>Up</kbd> and <kbd>Down</kbd> interactions.
 
 It should return a string or a `ReactElement`. For example:
 
@@ -458,7 +458,7 @@ function getSectionSuggestions(section) {
 
 You shouldn't specify `renderInputComponent` unless you want to customize the rendering of the input element.
 
-To keep Autosuggest [accessible](https://www.w3.org/TR/wai-aria-practices/#autocomplete), `renderInputComponent` MUST:
+To keep Autosuggest [accessible](https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete), `renderInputComponent` MUST:
 
 * render an input element
 * pass through all the provided `inputProps` to the input element

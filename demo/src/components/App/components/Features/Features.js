@@ -17,7 +17,7 @@ const Features = () => (
         <div className={styles.featureDescription}>
           <Link
             className={styles.link}
-            href="http://www.w3.org/TR/wai-aria-practices/#autocomplete"
+            href="https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete"
           >
             WAI-ARIA compliant
           </Link>
