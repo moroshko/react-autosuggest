@@ -18,6 +18,7 @@ import {
   clickEscape,
   clickEnter,
   clickDown,
+  clickUp,
   setInputValue,
   focusAndSetInputValue,
   clickClearButton
@@ -25,6 +26,7 @@ import {
 import AutosuggestApp, {
   onSuggestionsFetchRequested,
   onSuggestionSelected,
+  onSuggestionFocused,
   renderSectionTitle,
   getSectionSuggestions,
   setHighlightFirstSuggestion
@@ -82,6 +84,34 @@ describe('Autosuggest with multiSection={true}', () => {
           sectionIndex: 2
         })
       );
+    });
+  });
+
+  describe('onSuggestionFocused', () => {
+    beforeEach(() => {
+      onSuggestionFocused.reset();
+      focusAndSetInputValue('c');
+    });
+
+    it('should be called with the right paramter when Down is pressed', () => {
+      clickDown();
+      expect(onSuggestionFocused).to.have.been.calledOnce;
+      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'C', year: 1972 } });
+    });
+
+    it('should be called with the right parameter when Up is pressed', () => {
+      clickUp();
+      expect(onSuggestionFocused).to.have.been.calledOnce;
+      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'Clojure', year: 2007 } });
+    });
+
+    it('should be called with the right parameter when a combination of Up and Down is pressed', () => {
+      clickDown();
+      clickDown();
+      clickDown();
+      onSuggestionFocused.reset();
+      clickUp();
+      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'C#', year: 2000 } });
     });
   });
 

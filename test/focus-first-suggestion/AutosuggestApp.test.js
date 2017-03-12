@@ -19,7 +19,8 @@ import {
 } from '../helpers';
 import AutosuggestApp, {
   onChange,
-  onSuggestionSelected
+  onSuggestionSelected,
+  onSuggestionFocused
 } from './AutosuggestApp';
 
 describe('Autosuggest with highlightFirstSuggestion={true}', () => {
@@ -142,6 +143,18 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
         sectionIndex: null,
         method: 'enter'
       });
+    });
+  });
+
+  describe('onSuggestionFocused', () => {
+    beforeEach(() => {
+      onSuggestionFocused.reset();
+      focusAndSetInputValue('p');
+    });
+
+    it('should be called once with the right paramter when the first suggestion is autohighlighted', () => {
+      expect(onSuggestionFocused).to.have.been.calledOnce;
+      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'Perl', year: 1987 } });
     });
   });
 });

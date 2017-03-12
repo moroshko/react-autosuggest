@@ -38,7 +38,8 @@ import AutosuggestApp, {
   shouldRenderSuggestions,
   onSuggestionsFetchRequested,
   onSuggestionsClearRequested,
-  onSuggestionSelected
+  onSuggestionSelected,
+  onSuggestionFocused
 } from './AutosuggestApp';
 
 describe('Default Autosuggest', () => {
@@ -604,7 +605,62 @@ describe('Default Autosuggest', () => {
       onChange.reset();
       clearEvents();
       clickSuggestion(1);
-      expect(getEvents()).to.deep.equal(['onChange', 'onSuggestionSelected']);
+      expect(getEvents().filter(event => event !== 'onSuggestionFocused')).to.deep.equal(['onChange', 'onSuggestionSelected']);
+    });
+  });
+
+  describe('onSuggestionFocused', () => {
+    beforeEach(() => {
+      onSuggestionFocused.reset();
+      focusAndSetInputValue('j');
+    });
+
+    it('should be called once with the right parameter when first Down is pressed', () => {
+      clickDown();
+      expect(onSuggestionFocused).to.have.been.calledOnce;
+      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'Java', year: 1995 } });
+    });
+
+    it('should be called with the right parameter when Up is pressed', () => {
+      clickUp();
+      expect(onSuggestionFocused).to.have.been.calledOnce;
+      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'Javascript', year: 1995 } });
+    });
+
+    it('should be called with null value when no suggestion is highlighted', () => {
+      clickDown();
+      clickDown();
+      onSuggestionFocused.reset();
+      clickDown();
+      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: null });
+    });
+
+    it('should be called with the right parameter when a combination of Up and Down is pressed', () => {
+      clickDown();
+      clickDown();
+      onSuggestionFocused.reset();
+      clickUp();
+      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'Java', year: 1995 } });
+    });
+
+    it('should be called with the right parameter when mouse enters the first suggestion', () => {
+      mouseEnterSuggestion(0);
+      expect(onSuggestionFocused).to.have.been.calledOnce;
+      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'Java', year: 1995 } });
+    });
+
+    it('should be called with the right parameter when mouse enters', () => {
+      mouseEnterSuggestion(1);
+      expect(onSuggestionFocused).to.have.been.calledOnce;
+      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'Javascript', year: 1995 } });
+    });
+
+    it('should be called with null value when mouse leaves', () => {
+      mouseEnterSuggestion(0);
+      onSuggestionFocused.reset();
+      mouseLeaveSuggestion(0);
+      expect(onSuggestionFocused).to.have.been.calledOnce;
+      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: null });
     });
   });
 
