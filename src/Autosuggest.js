@@ -119,55 +119,33 @@ export default class Autosuggest extends Component {
     document.removeEventListener('mousedown', this.onDocumentMouseDown);
   }
 
-  inputFocused(shouldRender) {
-    this.setState({
-      isFocused: true,
-      isCollapsed: !shouldRender
-    });
-  }
-
-  inputBlurred(shouldRender) {
-    this.setState({
-      isFocused: false,
-      highlightedSectionIndex: null,
-      highlightedSuggestionIndex: null,
-      valueBeforeUpDown: null,
-      isCollapsed: !shouldRender
-    });
-  }
-
-  inputChanged(shouldRender) {
-    this.setState({
-      highlightedSectionIndex: null,
-      highlightedSuggestionIndex: null,
-      valueBeforeUpDown: null,
-      isCollapsed: !shouldRender
-    });
-  }
-
   updateHighlightedSuggestion(sectionIndex, suggestionIndex, prevValue) {
-    let { valueBeforeUpDown } = this.state;
+    this.setState(state => {
+      let { valueBeforeUpDown } = state;
 
-    if (suggestionIndex === null) {
-      valueBeforeUpDown = null;
-    } else if (valueBeforeUpDown === null && typeof prevValue !== 'undefined') {
-      valueBeforeUpDown = prevValue;
-    }
+      if (suggestionIndex === null) {
+        valueBeforeUpDown = null;
+      } else if (valueBeforeUpDown === null && typeof prevValue !== 'undefined') {
+        valueBeforeUpDown = prevValue;
+      }
 
-    this.setState({
-      highlightedSectionIndex: sectionIndex,
-      highlightedSuggestionIndex: suggestionIndex,
-      valueBeforeUpDown
+      return {
+        highlightedSectionIndex: sectionIndex,
+        highlightedSuggestionIndex: suggestionIndex,
+        valueBeforeUpDown
+      };
     });
   }
 
   resetHighlightedSuggestion(shouldResetValueBeforeUpDown = true) {
-    const { valueBeforeUpDown } = this.state;
+    this.setState(state => {
+      const { valueBeforeUpDown } = state;
 
-    this.setState({
-      highlightedSectionIndex: null,
-      highlightedSuggestionIndex: null,
-      valueBeforeUpDown: shouldResetValueBeforeUpDown ? null : valueBeforeUpDown
+      return {
+        highlightedSectionIndex: null,
+        highlightedSuggestionIndex: null,
+        valueBeforeUpDown: shouldResetValueBeforeUpDown ? null : valueBeforeUpDown
+      };
     });
   }
 
@@ -351,8 +329,16 @@ export default class Autosuggest extends Component {
     const { inputProps, shouldRenderSuggestions } = this.props;
     const { value, onBlur } = inputProps;
     const highlightedSuggestion = this.getHighlightedSuggestion();
+    const shouldRender = shouldRenderSuggestions(value);
 
-    this.inputBlurred(shouldRenderSuggestions(value));
+    this.setState({
+      isFocused: false,
+      highlightedSectionIndex: null,
+      highlightedSuggestionIndex: null,
+      valueBeforeUpDown: null,
+      isCollapsed: !shouldRender
+    });
+
     onBlur && onBlur(this.blurEvent, { highlightedSuggestion });
   };
 
@@ -408,7 +394,11 @@ export default class Autosuggest extends Component {
         if (!this.justSelectedSuggestion && !this.justClickedOnSuggestionsContainer) {
           const shouldRender = shouldRenderSuggestions(value);
 
-          this.inputFocused(shouldRender);
+          this.setState({
+            isFocused: true,
+            isCollapsed: !shouldRender
+          });
+
           onFocus && onFocus(event);
 
           if (shouldRender) {
@@ -434,7 +424,13 @@ export default class Autosuggest extends Component {
         const shouldRender = shouldRenderSuggestions(value);
 
         this.maybeCallOnChange(event, value, 'type');
-        this.inputChanged(shouldRender);
+
+        this.setState({
+          highlightedSectionIndex: null,
+          highlightedSuggestionIndex: null,
+          valueBeforeUpDown: null,
+          isCollapsed: !shouldRender
+        });
 
         if (shouldRender) {
           onSuggestionsFetchRequested({ value });
