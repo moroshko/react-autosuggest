@@ -23,6 +23,7 @@
     "prepublish": "npm run dist && npm run standalone"
   },
   "dependencies": {
+    "prop-types": "^15.5.8",
     "react-autowhatever": "^9.1.0",
     "shallow-equal": "^1.0.0"
   },
