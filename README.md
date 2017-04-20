@@ -1,4 +1,5 @@
 [![Build Status](https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg?style=flat-square)](https://codeship.com/projects/67868)
+[![Contributors](https://img.shields.io/github/contributors/moroshko/react-autosuggest.svg?style=flat-square)](https://github.com/moroshko/react-autosuggest/graphs/contributors)
 [![Coverage Status](https://img.shields.io/codecov/c/github/moroshko/react-autosuggest/master.svg?style=flat-square)](https://codecov.io/gh/moroshko/react-autosuggest)
 [![npms Score](https://badges.npms.io/react-autosuggest.svg?style=flat-square)](https://npms.io/search?q=react-autosuggest)
 
