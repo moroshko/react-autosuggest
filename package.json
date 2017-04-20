@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/index.js",
   "repository": {
