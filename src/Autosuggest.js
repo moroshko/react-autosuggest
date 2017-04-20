@@ -92,7 +92,7 @@ export default class Autosuggest extends Component {
 
   componentDidMount() {
     document.addEventListener('mousedown', this.onDocumentMouseDown);
-    
+
     this.input = this.autowhatever.input;
     this.suggestionsContainer = this.autowhatever.itemsContainer;
   }
