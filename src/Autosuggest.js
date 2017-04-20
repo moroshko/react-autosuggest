@@ -92,6 +92,9 @@ export default class Autosuggest extends Component {
 
   componentDidMount() {
     document.addEventListener('mousedown', this.onDocumentMouseDown);
+    
+    this.input = this.autowhatever.input;
+    this.suggestionsContainer = this.autowhatever.itemsContainer;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -254,12 +257,9 @@ export default class Autosuggest extends Component {
     return suggestions.length > 0 && shouldRenderSuggestions(value);
   }
 
-  storeReferences = autowhatever => {
+  storeAutowhateverRef = autowhatever => {
     if (autowhatever !== null) {
-      const { input, itemsContainer } = autowhatever;
-
-      this.input = input;
-      this.suggestionsContainer = itemsContainer;
+      this.autowhatever = autowhatever;
     }
   };
 
@@ -567,7 +567,7 @@ export default class Autosuggest extends Component {
         itemProps={this.itemProps}
         theme={mapToAutowhateverTheme(theme)}
         id={id}
-        ref={this.storeReferences}
+        ref={this.storeAutowhateverRef}
       />
     );
   }
