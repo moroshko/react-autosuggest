@@ -124,7 +124,9 @@ export default class ScrollableContainer extends Component {
           contentLabel="Modal"
           onRequestClose={this.closeModal}
           shouldCloseOnOverlayClick={false}
-          closeTimeoutMS={1/* otherwise the modal is not closed when suggestion is selected by pressing Enter */}
+          closeTimeoutMS={
+            1 /* otherwise the modal is not closed when suggestion is selected by pressing Enter */
+          }
           style={modalStyle}
         >
           <div className={styles.modalTitle}>

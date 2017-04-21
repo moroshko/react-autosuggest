@@ -22,7 +22,10 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]__[local]___[hash:base64:5]!postcss!less'),
+        loader: ExtractTextPlugin.extract(
+          'style',
+          'css?modules&localIdentName=[name]__[local]___[hash:base64:5]!postcss!less'
+        ),
         exclude: /node_modules/
       },
       {

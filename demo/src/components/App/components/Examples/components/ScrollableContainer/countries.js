@@ -217,7 +217,7 @@ export default [
   },
   {
     code: 'ci',
-    name: 'Cote d\'Ivoire'
+    name: "Cote d'Ivoire"
   },
   {
     code: 'hr',
@@ -469,7 +469,7 @@ export default [
   },
   {
     code: 'kp',
-    name: 'Korea, Democratic People\'s Republic of'
+    name: "Korea, Democratic People's Republic of"
   },
   {
     code: 'kr',
@@ -485,7 +485,7 @@ export default [
   },
   {
     code: 'la',
-    name: 'Lao People\'s Democratic Republic'
+    name: "Lao People's Democratic Republic"
   },
   {
     code: 'lv',

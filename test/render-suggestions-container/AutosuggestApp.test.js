@@ -9,9 +9,7 @@ import {
   getElementWithClass,
   setInputValue
 } from '../helpers';
-import AutosuggestApp, {
-  renderSuggestionsContainer
-} from './AutosuggestApp';
+import AutosuggestApp, { renderSuggestionsContainer } from './AutosuggestApp';
 
 describe('Autosuggest with renderSuggestionsContainer', () => {
   beforeEach(() => {
@@ -21,7 +19,9 @@ describe('Autosuggest with renderSuggestionsContainer', () => {
   });
 
   it('should render whatever renderSuggestionsContainer returns', () => {
-    expect(getElementWithClass('my-suggestions-container-footer')).not.to.equal(null);
+    expect(getElementWithClass('my-suggestions-container-footer')).not.to.equal(
+      null
+    );
     expect(getInnerHTML(getElementWithClass('my-query'))).to.equal('c');
   });
 

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import sinon from 'sinon';
 import Autosuggest from '../../src/Autosuggest';
 import languages from '../plain-list/languages';
-import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
+import {
+  escapeRegexCharacters
+} from '../../demo/src/components/utils/utils.js';
 
 const getMatchingLanguages = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -18,9 +20,7 @@ export const getSuggestionValue = sinon.spy(suggestion => {
 });
 
 export const renderSuggestion = sinon.spy(suggestion => {
-  return (
-    <span>{suggestion.name}</span>
-  );
+  return <span>{suggestion.name}</span>;
 });
 
 export const onChange = sinon.spy((event, { newValue }) => {

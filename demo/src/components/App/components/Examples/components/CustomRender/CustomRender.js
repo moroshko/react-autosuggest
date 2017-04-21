@@ -24,7 +24,8 @@ const getSuggestions = value => {
   return people.filter(person => regex.test(getSuggestionValue(person)));
 };
 
-const getSuggestionValue = suggestion => `${suggestion.first} ${suggestion.last}`;
+const getSuggestionValue = suggestion =>
+  `${suggestion.first} ${suggestion.last}`;
 
 const renderSuggestion = (suggestion, { query }) => {
   const suggestionText = `${suggestion.first} ${suggestion.last}`;
@@ -34,15 +35,11 @@ const renderSuggestion = (suggestion, { query }) => {
   return (
     <span className={theme.suggestionContent + ' ' + theme[suggestion.twitter]}>
       <span className={theme.name}>
-        {
-          parts.map((part, index) => {
-            const className = part.highlight ? theme.highlight : null;
+        {parts.map((part, index) => {
+          const className = part.highlight ? theme.highlight : null;
 
-            return (
-              <span className={className} key={index}>{part.text}</span>
-            );
-          })
-        }
+          return <span className={className} key={index}>{part.text}</span>;
+        })}
       </span>
     </span>
   );
@@ -83,7 +80,7 @@ export default class CustomRender extends Component {
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Type \'c\'',
+      placeholder: "Type 'c'",
       value,
       onChange: this.onChange
     };

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Autosuggest from '../../src/Autosuggest';
 import languages from '../plain-list/languages';
-import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
+import {
+  escapeRegexCharacters
+} from '../../demo/src/components/utils/utils.js';
 
 const getMatchingLanguages = value => {
   const escapedValue = escapeRegexCharacters(value.trim());

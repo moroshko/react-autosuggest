@@ -4,7 +4,9 @@ import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import Autosuggest from '../../src/Autosuggest';
 import languages from './languages';
-import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
+import {
+  escapeRegexCharacters
+} from '../../demo/src/components/utils/utils.js';
 import { addEvent } from '../helpers';
 
 const getMatchingLanguages = value => {
@@ -25,9 +27,9 @@ export const renderSuggestion = sinon.spy((suggestion, { query }) => {
   const parts = parse(suggestion.name, matches);
 
   return parts.map((part, index) => {
-    return part.highlight ?
-      <strong key={index}>{part.text}</strong> :
-      <span key={index}>{part.text}</span>;
+    return part.highlight
+      ? <strong key={index}>{part.text}</strong>
+      : <span key={index}>{part.text}</span>;
   });
 });
 

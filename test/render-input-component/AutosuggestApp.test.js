@@ -13,7 +13,7 @@ describe('Autosuggest with renderInputComponent', () => {
   });
 
   describe('initially', () => {
-    it('should set input\'s id', () => {
+    it("should set input's id", () => {
       expectInputAttribute('id', 'my-custom-input');
     });
 

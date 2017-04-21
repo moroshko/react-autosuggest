@@ -76,10 +76,9 @@ const getSuggestions = value => {
 
 const getSuggestionValue = suggestion => suggestion.name;
 
-const renderSuggestion = suggestion => (
-  <span>{suggestion.name}</span>
-);
+const renderSuggestion = suggestion => <span>{suggestion.name}</span>;
 
+// prettier-ignore
 class App extends React.Component { // eslint-disable-line no-undef
   constructor() {
     super();
@@ -111,7 +110,7 @@ class App extends React.Component { // eslint-disable-line no-undef
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Type \'c\'',
+      placeholder: "Type 'c'",
       value,
       onChange: this.onChange
     };

@@ -5,7 +5,4 @@ import App from 'App/App';
 
 es6promise.polyfill(); // Required, because `Promise` is undefined in IE.
 
-render(
-  <App />,
-  document.getElementById('demo')
-);
+render(<App />, document.getElementById('demo'));

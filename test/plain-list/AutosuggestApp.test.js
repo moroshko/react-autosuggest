@@ -323,19 +323,28 @@ describe('Default Autosuggest', () => {
     it('should be called once with the right parameters when Up is pressed', () => {
       clickUp();
       expect(getSuggestionValue).to.have.been.calledOnce;
-      expect(getSuggestionValue).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 });
+      expect(getSuggestionValue).to.have.been.calledWithExactly({
+        name: 'Ruby',
+        year: 1995
+      });
     });
 
     it('should be called once with the right parameters when Down is pressed', () => {
       clickDown();
       expect(getSuggestionValue).to.have.been.calledOnce;
-      expect(getSuggestionValue).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 });
+      expect(getSuggestionValue).to.have.been.calledWithExactly({
+        name: 'Ruby',
+        year: 1995
+      });
     });
 
     it('should be called once with the right parameters when suggestion is clicked', () => {
       clickSuggestion(0);
       expect(getSuggestionValue).to.have.been.calledOnce;
-      expect(getSuggestionValue).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 });
+      expect(getSuggestionValue).to.have.been.calledWithExactly({
+        name: 'Ruby',
+        year: 1995
+      });
     });
 
     it('should not be called when input is focused', () => {
@@ -353,10 +362,16 @@ describe('Default Autosuggest', () => {
     });
 
     it('should be called with the right parameters', () => {
-      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, { query: 'r' });
+      expect(renderSuggestion).to.have.been.calledWithExactly(
+        { name: 'Ruby', year: 1995 },
+        { query: 'r' }
+      );
       renderSuggestion.reset();
       clickDown();
-      expect(renderSuggestion).to.have.been.calledWithExactly({ name: 'Ruby', year: 1995 }, { query: 'r' });
+      expect(renderSuggestion).to.have.been.calledWithExactly(
+        { name: 'Ruby', year: 1995 },
+        { query: 'r' }
+      );
     });
 
     it('should be called once per suggestion', () => {
@@ -372,14 +387,18 @@ describe('Default Autosuggest', () => {
     });
 
     it('return value should be used to render suggestions', () => {
-      expect(getInnerHTML(getSuggestion(0))).to.equal('<strong>R</strong><span>uby</span>');
+      expect(getInnerHTML(getSuggestion(0))).to.equal(
+        '<strong>R</strong><span>uby</span>'
+      );
     });
 
     it('should not change the query when mouse leaves a suggestion', () => {
       clickDown();
       mouseEnterSuggestion(0);
       mouseLeaveSuggestion(0);
-      expect(getInnerHTML(getSuggestion(0))).to.equal('<strong>R</strong><span>uby</span>');
+      expect(getInnerHTML(getSuggestion(0))).to.equal(
+        '<strong>R</strong><span>uby</span>'
+      );
     });
   });
 
@@ -542,7 +561,9 @@ describe('Default Autosuggest', () => {
     it('should be called once with the right parameters when suggestion is clicked', () => {
       clickSuggestion(1);
       expect(onSuggestionSelected).to.have.been.calledOnce;
-      expect(onSuggestionSelected).to.have.been.calledWithExactly(syntheticEventMatcher, {
+      expect(
+        onSuggestionSelected
+      ).to.have.been.calledWithExactly(syntheticEventMatcher, {
         suggestion: { name: 'Javascript', year: 1995 },
         suggestionValue: 'Javascript',
         suggestionIndex: 1,
@@ -555,7 +576,9 @@ describe('Default Autosuggest', () => {
       clickDown();
       clickEnter();
       expect(onSuggestionSelected).to.have.been.calledOnce;
-      expect(onSuggestionSelected).to.have.been.calledWithExactly(syntheticEventMatcher, {
+      expect(
+        onSuggestionSelected
+      ).to.have.been.calledWithExactly(syntheticEventMatcher, {
         suggestion: { name: 'Java', year: 1995 },
         suggestionValue: 'Java',
         suggestionIndex: 0,
@@ -591,7 +614,9 @@ describe('Default Autosuggest', () => {
       onSuggestionsFetchRequested.reset();
       setInputValue('j');
       expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
-      expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({ value: 'j' });
+      expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({
+        value: 'j'
+      });
     });
 
     it('should be called once with the right parameters when Up is pressed to reveal suggestions', () => {
@@ -600,7 +625,9 @@ describe('Default Autosuggest', () => {
       onSuggestionsFetchRequested.reset();
       clickDown();
       expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
-      expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({ value: 'Javascript' });
+      expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({
+        value: 'Javascript'
+      });
     });
 
     it('should not be called when input gets focus and shouldRenderSuggestions returns false', () => {
@@ -742,7 +769,7 @@ describe('Default Autosuggest', () => {
 
   describe('aria attributes', () => {
     describe('initially', () => {
-      describe('should set input\'s', () => {
+      describe("should set input's", () => {
         it('role to "combobox"', () => {
           expectInputAttribute('role', 'combobox');
         });
@@ -760,7 +787,7 @@ describe('Default Autosuggest', () => {
         });
       });
 
-      describe('should not set input\'s', () => {
+      describe("should not set input's", () => {
         it('aria-activedescendant', () => {
           expectInputAttribute('aria-activedescendant', null);
         });
@@ -776,11 +803,14 @@ describe('Default Autosuggest', () => {
         expectInputAttribute('aria-expanded', 'true');
       });
 
-      it('input\'s aria-owns should be equal to suggestions container id', () => {
-        expectInputAttribute('aria-owns', getSuggestionsContainerAttribute('id'));
+      it("input's aria-owns should be equal to suggestions container id", () => {
+        expectInputAttribute(
+          'aria-owns',
+          getSuggestionsContainerAttribute('id')
+        );
       });
 
-      it('input\'s aria-activedescendant should be equal to the highlighted suggestion id when using keyboard', () => {
+      it("input's aria-activedescendant should be equal to the highlighted suggestion id when using keyboard", () => {
         clickDown();
         expectInputAttribute('aria-activedescendant', getSuggestion(0).id);
         clickDown();
@@ -789,7 +819,7 @@ describe('Default Autosuggest', () => {
         expectInputAttribute('aria-activedescendant', null);
       });
 
-      it('input\'s aria-activedescendant should be equal to the highlighted suggestion id when using mouse', () => {
+      it("input's aria-activedescendant should be equal to the highlighted suggestion id when using mouse", () => {
         mouseEnterSuggestion(0);
         expectInputAttribute('aria-activedescendant', getSuggestion(0).id);
         mouseLeaveSuggestion(0);

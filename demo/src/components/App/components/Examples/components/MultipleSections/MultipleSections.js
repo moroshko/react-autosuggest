@@ -23,7 +23,9 @@ const getSuggestions = value => {
     .map(section => {
       return {
         title: section.title,
-        languages: section.languages.filter(language => regex.test(language.name))
+        languages: section.languages.filter(language =>
+          regex.test(language.name)
+        )
       };
     })
     .filter(section => section.languages.length > 0);
@@ -31,13 +33,9 @@ const getSuggestions = value => {
 
 const getSuggestionValue = suggestion => suggestion.name;
 
-const renderSuggestion = suggestion => (
-  <span>{suggestion.name}</span>
-);
+const renderSuggestion = suggestion => <span>{suggestion.name}</span>;
 
-const renderSectionTitle = section => (
-  <strong>{section.title}</strong>
-);
+const renderSectionTitle = section => <strong>{section.title}</strong>;
 
 const getSectionSuggestions = section => section.languages;
 
@@ -72,7 +70,7 @@ export default class MultipleSections extends Component {
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Type \'c\'',
+      placeholder: "Type 'c'",
       value,
       onChange: this.onChange
     };
