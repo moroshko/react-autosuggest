@@ -356,6 +356,7 @@ where:
   * `'click'` - user clicked (or tapped) on the suggestion
   * `'enter'` - user selected the suggestion using <kbd>Enter</kbd>
   * `'tab'` - user selected the suggestion using <kbd>Tab</kbd>
+  * `'ArrowRight'` - user selected the suggestion using <kbd>Right</kbd> key
 
 <a name="shouldRenderSuggestionsProp"></a>
 #### shouldRenderSuggestions (optional)

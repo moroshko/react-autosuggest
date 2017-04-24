@@ -191,6 +191,12 @@ export const clickTab = () => {
   clock.tick(1);
 };
 
+export const clickRight = (count = 1) => {
+  for (let i = 0; i < count; i++) {
+    Simulate.keyDown(input, { key: 'ArrowRight' });
+  }
+};
+
 export const clickDown = (count = 1) => {
   for (let i = 0; i < count; i++) {
     Simulate.keyDown(input, { key: 'ArrowDown' });

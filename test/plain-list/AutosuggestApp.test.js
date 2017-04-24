@@ -22,6 +22,7 @@ import {
   clickEscape,
   clickEnter,
   clickTab,
+  clickRight,
   clickDown,
   clickUp,
   setInputValue,
@@ -601,6 +602,32 @@ describe('Default Autosuggest', () => {
       clickDown();
       clickDown();
       clickTab();
+      expect(onSuggestionSelected).not.to.have.been.called;
+    });
+
+    it('should be called once with the right parameters when Right Arrow is pressed and suggestion is highlighted', () => {
+      clickDown();
+      clickRight();
+      expect(onSuggestionSelected).to.have.been.calledOnce;
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(syntheticEventMatcher, {
+        suggestion: { name: 'Java', year: 1995 },
+        suggestionValue: 'Java',
+        suggestionIndex: 0,
+        sectionIndex: null,
+        method: 'enter'
+      });
+    });
+
+    it('should not be called when Right Arrow is pressed and there is no highlighted suggestion', () => {
+      clickRight();
+      expect(onSuggestionSelected).not.to.have.been.called;
+    });
+
+    it('should not be called when Right Arrow is pressed and there is no highlighted suggestion after Up/Down interaction', () => {
+      clickDown();
+      clickDown();
+      clickDown();
+      clickRight();
       expect(onSuggestionSelected).not.to.have.been.called;
     });
 
