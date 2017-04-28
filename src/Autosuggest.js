@@ -476,6 +476,7 @@ export default class Autosuggest extends Component {
           return;
         }
 
+        event.persist();
         this.blurEvent = event;
 
         if (!this.justSelectedSuggestion) {
