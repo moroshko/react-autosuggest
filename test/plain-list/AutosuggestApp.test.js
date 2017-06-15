@@ -364,13 +364,13 @@ describe('Default Autosuggest', () => {
     it('should be called with the right parameters', () => {
       expect(renderSuggestion).to.have.been.calledWithExactly(
         { name: 'Ruby', year: 1995 },
-        { query: 'r' }
+        { query: 'r', isHighlighted: false }
       );
       renderSuggestion.reset();
       clickDown();
       expect(renderSuggestion).to.have.been.calledWithExactly(
         { name: 'Ruby', year: 1995 },
-        { query: 'r' }
+        { query: 'r', isHighlighted: true }
       );
     });
 
