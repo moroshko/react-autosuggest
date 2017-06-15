@@ -6,13 +6,12 @@ import Features from 'Features/Features';
 import Examples from 'Examples/Examples';
 import Footer from 'Footer/Footer';
 
-const App = () => (
+const App = () =>
   <div className={styles.container}>
     <Header />
     <Features />
     <Examples />
     <Footer />
-  </div>
-);
+  </div>;
 
 export default App;

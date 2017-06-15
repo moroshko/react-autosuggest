@@ -107,7 +107,8 @@ export default class ScrollableContainer extends Component {
             Scrollable container
           </div>
           <div className={styles.description}>
-            When the suggestions list is long, you may want to make it scrollable.
+            When the suggestions list is long, you may want to make it
+            scrollable.
             Note that the suggestions are rendered even when the input field
             is not focused.
           </div>

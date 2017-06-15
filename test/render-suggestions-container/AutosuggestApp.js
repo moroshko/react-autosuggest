@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import sinon from 'sinon';
 import Autosuggest from '../../src/Autosuggest';
 import languages from '../plain-list/languages';
-import {
-  escapeRegexCharacters
-} from '../../demo/src/components/utils/utils.js';
+import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
 
 const getMatchingLanguages = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -38,14 +36,13 @@ const getSuggestionValue = suggestion => suggestion.name;
 const renderSuggestion = suggestion => suggestion.name;
 
 export const renderSuggestionsContainer = sinon.spy(
-  ({ containerProps, children, query }) => (
+  ({ containerProps, children, query }) =>
     <div {...containerProps}>
       {children}
       <div className="my-suggestions-container-footer">
         Press Enter to search <strong className="my-query">{query}</strong>
       </div>
     </div>
-  )
 );
 
 export default class AutosuggestApp extends Component {

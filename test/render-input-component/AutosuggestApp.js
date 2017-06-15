@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import Autosuggest from '../../src/Autosuggest';
 import languages from '../plain-list/languages';
-import {
-  escapeRegexCharacters
-} from '../../demo/src/components/utils/utils.js';
+import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
 
 const getMatchingLanguages = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -36,11 +34,10 @@ const getSuggestionValue = suggestion => suggestion.name;
 
 const renderSuggestion = suggestion => suggestion.name;
 
-const renderInputComponent = inputProps => (
+const renderInputComponent = inputProps =>
   <div>
     <input id="my-custom-input" {...inputProps} />
-  </div>
-);
+  </div>;
 
 export default class AutosuggestApp extends Component {
   constructor() {

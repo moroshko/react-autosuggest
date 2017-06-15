@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import sinon from 'sinon';
 import Autosuggest from '../../src/Autosuggest';
 import languages from '../plain-list/languages';
-import {
-  escapeRegexCharacters
-} from '../../demo/src/components/utils/utils.js';
+import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
 import { addEvent } from '../helpers';
 
 const getMatchingLanguages = value => {
