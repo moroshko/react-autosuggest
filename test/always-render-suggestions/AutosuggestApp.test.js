@@ -1,5 +1,5 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import TestUtils from 'react-dom/test-utils';
 import {
   init,
   expectInputValue,
@@ -17,8 +17,20 @@ import {
 import AutosuggestApp from './AutosuggestApp';
 
 const allSuggestions = [
-  'C', 'C#', 'C++', 'Clojure', 'Elm', 'Go', 'Haskell', 'Java',
-  'Javascript', 'Perl', 'PHP', 'Python', 'Ruby', 'Scala'
+  'C',
+  'C#',
+  'C++',
+  'Clojure',
+  'Elm',
+  'Go',
+  'Haskell',
+  'Java',
+  'Javascript',
+  'Perl',
+  'PHP',
+  'Python',
+  'Ruby',
+  'Scala'
 ];
 
 describe('Autosuggest with alwaysRenderSuggestions={true}', () => {

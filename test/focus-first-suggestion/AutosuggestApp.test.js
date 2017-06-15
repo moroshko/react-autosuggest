@@ -1,5 +1,5 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import TestUtils from 'react-dom/test-utils';
 import { expect } from 'chai';
 import {
   init,
@@ -133,7 +133,9 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
     it('should be called once with the right parameters when Enter is pressed after autohighlight', () => {
       clickEnter();
       expect(onSuggestionSelected).to.have.been.calledOnce;
-      expect(onSuggestionSelected).to.have.been.calledWithExactly(syntheticEventMatcher, {
+      expect(
+        onSuggestionSelected
+      ).to.have.been.calledWithExactly(syntheticEventMatcher, {
         suggestion: { name: 'Perl', year: 1987 },
         suggestionValue: 'Perl',
         suggestionIndex: 0,

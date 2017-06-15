@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "9.0.0",
+  "version": "9.1.0",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/index.js",
   "repository": {
@@ -10,72 +10,103 @@
   "author": "Misha Moroshko <michael.moroshko@gmail.com>",
   "scripts": {
     "start": "mkdir -p demo/dist && npm run copy-static-files && node server",
+    "prettier": "prettier --single-quote --write \".*.js\" \"*.js\" \"demo/src/**/*.js\" \"demo/standalone/app.js\" \"src/**/*.js\" \"test/**/*.js\"",
     "lint": "eslint src test demo/src demo/standalone/app.js server.js webpack.*.js",
     "test": "nyc mocha \"test/**/*.test.js\"",
     "copy-static-files": "cp demo/src/index.html demo/src/components/App/components/Examples/components/Basic/autosuggest.css demo/dist/",
     "dist": "rm -rf dist && mkdir dist && babel src -d dist",
     "demo-dist": "rm -rf demo/dist && mkdir demo/dist && npm run copy-static-files && cross-env BABEL_ENV=production webpack --config webpack.gh-pages.config.js",
     "standalone": "cross-env BABEL_ENV=production webpack --config webpack.standalone.config.js && webpack --config webpack.standalone-demo.config.js",
-    "prebuild": "npm run lint && npm test",
+    "prebuild": "npm run prettier && npm run lint && npm test",
     "build": "npm run dist && npm run standalone",
     "gh-pages-build": "npm run prebuild && npm run demo-dist",
     "postversion": "git push && git push --tags",
-    "prepublish": "npm run dist && npm run standalone"
+    "prepublish": "npm run dist && npm run standalone",
+    "precommit": "lint-staged"
   },
   "dependencies": {
-    "react-autowhatever": "^9.1.0",
+    "prop-types": "^15.5.10",
+    "react-autowhatever": "^10.1.0",
     "shallow-equal": "^1.0.0"
   },
   "peerDependencies": {
-    "react": ">=0.14.7 || >=16.0.0-alpha.2"
+    "react": ">=0.14.7"
   },
   "devDependencies": {
-    "autoprefixer": "^6.7.5",
+    "autoprefixer": "^6.7.7",
     "autosuggest-highlight": "^3.1.0",
-    "babel-cli": "^6.23.0",
-    "babel-core": "^6.23.1",
-    "babel-eslint": "^7.1.1",
-    "babel-loader": "^6.3.2",
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.25.0",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^6.4.1",
     "babel-plugin-react-transform": "^2.0.2",
-    "babel-plugin-transform-react-remove-prop-types": "^0.3.2",
-    "babel-preset-es2015": "^6.22.0",
-    "babel-preset-react": "^6.23.0",
-    "babel-preset-stage-0": "^6.22.0",
-    "babel-register": "^6.23.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.6",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.24.1",
     "chai": "^3.5.0",
     "cross-env": "^3.1.4",
-    "css-loader": "^0.26.2",
-    "es6-promise": "^4.0.5",
-    "eslint": "^3.16.1",
-    "eslint-plugin-react": "6.10.0",
+    "css-loader": "^0.28.4",
+    "es6-promise": "^4.1.0",
+    "eslint": "^3.19.0",
+    "eslint-plugin-react": "6.10.3",
     "extract-text-webpack-plugin": "^1.0.1",
-    "file-loader": "^0.10.1",
-    "ismobilejs": "^0.4.0",
+    "file-loader": "^0.11.2",
+    "husky": "^0.13.4",
+    "ismobilejs": "^0.4.1",
     "isomorphic-fetch": "^2.2.1",
-    "jsdom": "^9.11.0",
+    "jsdom": "^9.12.0",
     "less": "^2.7.2",
     "less-loader": "^2.2.3",
-    "mocha": "^3.2.0",
+    "lint-staged": "^3.6.1",
+    "mocha": "^3.4.2",
     "nyc": "^10.1.2",
     "openurl": "^1.1.1",
-    "postcss-loader": "^1.3.2",
-    "react": "^16.0.0-alpha.2",
-    "react-addons-test-utils": "^16.0.0-alpha.2",
-    "react-dom": "^16.0.0-alpha.2",
-    "react-modal": "^1.6.5",
+    "postcss-loader": "^1.3.3",
+    "prettier": "^1.4.4",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-modal": "^1.7.7",
     "react-transform-hmr": "^1.0.4",
     "sinon": "^1.17.7",
-    "sinon-chai": "^2.8.0",
-    "style-loader": "^0.13.2",
+    "sinon-chai": "^2.11.0",
+    "style-loader": "^0.18.2",
     "svgo": "^0.7.2",
-    "svgo-loader": "^1.1.2",
-    "url-loader": "^0.5.8",
+    "svgo-loader": "^1.2.1",
+    "url-loader": "^0.5.9",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2"
   },
   "files": [
     "dist"
   ],
+  "lint-staged": {
+    ".*.js": [
+      "npm run prettier",
+      "git add"
+    ],
+    "*.js": [
+      "npm run prettier",
+      "git add"
+    ],
+    "demo/src/**/*.js": [
+      "npm run prettier",
+      "git add"
+    ],
+    "demo/standalone/app.js": [
+      "npm run prettier",
+      "git add"
+    ],
+    "src/**/*.js": [
+      "npm run prettier",
+      "git add"
+    ],
+    "test/**/*.js": [
+      "npm run prettier",
+      "git add"
+    ]
+  },
   "keywords": [
     "autosuggest",
     "autocomplete",

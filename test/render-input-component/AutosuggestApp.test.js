@@ -1,5 +1,5 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import TestUtils from 'react-dom/test-utils';
 import {
   init,
   expectInputAttribute,
@@ -13,7 +13,7 @@ describe('Autosuggest with renderInputComponent', () => {
   });
 
   describe('initially', () => {
-    it('should set input\'s id', () => {
+    it("should set input's id", () => {
       expectInputAttribute('id', 'my-custom-input');
     });
 

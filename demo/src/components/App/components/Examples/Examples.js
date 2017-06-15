@@ -6,7 +6,7 @@ import MultipleSections from 'MultipleSections/MultipleSections';
 import CustomRender from 'CustomRender/CustomRender';
 import ScrollableContainer from 'ScrollableContainer/ScrollableContainer';
 
-const Examples = () => (
+const Examples = () =>
   <div className={styles.container}>
     <h2 className={styles.header}>
       Examples
@@ -15,7 +15,6 @@ const Examples = () => (
     <MultipleSections />
     <CustomRender />
     <ScrollableContainer />
-  </div>
-);
+  </div>;
 
 export default Examples;

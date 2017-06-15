@@ -1,9 +1,11 @@
 [![Build Status](https://img.shields.io/codeship/41810250-aa07-0132-fbf4-4e62e8945e03/master.svg?style=flat-square)](https://codeship.com/projects/67868)
+[![Contributors](https://img.shields.io/github/contributors/moroshko/react-autosuggest.svg?style=flat-square)](https://github.com/moroshko/react-autosuggest/graphs/contributors)
 [![Coverage Status](https://img.shields.io/codecov/c/github/moroshko/react-autosuggest/master.svg?style=flat-square)](https://codecov.io/gh/moroshko/react-autosuggest)
-[![npms Score](https://badges.npms.io/react.svg?style=flat-square)](https://npms.io/search?q=react-autosuggest)
+[![npms Score](https://badges.npms.io/react-autosuggest.svg?style=flat-square)](https://npms.io/search?q=react-autosuggest)
 
 [![npm Downloads](https://img.shields.io/npm/dm/react-autosuggest.svg?style=flat-square)](https://npmjs.org/package/react-autosuggest)
 [![npm Version](https://img.shields.io/npm/v/react-autosuggest.svg?style=flat-square)](https://npmjs.org/package/react-autosuggest)
+![gzip size](http://img.badgesize.io/https://unpkg.com/react-autosuggest/dist/standalone/autosuggest.min.js?compression=gzip&style=flat-square)
 
 # React Autosuggest
 
@@ -275,13 +277,14 @@ Use your imagination to define how suggestions are rendered.
 The signature is:
 
 ```js
-function renderSuggestion(suggestion, { query })
+function renderSuggestion(suggestion, { query, isHighlighted })
 ```
 
 where:
 
 * `suggestion` - The suggestion to render
 * `query` - Used to highlight the matching string. As user types in the input element, `query` will be equal to the trimmed value of the input. Then, if user interacts using the <kbd>Up</kbd> or <kbd>Down</kbd> keys, [the input element will get the value of the highlighted suggestion](https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete), but `query` will remain to be equal to the trimmed value of the input element prior to the <kbd>Up</kbd> and <kbd>Down</kbd> interactions.
+* `isHighlighted` - Whether or not the suggestion is highlighted.
 
 It should return a string or a `ReactElement`. For example:
 

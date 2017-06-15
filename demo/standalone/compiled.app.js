@@ -1,144 +1,199 @@
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
+/******/ (function(modules) {
+  // webpackBootstrap
+  /******/ // The module cache
+  /******/ var installedModules = {}; // The require function
 
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
+  /******/ /******/ function __webpack_require__(moduleId) {
+    /******/ // Check if module is in cache
+    /******/ if (installedModules[moduleId])
+      /******/ return installedModules[moduleId].exports; // Create a new module (and put it into the cache)
 
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
-/******/ 			return installedModules[moduleId].exports;
+    /******/ /******/ var module = (installedModules[moduleId] = {
+      /******/ exports: {},
+      /******/ id: moduleId,
+      /******/ loaded: false
+      /******/
+    }); // Execute the module function
 
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
-/******/ 		};
+    /******/ /******/ modules[moduleId].call(
+      module.exports,
+      module,
+      module.exports,
+      __webpack_require__
+    ); // Flag the module as loaded
 
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+    /******/ /******/ module.loaded = true; // Return the exports of the module
 
-/******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
+    /******/ /******/ return module.exports;
+    /******/
+  } // expose the modules object (__webpack_modules__)
 
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
+  /******/ /******/ __webpack_require__.m = modules; // expose the module cache
 
+  /******/ /******/ __webpack_require__.c = installedModules; // __webpack_public_path__
 
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
+  /******/ /******/ __webpack_require__.p = ''; // Load entry module and return exports
 
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
+  /******/ /******/ return __webpack_require__(0);
+  /******/
+})(
+  /************************************************************************/
+  /******/ [
+    /* 0 */
+    /***/ function(module, exports, __webpack_require__) {
+      module.exports = __webpack_require__(1);
 
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+      /***/
+    },
+    /* 1 */
+    /***/ function(module, exports) {
+      'use strict';
+      var _createClass = (function() {
+        function defineProperties(target, props) {
+          for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor) descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+          }
+        }
+        return function(Constructor, protoProps, staticProps) {
+          if (protoProps) defineProperties(Constructor.prototype, protoProps);
+          if (staticProps) defineProperties(Constructor, staticProps);
+          return Constructor;
+        };
+      })();
 
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports, __webpack_require__) {
+      function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+          throw new TypeError('Cannot call a class as a function');
+        }
+      }
 
-	module.exports = __webpack_require__(1);
+      function _possibleConstructorReturn(self, call) {
+        if (!self) {
+          throw new ReferenceError(
+            "this hasn't been initialised - super() hasn't been called"
+          );
+        }
+        return call && (typeof call === 'object' || typeof call === 'function')
+          ? call
+          : self;
+      }
 
+      function _inherits(subClass, superClass) {
+        if (typeof superClass !== 'function' && superClass !== null) {
+          throw new TypeError(
+            'Super expression must either be null or a function, not ' +
+              typeof superClass
+          );
+        }
+        subClass.prototype = Object.create(superClass && superClass.prototype, {
+          constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+          }
+        });
+        if (superClass)
+          Object.setPrototypeOf
+            ? Object.setPrototypeOf(subClass, superClass)
+            : (subClass.__proto__ = superClass);
+      }
 
-/***/ },
-/* 1 */
-/***/ function(module, exports) {
+      /* eslint-disable react/react-in-jsx-scope */
 
-	'use strict';
+      var languages = [
+        {
+          name: 'C',
+          year: 1972
+        },
+        {
+          name: 'C#',
+          year: 2000
+        },
+        {
+          name: 'C++',
+          year: 1983
+        },
+        {
+          name: 'Clojure',
+          year: 2007
+        },
+        {
+          name: 'Elm',
+          year: 2012
+        },
+        {
+          name: 'Go',
+          year: 2009
+        },
+        {
+          name: 'Haskell',
+          year: 1990
+        },
+        {
+          name: 'Java',
+          year: 1995
+        },
+        {
+          name: 'Javascript',
+          year: 1995
+        },
+        {
+          name: 'Perl',
+          year: 1987
+        },
+        {
+          name: 'PHP',
+          year: 1995
+        },
+        {
+          name: 'Python',
+          year: 1991
+        },
+        {
+          name: 'Ruby',
+          year: 1995
+        },
+        {
+          name: 'Scala',
+          year: 2003
+        }
+      ];
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+      // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters
+      var escapeRegexCharacters = function escapeRegexCharacters(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      };
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+      var getSuggestions = function getSuggestions(value) {
+        var escapedValue = escapeRegexCharacters(value.trim());
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+        if (escapedValue === '') {
+          return [];
+        }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+        var regex = new RegExp('^' + escapedValue, 'i');
 
-	/* eslint-disable react/react-in-jsx-scope */
+        return languages.filter(function(language) {
+          return regex.test(language.name);
+        });
+      };
 
-	var languages = [{
-	  name: 'C',
-	  year: 1972
-	}, {
-	  name: 'C#',
-	  year: 2000
-	}, {
-	  name: 'C++',
-	  year: 1983
-	}, {
-	  name: 'Clojure',
-	  year: 2007
-	}, {
-	  name: 'Elm',
-	  year: 2012
-	}, {
-	  name: 'Go',
-	  year: 2009
-	}, {
-	  name: 'Haskell',
-	  year: 1990
-	}, {
-	  name: 'Java',
-	  year: 1995
-	}, {
-	  name: 'Javascript',
-	  year: 1995
-	}, {
-	  name: 'Perl',
-	  year: 1987
-	}, {
-	  name: 'PHP',
-	  year: 1995
-	}, {
-	  name: 'Python',
-	  year: 1991
-	}, {
-	  name: 'Ruby',
-	  year: 1995
-	}, {
-	  name: 'Scala',
-	  year: 2003
-	}];
+      var getSuggestionValue = function getSuggestionValue(suggestion) {
+        return suggestion.name;
+      };
 
-	// https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters
-	var escapeRegexCharacters = function escapeRegexCharacters(str) {
-	  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-	};
+      var renderSuggestion = function renderSuggestion(suggestion) {
+        return React.createElement('span', null, suggestion.name);
+      };
 
-	var getSuggestions = function getSuggestions(value) {
-	  var escapedValue = escapeRegexCharacters(value.trim());
+      // prettier-ignore
 
-	  if (escapedValue === '') {
-	    return [];
-	  }
-
-	  var regex = new RegExp('^' + escapedValue, 'i');
-
-	  return languages.filter(function (language) {
-	    return regex.test(language.name);
-	  });
-	};
-
-	var getSuggestionValue = function getSuggestionValue(suggestion) {
-	  return suggestion.name;
-	};
-
-	var renderSuggestion = function renderSuggestion(suggestion) {
-	  return React.createElement(
-	    'span',
-	    null,
-	    suggestion.name
-	  );
-	};
-
-	var App = function (_React$Component) {
+      var App = function (_React$Component) {
 	  _inherits(App, _React$Component);
 
 	  // eslint-disable-line no-undef
@@ -184,7 +239,7 @@
 	          suggestions = _state.suggestions;
 
 	      var inputProps = {
-	        placeholder: 'Type \'c\'',
+	        placeholder: "Type 'c'",
 	        value: value,
 	        onChange: this.onChange
 	      };
@@ -203,7 +258,13 @@
 	  return App;
 	}(React.Component);
 
-	ReactDOM.render(React.createElement(App, null), document.getElementById('app')); // eslint-disable-line no-undef
+      ReactDOM.render(
+        React.createElement(App, null),
+        document.getElementById('app')
+      ); // eslint-disable-line no-undef
 
-/***/ }
-/******/ ]);
+      /***/
+    }
+    /******/
+  ]
+);
