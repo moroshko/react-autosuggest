@@ -39,7 +39,7 @@ import AutosuggestApp, {
   onSuggestionsFetchRequested,
   onSuggestionsClearRequested,
   onSuggestionSelected,
-  onSuggestionFocused
+  onSuggestionHighlighted
 } from './AutosuggestApp';
 
 describe('Default Autosuggest', () => {
@@ -605,62 +605,78 @@ describe('Default Autosuggest', () => {
       onChange.reset();
       clearEvents();
       clickSuggestion(1);
-      expect(getEvents().filter(event => event !== 'onSuggestionFocused')).to.deep.equal(['onChange', 'onSuggestionSelected']);
+      expect(
+        getEvents().filter(event => event !== 'onSuggestionHighlighted')
+      ).to.deep.equal(['onChange', 'onSuggestionSelected']);
     });
   });
 
-  describe('onSuggestionFocused', () => {
+  describe('onSuggestionHighlighted', () => {
     beforeEach(() => {
-      onSuggestionFocused.reset();
+      onSuggestionHighlighted.reset();
       focusAndSetInputValue('j');
     });
 
     it('should be called once with the right parameter when first Down is pressed', () => {
       clickDown();
-      expect(onSuggestionFocused).to.have.been.calledOnce;
-      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'Java', year: 1995 } });
+      expect(onSuggestionHighlighted).to.have.been.calledOnce;
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: { name: 'Java', year: 1995 }
+      });
     });
 
     it('should be called with the right parameter when Up is pressed', () => {
       clickUp();
-      expect(onSuggestionFocused).to.have.been.calledOnce;
-      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'Javascript', year: 1995 } });
+      expect(onSuggestionHighlighted).to.have.been.calledOnce;
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: { name: 'Javascript', year: 1995 }
+      });
     });
 
     it('should be called with null value when no suggestion is highlighted', () => {
       clickDown();
       clickDown();
-      onSuggestionFocused.reset();
+      onSuggestionHighlighted.reset();
       clickDown();
-      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: null });
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: null
+      });
     });
 
     it('should be called with the right parameter when a combination of Up and Down is pressed', () => {
       clickDown();
       clickDown();
-      onSuggestionFocused.reset();
+      onSuggestionHighlighted.reset();
       clickUp();
-      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'Java', year: 1995 } });
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: { name: 'Java', year: 1995 }
+      });
     });
 
     it('should be called with the right parameter when mouse enters the first suggestion', () => {
       mouseEnterSuggestion(0);
-      expect(onSuggestionFocused).to.have.been.calledOnce;
-      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'Java', year: 1995 } });
+      expect(onSuggestionHighlighted).to.have.been.calledOnce;
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: { name: 'Java', year: 1995 }
+      });
     });
 
     it('should be called with the right parameter when mouse enters', () => {
       mouseEnterSuggestion(1);
-      expect(onSuggestionFocused).to.have.been.calledOnce;
-      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'Javascript', year: 1995 } });
+      expect(onSuggestionHighlighted).to.have.been.calledOnce;
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: { name: 'Javascript', year: 1995 }
+      });
     });
 
     it('should be called with null value when mouse leaves', () => {
       mouseEnterSuggestion(0);
-      onSuggestionFocused.reset();
+      onSuggestionHighlighted.reset();
       mouseLeaveSuggestion(0);
-      expect(onSuggestionFocused).to.have.been.calledOnce;
-      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: null });
+      expect(onSuggestionHighlighted).to.have.been.calledOnce;
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: null
+      });
     });
   });
 

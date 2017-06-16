@@ -26,7 +26,7 @@ import {
 import AutosuggestApp, {
   onSuggestionsFetchRequested,
   onSuggestionSelected,
-  onSuggestionFocused,
+  onSuggestionHighlighted,
   renderSectionTitle,
   getSectionSuggestions,
   setHighlightFirstSuggestion
@@ -87,31 +87,37 @@ describe('Autosuggest with multiSection={true}', () => {
     });
   });
 
-  describe('onSuggestionFocused', () => {
+  describe('onSuggestionHighlighted', () => {
     beforeEach(() => {
-      onSuggestionFocused.reset();
+      onSuggestionHighlighted.reset();
       focusAndSetInputValue('c');
     });
 
     it('should be called with the right paramter when Down is pressed', () => {
       clickDown();
-      expect(onSuggestionFocused).to.have.been.calledOnce;
-      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'C', year: 1972 } });
+      expect(onSuggestionHighlighted).to.have.been.calledOnce;
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: { name: 'C', year: 1972 }
+      });
     });
 
     it('should be called with the right parameter when Up is pressed', () => {
       clickUp();
-      expect(onSuggestionFocused).to.have.been.calledOnce;
-      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'Clojure', year: 2007 } });
+      expect(onSuggestionHighlighted).to.have.been.calledOnce;
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: { name: 'Clojure', year: 2007 }
+      });
     });
 
     it('should be called with the right parameter when a combination of Up and Down is pressed', () => {
       clickDown();
       clickDown();
       clickDown();
-      onSuggestionFocused.reset();
+      onSuggestionHighlighted.reset();
       clickUp();
-      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'C#', year: 2000 } });
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: { name: 'C#', year: 2000 }
+      });
     });
   });
 

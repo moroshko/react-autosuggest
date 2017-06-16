@@ -54,7 +54,7 @@ export const onSuggestionsClearRequested = sinon.spy(() => {
 
 export const onSuggestionSelected = sinon.spy();
 
-export const onSuggestionFocused = sinon.spy();
+export const onSuggestionHighlighted = sinon.spy();
 
 export const renderSectionTitle = sinon.spy(section => {
   return <strong>{section.title}</strong>;
@@ -108,7 +108,7 @@ export default class AutosuggestApp extends Component {
           onSuggestionsFetchRequested={onSuggestionsFetchRequested}
           onSuggestionsClearRequested={onSuggestionsClearRequested}
           onSuggestionSelected={onSuggestionSelected}
-          onSuggestionFocused={onSuggestionFocused}
+          onSuggestionHighlighted={onSuggestionHighlighted}
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}
           inputProps={inputProps}

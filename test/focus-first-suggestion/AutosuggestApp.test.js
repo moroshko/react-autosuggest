@@ -20,7 +20,7 @@ import {
 import AutosuggestApp, {
   onChange,
   onSuggestionSelected,
-  onSuggestionFocused
+  onSuggestionHighlighted
 } from './AutosuggestApp';
 
 describe('Autosuggest with highlightFirstSuggestion={true}', () => {
@@ -146,15 +146,17 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
     });
   });
 
-  describe('onSuggestionFocused', () => {
+  describe('onSuggestionHighlighted', () => {
     beforeEach(() => {
-      onSuggestionFocused.reset();
+      onSuggestionHighlighted.reset();
       focusAndSetInputValue('p');
     });
 
     it('should be called once with the right paramter when the first suggestion is autohighlighted', () => {
-      expect(onSuggestionFocused).to.have.been.calledOnce;
-      expect(onSuggestionFocused).to.have.been.calledWithExactly({ suggestion: { name: 'Perl', year: 1987 } });
+      expect(onSuggestionHighlighted).to.have.been.calledOnce;
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: { name: 'Perl', year: 1987 }
+      });
     });
   });
 });

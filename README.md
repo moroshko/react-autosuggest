@@ -157,7 +157,7 @@ class Example extends React.Component {
 | [`renderSuggestion`](#renderSuggestionProp) | Function | ✓ | Use your imagination to define how suggestions are rendered. |
 | [`inputProps`](#inputPropsProp) | Object | ✓ | Pass through arbitrary props to the input element. It must contain at least `value` and `onChange`. |
 | [`onSuggestionSelected`](#onSuggestionSelectedProp) | Function | | Will be called every time suggestion is selected via mouse or keyboard. |
-| [`onSuggestionFocused`](#onSuggestionFocusedProp) | Function | Will be called every time suggestion is focused via mouse or keyboard. |
+| [`onSuggestionHighlighted`](#onSuggestionHighlightedProp) | Function | Will be called every time suggestion is focused via mouse or keyboard. |
 | [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp) | Function | | When the input element is focused, Autosuggest will consult this function when to render suggestions. Use it, for example, if you want to display suggestions when input value is at least 2 characters long. |
 | [`alwaysRenderSuggestions`](#alwaysRenderSuggestionsProp) | Boolean | | Set it to `true` if you'd like to render suggestions even when the input element is not focused. |
 | [`highlightFirstSuggestion`](#highlightFirstSuggestionProp) | Boolean | | Set it to `true` if you'd like Autosuggest to automatically highlight the first suggestion. |
@@ -365,13 +365,13 @@ where:
   * `'click'` - user clicked (or tapped) on the suggestion
   * `'enter'` - user selected the suggestion using <kbd>Enter</kbd>
 
-<a name="onSuggestionFocusedProp"></a>
-#### onSuggestionFocused (optional)
+<a name="onSuggestionHighlightedProp"></a>
+#### onSuggestionHighlighted (optional)
 
 This function is called when suggestion is focused. It has the following signature:
 
 ```js
-function onSuggestionFocused({ suggestion })
+function onSuggestionHighlighted({ suggestion })
 ```
 
 where:
