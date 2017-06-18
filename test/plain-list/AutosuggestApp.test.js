@@ -615,7 +615,8 @@ describe('Default Autosuggest', () => {
       setInputValue('j');
       expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
       expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({
-        value: 'j'
+        value: 'j',
+        reason: 'input-changed'
       });
     });
 
@@ -626,7 +627,8 @@ describe('Default Autosuggest', () => {
       clickDown();
       expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
       expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({
-        value: 'Javascript'
+        value: 'Javascript',
+        reason: 'suggestions-revealed'
       });
     });
 

@@ -240,10 +240,18 @@ const suggestions = [
 This function will be called every time you need to update [`suggestions`](#suggestionsProp). It has the following signature:
 
 ```js
-function onSuggestionsFetchRequested({ value })
+function onSuggestionsFetchRequested({ value, reason })
 ```
 
-where `value` is current value of the input.
+where
+
+ - `value` is current value of the input.
+ -  `reason` is one of the following values: 
+   - 'escape-pressed' 
+   - 'input-changed' 
+   - 'input-focused'
+   - 'suggestions-revealed'
+   - 'suggestion-selected'
 
 <a name="onSuggestionsClearRequestedProp"></a>
 #### onSuggestionsClearRequested (required unless `alwaysRenderSuggestions={true}`)

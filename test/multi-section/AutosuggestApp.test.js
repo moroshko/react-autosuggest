@@ -91,7 +91,8 @@ describe('Autosuggest with multiSection={true}', () => {
       focusInput();
       expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
       expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({
-        value: ''
+        value: '',
+        reason: 'input-focused'
       });
     });
 
@@ -101,7 +102,8 @@ describe('Autosuggest with multiSection={true}', () => {
       clickEscape();
       expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
       expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({
-        value: ''
+        value: '',
+        reason: 'escape-pressed'
       });
     });
   });
