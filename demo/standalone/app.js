@@ -34,7 +34,7 @@ const languages = [
     year: 1995
   },
   {
-    name: 'Javascript',
+    name: 'JavaScript',
     year: 1995
   },
   {

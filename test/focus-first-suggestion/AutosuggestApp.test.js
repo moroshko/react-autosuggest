@@ -55,7 +55,7 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
 
     it('should highlight a suggestion when mouse enters it', () => {
       mouseEnterSuggestion(1);
-      expectHighlightedSuggestion('Javascript');
+      expectHighlightedSuggestion('JavaScript');
     });
 
     it('should not have highlighted suggestions when mouse leaves a suggestion', () => {
@@ -72,7 +72,7 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
 
     it('should highlight the second suggestion', () => {
       clickDown();
-      expectHighlightedSuggestion('Javascript');
+      expectHighlightedSuggestion('JavaScript');
     });
 
     it('should not highlight any suggestion after reaching the last suggestion', () => {

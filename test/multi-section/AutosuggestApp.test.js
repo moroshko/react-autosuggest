@@ -47,7 +47,7 @@ describe('Autosuggest with multiSection={true}', () => {
         'Go',
         'Haskell',
         'Java',
-        'Javascript',
+        'JavaScript',
         'Perl',
         'PHP',
         'Python',
@@ -91,7 +91,8 @@ describe('Autosuggest with multiSection={true}', () => {
       focusInput();
       expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
       expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({
-        value: ''
+        value: '',
+        reason: 'input-focused'
       });
     });
 
@@ -101,7 +102,8 @@ describe('Autosuggest with multiSection={true}', () => {
       clickEscape();
       expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
       expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({
-        value: ''
+        value: '',
+        reason: 'escape-pressed'
       });
     });
   });
@@ -123,7 +125,7 @@ describe('Autosuggest with multiSection={true}', () => {
         'Go',
         'Haskell',
         'Java',
-        'Javascript',
+        'JavaScript',
         'Perl',
         'PHP',
         'Python',
@@ -191,7 +193,7 @@ describe('Autosuggest with multiSection={true}', () => {
             year: 1995
           },
           {
-            name: 'Javascript',
+            name: 'JavaScript',
             year: 1995
           }
         ]
