@@ -47,7 +47,7 @@ describe('Autosuggest with multiSection={true}', () => {
         'Go',
         'Haskell',
         'Java',
-        'Javascript',
+        'JavaScript',
         'Perl',
         'PHP',
         'Python',
@@ -125,7 +125,7 @@ describe('Autosuggest with multiSection={true}', () => {
         'Go',
         'Haskell',
         'Java',
-        'Javascript',
+        'JavaScript',
         'Perl',
         'PHP',
         'Python',
@@ -193,7 +193,7 @@ describe('Autosuggest with multiSection={true}', () => {
             year: 1995
           },
           {
-            name: 'Javascript',
+            name: 'JavaScript',
             year: 1995
           }
         ]

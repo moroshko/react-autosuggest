@@ -24,7 +24,7 @@ describe('Autosuggest that gets suggestions asynchronously', () => {
     });
 
     it('should show suggestions when they arrive', () => {
-      expectSuggestions(['Java', 'Javascript']);
+      expectSuggestions(['Java', 'JavaScript']);
     });
 
     it('should not show previous suggestions when revealing suggestions', () => {
