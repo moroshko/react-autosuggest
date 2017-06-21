@@ -9128,7 +9128,7 @@
         function t() {
           o(this, t);
           var e = i(this, (t.__proto__ || Object.getPrototypeOf(t)).call(this));
-          return (e.state = { stargazers: '1995' }), e;
+          return (e.state = { stargazers: '2020' }), e;
         }
         return a(t, e), s(t, [
           {
@@ -10423,7 +10423,7 @@
                     ) {
                       var n = x(k);
                       e.setState({ isFocused: !0, isCollapsed: !n }), I &&
-                        I(t), n && o({ value: k });
+                        I(t), n && o({ value: k, reason: 'input-focused' });
                     }
                   },
                   onBlur: function(t) {
@@ -10445,13 +10445,20 @@
                       highlightedSuggestionIndex: null,
                       valueBeforeUpDown: null,
                       isCollapsed: !r
-                    }), r ? o({ value: n }) : e.onSuggestionsClearRequested();
+                    }), r
+                      ? o({ value: n, reason: 'input-changed' })
+                      : e.onSuggestionsClearRequested();
                   },
                   onKeyDown: function(t, r) {
                     switch (t.key) {
                       case 'ArrowDown':
                       case 'ArrowUp':
-                        if (C) x(k) && (o({ value: k }), e.revealSuggestions());
+                        if (C)
+                          x(k) &&
+                            (
+                              o({ value: k, reason: 'suggestions-revealed' }),
+                              e.revealSuggestions()
+                            );
                         else if (n.length > 0) {
                           var i = r.newHighlightedSectionIndex,
                             a = r.newHighlightedItemIndex,
@@ -10505,7 +10512,7 @@
                           if (!c) {
                             var d = '';
                             e.maybeCallOnChange(t, d, 'escape'), x(d)
-                              ? o({ value: d })
+                              ? o({ value: d, reason: 'escape-pressed' })
                               : e.onSuggestionsClearRequested();
                           }
                         } else e.maybeCallOnChange(t, S, 'escape');
@@ -10584,7 +10591,7 @@
           i = r.onSuggestionSelected,
           a = r.onSuggestionsFetchRequested;
         i && i(t, n), o
-          ? a({ value: n.suggestionValue })
+          ? a({ value: n.suggestionValue, reason: 'suggestion-selected' })
           : e.onSuggestionsClearRequested(), e.resetHighlightedSuggestion();
       }), (this.onSuggestionClick = function(t) {
         var n = e.props,
@@ -11764,7 +11771,7 @@
       { name: 'Go', year: 2009 },
       { name: 'Haskell', year: 1990 },
       { name: 'Java', year: 1995 },
-      { name: 'Javascript', year: 1995 },
+      { name: 'JavaScript', year: 1995 },
       { name: 'Perl', year: 1987 },
       { name: 'PHP', year: 1995 },
       { name: 'Python', year: 1991 },
@@ -11996,7 +12003,7 @@
           { name: 'Haskell', year: 1990 },
           { name: 'Python', year: 1991 },
           { name: 'Java', year: 1995 },
-          { name: 'Javascript', year: 1995 },
+          { name: 'JavaScript', year: 1995 },
           { name: 'PHP', year: 1995 },
           { name: 'Ruby', year: 1995 }
         ]
