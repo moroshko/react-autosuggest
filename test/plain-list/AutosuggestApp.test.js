@@ -565,8 +565,8 @@ describe('Default Autosuggest', () => {
       expect(
         onSuggestionSelected
       ).to.have.been.calledWithExactly(syntheticEventMatcher, {
-        suggestion: { name: 'Javascript', year: 1995 },
-        suggestionValue: 'Javascript',
+        suggestion: { name: 'JavaScript', year: 1995 },
+        suggestionValue: 'JavaScript',
         suggestionIndex: 1,
         sectionIndex: null,
         method: 'click'
@@ -687,7 +687,8 @@ describe('Default Autosuggest', () => {
       setInputValue('j');
       expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
       expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({
-        value: 'j'
+        value: 'j',
+        reason: 'input-changed'
       });
     });
 
@@ -698,7 +699,8 @@ describe('Default Autosuggest', () => {
       clickDown();
       expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
       expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({
-        value: 'Javascript'
+        value: 'JavaScript',
+        reason: 'suggestions-revealed'
       });
     });
 

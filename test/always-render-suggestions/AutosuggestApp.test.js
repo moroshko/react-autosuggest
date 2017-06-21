@@ -1,5 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-dom/test-utils';
+import { expect } from 'chai';
 import {
   init,
   expectInputValue,
@@ -14,7 +15,7 @@ import {
   clickUp,
   focusAndSetInputValue
 } from '../helpers';
-import AutosuggestApp from './AutosuggestApp';
+import AutosuggestApp, { onSuggestionsFetchRequested } from './AutosuggestApp';
 
 const allSuggestions = [
   'C',
@@ -25,7 +26,7 @@ const allSuggestions = [
   'Go',
   'Haskell',
   'Java',
-  'Javascript',
+  'JavaScript',
   'Perl',
   'PHP',
   'Python',
@@ -151,7 +152,20 @@ describe('Autosuggest with alwaysRenderSuggestions={true}', () => {
       focusAndSetInputValue('j');
       clickSuggestion(1);
       clickDown();
-      expectHighlightedSuggestion('Javascript');
+      expectHighlightedSuggestion('JavaScript');
+    });
+  });
+
+  describe('onSuggestionsFetchRequested', () => {
+    it('should be called once with the right parameters when suggestion is selected', () => {
+      focusAndSetInputValue('j');
+      onSuggestionsFetchRequested.reset();
+      clickSuggestion(1);
+      expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
+      expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({
+        value: 'JavaScript',
+        reason: 'suggestion-selected'
+      });
     });
   });
 });

@@ -338,7 +338,10 @@ export default class Autosuggest extends Component {
     onSuggestionSelected && onSuggestionSelected(event, data);
 
     if (alwaysRenderSuggestions) {
-      onSuggestionsFetchRequested({ value: data.suggestionValue });
+      onSuggestionsFetchRequested({
+        value: data.suggestionValue,
+        reason: 'suggestion-selected'
+      });
     } else {
       this.onSuggestionsClearRequested();
     }
@@ -479,7 +482,7 @@ export default class Autosuggest extends Component {
           onFocus && onFocus(event);
 
           if (shouldRender) {
-            onSuggestionsFetchRequested({ value });
+            onSuggestionsFetchRequested({ value, reason: 'input-focused' });
           }
         }
       },
@@ -510,7 +513,7 @@ export default class Autosuggest extends Component {
         });
 
         if (shouldRender) {
-          onSuggestionsFetchRequested({ value });
+          onSuggestionsFetchRequested({ value, reason: 'input-changed' });
         } else {
           this.onSuggestionsClearRequested();
         }
@@ -521,7 +524,10 @@ export default class Autosuggest extends Component {
           case 'ArrowUp':
             if (isCollapsed) {
               if (shouldRenderSuggestions(value)) {
-                onSuggestionsFetchRequested({ value });
+                onSuggestionsFetchRequested({
+                  value,
+                  reason: 'suggestions-revealed'
+                });
                 this.revealSuggestions();
               }
             } else if (suggestions.length > 0) {
@@ -617,7 +623,10 @@ export default class Autosuggest extends Component {
                 this.maybeCallOnChange(event, newValue, 'escape');
 
                 if (shouldRenderSuggestions(newValue)) {
-                  onSuggestionsFetchRequested({ value: newValue });
+                  onSuggestionsFetchRequested({
+                    value: newValue,
+                    reason: 'escape-pressed'
+                  });
                 } else {
                   this.onSuggestionsClearRequested();
                 }
