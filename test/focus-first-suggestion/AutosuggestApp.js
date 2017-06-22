@@ -41,6 +41,8 @@ export const onSuggestionsClearRequested = sinon.spy(() => {
 
 export const onSuggestionSelected = sinon.spy();
 
+export const onSuggestionHighlighted = sinon.spy();
+
 export default class AutosuggestApp extends Component {
   constructor() {
     super();
@@ -66,6 +68,7 @@ export default class AutosuggestApp extends Component {
         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
         onSuggestionsClearRequested={onSuggestionsClearRequested}
         onSuggestionSelected={onSuggestionSelected}
+        onSuggestionHighlighted={onSuggestionHighlighted}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
