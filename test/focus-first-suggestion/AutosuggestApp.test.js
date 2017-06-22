@@ -110,12 +110,9 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
   });
 
   describe('inputProps.onChange', () => {
-    beforeEach(() => {
+    it('should be called once with the right parameters when Enter is pressed after autohighlight', () => {
       focusAndSetInputValue('p');
       onChange.reset();
-    });
-
-    it('should be called once with the right parameters when Enter is pressed after autohighlight', () => {
       clickEnter();
       expect(onChange).to.have.been.calledOnce;
       expect(onChange).to.be.calledWith(syntheticEventMatcher, {
@@ -126,12 +123,9 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
   });
 
   describe('onSuggestionSelected', () => {
-    beforeEach(() => {
+    it('should be called once with the right parameters when Enter is pressed after autohighlight', () => {
       focusAndSetInputValue('p');
       onSuggestionSelected.reset();
-    });
-
-    it('should be called once with the right parameters when Enter is pressed after autohighlight', () => {
       clickEnter();
       expect(onSuggestionSelected).to.have.been.calledOnce;
       expect(
@@ -147,12 +141,9 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
   });
 
   describe('onSuggestionHighlighted', () => {
-    beforeEach(() => {
+    it('should be called once with the highlighed suggestion when the first suggestion is autohighlighted', () => {
       onSuggestionHighlighted.reset();
       focusAndSetInputValue('p');
-    });
-
-    it('should be called once with the right parameters when the first suggestion is autohighlighted', () => {
       expect(onSuggestionHighlighted).to.have.been.calledOnce;
       expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
         suggestion: { name: 'Perl', year: 1987 }
