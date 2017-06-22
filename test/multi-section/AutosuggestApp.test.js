@@ -93,7 +93,7 @@ describe('Autosuggest with multiSection={true}', () => {
       focusAndSetInputValue('c');
     });
 
-    it('should be called with the right paramter when Down is pressed', () => {
+    it('should be called once with the suggestion that becomes highlighted', () => {
       clickDown();
       expect(onSuggestionHighlighted).to.have.been.calledOnce;
       expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
@@ -101,22 +101,12 @@ describe('Autosuggest with multiSection={true}', () => {
       });
     });
 
-    it('should be called with the right parameter when Up is pressed', () => {
+    it('should be called once with null when there is no more highlighted suggestion', () => {
+      clickDown()
       clickUp();
       expect(onSuggestionHighlighted).to.have.been.calledOnce;
       expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
-        suggestion: { name: 'Clojure', year: 2007 }
-      });
-    });
-
-    it('should be called with the right parameter when a combination of Up and Down is pressed', () => {
-      clickDown();
-      clickDown();
-      clickDown();
-      onSuggestionHighlighted.reset();
-      clickUp();
-      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
-        suggestion: { name: 'C#', year: 2000 }
+        suggestion: null
       });
     });
   });
