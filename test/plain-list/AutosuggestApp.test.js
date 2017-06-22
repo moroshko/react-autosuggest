@@ -606,54 +606,18 @@ describe('Default Autosuggest', () => {
       clearEvents();
       clickSuggestion(1);
       expect(
-        getEvents().filter(event => event !== 'onSuggestionHighlighted')
+        getEvents().filter(event => event === 'onChange' || event === 'onSuggestionSelected')
       ).to.deep.equal(['onChange', 'onSuggestionSelected']);
     });
   });
 
   describe('onSuggestionHighlighted', () => {
     beforeEach(() => {
-      onSuggestionHighlighted.reset();
       focusAndSetInputValue('j');
-    });
-
-    it('should be called once with the right parameter when first Down is pressed', () => {
-      clickDown();
-      expect(onSuggestionHighlighted).to.have.been.calledOnce;
-      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
-        suggestion: { name: 'Java', year: 1995 }
-      });
-    });
-
-    it('should be called with the right parameter when Up is pressed', () => {
-      clickUp();
-      expect(onSuggestionHighlighted).to.have.been.calledOnce;
-      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
-        suggestion: { name: 'Javascript', year: 1995 }
-      });
-    });
-
-    it('should be called with null value when no suggestion is highlighted', () => {
-      clickDown();
-      clickDown();
       onSuggestionHighlighted.reset();
-      clickDown();
-      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
-        suggestion: null
-      });
     });
 
-    it('should be called with the right parameter when a combination of Up and Down is pressed', () => {
-      clickDown();
-      clickDown();
-      onSuggestionHighlighted.reset();
-      clickUp();
-      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
-        suggestion: { name: 'Java', year: 1995 }
-      });
-    });
-
-    it('should be called with the right parameter when mouse enters the first suggestion', () => {
+    it('should be called once with the highlighted suggestion when mouse enters a suggestion', () => {
       mouseEnterSuggestion(0);
       expect(onSuggestionHighlighted).to.have.been.calledOnce;
       expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
@@ -661,15 +625,7 @@ describe('Default Autosuggest', () => {
       });
     });
 
-    it('should be called with the right parameter when mouse enters', () => {
-      mouseEnterSuggestion(1);
-      expect(onSuggestionHighlighted).to.have.been.calledOnce;
-      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
-        suggestion: { name: 'Javascript', year: 1995 }
-      });
-    });
-
-    it('should be called with null value when mouse leaves', () => {
+    it('should be called once with null when mouse leaves a suggestion and there is no more highlighted suggestion', () => {
       mouseEnterSuggestion(0);
       onSuggestionHighlighted.reset();
       mouseLeaveSuggestion(0);
