@@ -10252,6 +10252,24 @@
             }
           },
           {
+            key: 'componentDidUpdate',
+            value: function(e, t) {
+              var n = this.props.onSuggestionHighlighted;
+              if (n) {
+                var r = this.state,
+                  o = r.highlightedSectionIndex,
+                  i = r.highlightedSuggestionIndex;
+                if (
+                  o !== t.highlightedSectionIndex ||
+                  i !== t.highlightedSuggestionIndex
+                ) {
+                  var a = this.getHighlightedSuggestion();
+                  n({ suggestion: a });
+                }
+              }
+            }
+          },
+          {
             key: 'componentWillUnmount',
             value: function() {
               document.removeEventListener(
