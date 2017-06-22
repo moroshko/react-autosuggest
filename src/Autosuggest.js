@@ -140,15 +140,21 @@ export default class Autosuggest extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { onSuggestionHighlighted } = this.props;
+    
+    if (!onSuggestionHighlighted) {
+      return;
+    }
+    
     const { highlightedSectionIndex, highlightedSuggestionIndex } = this.state;
-    const hasFocusedSuggestionChanged =
-      highlightedSectionIndex !== prevState.highlightedSectionIndex ||
-      highlightedSuggestionIndex !== prevState.highlightedSuggestionIndex;
-
-    if (this.props.onSuggestionHighlighted && hasFocusedSuggestionChanged) {
+    
+    if (
+      highlightedSectionIndex !== prevState.highlightedSectionIndex || 
+      highlightedSuggestionIndex !== prevState.highlightedSuggestionIndex
+    ) {
       const suggestion = this.getHighlightedSuggestion();
 
-      this.props.onSuggestionHighlighted({ suggestion });
+      onSuggestionHighlighted({ suggestion });
     }
   }
 
