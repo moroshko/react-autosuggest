@@ -157,6 +157,7 @@ class Example extends React.Component {
 | [`renderSuggestion`](#renderSuggestionProp) | Function | ✓ | Use your imagination to define how suggestions are rendered. |
 | [`inputProps`](#inputPropsProp) | Object | ✓ | Pass through arbitrary props to the input. It must contain at least `value` and `onChange`. |
 | [`onSuggestionSelected`](#onSuggestionSelectedProp) | Function | | Will be called every time suggestion is selected via mouse or keyboard. |
+| [`onSuggestionHighlighted`](#onSuggestionHighlightedProp) | Function | | Will be called every time the highlighted suggestion changes. |
 | [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp) | Function | | When the input is focused, Autosuggest will consult this function when to render suggestions. Use it, for example, if you want to display suggestions when input value is at least 2 characters long. |
 | [`alwaysRenderSuggestions`](#alwaysRenderSuggestionsProp) | Boolean | | Set it to `true` if you'd like to render suggestions even when the input is not focused. |
 | [`highlightFirstSuggestion`](#highlightFirstSuggestionProp) | Boolean | | Set it to `true` if you'd like Autosuggest to automatically highlight the first suggestion. |
@@ -371,6 +372,18 @@ where:
 * `method` - string describing how user selected the suggestion. The possible values are:
   * `'click'` - user clicked (or tapped) on the suggestion
   * `'enter'` - user selected the suggestion using <kbd>Enter</kbd>
+
+<a name="onSuggestionHighlightedProp"></a>
+#### onSuggestionHighlighted (optional)
+
+This function is called when the highlighted suggestion changes. It has the following signature:
+
+```js
+function onSuggestionHighlighted({ suggestion })
+```
+
+where:
+* `suggestion` - the highlighted suggestion, or `null` if there is no highlighted suggestion.
 
 <a name="shouldRenderSuggestionsProp"></a>
 #### shouldRenderSuggestions (optional)

@@ -38,7 +38,8 @@ import AutosuggestApp, {
   shouldRenderSuggestions,
   onSuggestionsFetchRequested,
   onSuggestionsClearRequested,
-  onSuggestionSelected
+  onSuggestionSelected,
+  onSuggestionHighlighted
 } from './AutosuggestApp';
 
 describe('Default Autosuggest', () => {
@@ -604,7 +605,34 @@ describe('Default Autosuggest', () => {
       onChange.reset();
       clearEvents();
       clickSuggestion(1);
-      expect(getEvents()).to.deep.equal(['onChange', 'onSuggestionSelected']);
+      expect(
+        getEvents().filter(event => event === 'onChange' || event === 'onSuggestionSelected')
+      ).to.deep.equal(['onChange', 'onSuggestionSelected']);
+    });
+  });
+
+  describe('onSuggestionHighlighted', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('j');
+      onSuggestionHighlighted.reset();
+    });
+
+    it('should be called once with the highlighted suggestion when mouse enters a suggestion', () => {
+      mouseEnterSuggestion(0);
+      expect(onSuggestionHighlighted).to.have.been.calledOnce;
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: { name: 'Java', year: 1995 }
+      });
+    });
+
+    it('should be called once with null when mouse leaves a suggestion and there is no more highlighted suggestion', () => {
+      mouseEnterSuggestion(0);
+      onSuggestionHighlighted.reset();
+      mouseLeaveSuggestion(0);
+      expect(onSuggestionHighlighted).to.have.been.calledOnce;
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: null
+      });
     });
   });
 

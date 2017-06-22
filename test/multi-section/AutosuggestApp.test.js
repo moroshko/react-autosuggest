@@ -18,6 +18,7 @@ import {
   clickEscape,
   clickEnter,
   clickDown,
+  clickUp,
   setInputValue,
   focusAndSetInputValue,
   clickClearButton
@@ -25,6 +26,7 @@ import {
 import AutosuggestApp, {
   onSuggestionsFetchRequested,
   onSuggestionSelected,
+  onSuggestionHighlighted,
   renderSectionTitle,
   getSectionSuggestions,
   setHighlightFirstSuggestion
@@ -82,6 +84,29 @@ describe('Autosuggest with multiSection={true}', () => {
           sectionIndex: 2
         })
       );
+    });
+  });
+
+  describe('onSuggestionHighlighted', () => {
+    it('should be called once with the suggestion that becomes highlighted', () => {
+      focusAndSetInputValue('c');
+      onSuggestionHighlighted.reset();
+      clickDown();
+      expect(onSuggestionHighlighted).to.have.been.calledOnce;
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: { name: 'C', year: 1972 }
+      });
+    });
+
+    it('should be called once with null when there is no more highlighted suggestion', () => {
+      focusAndSetInputValue('c');
+      clickDown();
+      onSuggestionHighlighted.reset();
+      clickUp();
+      expect(onSuggestionHighlighted).to.have.been.calledOnce;
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: null
+      });
     });
   });
 
