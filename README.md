@@ -376,14 +376,14 @@ where:
 <a name="onSuggestionHighlightedProp"></a>
 #### onSuggestionHighlighted (optional)
 
-This function is called when suggestion is focused. It has the following signature:
+This function is called when the highlighted suggestion changes. It has the following signature:
 
 ```js
 function onSuggestionHighlighted({ suggestion })
 ```
 
 where:
-* `suggestion` - the focused suggestion(set to `null` when unfocused)
+* `suggestion` - the highlighted suggestion, or `null` if there is no highlighted suggestion.
 
 <a name="shouldRenderSuggestionsProp"></a>
 #### shouldRenderSuggestions (optional)
