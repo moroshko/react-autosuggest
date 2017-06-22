@@ -216,6 +216,11 @@ export const clickEnter = () => {
   clock.tick(1);
 };
 
+export const clickCombinedCharacterEnter = () => {
+  Simulate.keyDown(input, { key: 'Enter', keyCode: 229 });
+  clock.tick(1);
+};
+
 export const clickDown = (count = 1) => {
   for (let i = 0; i < count; i++) {
     Simulate.keyDown(input, { key: 'ArrowDown' });
