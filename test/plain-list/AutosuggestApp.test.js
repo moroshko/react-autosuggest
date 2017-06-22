@@ -606,7 +606,9 @@ describe('Default Autosuggest', () => {
       clearEvents();
       clickSuggestion(1);
       expect(
-        getEvents().filter(event => event === 'onChange' || event === 'onSuggestionSelected')
+        getEvents().filter(
+          event => event === 'onChange' || event === 'onSuggestionSelected'
+        )
       ).to.deep.equal(['onChange', 'onSuggestionSelected']);
     });
   });
