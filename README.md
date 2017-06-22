@@ -372,6 +372,8 @@ where:
 * `method` - string describing how user selected the suggestion. The possible values are:
   * `'click'` - user clicked (or tapped) on the suggestion
   * `'enter'` - user selected the suggestion using <kbd>Enter</kbd>
+  * `'tab'` - user selected the suggestion using <kbd>Tab</kbd>
+  * `'ArrowRight'` - user selected the suggestion using <kbd>Right</kbd> key
 
 <a name="onSuggestionHighlightedProp"></a>
 #### onSuggestionHighlighted (optional)
