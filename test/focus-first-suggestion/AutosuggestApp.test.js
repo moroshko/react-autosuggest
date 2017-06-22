@@ -152,7 +152,7 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
       focusAndSetInputValue('p');
     });
 
-    it('should be called once with the right paramter when the first suggestion is autohighlighted', () => {
+    it('should be called once with the right parameters when the first suggestion is autohighlighted', () => {
       expect(onSuggestionHighlighted).to.have.been.calledOnce;
       expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
         suggestion: { name: 'Perl', year: 1987 }
