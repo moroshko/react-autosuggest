@@ -88,12 +88,9 @@ describe('Autosuggest with multiSection={true}', () => {
   });
 
   describe('onSuggestionHighlighted', () => {
-    beforeEach(() => {
-      onSuggestionHighlighted.reset();
-      focusAndSetInputValue('c');
-    });
-
     it('should be called once with the suggestion that becomes highlighted', () => {
+      focusAndSetInputValue('c');
+      onSuggestionHighlighted.reset();
       clickDown();
       expect(onSuggestionHighlighted).to.have.been.calledOnce;
       expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
@@ -102,7 +99,9 @@ describe('Autosuggest with multiSection={true}', () => {
     });
 
     it('should be called once with null when there is no more highlighted suggestion', () => {
-      clickDown()
+      focusAndSetInputValue('c');
+      clickDown();
+      onSuggestionHighlighted.reset();
       clickUp();
       expect(onSuggestionHighlighted).to.have.been.calledOnce;
       expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
