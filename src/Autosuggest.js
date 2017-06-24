@@ -5,7 +5,11 @@ import Autowhatever from 'react-autowhatever';
 import { defaultTheme, mapToAutowhateverTheme } from './theme';
 
 const alwaysTrue = () => true;
-const defaultShouldRenderSuggestions = value => value.trim().length > 0;
+const defaultShouldRenderSuggestions = value => {
+  const formattedValue = typeof value === 'string' ? value.trim() : '';
+
+  return formattedValue.length > 0;
+};
 const defaultRenderSuggestionsContainer = ({ containerProps, children }) =>
   <div {...containerProps}>{children}</div>;
 
@@ -426,8 +430,10 @@ export default class Autosuggest extends Component {
     const { inputProps } = this.props;
     const { value } = inputProps;
     const { valueBeforeUpDown } = this.state;
+    const query = valueBeforeUpDown || value;
+    const formattedQuery = typeof query === 'string' ? query.trim() : '';
 
-    return (valueBeforeUpDown || value).trim();
+    return formattedQuery;
   }
 
   renderSuggestionsContainer = ({ containerProps, children }) => {
