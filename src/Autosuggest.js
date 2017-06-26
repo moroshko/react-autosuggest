@@ -581,8 +581,10 @@ export default class Autosuggest extends Component {
             break;
 
           case 'Enter': {
-            // Ignore enter of combined character
-            if (event.keyCode === 229) break;
+            // See #388
+            if (event.keyCode === 229) {
+              break;
+            }
 
             const highlightedSuggestion = this.getHighlightedSuggestion();
 
