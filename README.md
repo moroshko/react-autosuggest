@@ -24,7 +24,7 @@ Check out the [Homepage](http://react-autosuggest.js.org) and the [Codepen examp
 * Supports styling using [CSS Modules](https://github.com/css-modules/css-modules), [Radium](https://github.com/FormidableLabs/radium), [Aphrodite](https://github.com/Khan/aphrodite), [JSS](https://github.com/cssinjs/jss), [and more](#themeProp)
 * You decide [when to show suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
 * [Always render suggestions](#alwaysRenderSuggestionsProp) (useful for mobile and modals)
-* [Pass through arbitrary props to the input](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange), [onBlur](#inputPropsOnBlur), or any other), or [take full control on the rendering of the input](#renderInputComponentProp) (useful for integration with other libraries)
+* [Pass through arbitrary props to the input](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange) (non-standard, see below), [onBlur](#inputPropsOnBlur), or any other), or [take full control on the rendering of the input](#renderInputComponentProp) (useful for integration with other libraries)
 * Thoroughly tested
 
 ## Installation
@@ -91,7 +91,8 @@ class Example extends React.Component {
 
     // Autosuggest is a controlled component.
     // This means that you need to provide an input value
-    // and an onChange handler that updates this value (see below).
+    // and an onChange handler that updates this value (which receives
+    // the new `value` as a property on the second argument, see below).
     // Suggestions also need to be provided to the Autosuggest,
     // and they are initially empty because the Autosuggest is closed.
     this.state = {
@@ -155,7 +156,7 @@ class Example extends React.Component {
 | [`onSuggestionsClearRequested`](#onSuggestionsClearRequestedProp) | Function | ✓[*](#onSuggestionsClearRequestedPropNote) | Will be called every time you need to set `suggestions` to `[]`. |
 | [`getSuggestionValue`](#getSuggestionValueProp) | Function | ✓ | Implement it to teach Autosuggest what should be the input value when suggestion is clicked. |
 | [`renderSuggestion`](#renderSuggestionProp) | Function | ✓ | Use your imagination to define how suggestions are rendered. |
-| [`inputProps`](#inputPropsProp) | Object | ✓ | Pass through arbitrary props to the input. It must contain at least `value` and `onChange`. |
+| [`inputProps`](#inputPropsProp) | Object | ✓ | Pass through arbitrary props to the input. It must contain at least `value` and `onChange` (which receives the new `value` as a property on the second argument). |
 | [`onSuggestionSelected`](#onSuggestionSelectedProp) | Function | | Will be called every time suggestion is selected via mouse or keyboard. |
 | [`onSuggestionHighlighted`](#onSuggestionHighlightedProp) | Function | | Will be called every time the highlighted suggestion changes. |
 | [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp) | Function | | When the input is focused, Autosuggest will consult this function when to render suggestions. Use it, for example, if you want to display suggestions when input value is at least 2 characters long. |
@@ -309,7 +310,7 @@ function renderSuggestion(suggestion) {
 <a name="inputPropsProp"></a>
 #### inputProps (required)
 
-Autosuggest is a [controlled component](https://facebook.github.io/react/docs/forms.html#controlled-components). Therefore, you MUST pass at least a `value` and an `onChange` callback to the input. You can pass any other props as well. For example:
+Autosuggest is a [controlled component](https://facebook.github.io/react/docs/forms.html#controlled-components). Therefore, you MUST pass at least a `value` and an `onChange` callback (which receives the new `value` as a property on the second argument) to the input. You can pass any other props as well. For example:
 
 ```js
 const inputProps = {
@@ -332,6 +333,7 @@ function onChange(event, { newValue, method })
 
 where:
 
+* `event` - either the click event from an suggestion click or the keyboard event from a keypress. `event.target.value` should not be used to retreive the new value, since it may be undefined (e. g. in case of a click on a suggestion, `event.target` is not the input element).
 * `newValue` - the new value of the input
 * `method` - string describing how the change has occurred. The possible values are:
   * `'down'` - user pressed <kbd>Down</kbd>
