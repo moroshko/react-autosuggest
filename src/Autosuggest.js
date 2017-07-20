@@ -525,7 +525,8 @@ export default class Autosuggest extends Component {
         }
       },
       onKeyDown: (event, data) => {
-        switch (event.key) {
+        const keyCode = event.key || event.code;
+        switch (keyCode) {
           case 'ArrowDown':
           case 'ArrowUp':
             if (isCollapsed) {
