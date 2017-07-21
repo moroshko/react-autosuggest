@@ -56,11 +56,11 @@ export default class Basic extends Component {
     });
   };
 
-  onDropdownOpen = () => {
+  onSuggestionsShowning = () => {
     console.log('Opened!');
   };
 
-  onDropdownClose = () => {
+  onSuggestionsHiding = () => {
     console.log('Closed!');
   };
 
@@ -97,8 +97,8 @@ export default class Basic extends Component {
             inputProps={inputProps}
             focusInputOnSuggestionClick={focusInputOnSuggestionClick}
             id="basic-example"
-            onDropdownOpen={this.onDropdownOpen}
-            onDropdownClose={this.onDropdownClose}
+            onSuggestionsShowning={this.onSuggestionsShowning}
+            onSuggestionsHiding={this.onSuggestionsHiding}
           />
         </div>
       </div>

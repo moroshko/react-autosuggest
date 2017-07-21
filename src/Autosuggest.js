@@ -35,8 +35,8 @@ export default class Autosuggest extends Component {
         );
       }
     },
-    onDropdownOpen: PropTypes.func,
-    onDropdownClose: PropTypes.func,
+    onSuggestionsShowning: PropTypes.func,
+    onSuggestionsHiding: PropTypes.func,
     onSuggestionSelected: PropTypes.func,
     onSuggestionHighlighted: PropTypes.func,
     renderInputComponent: PropTypes.func,
@@ -123,8 +123,8 @@ export default class Autosuggest extends Component {
   componentWillUpdate(nextProps, nextState) {
     const {
       alwaysRenderSuggestions,
-      onDropdownOpen,
-      onDropdownClose
+      onSuggestionsShowning,
+      onSuggestionsHiding
     } = this.props;
 
     const { isFocused, isCollapsed } = nextState;
@@ -137,12 +137,12 @@ export default class Autosuggest extends Component {
     if (this.state.isOpen !== isOpen) {
       this.setState({ isOpen });
 
-      if (isOpen && typeof onDropdownOpen === 'function') {
-        onDropdownOpen();
+      if (isOpen && typeof onSuggestionsShowning === 'function') {
+        onSuggestionsShowning();
       }
 
-      if (!isOpen && typeof onDropdownClose === 'function') {
-        onDropdownClose();
+      if (!isOpen && typeof onSuggestionsHiding === 'function') {
+        onSuggestionsHiding();
       }
     }
 
