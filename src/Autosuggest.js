@@ -7,7 +7,9 @@ import { defaultTheme, mapToAutowhateverTheme } from './theme';
 const alwaysTrue = () => true;
 const defaultShouldRenderSuggestions = value => value.trim().length > 0;
 const defaultRenderSuggestionsContainer = ({ containerProps, children }) =>
-  <div {...containerProps}>{children}</div>;
+  <div {...containerProps}>
+    {children}
+  </div>;
 
 export default class Autosuggest extends Component {
   static propTypes = {
@@ -33,6 +35,8 @@ export default class Autosuggest extends Component {
         );
       }
     },
+    onDropdownOpen: PropTypes.func,
+    onDropdownClose: PropTypes.func,
     onSuggestionSelected: PropTypes.func,
     onSuggestionHighlighted: PropTypes.func,
     renderInputComponent: PropTypes.func,
@@ -98,6 +102,7 @@ export default class Autosuggest extends Component {
     super();
 
     this.state = {
+      isOpen: false,
       isFocused: false,
       isCollapsed: !alwaysRenderSuggestions,
       highlightedSectionIndex: null,
@@ -115,7 +120,32 @@ export default class Autosuggest extends Component {
     this.suggestionsContainer = this.autowhatever.itemsContainer;
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillUpdate(nextProps, nextState) {
+    const {
+      alwaysRenderSuggestions,
+      onDropdownOpen,
+      onDropdownClose
+    } = this.props;
+
+    const { isFocused, isCollapsed } = nextState;
+    const willRenderSuggestions = this.willRenderSuggestions(this.props);
+
+    const isOpen =
+      alwaysRenderSuggestions ||
+      (isFocused && !isCollapsed && willRenderSuggestions);
+
+    if (this.state.isOpen !== isOpen) {
+      this.setState({ isOpen });
+
+      if (isOpen && typeof onDropdownOpen === 'function') {
+        onDropdownOpen();
+      }
+
+      if (!isOpen && typeof onDropdownClose === 'function') {
+        onDropdownClose();
+      }
+    }
+
     if (shallowEqualArrays(nextProps.suggestions, this.props.suggestions)) {
       if (
         nextProps.highlightFirstSuggestion &&
@@ -250,9 +280,8 @@ export default class Autosuggest extends Component {
     );
 
     return {
-      sectionIndex: typeof sectionIndex === 'string'
-        ? parseInt(sectionIndex, 10)
-        : null,
+      sectionIndex:
+        typeof sectionIndex === 'string' ? parseInt(sectionIndex, 10) : null,
       suggestionIndex: parseInt(suggestionIndex, 10)
     };
   }
@@ -456,20 +485,17 @@ export default class Autosuggest extends Component {
       alwaysRenderSuggestions
     } = this.props;
     const {
-      isFocused,
       isCollapsed,
       highlightedSectionIndex,
       highlightedSuggestionIndex,
-      valueBeforeUpDown
+      valueBeforeUpDown,
+      isOpen
     } = this.state;
     const shouldRenderSuggestions = alwaysRenderSuggestions
       ? alwaysTrue
       : this.props.shouldRenderSuggestions;
+
     const { value, onFocus, onKeyDown } = inputProps;
-    const willRenderSuggestions = this.willRenderSuggestions(this.props);
-    const isOpen =
-      alwaysRenderSuggestions ||
-      (isFocused && !isCollapsed && willRenderSuggestions);
     const items = isOpen ? suggestions : [];
     const autowhateverInputProps = {
       ...inputProps,
@@ -548,9 +574,8 @@ export default class Autosuggest extends Component {
                 // valueBeforeUpDown can be null if, for example, user
                 // hovers on the first suggestion and then pressed Up.
                 // If that happens, use the original input value.
-                newValue = valueBeforeUpDown === null
-                  ? value
-                  : valueBeforeUpDown;
+                newValue =
+                  valueBeforeUpDown === null ? value : valueBeforeUpDown;
               } else {
                 newValue = this.getSuggestionValueByIndex(
                   newHighlightedSectionIndex,
