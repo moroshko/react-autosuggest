@@ -539,8 +539,8 @@ For example:
 ```js
 import IsolatedScroll from 'react-isolated-scroll';
 
-function renderSuggestionsContainer({ containerProps, children }) {
-  const { ref, ...restContainerProps } = containerProps;
+function renderSuggestionsContainer(containerProps) {
+  const { children, ref, ...restContainerProps } = containerProps;
   const callRef = isolatedScroll => {
     if (isolatedScroll !== null) {
       ref(isolatedScroll.component);
