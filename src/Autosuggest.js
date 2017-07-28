@@ -525,10 +525,11 @@ export default class Autosuggest extends Component {
         }
       },
       onKeyDown: (event, data) => {
-        const keyCode = event.key || event.code;
+        const { keyCode } = event;
+
         switch (keyCode) {
-          case 'ArrowDown':
-          case 'ArrowUp':
+          case 40: // ArrowDown
+          case 38: // ArrowUp
             if (isCollapsed) {
               if (shouldRenderSuggestions(value)) {
                 onSuggestionsFetchRequested({
@@ -567,7 +568,7 @@ export default class Autosuggest extends Component {
               this.maybeCallOnChange(
                 event,
                 newValue,
-                event.key === 'ArrowDown' ? 'down' : 'up'
+                keyCode === 40 ? 'down' : 'up'
               );
             }
 
@@ -581,7 +582,8 @@ export default class Autosuggest extends Component {
 
             break;
 
-          case 'Enter': {
+          // Enter
+          case 13: {
             // See #388
             if (event.keyCode === 229) {
               break;
@@ -616,7 +618,8 @@ export default class Autosuggest extends Component {
             break;
           }
 
-          case 'Escape': {
+          // Escape
+          case 27: {
             if (isOpen) {
               // If input.type === 'search', the browser clears the input
               // when Escape is pressed. We want to disable this default

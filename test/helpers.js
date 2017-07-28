@@ -208,28 +208,29 @@ export const blurInput = () => {
 };
 
 export const clickEscape = () => {
-  Simulate.keyDown(input, { key: 'Escape' });
+  Simulate.keyDown(input, { key: 'Escape', keyCode: 27 }); // throws if key is missing
 };
 
 export const clickEnter = () => {
-  Simulate.keyDown(input, { key: 'Enter' });
+  Simulate.keyDown(input, { key: 'Enter', keyCode: 13 }); // throws if key is missing
   clock.tick(1);
 };
 
+// See #388
 export const clickCombinedCharacterEnter = () => {
-  Simulate.keyDown(input, { key: 'Enter', keyCode: 229 });
+  Simulate.keyDown(input, { key: 'Enter', keyCode: 229 }); // throws if key is missing
   clock.tick(1);
 };
 
 export const clickDown = (count = 1) => {
   for (let i = 0; i < count; i++) {
-    Simulate.keyDown(input, { key: 'ArrowDown' });
+    Simulate.keyDown(input, { key: 'ArrowDown', keyCode: 40 }); // throws if key is missing
   }
 };
 
 export const clickUp = (count = 1) => {
   for (let i = 0; i < count; i++) {
-    Simulate.keyDown(input, { key: 'ArrowUp' });
+    Simulate.keyDown(input, { key: 'ArrowUp', keyCode: 38 }); // throws if key is missing
   }
 };
 
