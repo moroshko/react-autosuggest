@@ -115,14 +115,8 @@ export default class Autosuggest extends Component {
 
     this.input = this.autowhatever.input;
     this.suggestionsContainer = this.autowhatever.itemsContainer;
-    this.suggestionsContainer.addEventListener(
-      'mousedown',
-      this.onSuggestionsContainerMouseDown
-    );
-    this.suggestionsContainer.addEventListener(
-      'mouseleave',
-      this.onSuggestionsContainerMouseLeave
-    );
+    this.suggestionsContainer.addEventListener('mousedown', this.onSuggestionsContainerMouseDown);
+    this.suggestionsContainer.addEventListener('mouseleave', this.onSuggestionsContainerMouseLeave);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -171,14 +165,8 @@ export default class Autosuggest extends Component {
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.onDocumentMouseDown);
     document.removeEventListener('mouseup', this.onDocumentMouseUp);
-    this.suggestionsContainer.removeEventListener(
-      'mousedown',
-      this.onSuggestionsContainerMouseDown
-    );
-    this.suggestionsContainer.removeEventListener(
-      'mouseleave',
-      this.onSuggestionsContainerMouseLeave
-    );
+    this.suggestionsContainer.removeEventListener('mousedown', this.onSuggestionsContainerMouseDown);
+    this.suggestionsContainer.removeEventListener('mouseleave', this.onSuggestionsContainerMouseLeave);
   }
 
   updateHighlightedSuggestion(sectionIndex, suggestionIndex, prevValue) {
@@ -309,8 +297,7 @@ export default class Autosuggest extends Component {
 
   onSuggestionsContainerMouseLeave = () => {
     if (this.isMouseDown) {
-      this.justSelectedSuggestion = false;
-      this.onBlur();
+      this.input.focus();
     }
   };
 
