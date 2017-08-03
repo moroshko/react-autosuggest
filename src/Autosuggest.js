@@ -7,9 +7,7 @@ import { defaultTheme, mapToAutowhateverTheme } from './theme';
 const alwaysTrue = () => true;
 const defaultShouldRenderSuggestions = value => value.trim().length > 0;
 const defaultRenderSuggestionsContainer = ({ containerProps, children }) =>
-  <div {...containerProps}>
-    {children}
-  </div>;
+  <div {...containerProps}>{children}</div>;
 
 export default class Autosuggest extends Component {
   static propTypes = {
@@ -271,8 +269,9 @@ export default class Autosuggest extends Component {
     );
 
     return {
-      sectionIndex:
-        typeof sectionIndex === 'string' ? parseInt(sectionIndex, 10) : null,
+      sectionIndex: typeof sectionIndex === 'string'
+        ? parseInt(sectionIndex, 10)
+        : null,
       suggestionIndex: parseInt(suggestionIndex, 10)
     };
   }
@@ -363,7 +362,7 @@ export default class Autosuggest extends Component {
     this.justSelectedSuggestion = true;
   };
 
-  onSuggestionTouchEnd = event => {
+  onSuggestionTouchEnd = () => {
     this.justSelectedSuggestion = false;
   };
 
@@ -590,8 +589,9 @@ export default class Autosuggest extends Component {
                 // valueBeforeUpDown can be null if, for example, user
                 // hovers on the first suggestion and then pressed Up.
                 // If that happens, use the original input value.
-                newValue =
-                  valueBeforeUpDown === null ? value : valueBeforeUpDown;
+                newValue = valueBeforeUpDown === null
+                  ? value
+                  : valueBeforeUpDown;
               } else {
                 newValue = this.getSuggestionValueByIndex(
                   newHighlightedSectionIndex,
