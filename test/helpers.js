@@ -156,6 +156,10 @@ export const expectHighlightedSuggestion = suggestion => {
   }
 };
 
+export const getIsMouseDown = () => {
+  return app.autosuggest.isMouseDown;
+}
+
 export const mouseEnterSuggestion = suggestionIndex => {
   Simulate.mouseEnter(getSuggestion(suggestionIndex));
 };
@@ -179,6 +183,34 @@ const mouseDownDocument = target => {
   );
 };
 
+export const mouseUpDocument = () => {
+  document.dispatchEvent(
+    new window.CustomEvent('mouseup')
+  );
+};
+
+export const mouseDownSuggestionsContainer = () => {
+  suggestionsContainer.dispatchEvent(
+    new window.CustomEvent('mousedown', {
+      detail: {
+        // must be 'detail' accoring to docs: https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events#Adding_custom_data_–_CustomEvent()
+        target: suggestionsContainer
+      }
+    })
+  );
+};
+
+const mouseLeaveSuggestionsContainer = () => {
+  suggestionsContainer.dispatchEvent(
+    new window.CustomEvent('mouseleave', {
+      detail: {
+        // must be 'detail' accoring to docs: https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events#Adding_custom_data_–_CustomEvent()
+        target: suggestionsContainer
+      }
+    })
+  );
+};
+
 // It doesn't feel right to emulate all the DOM events by copying the implementation.
 // Please show me a better way to emulate this.
 export const clickSuggestion = suggestionIndex => {
@@ -197,6 +229,16 @@ export const clickSuggestionsContainer = () => {
   mouseDownDocument(suggestionsContainer);
   blurInput();
   focusInput();
+};
+
+export const clickSuggestionAndMoveOutsideContainer = () => {
+  mouseDownSuggestionsContainer();
+  mouseLeaveSuggestionsContainer();
+};
+
+export const moveMouseOutsideContainer = () => {
+  blurInput();
+  mouseLeaveSuggestionsContainer();
 };
 
 export const focusInput = () => {

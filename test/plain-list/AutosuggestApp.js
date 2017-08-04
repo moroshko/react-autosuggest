@@ -80,6 +80,7 @@ export default class AutosuggestApp extends Component {
 
   storeAutosuggestReference = autosuggest => {
     if (autosuggest !== null) {
+      this.autosuggest = autosuggest;
       this.input = autosuggest.input;
     }
   };
