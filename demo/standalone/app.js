@@ -76,7 +76,10 @@ const getSuggestions = value => {
 
 const getSuggestionValue = suggestion => suggestion.name;
 
-const renderSuggestion = suggestion => <span>{suggestion.name}</span>;
+const renderSuggestion = suggestion =>
+  <span>
+    {suggestion.name}
+  </span>;
 
 // prettier-ignore
 class App extends React.Component { // eslint-disable-line no-undef

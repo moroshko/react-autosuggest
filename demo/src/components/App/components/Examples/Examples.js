@@ -8,9 +8,7 @@ import ScrollableContainer from 'ScrollableContainer/ScrollableContainer';
 
 const Examples = () =>
   <div className={styles.container}>
-    <h2 className={styles.header}>
-      Examples
-    </h2>
+    <h2 className={styles.header}>Examples</h2>
     <Basic />
     <MultipleSections />
     <CustomRender />

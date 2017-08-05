@@ -5,15 +5,11 @@ import Link from 'Link/Link';
 
 const Features = () =>
   <div className={styles.container}>
-    <h2 className={styles.header}>
-      Features
-    </h2>
+    <h2 className={styles.header}>Features</h2>
     <div className={styles.content}>
       <div className={styles.feature}>
         <div className={styles.accessibleIcon} />
-        <div className={styles.featureName}>
-          Accessible
-        </div>
+        <div className={styles.featureName}>Accessible</div>
         <div className={styles.featureDescription}>
           <Link
             className={styles.link}
@@ -26,18 +22,14 @@ const Features = () =>
       </div>
       <div className={styles.feature}>
         <div className={styles.mobileFriendlyIcon} />
-        <div className={styles.featureName}>
-          Mobile friendly
-        </div>
+        <div className={styles.featureName}>Mobile friendly</div>
         <div className={styles.featureDescription}>
           Works well on those little devices you carry around in your hands.
         </div>
       </div>
       <div className={styles.feature}>
         <div className={styles.customizableIcon} />
-        <div className={styles.featureName}>
-          Customizable
-        </div>
+        <div className={styles.featureName}>Customizable</div>
         <div className={styles.featureDescription}>
           Supports custom suggestion rendering, multiple sections, and more.
         </div>
