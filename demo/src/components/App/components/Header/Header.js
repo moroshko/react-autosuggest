@@ -10,7 +10,7 @@ export default class Header extends Component {
     super();
 
     this.state = {
-      stargazers: '2020'
+      stargazers: '2363'
     };
   }
 
@@ -32,9 +32,7 @@ export default class Header extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.logo} />
-        <h1 className={styles.header}>
-          React Autosuggest
-        </h1>
+        <h1 className={styles.header}>React Autosuggest</h1>
         <div className={styles.subHeader}>
           WAI-ARIA compliant autosuggest component built in React
         </div>

@@ -26,8 +26,12 @@ export const renderSuggestion = sinon.spy((suggestion, { query }) => {
 
   return parts.map((part, index) => {
     return part.highlight
-      ? <strong key={index}>{part.text}</strong>
-      : <span key={index}>{part.text}</span>;
+      ? <strong key={index}>
+          {part.text}
+        </strong>
+      : <span key={index}>
+          {part.text}
+        </span>;
   });
 });
 

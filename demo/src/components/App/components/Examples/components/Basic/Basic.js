@@ -23,7 +23,10 @@ const getSuggestions = value => {
 
 const getSuggestionValue = suggestion => suggestion.name;
 
-const renderSuggestion = suggestion => <span>{suggestion.name}</span>;
+const renderSuggestion = suggestion =>
+  <span>
+    {suggestion.name}
+  </span>;
 
 export default class Basic extends Component {
   constructor() {
@@ -64,9 +67,7 @@ export default class Basic extends Component {
     return (
       <div id="basic-example" className={styles.container}>
         <div className={styles.textContainer}>
-          <div className={styles.title}>
-            Basic
-          </div>
+          <div className={styles.title}>Basic</div>
           <div className={styles.description}>
             Let’s start simple. Here’s a plain list of suggestions.
           </div>

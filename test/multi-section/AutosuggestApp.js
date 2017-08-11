@@ -27,7 +27,11 @@ export const getSuggestionValue = sinon.spy(suggestion => {
 });
 
 export const renderSuggestion = sinon.spy(suggestion => {
-  return <span>{suggestion.name}</span>;
+  return (
+    <span>
+      {suggestion.name}
+    </span>
+  );
 });
 
 const alwaysTrue = () => true;
@@ -57,7 +61,11 @@ export const onSuggestionSelected = sinon.spy();
 export const onSuggestionHighlighted = sinon.spy();
 
 export const renderSectionTitle = sinon.spy(section => {
-  return <strong>{section.title}</strong>;
+  return (
+    <strong>
+      {section.title}
+    </strong>
+  );
 });
 
 export const getSectionSuggestions = sinon.spy(section => {
