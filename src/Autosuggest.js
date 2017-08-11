@@ -297,6 +297,7 @@ export default class Autosuggest extends Component {
 
   onSuggestionsContainerMouseLeave = () => {
     if (this.isMouseDown) {
+      this.justSelectedSuggestion = false;
       this.input.focus();
     }
   };
