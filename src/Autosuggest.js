@@ -582,8 +582,9 @@ export default class Autosuggest extends Component {
 
             break;
 
-          // Enter
+          case 9: // Tab
           case 13: {
+            // Enter
             // See #388
             if (event.keyCode === 229) {
               break;
