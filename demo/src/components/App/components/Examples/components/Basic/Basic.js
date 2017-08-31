@@ -23,10 +23,7 @@ const getSuggestions = value => {
 
 const getSuggestionValue = suggestion => suggestion.name;
 
-const renderSuggestion = suggestion =>
-  <span>
-    {suggestion.name}
-  </span>;
+const renderSuggestion = suggestion => <span>{suggestion.name}</span>;
 
 export default class Basic extends Component {
   constructor() {

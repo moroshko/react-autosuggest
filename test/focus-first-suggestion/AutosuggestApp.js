@@ -18,11 +18,7 @@ export const getSuggestionValue = sinon.spy(suggestion => {
 });
 
 export const renderSuggestion = sinon.spy(suggestion => {
-  return (
-    <span>
-      {suggestion.name}
-    </span>
-  );
+  return <span>{suggestion.name}</span>;
 });
 
 export const onChange = sinon.spy((event, { newValue }) => {

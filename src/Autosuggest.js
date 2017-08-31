@@ -6,10 +6,9 @@ import { defaultTheme, mapToAutowhateverTheme } from './theme';
 
 const alwaysTrue = () => true;
 const defaultShouldRenderSuggestions = value => value.trim().length > 0;
-const defaultRenderSuggestionsContainer = ({ containerProps, children }) =>
-  <div {...containerProps}>
-    {children}
-  </div>;
+const defaultRenderSuggestionsContainer = ({ containerProps, children }) => (
+  <div {...containerProps}>{children}</div>
+);
 
 export default class Autosuggest extends Component {
   static propTypes = {

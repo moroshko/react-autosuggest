@@ -112,9 +112,7 @@ export default class ScrollableContainer extends Component {
         </div>
         <div className={styles.demoContainer}>
           <div className={styles.question}>Where do you live?</div>
-          <div className={styles.answer}>
-            {selected.name}
-          </div>
+          <div className={styles.answer}>{selected.name}</div>
           <button className={styles.editButton} onClick={this.openModal}>
             Edit
           </button>
