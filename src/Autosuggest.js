@@ -6,10 +6,9 @@ import { defaultTheme, mapToAutowhateverTheme } from './theme';
 
 const alwaysTrue = () => true;
 const defaultShouldRenderSuggestions = value => value.trim().length > 0;
-const defaultRenderSuggestionsContainer = ({ containerProps, children }) =>
-  <div {...containerProps}>
-    {children}
-  </div>;
+const defaultRenderSuggestionsContainer = ({ containerProps, children }) => (
+  <div {...containerProps}>{children}</div>
+);
 
 export default class Autosuggest extends Component {
   static propTypes = {
@@ -260,6 +259,14 @@ export default class Autosuggest extends Component {
 
   onDocumentMouseDown = event => {
     this.justClickedOnSuggestionsContainer = false;
+    if (
+      this.suggestionsContainer &&
+      !this.suggestionsContainer.contains(event.target) &&
+      this.justSelectedSuggestion
+    ) {
+      this.input.focus();
+      this.justSelectedSuggestion = false;
+    }
 
     let node =
       (event.detail && event.detail.target) || // This is for testing only. Please show me a better way to emulate this.
