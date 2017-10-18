@@ -10,6 +10,8 @@
 
 ## Demo
 
+![Demo](https://media.giphy.com/media/xT1R9OGr536ybc5EYw/giphy.gif)
+
 Check out the [Homepage](http://react-autosuggest.js.org) and the [Codepen examples](http://codepen.io/collection/DkkYaQ).
 
 ## Features
