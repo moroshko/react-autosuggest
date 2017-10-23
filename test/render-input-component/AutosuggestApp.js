@@ -34,10 +34,11 @@ const getSuggestionValue = suggestion => suggestion.name;
 
 const renderSuggestion = suggestion => suggestion.name;
 
-const renderInputComponent = inputProps =>
+const renderInputComponent = inputProps => (
   <div>
     <input id="my-custom-input" {...inputProps} />
-  </div>;
+  </div>
+);
 
 export default class AutosuggestApp extends Component {
   constructor() {

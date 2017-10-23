@@ -3,7 +3,7 @@ import styles from './Footer.less';
 import React from 'react';
 import Link from 'Link/Link';
 
-const Footer = () =>
+const Footer = () => (
   <div className={styles.container}>
     <div>
       {'Crafted with love by '}
@@ -35,6 +35,7 @@ const Footer = () =>
         MIT license
       </Link>
     </div>
-  </div>;
+  </div>
+);
 
 export default Footer;
