@@ -11,6 +11,7 @@ import {
   blurInput,
   clickEscape,
   clickEnter,
+  clickCombinedCharacterEnter,
   clickDown,
   clickUp,
   focusAndSetInputValue
@@ -104,6 +105,11 @@ describe('Autosuggest with alwaysRenderSuggestions={true}', () => {
 
     it('should not hide suggestions if there is no highlighted suggestion', () => {
       clickEnter();
+      expectSuggestions(['Perl', 'PHP', 'Python']);
+    });
+
+    it('should not hide suggestions if enter event for combined character', () => {
+      clickCombinedCharacterEnter();
       expectSuggestions(['Perl', 'PHP', 'Python']);
     });
   });
