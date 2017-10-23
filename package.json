@@ -128,7 +128,7 @@
   ],
   "nyc": {
     "statements": 95,
-    "branches": 91,
+    "branches": 89,
     "functions": 100,
     "lines": 95,
     "include": [
