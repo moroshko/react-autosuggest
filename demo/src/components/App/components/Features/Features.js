@@ -3,7 +3,7 @@ import styles from './Features.less';
 import React from 'react';
 import Link from 'Link/Link';
 
-const Features = () =>
+const Features = () => (
   <div className={styles.container}>
     <h2 className={styles.header}>Features</h2>
     <div className={styles.content}>
@@ -45,6 +45,7 @@ const Features = () =>
       </Link>
       {' for a full list of features.'}
     </div>
-  </div>;
+  </div>
+);
 
 export default Features;
