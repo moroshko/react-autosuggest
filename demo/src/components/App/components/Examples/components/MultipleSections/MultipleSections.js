@@ -33,15 +33,9 @@ const getSuggestions = value => {
 
 const getSuggestionValue = suggestion => suggestion.name;
 
-const renderSuggestion = suggestion =>
-  <span>
-    {suggestion.name}
-  </span>;
+const renderSuggestion = suggestion => <span>{suggestion.name}</span>;
 
-const renderSectionTitle = section =>
-  <strong>
-    {section.title}
-  </strong>;
+const renderSectionTitle = section => <strong>{section.title}</strong>;
 
 const getSectionSuggestions = section => section.languages;
 

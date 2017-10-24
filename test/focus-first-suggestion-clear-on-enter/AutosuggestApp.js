@@ -16,10 +16,7 @@ let app = null;
 
 export const getSuggestionValue = suggestion => suggestion.name;
 
-export const renderSuggestion = suggestion =>
-  <span>
-    {suggestion.name}
-  </span>;
+export const renderSuggestion = suggestion => <span>{suggestion.name}</span>;
 
 export const onChange = sinon.spy((event, { newValue }) => {
   addEvent('onChange');
