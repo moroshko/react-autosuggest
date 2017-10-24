@@ -434,10 +434,8 @@ export default class Autosuggest extends Component {
     const { inputProps } = this.props;
     const { value } = inputProps;
     const { valueBeforeUpDown } = this.state;
-    const query = valueBeforeUpDown || value;
-    const formattedQuery = typeof query === 'string' ? query.trim() : '';
 
-    return formattedQuery;
+    return (valueBeforeUpDown || value).trim();
   }
 
   renderSuggestionsContainer = ({ containerProps, children }) => {
