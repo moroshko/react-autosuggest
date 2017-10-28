@@ -98,9 +98,14 @@ class Example extends React.Component {
       value: '',
       suggestions: []
     };
+
+    // Bind context for functions to pass.
+    this.onChange = this.onChange.bind(this)
+    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this)
+    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this)
   }
 
-  onChange = (event, { newValue }) => {
+  onChange(event, { newValue }) {
     this.setState({
       value: newValue
     });
@@ -108,14 +113,14 @@ class Example extends React.Component {
 
   // Autosuggest will call this function every time you need to update suggestions.
   // You already implemented this logic above, so just use it.
-  onSuggestionsFetchRequested = ({ value }) => {
+  onSuggestionsFetchRequested({ value }) {
     this.setState({
       suggestions: getSuggestions(value)
     });
   };
 
   // Autosuggest will call this function every time you need to clear suggestions.
-  onSuggestionsClearRequested = () => {
+  onSuggestionsClearRequested() {
     this.setState({
       suggestions: []
     });
