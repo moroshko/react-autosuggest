@@ -555,6 +555,11 @@ function renderSuggestionsContainer({ containerProps, children }) {
 }
 ```
 
+The default suggestion container renders as
+```js
+<div {...containerProps}>{children}</div>
+```
+
 <a name="themeProp"></a>
 #### theme (optional)
 
