@@ -4,6 +4,7 @@ import React from 'react';
 import Basic from 'Basic/Basic';
 import MultipleSections from 'MultipleSections/MultipleSections';
 import CustomRender from 'CustomRender/CustomRender';
+import Browsable from 'Browsable/Browsable';
 import ScrollableContainer from 'ScrollableContainer/ScrollableContainer';
 
 const Examples = () => (
@@ -12,6 +13,7 @@ const Examples = () => (
     <Basic />
     <MultipleSections />
     <CustomRender />
+    <Browsable />
     <ScrollableContainer />
   </div>
 );

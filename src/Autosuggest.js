@@ -5,7 +5,10 @@ import Autowhatever from 'react-autowhatever';
 import { defaultTheme, mapToAutowhateverTheme } from './theme';
 
 const alwaysTrue = () => true;
-const defaultShouldRenderSuggestions = value => value.trim().length > 0;
+let defaultBrowsable = false;
+const defaultShouldRenderSuggestions = value =>
+  defaultBrowsable || value.trim().length > 0;
+
 const defaultRenderSuggestionsContainer = ({ containerProps, children }) => (
   <div {...containerProps}>{children}</div>
 );
@@ -52,6 +55,7 @@ export default class Autosuggest extends Component {
       }
     },
     shouldRenderSuggestions: PropTypes.func,
+    browsable: PropTypes.bool,
     alwaysRenderSuggestions: PropTypes.bool,
     multiSection: PropTypes.bool,
     renderSectionTitle: (props, propName) => {
@@ -87,6 +91,7 @@ export default class Autosuggest extends Component {
   static defaultProps = {
     renderSuggestionsContainer: defaultRenderSuggestionsContainer,
     shouldRenderSuggestions: defaultShouldRenderSuggestions,
+    browsable: false,
     alwaysRenderSuggestions: false,
     multiSection: false,
     focusInputOnSuggestionClick: true,
@@ -95,7 +100,7 @@ export default class Autosuggest extends Component {
     id: '1'
   };
 
-  constructor({ alwaysRenderSuggestions }) {
+  constructor({ alwaysRenderSuggestions, browsable }) {
     super();
 
     this.state = {
@@ -105,6 +110,8 @@ export default class Autosuggest extends Component {
       highlightedSuggestionIndex: null,
       valueBeforeUpDown: null
     };
+
+    defaultBrowsable = browsable;
 
     this.justPressedUpDown = false;
   }
