@@ -171,7 +171,7 @@ class Example extends React.Component {
 | [`id`](#idProp) | String | | Use it only if you have multiple Autosuggest components on a page. |
 
 <a name="suggestionsProp"></a>
-#### suggestions (required)
+### suggestions (required)
 
 Array of suggestions to display. The only requirement is that `suggestions` is an array. Items in this array can take an arbitrary shape.
 
@@ -236,7 +236,7 @@ const suggestions = [
 ```
 
 <a name="onSuggestionsFetchRequestedProp"></a>
-#### onSuggestionsFetchRequested (required)
+### onSuggestionsFetchRequested (required)
 
 This function will be called every time you might need to update [`suggestions`](#suggestionsProp). It has the following signature:
 
@@ -255,7 +255,7 @@ where:
   * `'suggestion-selected'` - user selected a suggestion when `alwaysRenderSuggestions={true}`
 
 <a name="onSuggestionsClearRequestedProp"></a>
-#### onSuggestionsClearRequested (required unless `alwaysRenderSuggestions={true}`)
+### onSuggestionsClearRequested (required unless `alwaysRenderSuggestions={true}`)
 
 This function will be called every time you need to clear [`suggestions`](#suggestionsProp).
 
@@ -265,7 +265,7 @@ All you have to do in this function is to set `suggestions` to `[]`.
 **Note:** When `alwaysRenderSuggestions={true}`, you don't have to implement this function.
 
 <a name="getSuggestionValueProp"></a>
-#### getSuggestionValue (required)
+### getSuggestionValue (required)
 
 When user navigates the suggestions using the <kbd>Up</kbd> and <kbd>Down</kbd> keys, [the input value should be set according to the highlighted suggestion](https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete). You design how suggestion is modelled. Therefore, it's your responsibility to tell Autosuggest how to map suggestions to input values.
 
@@ -278,7 +278,7 @@ function getSuggestionValue(suggestion) {
 ```
 
 <a name="renderSuggestionProp"></a>
-#### renderSuggestion (required)
+### renderSuggestion (required)
 
 Use your imagination to define how suggestions are rendered.
 
@@ -307,7 +307,7 @@ function renderSuggestion(suggestion) {
 **Important:** `renderSuggestion` must be a pure function (we optimize rendering performance based on this assumption).
 
 <a name="inputPropsProp"></a>
-#### inputProps (required)
+### inputProps (required)
 
 Autosuggest is a [controlled component](https://facebook.github.io/react/docs/forms.html#controlled-components). Therefore, you MUST pass at least a `value` and an `onChange` callback to the input. You can pass any other props as well. For example:
 
@@ -342,7 +342,7 @@ where:
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the input, etc.)
 
 <a name="inputPropsOnBlur"></a>
-##### inputProps.onBlur (optional)
+#### inputProps.onBlur (optional)
 
 The signature is:
 
@@ -355,7 +355,7 @@ where:
 * `highlightedSuggestion` - the suggestion that was highlighted just before the input lost focus, or `null` if there was no highlighted suggestion.
 
 <a name="onSuggestionSelectedProp"></a>
-#### onSuggestionSelected (optional)
+### onSuggestionSelected (optional)
 
 This function is called when suggestion is selected. It has the following signature:
 
@@ -374,7 +374,7 @@ where:
   * `'enter'` - user selected the suggestion using <kbd>Enter</kbd>
 
 <a name="onSuggestionHighlightedProp"></a>
-#### onSuggestionHighlighted (optional)
+### onSuggestionHighlighted (optional)
 
 This function is called when the highlighted suggestion changes. It has the following signature:
 
@@ -386,7 +386,7 @@ where:
 * `suggestion` - the highlighted suggestion, or `null` if there is no highlighted suggestion.
 
 <a name="shouldRenderSuggestionsProp"></a>
-#### shouldRenderSuggestions (optional)
+### shouldRenderSuggestions (optional)
 
 By default, suggestions are rendered when the input isn't blank. Feel free to override this behaviour.
 
@@ -405,7 +405,7 @@ When `shouldRenderSuggestions` returns `true`, **suggestions will be rendered on
 If you would like to render suggestions regardless of whether the input is focused or not, set `alwaysRenderSuggestions={true}` (`shouldRenderSuggestions` is ignored in this case).
 
 <a name="alwaysRenderSuggestionsProp"></a>
-#### alwaysRenderSuggestions (optional)
+### alwaysRenderSuggestions (optional)
 
 Set `alwaysRenderSuggestions={true}` if you'd like to always render the suggestions.
 
@@ -418,12 +418,12 @@ this.state = {
 ```
 
 <a name="highlightFirstSuggestionProp"></a>
-#### highlightFirstSuggestion (optional)
+### highlightFirstSuggestion (optional)
 
 When `highlightFirstSuggestion={true}`, Autosuggest will automatically highlight the first suggestion. Defaults to `false`.
 
 <a name="focusInputOnSuggestionClickProp"></a>
-#### focusInputOnSuggestionClick (optional)
+### focusInputOnSuggestionClick (optional)
 
 By default, `focusInputOnSuggestionClick={true}`, which means that, every time suggestion is clicked (or tapped), the input keeps the focus.
 
@@ -438,14 +438,14 @@ You can do something like this:
 where `isMobile` is a boolean describing whether Autosuggest operates on a mobile device or not. You can use [kaimallea/isMobile](https://github.com/kaimallea/isMobile), for example, to determine that.
 
 <a name="multiSectionProp"></a>
-#### multiSection (optional)
+### multiSection (optional)
 
 By default, Autosuggest renders a plain list of suggestions.
 
 If you'd like to have multiple sections (with optional titles), set `multiSection={true}`.
 
 <a name="renderSectionTitleProp"></a>
-#### renderSectionTitle (required when `multiSection={true}`)
+### renderSectionTitle (required when `multiSection={true}`)
 
 When rendering [multiple sections](#multiSectionProp), you need to tell Autosuggest how to render a section title.
 
@@ -462,7 +462,7 @@ function renderSectionTitle(section) {
 If `renderSectionTitle` returns `null` or `undefined`, section title is not rendered.
 
 <a name="getSectionSuggestionsProp"></a>
-#### getSectionSuggestions (required when `multiSection={true}`)
+### getSectionSuggestions (required when `multiSection={true}`)
 
 When rendering [multiple sections](#multiSectionProp), you need to tell Autosuggest where to find the suggestions for a given section.
 
@@ -477,7 +477,7 @@ function getSectionSuggestions(section) {
 **Note:** Sections with no suggestions are not rendered.
 
 <a name="renderInputComponentProp"></a>
-#### renderInputComponent (optional)
+### renderInputComponent (optional)
 
 You shouldn't specify `renderInputComponent` unless you want to customize the rendering of the input.
 
@@ -501,7 +501,7 @@ const renderInputComponent = inputProps => (
 **Note:** When using `renderInputComponent`, you still need to specify the usual [`inputProps`](#inputPropsProp). Autosuggest will merge the `inputProps` that you provide with other props that are needed for accessibility (e.g. `'aria-activedescendant'`), and will pass the **merged `inputProps`** to `renderInputComponent`.
 
 <a name="renderSuggestionsContainerProp"></a>
-#### renderSuggestionsContainer (optional)
+### renderSuggestionsContainer (optional)
 
 You shouldn't specify `renderSuggestionsContainer` unless you want to customize the content or behaviour of the suggestions container beyond rendering the suggestions themselves. For example, you might want to add a custom text before/after the suggestions list, or to [customize the scrolling behaviour of the suggestions container](https://github.com/moroshko/react-autosuggest/blob/master/FAQ.md#limitSuggestionsContainerScrolling).
 
@@ -556,7 +556,7 @@ function renderSuggestionsContainer({ containerProps, children }) {
 ```
 
 <a name="themeProp"></a>
-#### theme (optional)
+### theme (optional)
 
 Autosuggest comes with no styles.
 
@@ -608,7 +608,7 @@ The following picture illustrates how `theme` keys correspond to Autosuggest DOM
 ![DOM structure](dom-structure.png)
 
 <a name="idProp"></a>
-#### id (required when multiple Autosuggest components are rendered on a page)
+### id (required when multiple Autosuggest components are rendered on a page)
 
 The only reason `id` exists, is to set ARIA attributes (they require a unique id).
 
