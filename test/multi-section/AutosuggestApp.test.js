@@ -24,6 +24,7 @@ import {
   clickClearButton
 } from '../helpers';
 import AutosuggestApp, {
+  renderSuggestion,
   onSuggestionsFetchRequested,
   onSuggestionSelected,
   onSuggestionHighlighted,
@@ -35,6 +36,35 @@ import AutosuggestApp, {
 describe('Autosuggest with multiSection={true}', () => {
   beforeEach(() => {
     init(TestUtils.renderIntoDocument(<AutosuggestApp />));
+  });
+
+  describe('renderSuggestion', () => {
+    beforeEach(() => {
+      focusInput();
+    });
+
+    it('should be called once for every suggestion', () => {
+      expect(renderSuggestion).to.have.callCount(14);
+    });
+
+    it('should be called with an empty query when input field is blank', () => {
+      renderSuggestion.reset();
+      clickDown();
+      expect(renderSuggestion.getCall(0).args).to.deep.equal([
+        { name: 'C', year: 1972 },
+        { query: '', isHighlighted: true }
+      ]);
+    });
+
+    it('should trim the value before passing it to the query', () => {
+      renderSuggestion.reset();
+      setInputValue(' ');
+      clickDown();
+      expect(renderSuggestion.getCall(0).args).to.deep.equal([
+        { name: 'C', year: 1972 },
+        { query: '', isHighlighted: true }
+      ]);
+    });
   });
 
   describe('shouldRenderSuggestions', () => {
