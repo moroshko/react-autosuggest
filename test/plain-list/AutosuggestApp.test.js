@@ -15,8 +15,13 @@ import {
   getSuggestionsContainerAttribute,
   mouseEnterSuggestion,
   mouseLeaveSuggestion,
+  mouseUpDocument,
+  mouseDownSuggestionsContainer,
+  getIsMouseDown,
   clickSuggestion,
   clickSuggestionsContainer,
+  clickSuggestionAndMoveOutsideContainer,
+  moveMouseOutsideContainer,
   focusInput,
   blurInput,
   clickEscape,
@@ -140,6 +145,26 @@ describe('Default Autosuggest', () => {
     it('should keep the focus on input when suggestions container is clicked', () => {
       clickSuggestionsContainer();
       expect(isInputFocused()).to.equal(true);
+    });
+
+    it('should keep the focus on input when a suggestion is clicked and dragged', () => {
+      clickSuggestionAndMoveOutsideContainer();
+      expect(isInputFocused()).to.equal(true);
+    });
+
+    it('should not change the focus on input when mouse leaves the container without mouse down', () => {
+      moveMouseOutsideContainer();
+      expect(isInputFocused()).to.equal(false);
+    });
+
+    it('should set isMouseDown to true when mouseDown event is dispatched on the suggestion container', () => {
+      mouseDownSuggestionsContainer();
+      expect(getIsMouseDown()).to.equal(true);
+    });
+
+    it('should set isMouseDown to false when mouseUp event is dispatched on the document', () => {
+      mouseUpDocument();
+      expect(getIsMouseDown()).to.equal(false);
     });
 
     it('shoud reset the highlighted suggestion when input value changes', () => {

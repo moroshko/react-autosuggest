@@ -107,13 +107,17 @@ export default class Autosuggest extends Component {
     };
 
     this.justPressedUpDown = false;
+    this.isMouseDown = false;
   }
 
   componentDidMount() {
     document.addEventListener('mousedown', this.onDocumentMouseDown);
+    document.addEventListener('mouseup', this.onDocumentMouseUp);
 
     this.input = this.autowhatever.input;
     this.suggestionsContainer = this.autowhatever.itemsContainer;
+    this.suggestionsContainer.addEventListener('mousedown', this.onSuggestionsContainerMouseDown);
+    this.suggestionsContainer.addEventListener('mouseleave', this.onSuggestionsContainerMouseLeave);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -161,6 +165,9 @@ export default class Autosuggest extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.onDocumentMouseDown);
+    document.removeEventListener('mouseup', this.onDocumentMouseUp);
+    this.suggestionsContainer.removeEventListener('mousedown', this.onSuggestionsContainerMouseDown);
+    this.suggestionsContainer.removeEventListener('mouseleave', this.onSuggestionsContainerMouseLeave);
   }
 
   updateHighlightedSuggestion(sectionIndex, suggestionIndex, prevValue) {
@@ -280,6 +287,21 @@ export default class Autosuggest extends Component {
     }
   };
 
+  onDocumentMouseUp = () => {
+    this.isMouseDown = false;
+  };
+
+  onSuggestionsContainerMouseDown = () => {
+    this.isMouseDown = true;
+  };
+
+  onSuggestionsContainerMouseLeave = () => {
+    if (this.isMouseDown) {
+      this.justSelectedSuggestion = false;
+      this.input.focus();
+    }
+  };
+
   findSuggestionElement(startNode) {
     let node = startNode;
 
@@ -326,6 +348,10 @@ export default class Autosuggest extends Component {
 
   onSuggestionMouseDown = () => {
     this.justSelectedSuggestion = true;
+  };
+
+  onSuggestionTouchEnd = () => {
+    this.justSelectedSuggestion = false;
   };
 
   onSuggestionsClearRequested = () => {
@@ -418,6 +444,7 @@ export default class Autosuggest extends Component {
       onMouseLeave: this.resetHighlightedSuggestionOnMouseLeave,
       onMouseDown: this.onSuggestionMouseDown,
       onTouchStart: this.onSuggestionMouseDown, // Because on iOS `onMouseDown` is not triggered
+      onTouchEnd: this.onSuggestionTouchEnd,
       onClick: this.onSuggestionClick
     };
   };
