@@ -586,7 +586,9 @@ export default class Autosuggest extends Component {
           // Tab (must fall through to enter when conditions apply!)
           case 9:
             if (!this.props.selectOnTab) break;
+
           // Enter
+          // eslint-disable-next-line no-fallthrough
           case 13: {
             // See #388
             if (event.keyCode === 229) {
