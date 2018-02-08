@@ -216,6 +216,11 @@ export const clickEnter = () => {
   clock.tick(1);
 };
 
+export const clickTab = () => {
+  Simulate.keyDown(input, { key: 'Tab', keyCode: 9 }); // throws if key is missing
+  clock.tick(1);
+};
+
 // See #388
 export const clickCombinedCharacterEnter = () => {
   Simulate.keyDown(input, { key: 'Enter', keyCode: 229 }); // throws if key is missing

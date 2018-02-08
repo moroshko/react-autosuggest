@@ -4,7 +4,6 @@ import { expect } from 'chai';
 import {
   init,
   expectInputValue,
-  clickEnter,
   clickTab,
   clickDown,
   focusAndSetInputValue,
@@ -16,24 +15,24 @@ import AutosuggestApp, {
   onSuggestionSelected
 } from './AutosuggestApp';
 
-describe('Autosuggest with highlightFirstSuggestion={true} and clear on Enter', () => {
+describe('Autosuggest with highlightFirstSuggestion={true} and selectOnTab={true} clear on Tab', () => {
   beforeEach(() => {
     init(TestUtils.renderIntoDocument(<AutosuggestApp />));
   });
 
-  describe('when pressing Enter', () => {
+  describe('when pressing Tab', () => {
     beforeEach(() => {
       focusAndSetInputValue('c');
     });
 
     it('should clear the input after selecting the first suggestion', () => {
-      clickEnter();
+      clickTab();
       expectInputValue('');
     });
 
     it('should clear the input after selecting the second suggestion', () => {
       clickDown();
-      clickEnter();
+      clickTab();
       expectInputValue('');
     });
   });
@@ -44,28 +43,11 @@ describe('Autosuggest with highlightFirstSuggestion={true} and clear on Enter', 
       focusAndSetInputValue('j');
     });
 
-    it('should be called after inputProps.onChange when Enter is pressed', () => {
-      onChange.reset();
-      clearEvents();
-      clickEnter();
-      expect(getEvents()).to.deep.equal(['onChange', 'onSuggestionSelected']);
-    });
-  });
-
-  describe('onSuggestionSelected', () => {
-    beforeEach(() => {
-      onSuggestionSelected.reset();
-      focusAndSetInputValue('j');
-    });
-
-    it('should not be called after inputProps.onChange when Tab is pressed', () => {
+    it('should be called after inputProps.onChange when Tab is pressed', () => {
       onChange.reset();
       clearEvents();
       clickTab();
-      expect(getEvents()).to.not.deep.equal([
-        'onChange',
-        'onSuggestionSelected'
-      ]);
+      expect(getEvents()).to.deep.equal(['onChange', 'onSuggestionSelected']);
     });
   });
 });
