@@ -107,6 +107,7 @@ export default class Autosuggest extends Component {
     };
 
     this.justPressedUpDown = false;
+    this.justMouseEntered = false;
   }
 
   componentDidMount() {
@@ -121,7 +122,8 @@ export default class Autosuggest extends Component {
       if (
         nextProps.highlightFirstSuggestion &&
         nextProps.suggestions.length > 0 &&
-        this.justPressedUpDown === false
+        this.justPressedUpDown === false &&
+        this.justMouseEntered === false
       ) {
         this.highlightFirstSuggestion();
       }
@@ -318,6 +320,12 @@ export default class Autosuggest extends Component {
 
   onSuggestionMouseEnter = (event, { sectionIndex, itemIndex }) => {
     this.updateHighlightedSuggestion(sectionIndex, itemIndex);
+
+    this.justMouseEntered = true;
+
+    setTimeout(() => {
+      this.justMouseEntered = false;
+    });
   };
 
   highlightFirstSuggestion = () => {
