@@ -41,7 +41,11 @@ export const onSuggestionsClearRequested = sinon.spy(() => {
 
 export const onSuggestionSelected = sinon.spy();
 
-export const onSuggestionHighlighted = sinon.spy();
+export const onSuggestionHighlighted = sinon.spy(({ suggestion }) => {
+  app.setState({
+    highlightedSuggestion: suggestion
+  });
+});
 
 export default class AutosuggestApp extends Component {
   constructor() {
@@ -51,7 +55,8 @@ export default class AutosuggestApp extends Component {
 
     this.state = {
       value: '',
-      suggestions: []
+      suggestions: [],
+      highlightedSuggestion: null
     };
   }
 
