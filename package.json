@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "9.3.3",
+  "version": "9.3.4",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/index.js",
   "repository": {
@@ -10,13 +10,18 @@
   "author": "Misha Moroshko <michael.moroshko@gmail.com>",
   "scripts": {
     "start": "mkdir -p demo/dist && npm run copy-static-files && node server",
-    "prettier": "prettier --single-quote --write \".*.js\" \"*.js\" \"demo/src/**/*.js\" \"demo/standalone/app.js\" \"src/**/*.js\" \"test/**/*.js\"",
-    "lint": "eslint src test demo/src demo/standalone/app.js server.js webpack.*.js",
+    "prettier":
+      "prettier --single-quote --write \".*.js\" \"*.js\" \"demo/src/**/*.js\" \"demo/standalone/app.js\" \"src/**/*.js\" \"test/**/*.js\"",
+    "lint":
+      "eslint src test demo/src demo/standalone/app.js server.js webpack.*.js",
     "test": "nyc mocha \"test/**/*.test.js\"",
-    "copy-static-files": "cp demo/src/index.html demo/src/components/App/components/Examples/components/Basic/autosuggest.css demo/dist/",
+    "copy-static-files":
+      "cp demo/src/index.html demo/src/components/App/components/Examples/components/Basic/autosuggest.css demo/dist/",
     "dist": "rm -rf dist && mkdir dist && babel src -d dist",
-    "demo-dist": "rm -rf demo/dist && mkdir demo/dist && npm run copy-static-files && cross-env BABEL_ENV=production webpack --config webpack.gh-pages.config.js",
-    "standalone": "cross-env BABEL_ENV=production webpack --config webpack.standalone.config.js && webpack --config webpack.standalone-demo.config.js",
+    "demo-dist":
+      "rm -rf demo/dist && mkdir demo/dist && npm run copy-static-files && cross-env BABEL_ENV=production webpack --config webpack.gh-pages.config.js",
+    "standalone":
+      "cross-env BABEL_ENV=production webpack --config webpack.standalone.config.js && webpack --config webpack.standalone-demo.config.js",
     "prebuild": "npm run prettier && npm run lint && npm test",
     "build": "npm run dist && npm run standalone",
     "gh-pages-build": "npm run prebuild && npm run demo-dist",
@@ -78,34 +83,14 @@
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "lint-staged": {
-    ".*.js": [
-      "npm run prettier",
-      "git add"
-    ],
-    "*.js": [
-      "npm run prettier",
-      "git add"
-    ],
-    "demo/src/**/*.js": [
-      "npm run prettier",
-      "git add"
-    ],
-    "demo/standalone/app.js": [
-      "npm run prettier",
-      "git add"
-    ],
-    "src/**/*.js": [
-      "npm run prettier",
-      "git add"
-    ],
-    "test/**/*.js": [
-      "npm run prettier",
-      "git add"
-    ]
+    ".*.js": ["npm run prettier", "git add"],
+    "*.js": ["npm run prettier", "git add"],
+    "demo/src/**/*.js": ["npm run prettier", "git add"],
+    "demo/standalone/app.js": ["npm run prettier", "git add"],
+    "src/**/*.js": ["npm run prettier", "git add"],
+    "test/**/*.js": ["npm run prettier", "git add"]
   },
   "keywords": [
     "autosuggest",
@@ -131,20 +116,10 @@
     "branches": 91,
     "functions": 100,
     "lines": 95,
-    "include": [
-      "src/*.js"
-    ],
-    "exclude": [
-      "test/**/*.js"
-    ],
-    "reporter": [
-      "lcov",
-      "text-summary"
-    ],
-    "require": [
-      "babel-register",
-      "./test/setup.js"
-    ],
+    "include": ["src/*.js"],
+    "exclude": ["test/**/*.js"],
+    "reporter": ["lcov", "text-summary"],
+    "require": ["babel-register", "./test/setup.js"],
     "check-coverage": true
   },
   "license": "MIT"
