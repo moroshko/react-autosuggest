@@ -103,6 +103,7 @@ export default class Autosuggest extends Component {
       isCollapsed: !alwaysRenderSuggestions,
       highlightedSectionIndex: null,
       highlightedSuggestionIndex: null,
+      highlightedSuggestion: null,
       valueBeforeUpDown: null
     };
 
@@ -129,10 +130,6 @@ export default class Autosuggest extends Component {
       }
     } else {
       if (this.willRenderSuggestions(nextProps)) {
-        if (nextProps.highlightFirstSuggestion) {
-          this.highlightFirstSuggestion();
-        }
-
         if (this.state.isCollapsed && !this.justSelectedSuggestion) {
           this.revealSuggestions();
         }
@@ -143,21 +140,30 @@ export default class Autosuggest extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { onSuggestionHighlighted } = this.props;
+    const {
+      suggestions,
+      onSuggestionHighlighted,
+      highlightFirstSuggestion
+    } = this.props;
 
-    if (!onSuggestionHighlighted) {
+    if (
+      !shallowEqualArrays(suggestions, prevProps.suggestions) &&
+      suggestions.length > 0 &&
+      highlightFirstSuggestion
+    ) {
+      this.highlightFirstSuggestion();
       return;
     }
 
-    const { highlightedSectionIndex, highlightedSuggestionIndex } = this.state;
+    if (onSuggestionHighlighted) {
+      const highlightedSuggestion = this.getHighlightedSuggestion();
+      const prevHighlightedSuggestion = prevState.highlightedSuggestion;
 
-    if (
-      highlightedSectionIndex !== prevState.highlightedSectionIndex ||
-      highlightedSuggestionIndex !== prevState.highlightedSuggestionIndex
-    ) {
-      const suggestion = this.getHighlightedSuggestion();
-
-      onSuggestionHighlighted({ suggestion });
+      if (highlightedSuggestion != prevHighlightedSuggestion) {
+        onSuggestionHighlighted({
+          suggestion: highlightedSuggestion
+        });
+      }
     }
   }
 
@@ -181,6 +187,10 @@ export default class Autosuggest extends Component {
       return {
         highlightedSectionIndex: sectionIndex,
         highlightedSuggestionIndex: suggestionIndex,
+        highlightedSuggestion:
+          suggestionIndex === null
+            ? null
+            : this.getSuggestion(sectionIndex, suggestionIndex),
         valueBeforeUpDown
       };
     });
@@ -193,6 +203,7 @@ export default class Autosuggest extends Component {
       return {
         highlightedSectionIndex: null,
         highlightedSuggestionIndex: null,
+        highlightedSuggestion: null,
         valueBeforeUpDown: shouldResetValueBeforeUpDown
           ? null
           : valueBeforeUpDown
@@ -210,6 +221,7 @@ export default class Autosuggest extends Component {
     this.setState({
       highlightedSectionIndex: null,
       highlightedSuggestionIndex: null,
+      highlightedSuggestion: null,
       valueBeforeUpDown: null,
       isCollapsed: true
     });
@@ -407,6 +419,7 @@ export default class Autosuggest extends Component {
       isFocused: false,
       highlightedSectionIndex: null,
       highlightedSuggestionIndex: null,
+      highlightedSuggestion: null,
       valueBeforeUpDown: null,
       isCollapsed: !shouldRender
     });
@@ -461,7 +474,8 @@ export default class Autosuggest extends Component {
       getSectionSuggestions,
       theme,
       getSuggestionValue,
-      alwaysRenderSuggestions
+      alwaysRenderSuggestions,
+      highlightFirstSuggestion
     } = this.props;
     const {
       isFocused,
@@ -520,8 +534,13 @@ export default class Autosuggest extends Component {
         this.maybeCallOnChange(event, value, 'type');
 
         this.setState({
-          highlightedSectionIndex: null,
-          highlightedSuggestionIndex: null,
+          ...(highlightFirstSuggestion
+            ? {}
+            : {
+                highlightedSectionIndex: null,
+                highlightedSuggestionIndex: null,
+                highlightedSuggestion: null
+              }),
           valueBeforeUpDown: null,
           isCollapsed: !shouldRender
         });
@@ -602,7 +621,7 @@ export default class Autosuggest extends Component {
               this.closeSuggestions();
             }
 
-            if (highlightedSuggestion !== null) {
+            if (highlightedSuggestion != null) {
               const newValue = getSuggestionValue(highlightedSuggestion);
 
               this.maybeCallOnChange(event, newValue, 'enter');

@@ -149,5 +149,15 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
         suggestion: { name: 'Perl', year: 1987 }
       });
     });
+
+    it('should be called once with the new suggestion when typing more changes the autohighlighted suggestion', () => {
+      focusAndSetInputValue('c');
+      onSuggestionHighlighted.reset();
+      focusAndSetInputValue('c+');
+      expect(onSuggestionHighlighted).to.have.been.calledOnce;
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: { name: 'C++', year: 1983 }
+      });
+    });
   });
 });
