@@ -34,6 +34,7 @@ export default class Autosuggest extends Component {
         );
       }
     },
+    onSuggestionClick: PropTypes.func,
     onSuggestionSelected: PropTypes.func,
     onSuggestionHighlighted: PropTypes.func,
     renderInputComponent: PropTypes.func,
@@ -376,7 +377,11 @@ export default class Autosuggest extends Component {
   };
 
   onSuggestionClick = event => {
-    const { alwaysRenderSuggestions, focusInputOnSuggestionClick } = this.props;
+    const {
+      alwaysRenderSuggestions,
+      focusInputOnSuggestionClick,
+      onSuggestionClick
+    } = this.props;
     const { sectionIndex, suggestionIndex } = this.getSuggestionIndices(
       this.findSuggestionElement(event.target)
     );
@@ -384,29 +389,40 @@ export default class Autosuggest extends Component {
     const clickedSuggestionValue = this.props.getSuggestionValue(
       clickedSuggestion
     );
-
-    this.maybeCallOnChange(event, clickedSuggestionValue, 'click');
-    this.onSuggestionSelected(event, {
+    const suggestionData = {
       suggestion: clickedSuggestion,
       suggestionValue: clickedSuggestionValue,
       suggestionIndex: suggestionIndex,
       sectionIndex,
       method: 'click'
-    });
+    };
+    const next = () => {
+      this.maybeCallOnChange(event, clickedSuggestionValue, 'click');
+      this.onSuggestionSelected(event, suggestionData);
 
-    if (!alwaysRenderSuggestions) {
-      this.closeSuggestions();
-    }
+      if (!alwaysRenderSuggestions) {
+        this.closeSuggestions();
+      }
 
-    if (focusInputOnSuggestionClick === true) {
-      this.input.focus();
+      if (focusInputOnSuggestionClick === true) {
+        this.input.focus();
+      } else {
+        this.onBlur();
+      }
+
+      setTimeout(() => {
+        this.justSelectedSuggestion = false;
+      });
+    };
+
+    if (onSuggestionClick) {
+      onSuggestionClick(event, {
+        ...suggestionData,
+        selectSuggestion: () => next()
+      });
     } else {
-      this.onBlur();
+      next();
     }
-
-    setTimeout(() => {
-      this.justSelectedSuggestion = false;
-    });
   };
 
   onBlur = () => {

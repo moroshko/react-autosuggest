@@ -156,6 +156,7 @@ class Example extends React.Component {
 | [`getSuggestionValue`](#getSuggestionValueProp) | Function | ✓ | Implement it to teach Autosuggest what should be the input value when suggestion is clicked. |
 | [`renderSuggestion`](#renderSuggestionProp) | Function | ✓ | Use your imagination to define how suggestions are rendered. |
 | [`inputProps`](#inputPropsProp) | Object | ✓ | Pass through arbitrary props to the input. It must contain at least `value` and `onChange`. |
+| [`onSuggestionClick`](#onSuggestionClickProp) | Function | | If specified, will be called whenever a suggestion is clicked. |
 | [`onSuggestionSelected`](#onSuggestionSelectedProp) | Function | | Will be called every time suggestion is selected via mouse or keyboard. |
 | [`onSuggestionHighlighted`](#onSuggestionHighlightedProp) | Function | | Will be called every time the highlighted suggestion changes. |
 | [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp) | Function | | When the input is focused, Autosuggest will consult this function when to render suggestions. Use it, for example, if you want to display suggestions when input value is at least 2 characters long. |
@@ -353,6 +354,41 @@ function onBlur(event, { highlightedSuggestion })
 where:
 
 * `highlightedSuggestion` - the suggestion that was highlighted just before the input lost focus, or `null` if there was no highlighted suggestion.
+
+<a name="onSuggestionClickProp"></a>
+#### onSuggestionClick (optional)
+
+This function is called when a suggestion is clicked.  It allows you to intercept, and decide whether or not to select this suggestion, and specify custom behavior on click. It has the following signature:
+
+```js
+function onSuggestionSelected(event, { selectSuggestion, suggestion, suggestionValue, suggestionIndex, sectionIndex, method })
+```
+
+where:
+
+* `selectSuggestion` - a callback to proceed with the selection of the suggestion, if this is not called, the suggestion will not be selected
+* `suggestion` - the selected suggestion
+* `suggestionValue` - the value of the selected suggestion (equivalent to `getSuggestionValue(suggestion)`)
+* `suggestionIndex` - the index of the selected suggestion in the `suggestions` array
+* `sectionIndex` - when rendering [multiple sections](#multiSectionProp), this will be the section index (in [`suggestions`](#suggestionsProp)) of the selected suggestion. Otherwise, it will be `null`.
+* `method` - string describing how user selected the suggestion. The possible values are:
+  * `'click'` - user clicked (or tapped) on the suggestion
+  * `'enter'` - user selected the suggestion using <kbd>Enter</kbd>
+  
+You can do something like this:
+
+```js
+const onSuggestionClick = (event, {selectSuggestion, suggestionValue}) => {
+  // only select the suggestion if it meets your criteria
+  if (suggestionValue !== 'SOME VALUE') {
+    return selectSuggestion();
+  }
+};
+
+<Autosuggest
+  onSuggestionClick={onSuggestionClick}
+/>
+```
 
 <a name="onSuggestionSelectedProp"></a>
 #### onSuggestionSelected (optional)
