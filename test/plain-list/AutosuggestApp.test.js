@@ -233,6 +233,17 @@ describe('Default Autosuggest', () => {
       clickDown(5);
       expectHighlightedSuggestion('Perl');
     });
+
+    describe('with no matching suggestions', () => {
+      beforeEach(() => {
+        focusAndSetInputValue('z');
+      });
+
+      it('should not show suggestions', () => {
+        clickDown();
+        expectSuggestions([]);
+      });
+    });
   });
 
   describe('when pressing Up', () => {
@@ -265,6 +276,17 @@ describe('Default Autosuggest', () => {
     it('should highlight the last suggestion again', () => {
       clickUp(5);
       expectHighlightedSuggestion('Python');
+    });
+
+    describe('with no matching suggestions', () => {
+      beforeEach(() => {
+        focusAndSetInputValue('z');
+      });
+
+      it('should not show suggestions', () => {
+        clickUp();
+        expectSuggestions([]);
+      });
     });
   });
 
