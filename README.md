@@ -567,12 +567,64 @@ For example, to style the Autosuggest using CSS Modules, do:
 ```css
 /* theme.css */
 
-.container { ... }
-.input { ... }
-.suggestionsContainer { ... }
-.suggestion { ... }
-.suggestionHighlighted { ... }
-...
+.container {
+  position: relative;
+}
+
+.input {
+  width: 240px;
+  height: 30px;
+  padding: 10px 20px;
+  font-family: Helvetica, sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+.inputFocused {
+  outline: none;
+}
+
+.inputOpen {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.suggestionsContainer {
+  display: none;
+}
+
+.suggestionsContainerOpen {
+  display: block;
+  position: absolute;
+  top: 51px;
+  width: 280px;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  font-family: Helvetica, sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  border-radius: 0 0 4px 4px;
+  z-index: 2;
+}
+
+.suggestionsList {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.suggestion {
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+.suggestionHighlighted {
+  background-color: #ddd;
+}
+
+
 ```
 
 ```js
