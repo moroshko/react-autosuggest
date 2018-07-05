@@ -361,6 +361,7 @@ export default class Autosuggest extends Component {
       alwaysRenderSuggestions,
       onSuggestionSelected,
       onSuggestionsFetchRequested,
+      closeSuggestionsOnSelect
     } = this.props;
 
     onSuggestionSelected && onSuggestionSelected(event, data);
