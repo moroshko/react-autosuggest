@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import shallowEqualArrays from 'shallow-equal/arrays';
-import Autowhatever from 'react-autowhatever';
+import Autowhatever from 'ricardo-react-autowhatever';
 import { defaultTheme, mapToAutowhateverTheme } from './theme';
 
 const alwaysTrue = () => true;
@@ -38,6 +38,7 @@ export default class Autosuggest extends Component {
     onSuggestionHighlighted: PropTypes.func,
     renderInputComponent: PropTypes.func,
     renderSuggestionsContainer: PropTypes.func,
+    renderSectionContainer: PropTypes.func,
     getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
     inputProps: (props, propName) => {
@@ -510,6 +511,7 @@ export default class Autosuggest extends Component {
       inputProps,
       multiSection,
       renderSectionTitle,
+      renderSectionContainer,
       id,
       getSectionSuggestions,
       theme,
@@ -748,6 +750,7 @@ export default class Autosuggest extends Component {
         renderItem={renderSuggestion}
         renderItemData={renderSuggestionData}
         renderSectionTitle={renderSectionTitle}
+        renderSectionContainer={renderSectionContainer}
         getSectionItems={getSectionSuggestions}
         highlightedSectionIndex={highlightedSectionIndex}
         highlightedItemIndex={highlightedSuggestionIndex}
