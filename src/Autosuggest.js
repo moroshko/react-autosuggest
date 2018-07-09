@@ -397,7 +397,7 @@ export default class Autosuggest extends Component {
       method: 'click'
     });
 
-    if (!(alwaysRenderSuggestions && keepSuggestionsOnSelect)) {
+    if (!(alwaysRenderSuggestions || keepSuggestionsOnSelect)) {
       this.closeSuggestions();
     }
 
