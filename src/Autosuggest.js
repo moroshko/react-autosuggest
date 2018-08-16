@@ -109,6 +109,7 @@ export default class Autosuggest extends Component {
 
     this.justPressedUpDown = false;
     this.justMouseEntered = false;
+    this.justPressedUpDownTimeout = null;
   }
 
   componentDidMount() {
@@ -331,13 +332,22 @@ export default class Autosuggest extends Component {
   };
 
   onSuggestionMouseEnter = (event, { sectionIndex, itemIndex }) => {
-    this.updateHighlightedSuggestion(sectionIndex, itemIndex);
+    if (this.justPressedUpDown) {
+      this.justPressedUpDown = false;
+      this.updateHighlightedSuggestion(
+        this.state.highlightedSectionIndex,
+        this.state.highlightedSuggestionIndex
+      );
+      clearTimeout(this.justPressedUpDownTimeout);
+    } else {
+      this.updateHighlightedSuggestion(sectionIndex, itemIndex);
 
-    this.justMouseEntered = true;
+      this.justMouseEntered = true;
 
-    setTimeout(() => {
-      this.justMouseEntered = false;
-    });
+      setTimeout(() => {
+        this.justMouseEntered = false;
+      });
+    }
   };
 
   highlightFirstSuggestion = () => {
@@ -602,9 +612,13 @@ export default class Autosuggest extends Component {
 
             this.justPressedUpDown = true;
 
-            setTimeout(() => {
+            if (this.justPressedUpDownTimeout) {
+              clearTimeout(this.justPressedUpDownTimeout);
+            }
+
+            this.justPressedUpDownTimeout = setTimeout(() => {
               this.justPressedUpDown = false;
-            });
+            }, 1000); // Preventing onMouseEnter from moving cursor after keyUp/Down on scrolled list
 
             break;
 
