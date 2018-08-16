@@ -94,7 +94,8 @@ export default class CustomRender extends Component {
         <div className={styles.textContainer}>
           <div className={styles.title}>Custom render</div>
           <div className={styles.description}>
-            Apply any styling you wish.<br />
+            Apply any styling you wish.
+            <br />
             For example, render images and highlight the matching string.
           </div>
           <Link

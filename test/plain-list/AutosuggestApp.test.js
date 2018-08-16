@@ -563,30 +563,32 @@ describe('Default Autosuggest', () => {
     it('should be called once with the right parameters when suggestion is clicked', () => {
       clickSuggestion(1);
       expect(onSuggestionSelected).to.have.been.calledOnce;
-      expect(
-        onSuggestionSelected
-      ).to.have.been.calledWithExactly(syntheticEventMatcher, {
-        suggestion: { name: 'JavaScript', year: 1995 },
-        suggestionValue: 'JavaScript',
-        suggestionIndex: 1,
-        sectionIndex: null,
-        method: 'click'
-      });
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(
+        syntheticEventMatcher,
+        {
+          suggestion: { name: 'JavaScript', year: 1995 },
+          suggestionValue: 'JavaScript',
+          suggestionIndex: 1,
+          sectionIndex: null,
+          method: 'click'
+        }
+      );
     });
 
     it('should be called once with the right parameters when Enter is pressed and suggestion is highlighted', () => {
       clickDown();
       clickEnter();
       expect(onSuggestionSelected).to.have.been.calledOnce;
-      expect(
-        onSuggestionSelected
-      ).to.have.been.calledWithExactly(syntheticEventMatcher, {
-        suggestion: { name: 'Java', year: 1995 },
-        suggestionValue: 'Java',
-        suggestionIndex: 0,
-        sectionIndex: null,
-        method: 'enter'
-      });
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(
+        syntheticEventMatcher,
+        {
+          suggestion: { name: 'Java', year: 1995 },
+          suggestionValue: 'Java',
+          suggestionIndex: 0,
+          sectionIndex: null,
+          method: 'enter'
+        }
+      );
     });
 
     it('should not be called when Enter is pressed and there is no highlighted suggestion', () => {
