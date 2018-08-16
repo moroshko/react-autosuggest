@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "prop-types": "^15.5.10",
-    "react-autowhatever": "^10.1.0",
+    "react-autowhatever": "^10.1.2",
     "shallow-equal": "^1.0.0"
   },
   "peerDependencies": {
