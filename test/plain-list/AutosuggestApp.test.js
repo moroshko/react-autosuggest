@@ -9,6 +9,7 @@ import {
   expectInputValue,
   getSuggestionsList,
   getSuggestion,
+  expectContainerAttribute,
   expectInputReferenceToBeSet,
   expectSuggestions,
   expectHighlightedSuggestion,
@@ -801,21 +802,23 @@ describe('Default Autosuggest', () => {
 
   describe('aria attributes', () => {
     describe('initially', () => {
-      describe("should set input's", () => {
+      describe("should set input container's", () => {
         it('role to "combobox"', () => {
-          expectInputAttribute('role', 'combobox');
-        });
-
-        it('aria-autocomplete to "list"', () => {
-          expectInputAttribute('aria-autocomplete', 'list');
+          expectContainerAttribute('role', 'combobox');
         });
 
         it('aria-expanded to "false"', () => {
-          expectInputAttribute('aria-expanded', 'false');
+          expectContainerAttribute('aria-expanded', 'false');
         });
 
         it('aria-owns', () => {
-          expectInputAttribute('aria-owns', 'react-autowhatever-1');
+          expectContainerAttribute('aria-owns', 'react-autowhatever-1');
+        });
+      });
+
+      describe("should set input's", () => {
+        it('aria-autocomplete to "list"', () => {
+          expectInputAttribute('aria-autocomplete', 'list');
         });
       });
 
@@ -831,12 +834,12 @@ describe('Default Autosuggest', () => {
         focusAndSetInputValue('J');
       });
 
-      it('input\'s aria-expanded should be "true"', () => {
-        expectInputAttribute('aria-expanded', 'true');
+      it('input container\'s aria-expanded should be "true"', () => {
+        expectContainerAttribute('aria-expanded', 'true');
       });
 
-      it("input's aria-owns should be equal to suggestions container id", () => {
-        expectInputAttribute(
+      it("input container's aria-owns should be equal to suggestions container id", () => {
+        expectContainerAttribute(
           'aria-owns',
           getSuggestionsContainerAttribute('id')
         );
