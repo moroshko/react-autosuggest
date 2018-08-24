@@ -6,9 +6,8 @@ import { defaultTheme, mapToAutowhateverTheme } from './theme';
 
 const alwaysTrue = () => true;
 const defaultShouldRenderSuggestions = value => value.trim().length > 0;
-const defaultRenderSuggestionsContainer = ({ containerProps, children }) => (
-  <div {...containerProps}>{children}</div>
-);
+const defaultRenderSuggestionsContainer = ({ containerProps, children }) =>
+  <div {...containerProps}>{children}</div>;
 
 export default class Autosuggest extends Component {
   static propTypes = {
@@ -265,8 +264,9 @@ export default class Autosuggest extends Component {
     );
 
     return {
-      sectionIndex:
-        typeof sectionIndex === 'string' ? parseInt(sectionIndex, 10) : null,
+      sectionIndex: typeof sectionIndex === 'string'
+        ? parseInt(sectionIndex, 10)
+        : null,
       suggestionIndex: parseInt(suggestionIndex, 10)
     };
   }
@@ -344,7 +344,12 @@ export default class Autosuggest extends Component {
     this.updateHighlightedSuggestion(this.props.multiSection ? 0 : null, 0);
   };
 
-  onSuggestionMouseDown = () => {
+  onSuggestionMouseDown = event => {
+    event.preventDefault(); // prevent input from losing focus
+    this.justSelectedSuggestion = true;
+  };
+
+  onSuggestionTouchStart = () => {
     this.justSelectedSuggestion = true;
   };
 
@@ -427,7 +432,8 @@ export default class Autosuggest extends Component {
     onBlur && onBlur(this.blurEvent, { highlightedSuggestion });
   };
 
-  resetHighlightedSuggestionOnMouseLeave = () => {
+  onSuggestionMouseLeave = () => {
+    this.justSelectedSuggestion = false;
     this.resetHighlightedSuggestion(false); // shouldResetValueBeforeUpDown
   };
 
@@ -436,9 +442,9 @@ export default class Autosuggest extends Component {
       'data-section-index': sectionIndex,
       'data-suggestion-index': itemIndex,
       onMouseEnter: this.onSuggestionMouseEnter,
-      onMouseLeave: this.resetHighlightedSuggestionOnMouseLeave,
+      onMouseLeave: this.onSuggestionMouseLeave,
       onMouseDown: this.onSuggestionMouseDown,
-      onTouchStart: this.onSuggestionMouseDown, // Because on iOS `onMouseDown` is not triggered
+      onTouchStart: this.onSuggestionTouchStart,
       onClick: this.onSuggestionClick
     };
   };
@@ -577,8 +583,9 @@ export default class Autosuggest extends Component {
                 // valueBeforeUpDown can be null if, for example, user
                 // hovers on the first suggestion and then pressed Up.
                 // If that happens, use the original input value.
-                newValue =
-                  valueBeforeUpDown === null ? value : valueBeforeUpDown;
+                newValue = valueBeforeUpDown === null
+                  ? value
+                  : valueBeforeUpDown;
               } else {
                 newValue = this.getSuggestionValueByIndex(
                   newHighlightedSectionIndex,
