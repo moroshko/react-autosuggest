@@ -320,7 +320,7 @@ describe('Default Autosuggest', () => {
     });
   });
 
-  // Tests for this bugs
+  // Tests for these bugs
   // https://github.com/moroshko/react-autosuggest/issues/412#issuecomment-318627754
   // https://github.com/moroshko/react-autosuggest/issues/380
   describe('when suggestion is dragged', () => {
