@@ -333,6 +333,12 @@ describe('Default Autosuggest', () => {
       expect(isInputFocused()).to.equal(true);
     });
 
+    it('should clear suggestions if input blurred after suggestion drag', () => {
+      dragSuggestionOut(1);
+      blurInput();
+      expectSuggestions([]);
+    });
+
     it('should keep the focus on input when suggestion is dragged on touch devices', () => {
       dragSuggestionOutTouch(1);
       expect(isInputFocused()).to.equal(true);
