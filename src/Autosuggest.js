@@ -109,10 +109,13 @@ export default class Autosuggest extends Component {
 
     this.justPressedUpDown = false;
     this.justMouseEntered = false;
+
+    this.pressedSuggestion = null;
   }
 
   componentDidMount() {
     document.addEventListener('mousedown', this.onDocumentMouseDown);
+    document.addEventListener('mouseup', this.onDocumentMouseUp);
 
     this.input = this.autowhatever.input;
     this.suggestionsContainer = this.autowhatever.itemsContainer;
@@ -169,6 +172,7 @@ export default class Autosuggest extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.onDocumentMouseDown);
+    document.removeEventListener('mouseup', this.onDocumentMouseUp);
   }
 
   updateHighlightedSuggestion(sectionIndex, suggestionIndex, prevValue) {
@@ -332,6 +336,9 @@ export default class Autosuggest extends Component {
 
   onSuggestionMouseEnter = (event, { sectionIndex, itemIndex }) => {
     this.updateHighlightedSuggestion(sectionIndex, itemIndex);
+    if (event.target === this.pressedSuggestion) {
+      this.justSelectedSuggestion = true;
+    }
 
     this.justMouseEntered = true;
 
@@ -344,8 +351,20 @@ export default class Autosuggest extends Component {
     this.updateHighlightedSuggestion(this.props.multiSection ? 0 : null, 0);
   };
 
-  onSuggestionMouseDown = () => {
-    this.justSelectedSuggestion = true;
+  onDocumentMouseUp = () => {
+    if (this.pressedSuggestion && !this.justSelectedSuggestion) {
+      this.pressedSuggestion = null;
+      this.input.focus();
+    }
+  };
+
+  onSuggestionMouseDown = e => {
+    // Checking if this.justSelectedSuggestion is already true to not duplicate touch events in chrome
+    // See: https://github.com/facebook/react/issues/9809#issuecomment-413978405
+    if (!this.justSelectedSuggestion) {
+      this.justSelectedSuggestion = true;
+      this.pressedSuggestion = e.target;
+    }
   };
 
   onSuggestionsClearRequested = () => {
@@ -427,8 +446,23 @@ export default class Autosuggest extends Component {
     onBlur && onBlur(this.blurEvent, { highlightedSuggestion });
   };
 
-  resetHighlightedSuggestionOnMouseLeave = () => {
+  onSuggestionMouseLeave = e => {
     this.resetHighlightedSuggestion(false); // shouldResetValueBeforeUpDown
+    if (this.justSelectedSuggestion && e.target === this.pressedSuggestion) {
+      this.justSelectedSuggestion = false;
+    }
+  };
+
+  onSuggestionTouchStart = () => {
+    this.justSelectedSuggestion = true;
+    // todo: event.preventDefault when https://github.com/facebook/react/issues/2043
+    // todo: gets released so onSuggestionMouseDown won't fire in chrome
+  };
+
+  onSuggestionTouchMove = () => {
+    this.justSelectedSuggestion = false;
+    this.pressedSuggestion = null;
+    this.input.focus();
   };
 
   itemProps = ({ sectionIndex, itemIndex }) => {
@@ -436,9 +470,10 @@ export default class Autosuggest extends Component {
       'data-section-index': sectionIndex,
       'data-suggestion-index': itemIndex,
       onMouseEnter: this.onSuggestionMouseEnter,
-      onMouseLeave: this.resetHighlightedSuggestionOnMouseLeave,
+      onMouseLeave: this.onSuggestionMouseLeave,
       onMouseDown: this.onSuggestionMouseDown,
-      onTouchStart: this.onSuggestionMouseDown, // Because on iOS `onMouseDown` is not triggered
+      onTouchStart: this.onSuggestionTouchStart,
+      onTouchMove: this.onSuggestionTouchMove,
       onClick: this.onSuggestionClick
     };
   };
