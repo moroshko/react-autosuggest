@@ -38,7 +38,11 @@ const renderSuggestion = (suggestion, { query }) => {
         {parts.map((part, index) => {
           const className = part.highlight ? theme.highlight : null;
 
-          return <span className={className} key={index}>{part.text}</span>;
+          return (
+            <span className={className} key={index}>
+              {part.text}
+            </span>
+          );
         })}
       </span>
     </span>
@@ -88,11 +92,10 @@ export default class CustomRender extends Component {
     return (
       <div id="custom-render-example" className={styles.container}>
         <div className={styles.textContainer}>
-          <div className={styles.title}>
-            Custom render
-          </div>
+          <div className={styles.title}>Custom render</div>
           <div className={styles.description}>
-            Apply any styling you wish.<br />
+            Apply any styling you wish.
+            <br />
             For example, render images and highlight the matching string.
           </div>
           <Link

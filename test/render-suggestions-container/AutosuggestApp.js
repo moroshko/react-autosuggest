@@ -36,13 +36,14 @@ const getSuggestionValue = suggestion => suggestion.name;
 const renderSuggestion = suggestion => suggestion.name;
 
 export const renderSuggestionsContainer = sinon.spy(
-  ({ containerProps, children, query }) =>
+  ({ containerProps, children, query }) => (
     <div {...containerProps}>
       {children}
       <div className="my-suggestions-container-footer">
         Press Enter to search <strong className="my-query">{query}</strong>
       </div>
     </div>
+  )
 );
 
 export default class AutosuggestApp extends Component {

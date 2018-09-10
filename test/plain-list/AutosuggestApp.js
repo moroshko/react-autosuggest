@@ -25,9 +25,11 @@ export const renderSuggestion = sinon.spy((suggestion, { query }) => {
   const parts = parse(suggestion.name, matches);
 
   return parts.map((part, index) => {
-    return part.highlight
-      ? <strong key={index}>{part.text}</strong>
-      : <span key={index}>{part.text}</span>;
+    return part.highlight ? (
+      <strong key={index}>{part.text}</strong>
+    ) : (
+      <span key={index}>{part.text}</span>
+    );
   });
 });
 

@@ -128,15 +128,16 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
       onSuggestionSelected.reset();
       clickEnter();
       expect(onSuggestionSelected).to.have.been.calledOnce;
-      expect(
-        onSuggestionSelected
-      ).to.have.been.calledWithExactly(syntheticEventMatcher, {
-        suggestion: { name: 'Perl', year: 1987 },
-        suggestionValue: 'Perl',
-        suggestionIndex: 0,
-        sectionIndex: null,
-        method: 'enter'
-      });
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(
+        syntheticEventMatcher,
+        {
+          suggestion: { name: 'Perl', year: 1987 },
+          suggestionValue: 'Perl',
+          suggestionIndex: 0,
+          sectionIndex: null,
+          method: 'enter'
+        }
+      );
     });
   });
 
@@ -147,6 +148,16 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
       expect(onSuggestionHighlighted).to.have.been.calledOnce;
       expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
         suggestion: { name: 'Perl', year: 1987 }
+      });
+    });
+
+    it('should be called once with the new suggestion when typing more changes the autohighlighted suggestion', () => {
+      focusAndSetInputValue('c');
+      onSuggestionHighlighted.reset();
+      focusAndSetInputValue('c+');
+      expect(onSuggestionHighlighted).to.have.been.calledOnce;
+      expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
+        suggestion: { name: 'C++', year: 1983 }
       });
     });
   });

@@ -9,6 +9,7 @@ import {
   expectInputValue,
   getSuggestionsList,
   getSuggestion,
+  expectContainerAttribute,
   expectInputReferenceToBeSet,
   expectSuggestions,
   expectHighlightedSuggestion,
@@ -17,6 +18,8 @@ import {
   mouseLeaveSuggestion,
   clickSuggestion,
   clickSuggestionsContainer,
+  dragSuggestionOut,
+  dragSuggestionOutTouch,
   focusInput,
   blurInput,
   clickEscape,
@@ -27,7 +30,9 @@ import {
   focusAndSetInputValue,
   isInputFocused,
   clearEvents,
-  getEvents
+  getEvents,
+  mouseUpDocument,
+  dragSuggestionOutAndIn
 } from '../helpers';
 import AutosuggestApp, {
   getSuggestionValue,
@@ -315,6 +320,41 @@ describe('Default Autosuggest', () => {
     });
   });
 
+  // Tests for these bugs
+  // https://github.com/moroshko/react-autosuggest/issues/412#issuecomment-318627754
+  // https://github.com/moroshko/react-autosuggest/issues/380
+  describe('when suggestion is dragged', () => {
+    beforeEach(() => {
+      focusAndSetInputValue('p');
+    });
+
+    it('should keep the focus on input when suggestion is dragged', () => {
+      dragSuggestionOut(1);
+      expect(isInputFocused()).to.equal(true);
+    });
+
+    it('should clear suggestions if input blurred after suggestion drag', () => {
+      dragSuggestionOut(1);
+      blurInput();
+      expectSuggestions([]);
+    });
+
+    it('should keep the focus on input when suggestion is dragged on touch devices', () => {
+      dragSuggestionOutTouch(1);
+      expect(isInputFocused()).to.equal(true);
+    });
+
+    it("should select a suggestion if it's dragged and mouse enters back", () => {
+      dragSuggestionOutAndIn(1);
+      expectInputValue('PHP');
+    });
+
+    it('should not focus input on document mouse up', () => {
+      mouseUpDocument();
+      expect(isInputFocused()).to.equal(false);
+    });
+  });
+
   describe('getSuggestionValue', () => {
     beforeEach(() => {
       getSuggestionValue.reset();
@@ -562,30 +602,32 @@ describe('Default Autosuggest', () => {
     it('should be called once with the right parameters when suggestion is clicked', () => {
       clickSuggestion(1);
       expect(onSuggestionSelected).to.have.been.calledOnce;
-      expect(
-        onSuggestionSelected
-      ).to.have.been.calledWithExactly(syntheticEventMatcher, {
-        suggestion: { name: 'JavaScript', year: 1995 },
-        suggestionValue: 'JavaScript',
-        suggestionIndex: 1,
-        sectionIndex: null,
-        method: 'click'
-      });
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(
+        syntheticEventMatcher,
+        {
+          suggestion: { name: 'JavaScript', year: 1995 },
+          suggestionValue: 'JavaScript',
+          suggestionIndex: 1,
+          sectionIndex: null,
+          method: 'click'
+        }
+      );
     });
 
     it('should be called once with the right parameters when Enter is pressed and suggestion is highlighted', () => {
       clickDown();
       clickEnter();
       expect(onSuggestionSelected).to.have.been.calledOnce;
-      expect(
-        onSuggestionSelected
-      ).to.have.been.calledWithExactly(syntheticEventMatcher, {
-        suggestion: { name: 'Java', year: 1995 },
-        suggestionValue: 'Java',
-        suggestionIndex: 0,
-        sectionIndex: null,
-        method: 'enter'
-      });
+      expect(onSuggestionSelected).to.have.been.calledWithExactly(
+        syntheticEventMatcher,
+        {
+          suggestion: { name: 'Java', year: 1995 },
+          suggestionValue: 'Java',
+          suggestionIndex: 0,
+          sectionIndex: null,
+          method: 'enter'
+        }
+      );
     });
 
     it('should not be called when Enter is pressed and there is no highlighted suggestion', () => {
@@ -801,21 +843,23 @@ describe('Default Autosuggest', () => {
 
   describe('aria attributes', () => {
     describe('initially', () => {
-      describe("should set input's", () => {
+      describe("should set input container's", () => {
         it('role to "combobox"', () => {
-          expectInputAttribute('role', 'combobox');
-        });
-
-        it('aria-autocomplete to "list"', () => {
-          expectInputAttribute('aria-autocomplete', 'list');
+          expectContainerAttribute('role', 'combobox');
         });
 
         it('aria-expanded to "false"', () => {
-          expectInputAttribute('aria-expanded', 'false');
+          expectContainerAttribute('aria-expanded', 'false');
         });
 
         it('aria-owns', () => {
-          expectInputAttribute('aria-owns', 'react-autowhatever-1');
+          expectContainerAttribute('aria-owns', 'react-autowhatever-1');
+        });
+      });
+
+      describe("should set input's", () => {
+        it('aria-autocomplete to "list"', () => {
+          expectInputAttribute('aria-autocomplete', 'list');
         });
       });
 
@@ -831,12 +875,12 @@ describe('Default Autosuggest', () => {
         focusAndSetInputValue('J');
       });
 
-      it('input\'s aria-expanded should be "true"', () => {
-        expectInputAttribute('aria-expanded', 'true');
+      it('input container\'s aria-expanded should be "true"', () => {
+        expectContainerAttribute('aria-expanded', 'true');
       });
 
-      it("input's aria-owns should be equal to suggestions container id", () => {
-        expectInputAttribute(
+      it("input container's aria-owns should be equal to suggestions container id", () => {
+        expectContainerAttribute(
           'aria-owns',
           getSuggestionsContainerAttribute('id')
         );

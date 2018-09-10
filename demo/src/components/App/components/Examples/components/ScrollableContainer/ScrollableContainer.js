@@ -103,14 +103,11 @@ export default class ScrollableContainer extends Component {
     return (
       <div id="scrollable-container-example" className={styles.container}>
         <div className={styles.textContainer}>
-          <div className={styles.title}>
-            Scrollable container
-          </div>
+          <div className={styles.title}>Scrollable container</div>
           <div className={styles.description}>
             When the suggestions list is long, you may want to make it
-            scrollable.
-            Note that the suggestions are rendered even when the input field
-            is not focused.
+            scrollable. Note that the suggestions are rendered even when the
+            input field is not focused.
           </div>
         </div>
         <div className={styles.demoContainer}>
@@ -130,9 +127,7 @@ export default class ScrollableContainer extends Component {
           }
           style={modalStyle}
         >
-          <div className={styles.modalTitle}>
-            Please select a country:
-          </div>
+          <div className={styles.modalTitle}>Please select a country:</div>
           <div className={styles.modalBody}>
             <Autosuggest
               suggestions={suggestions}

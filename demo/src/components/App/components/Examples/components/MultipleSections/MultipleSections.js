@@ -78,12 +78,10 @@ export default class MultipleSections extends Component {
     return (
       <div id="multiple-sections-example" className={styles.container}>
         <div className={styles.textContainer}>
-          <div className={styles.title}>
-            Multiple sections
-          </div>
+          <div className={styles.title}>Multiple sections</div>
           <div className={styles.description}>
-            Suggestions can also be presented in multiple sections.
-            Note that we highlight the first suggestion by default here.
+            Suggestions can also be presented in multiple sections. Note that we
+            highlight the first suggestion by default here.
           </div>
           <Link
             className={styles.codepenLink}
