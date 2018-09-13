@@ -354,9 +354,9 @@ export default class Autosuggest extends Component {
 
   onDocumentMouseUp = () => {
     if (this.pressedSuggestion && !this.justSelectedSuggestion) {
-      this.pressedSuggestion = null;
       this.input.focus();
     }
+    this.pressedSuggestion = null;
   };
 
   onSuggestionMouseDown = event => {
