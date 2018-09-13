@@ -9367,7 +9367,7 @@
         function t() {
           o(this, t);
           var e = i(this, (t.__proto__ || Object.getPrototypeOf(t)).call(this));
-          return (e.state = { stargazers: '2363' }), e;
+          return (e.state = { stargazers: '3754' }), e;
         }
         return (
           a(t, e),
@@ -10924,9 +10924,8 @@
           e.updateHighlightedSuggestion(e.props.multiSection ? 0 : null, 0);
         }),
         (this.onDocumentMouseUp = function() {
-          e.pressedSuggestion &&
-            !e.justSelectedSuggestion &&
-            ((e.pressedSuggestion = null), e.input.focus());
+          e.pressedSuggestion && !e.justSelectedSuggestion && e.input.focus(),
+            (e.pressedSuggestion = null);
         }),
         (this.onSuggestionMouseDown = function(t) {
           e.justSelectedSuggestion ||
