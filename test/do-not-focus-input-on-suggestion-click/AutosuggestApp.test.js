@@ -6,7 +6,8 @@ import {
   syntheticEventMatcher,
   clickSuggestion,
   focusAndSetInputValue,
-  isInputFocused
+  isInputFocused,
+  mouseUpDocument
 } from '../helpers';
 import AutosuggestApp, {
   onBlur,
@@ -39,6 +40,11 @@ describe('Autosuggest with focusInputOnSuggestionClick={false}', () => {
 
     it('should call onSuggestionsClearRequested once', () => {
       expect(onSuggestionsClearRequested).to.have.been.calledOnce;
+    });
+
+    it('should not focus input on document mouse up', () => {
+      mouseUpDocument();
+      expect(isInputFocused()).to.equal(false);
     });
   });
 });
