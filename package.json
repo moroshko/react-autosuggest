@@ -1,6 +1,6 @@
 {
   "name": "react-autosuggest",
-  "version": "9.4.1",
+  "version": "9.4.2",
   "description": "WAI-ARIA compliant React autosuggest component",
   "main": "dist/index.js",
   "repository": {
@@ -78,34 +78,14 @@
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "lint-staged": {
-    ".*.js": [
-      "npm run prettier",
-      "git add"
-    ],
-    "*.js": [
-      "npm run prettier",
-      "git add"
-    ],
-    "demo/src/**/*.js": [
-      "npm run prettier",
-      "git add"
-    ],
-    "demo/standalone/app.js": [
-      "npm run prettier",
-      "git add"
-    ],
-    "src/**/*.js": [
-      "npm run prettier",
-      "git add"
-    ],
-    "test/**/*.js": [
-      "npm run prettier",
-      "git add"
-    ]
+    ".*.js": ["npm run prettier", "git add"],
+    "*.js": ["npm run prettier", "git add"],
+    "demo/src/**/*.js": ["npm run prettier", "git add"],
+    "demo/standalone/app.js": ["npm run prettier", "git add"],
+    "src/**/*.js": ["npm run prettier", "git add"],
+    "test/**/*.js": ["npm run prettier", "git add"]
   },
   "keywords": [
     "autosuggest",
@@ -131,20 +111,10 @@
     "branches": 91,
     "functions": 100,
     "lines": 95,
-    "include": [
-      "src/*.js"
-    ],
-    "exclude": [
-      "test/**/*.js"
-    ],
-    "reporter": [
-      "lcov",
-      "text-summary"
-    ],
-    "require": [
-      "babel-register",
-      "./test/setup.js"
-    ],
+    "include": ["src/*.js"],
+    "exclude": ["test/**/*.js"],
+    "reporter": ["lcov", "text-summary"],
+    "require": ["babel-register", "./test/setup.js"],
     "check-coverage": true
   },
   "license": "MIT"
