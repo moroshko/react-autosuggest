@@ -3,7 +3,6 @@ import sinon from 'sinon';
 import Autosuggest from '../../src/Autosuggest';
 import languages from '../plain-list/languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
-import { addEvent } from '../helpers';
 
 const getMatchingLanguages = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -14,35 +13,35 @@ const getMatchingLanguages = value => {
 
 let app = null;
 
-export const getSuggestionValue = suggestion => suggestion.name;
+export const getSuggestionValue = sinon.spy(suggestion => {
+  return suggestion.name;
+});
 
-export const renderSuggestion = suggestion => <span>{suggestion.name}</span>;
+export const renderSuggestion = sinon.spy(suggestion => {
+  return <span>{suggestion.name}</span>;
+});
 
 export const onChange = sinon.spy((event, { newValue }) => {
-  addEvent('onChange');
-
   app.setState({
     value: newValue
   });
 });
 
-export const onSuggestionsFetchRequested = ({ value }) => {
+export const onSuggestionsFetchRequested = sinon.spy(({ value }) => {
   app.setState({
     suggestions: getMatchingLanguages(value)
   });
-};
+});
 
-export const onSuggestionsClearRequested = () => {
+export const onSuggestionsClearRequested = sinon.spy(() => {
   app.setState({
     suggestions: []
   });
-};
-
-export const onSuggestionSelected = sinon.spy(() => {
-  addEvent('onSuggestionSelected');
-
-  app.setState({ value: '' });
 });
+
+export const onSuggestionSelected = sinon.spy();
+
+export const onSuggestionHighlighted = sinon.spy();
 
 export default class AutosuggestApp extends Component {
   constructor() {
@@ -69,11 +68,12 @@ export default class AutosuggestApp extends Component {
         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
         onSuggestionsClearRequested={onSuggestionsClearRequested}
         onSuggestionSelected={onSuggestionSelected}
+        onSuggestionHighlighted={onSuggestionHighlighted}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
         highlightFirstSuggestion={true}
-        selectOnTab={false}
+        selectOnTab={true}
       />
     );
   }

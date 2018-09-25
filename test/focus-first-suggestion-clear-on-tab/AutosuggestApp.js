@@ -73,7 +73,7 @@ export default class AutosuggestApp extends Component {
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
         highlightFirstSuggestion={true}
-        selectOnTab={false}
+        selectOnTab={true}
       />
     );
   }

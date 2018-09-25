@@ -169,6 +169,7 @@ class Example extends React.Component {
 | [`renderSuggestionsContainer`](#renderSuggestionsContainerProp) | Function | | Use it if you want to customize things inside the suggestions container beyond rendering the suggestions themselves. |
 | [`theme`](#themeProp) | Object | | Use your imagination to style the Autosuggest. |
 | [`id`](#idProp) | String | | Use it only if you have multiple Autosuggest components on a page. |
+| [`selectOnTab`](#selectOnTabProp) | Boolean | | Makes the tab key act identical to the enter key, allowing it to select the highlighted suggestion. |
 
 <a name="suggestionsProp"></a>
 #### suggestions (required)
@@ -620,6 +621,11 @@ When rendering multiple Autosuggest components on a page, make sure to give them
 <Autosuggest id="source" ... />
 <Autosuggest id="destination" ... />
 ```
+
+<a name="selectOnTabProp"></a>
+#### selectOnTab (optional)
+
+Makes the tab key act identical to the enter key, allowing it to select the highlighted suggestion.
 
 ## Development
 

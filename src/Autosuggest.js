@@ -81,7 +81,8 @@ export default class Autosuggest extends Component {
     focusInputOnSuggestionClick: PropTypes.bool,
     highlightFirstSuggestion: PropTypes.bool,
     theme: PropTypes.object,
-    id: PropTypes.string
+    id: PropTypes.string,
+    selectOnTab: PropTypes.bool
   };
 
   static defaultProps = {
@@ -92,7 +93,8 @@ export default class Autosuggest extends Component {
     focusInputOnSuggestionClick: true,
     highlightFirstSuggestion: false,
     theme: defaultTheme,
-    id: '1'
+    id: '1',
+    selectOnTab: false
   };
 
   constructor({ alwaysRenderSuggestions }) {
@@ -648,7 +650,12 @@ export default class Autosuggest extends Component {
 
             break;
 
+          // Tab (must fall through to enter when conditions apply!)
+          case 9:
+            if (!this.props.selectOnTab) break;
+
           // Enter
+          // eslint-disable-next-line no-fallthrough
           case 13: {
             // See #388
             if (event.keyCode === 229) {
