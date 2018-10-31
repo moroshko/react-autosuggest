@@ -150,7 +150,7 @@ class Example extends React.Component {
 
 | Prop | Type | Required | Description |
 | :--- | :--- | :---: | :--- |
-| [`suggestions`](#suggestionsProp) | Array | ✓ | These are the suggestions that will be displayed. Items can take an arbitrary shape. |
+| [`suggestions`](#suggestions-required) | Array | ✓ | These are the suggestions that will be displayed. Items can take an arbitrary shape. |
 | [`onSuggestionsFetchRequested`](#onSuggestionsFetchRequestedProp) | Function | ✓ | Will be called every time you need to recalculate `suggestions`. |
 | [`onSuggestionsClearRequested`](#onSuggestionsClearRequestedProp) | Function | ✓[*](#onSuggestionsClearRequestedPropNote) | Will be called every time you need to set `suggestions` to `[]`. |
 | [`getSuggestionValue`](#getSuggestionValueProp) | Function | ✓ | Implement it to teach Autosuggest what should be the input value when suggestion is clicked. |
