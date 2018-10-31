@@ -170,8 +170,7 @@ class Example extends React.Component {
 | [`theme`](#themeProp) | Object | | Use your imagination to style the Autosuggest. |
 | [`id`](#idProp) | String | | Use it only if you have multiple Autosuggest components on a page. |
 
-<a id="suggestionsProp"></a>
-#### suggestions (required)
+#### <a name="suggestionsProp"></a> suggestions (required)
 
 Array of suggestions to display. The only requirement is that `suggestions` is an array. Items in this array can take an arbitrary shape.
 
