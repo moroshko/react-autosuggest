@@ -17,14 +17,14 @@ Check out the [Homepage](http://react-autosuggest.js.org) and the [Codepen examp
 * [WAI-ARIA compliant](https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete), with support for ARIA attributes and keyboard interactions
 * Mobile friendly
 * Plugs in nicely to Flux and [Redux](http://redux.js.org) applications
-* Full control over [suggestions rendering](#renderSuggestionProp)
+* Full control over [suggestions rendering](#render-suggestion-prop)
 * Suggestions can be presented as [plain list](http://codepen.io/moroshko/pen/LGNJMy) or [multiple sections](http://codepen.io/moroshko/pen/qbRNjV)
 * Suggestions can be retrieved [asynchronously](http://codepen.io/moroshko/pen/EPZpev)
-* [Highlight the first suggestion](#highlightFirstSuggestionProp) in the list if you wish
-* Supports styling using [CSS Modules](https://github.com/css-modules/css-modules), [Radium](https://github.com/FormidableLabs/radium), [Aphrodite](https://github.com/Khan/aphrodite), [JSS](https://github.com/cssinjs/jss), [and more](#themeProp)
-* You decide [when to show suggestions](#shouldRenderSuggestionsProp) (e.g. when user types 2 or more characters)
-* [Always render suggestions](#alwaysRenderSuggestionsProp) (useful for mobile and modals)
-* [Pass through arbitrary props to the input](#inputPropsProp) (e.g. placeholder, type, [onChange](#inputPropsOnChange), [onBlur](#inputPropsOnBlur), or any other), or [take full control on the rendering of the input](#renderInputComponentProp) (useful for integration with other libraries)
+* [Highlight the first suggestion](#highlight-first-suggestion-prop) in the list if you wish
+* Supports styling using [CSS Modules](https://github.com/css-modules/css-modules), [Radium](https://github.com/FormidableLabs/radium), [Aphrodite](https://github.com/Khan/aphrodite), [JSS](https://github.com/cssinjs/jss), [and more](#theme-prop)
+* You decide [when to show suggestions](#should-render-suggestions-prop) (e.g. when user types 2 or more characters)
+* [Always render suggestions](#always-render-suggestions-prop) (useful for mobile and modals)
+* [Pass through arbitrary props to the input](#input-props-prop) (e.g. placeholder, type, [onChange](#input-props-on-change), [onBlur](#input-props-on-blur), or any other), or [take full control on the rendering of the input](#render-input-component-prop) (useful for integration with other libraries)
 * Thoroughly tested
 
 ## Installation
@@ -150,27 +150,27 @@ class Example extends React.Component {
 
 | Prop | Type | Required | Description |
 | :--- | :--- | :---: | :--- |
-| [`suggestions`](#suggestionsProp) | Array | ✓ | These are the suggestions that will be displayed. Items can take an arbitrary shape. |
-| [`onSuggestionsFetchRequested`](#onSuggestionsFetchRequestedProp) | Function | ✓ | Will be called every time you need to recalculate `suggestions`. |
-| [`onSuggestionsClearRequested`](#onSuggestionsClearRequestedProp) | Function | ✓[*](#onSuggestionsClearRequestedPropNote) | Will be called every time you need to set `suggestions` to `[]`. |
-| [`getSuggestionValue`](#getSuggestionValueProp) | Function | ✓ | Implement it to teach Autosuggest what should be the input value when suggestion is clicked. |
-| [`renderSuggestion`](#renderSuggestionProp) | Function | ✓ | Use your imagination to define how suggestions are rendered. |
-| [`inputProps`](#inputPropsProp) | Object | ✓ | Pass through arbitrary props to the input. It must contain at least `value` and `onChange`. |
-| [`onSuggestionSelected`](#onSuggestionSelectedProp) | Function | | Will be called every time suggestion is selected via mouse or keyboard. |
-| [`onSuggestionHighlighted`](#onSuggestionHighlightedProp) | Function | | Will be called every time the highlighted suggestion changes. |
-| [`shouldRenderSuggestions`](#shouldRenderSuggestionsProp) | Function | | When the input is focused, Autosuggest will consult this function when to render suggestions. Use it, for example, if you want to display suggestions when input value is at least 2 characters long. |
-| [`alwaysRenderSuggestions`](#alwaysRenderSuggestionsProp) | Boolean | | Set it to `true` if you'd like to render suggestions even when the input is not focused. |
-| [`highlightFirstSuggestion`](#highlightFirstSuggestionProp) | Boolean | | Set it to `true` if you'd like Autosuggest to automatically highlight the first suggestion. |
-| [`focusInputOnSuggestionClick`](#focusInputOnSuggestionClickProp) | Boolean | | Set it to `false` if you don't want Autosuggest to keep the input focused when suggestions are clicked/tapped. |
-| [`multiSection`](#multiSectionProp) | Boolean | | Set it to `true` if you'd like to display suggestions in multiple sections (with optional titles). |
-| [`renderSectionTitle`](#renderSectionTitleProp) | Function | ✓<br>when `multiSection={true}` | Use your imagination to define how section titles are rendered. |
-| [`getSectionSuggestions`](#getSectionSuggestionsProp) | Function | ✓<br>when `multiSection={true}` | Implement it to teach Autosuggest where to find the suggestions for every section. |
-| [`renderInputComponent`](#renderInputComponentProp) | Function | | Use it only if you need to customize the rendering of the input. |
-| [`renderSuggestionsContainer`](#renderSuggestionsContainerProp) | Function | | Use it if you want to customize things inside the suggestions container beyond rendering the suggestions themselves. |
-| [`theme`](#themeProp) | Object | | Use your imagination to style the Autosuggest. |
-| [`id`](#idProp) | String | | Use it only if you have multiple Autosuggest components on a page. |
+| [`suggestions`](#suggestions-prop) | Array | ✓ | These are the suggestions that will be displayed. Items can take an arbitrary shape. |
+| [`onSuggestionsFetchRequested`](#on-suggestions-fetch-requested-prop) | Function | ✓ | Will be called every time you need to recalculate `suggestions`. |
+| [`onSuggestionsClearRequested`](#on-suggestions-clear-requested-prop) | Function | ✓[*](#on-suggestions-clear-requested-prop-note) | Will be called every time you need to set `suggestions` to `[]`. |
+| [`getSuggestionValue`](#get-suggestion-value-prop) | Function | ✓ | Implement it to teach Autosuggest what should be the input value when suggestion is clicked. |
+| [`renderSuggestion`](#render-suggestion-prop) | Function | ✓ | Use your imagination to define how suggestions are rendered. |
+| [`inputProps`](#input-props-prop) | Object | ✓ | Pass through arbitrary props to the input. It must contain at least `value` and `onChange`. |
+| [`onSuggestionSelected`](#on-suggestion-selected-prop) | Function | | Will be called every time suggestion is selected via mouse or keyboard. |
+| [`onSuggestionHighlighted`](#on-suggestion-highlighted-prop) | Function | | Will be called every time the highlighted suggestion changes. |
+| [`shouldRenderSuggestions`](#should-render-suggestions-prop) | Function | | When the input is focused, Autosuggest will consult this function when to render suggestions. Use it, for example, if you want to display suggestions when input value is at least 2 characters long. |
+| [`alwaysRenderSuggestions`](#always-render-suggestions-prop) | Boolean | | Set it to `true` if you'd like to render suggestions even when the input is not focused. |
+| [`highlightFirstSuggestion`](#highlight-first-suggestion-prop) | Boolean | | Set it to `true` if you'd like Autosuggest to automatically highlight the first suggestion. |
+| [`focusInputOnSuggestionClick`](#focus-input-on-suggestion-click-prop) | Boolean | | Set it to `false` if you don't want Autosuggest to keep the input focused when suggestions are clicked/tapped. |
+| [`multiSection`](#multi-section-prop) | Boolean | | Set it to `true` if you'd like to display suggestions in multiple sections (with optional titles). |
+| [`renderSectionTitle`](#render-section-title-prop) | Function | ✓<br>when `multiSection={true}` | Use your imagination to define how section titles are rendered. |
+| [`getSectionSuggestions`](#get-section-suggestions-prop) | Function | ✓<br>when `multiSection={true}` | Implement it to teach Autosuggest where to find the suggestions for every section. |
+| [`renderInputComponent`](#render-input-component-prop) | Function | | Use it only if you need to customize the rendering of the input. |
+| [`renderSuggestionsContainer`](#render-suggestions-container-prop) | Function | | Use it if you want to customize things inside the suggestions container beyond rendering the suggestions themselves. |
+| [`theme`](#theme-prop) | Object | | Use your imagination to style the Autosuggest. |
+| [`id`](#id-prop) | String | | Use it only if you have multiple Autosuggest components on a page. |
 
-<a name="suggestionsProp"></a>
+<a name="suggestions-prop"></a>
 #### suggestions (required)
 
 Array of suggestions to display. The only requirement is that `suggestions` is an array. Items in this array can take an arbitrary shape.
@@ -197,7 +197,7 @@ const suggestions = [
 ];
 ```
 
-For [multiple sections](#multiSectionProp), every item in `suggestions` represents a single section. Again, it's up to you what shape every section takes. For example:
+For [multiple sections](#multi-section-prop), every item in `suggestions` represents a single section. Again, it's up to you what shape every section takes. For example:
 
 ```js
 const suggestions = [
@@ -235,10 +235,10 @@ const suggestions = [
 ];
 ```
 
-<a name="onSuggestionsFetchRequestedProp"></a>
+<a name="on-suggestions-fetch-requested-prop"></a>
 #### onSuggestionsFetchRequested (required)
 
-This function will be called every time you might need to update [`suggestions`](#suggestionsProp). It has the following signature:
+This function will be called every time you might need to update [`suggestions`](#suggestions-prop). It has the following signature:
 
 ```js
 function onSuggestionsFetchRequested({ value, reason })
@@ -254,17 +254,17 @@ where:
   * `'suggestions-revealed'` - user pressed <kbd>Up</kbd> or <kbd>Down</kbd> to reveal suggestions
   * `'suggestion-selected'` - user selected a suggestion when `alwaysRenderSuggestions={true}`
 
-<a name="onSuggestionsClearRequestedProp"></a>
+<a name="#on-suggestions-clear-requested-prop"></a>
 #### onSuggestionsClearRequested (required unless `alwaysRenderSuggestions={true}`)
 
-This function will be called every time you need to clear [`suggestions`](#suggestionsProp).
+This function will be called every time you need to clear [`suggestions`](#suggestions-prop).
 
 All you have to do in this function is to set `suggestions` to `[]`.
 
-<a name="onSuggestionsClearRequestedPropNote"></a>
+<a name="on-suggestions-clear-requested-prop-note"></a>
 **Note:** When `alwaysRenderSuggestions={true}`, you don't have to implement this function.
 
-<a name="getSuggestionValueProp"></a>
+<a name="get-suggestion-value-prop"></a>
 #### getSuggestionValue (required)
 
 When user navigates the suggestions using the <kbd>Up</kbd> and <kbd>Down</kbd> keys, [the input value should be set according to the highlighted suggestion](https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete). You design how suggestion is modelled. Therefore, it's your responsibility to tell Autosuggest how to map suggestions to input values.
@@ -277,7 +277,7 @@ function getSuggestionValue(suggestion) {
 }
 ```
 
-<a name="renderSuggestionProp"></a>
+<a name="render-suggestion-prop"></a>
 #### renderSuggestion (required)
 
 Use your imagination to define how suggestions are rendered.
@@ -306,7 +306,7 @@ function renderSuggestion(suggestion) {
 
 **Important:** `renderSuggestion` must be a pure function (we optimize rendering performance based on this assumption).
 
-<a name="inputPropsProp"></a>
+<a name="input-props-prop"></a>
 #### inputProps (required)
 
 Autosuggest is a [controlled component](https://facebook.github.io/react/docs/forms.html#controlled-components). Therefore, you MUST pass at least a `value` and an `onChange` callback to the input. You can pass any other props as well. For example:
@@ -321,7 +321,7 @@ const inputProps = {
 };
 ```
 
-<a name="inputPropsOnChange"></a>
+<a name="input-props-on-change"></a>
 ##### inputProps.onChange (required)
 
 The signature is:
@@ -341,7 +341,7 @@ where:
   * `'click'` - user clicked (or tapped) on suggestion
   * `'type'` - none of the methods above (usually means that user typed something, but can also be that they pressed Backspace, pasted something into the input, etc.)
 
-<a name="inputPropsOnBlur"></a>
+<a name="input-props-on-blur"></a>
 ##### inputProps.onBlur (optional)
 
 The signature is:
@@ -354,7 +354,7 @@ where:
 
 * `highlightedSuggestion` - the suggestion that was highlighted just before the input lost focus, or `null` if there was no highlighted suggestion.
 
-<a name="onSuggestionSelectedProp"></a>
+<a name="on-suggestion-selected-prop"></a>
 #### onSuggestionSelected (optional)
 
 This function is called when suggestion is selected. It has the following signature:
@@ -368,12 +368,12 @@ where:
 * `suggestion` - the selected suggestion
 * `suggestionValue` - the value of the selected suggestion (equivalent to `getSuggestionValue(suggestion)`)
 * `suggestionIndex` - the index of the selected suggestion in the `suggestions` array
-* `sectionIndex` - when rendering [multiple sections](#multiSectionProp), this will be the section index (in [`suggestions`](#suggestionsProp)) of the selected suggestion. Otherwise, it will be `null`.
+* `sectionIndex` - when rendering [multiple sections](#multiSectionProp), this will be the section index (in [`suggestions`](#suggestions-prop)) of the selected suggestion. Otherwise, it will be `null`.
 * `method` - string describing how user selected the suggestion. The possible values are:
   * `'click'` - user clicked (or tapped) on the suggestion
   * `'enter'` - user selected the suggestion using <kbd>Enter</kbd>
 
-<a name="onSuggestionHighlightedProp"></a>
+<a name="on-suggestion-highlighted-prop"></a>
 #### onSuggestionHighlighted (optional)
 
 This function is called when the highlighted suggestion changes. It has the following signature:
@@ -385,7 +385,7 @@ function onSuggestionHighlighted({ suggestion })
 where:
 * `suggestion` - the highlighted suggestion, or `null` if there is no highlighted suggestion.
 
-<a name="shouldRenderSuggestionsProp"></a>
+<a name="should-render-suggestions-prop"></a>
 #### shouldRenderSuggestions (optional)
 
 By default, suggestions are rendered when the input isn't blank. Feel free to override this behaviour.
@@ -404,7 +404,7 @@ When `shouldRenderSuggestions` returns `true`, **suggestions will be rendered on
 
 If you would like to render suggestions regardless of whether the input is focused or not, set `alwaysRenderSuggestions={true}` (`shouldRenderSuggestions` is ignored in this case).
 
-<a name="alwaysRenderSuggestionsProp"></a>
+<a name="always-render-suggestions-prop"></a>
 #### alwaysRenderSuggestions (optional)
 
 Set `alwaysRenderSuggestions={true}` if you'd like to always render the suggestions.
@@ -417,12 +417,12 @@ this.state = {
 };
 ```
 
-<a name="highlightFirstSuggestionProp"></a>
+<a name="highlight-first-suggestion-prop"></a>
 #### highlightFirstSuggestion (optional)
 
 When `highlightFirstSuggestion={true}`, Autosuggest will automatically highlight the first suggestion. Defaults to `false`.
 
-<a name="focusInputOnSuggestionClickProp"></a>
+<a name="focus-input-on-suggestion-click-prop"></a>
 #### focusInputOnSuggestionClick (optional)
 
 By default, `focusInputOnSuggestionClick={true}`, which means that, every time suggestion is clicked (or tapped), the input keeps the focus.
@@ -437,19 +437,19 @@ You can do something like this:
 
 where `isMobile` is a boolean describing whether Autosuggest operates on a mobile device or not. You can use [kaimallea/isMobile](https://github.com/kaimallea/isMobile), for example, to determine that.
 
-<a name="multiSectionProp"></a>
+<a name="multi-section-prop"></a>
 #### multiSection (optional)
 
 By default, Autosuggest renders a plain list of suggestions.
 
 If you'd like to have multiple sections (with optional titles), set `multiSection={true}`.
 
-<a name="renderSectionTitleProp"></a>
+<a name="render-section-title-prop"></a>
 #### renderSectionTitle (required when `multiSection={true}`)
 
-When rendering [multiple sections](#multiSectionProp), you need to tell Autosuggest how to render a section title.
+When rendering [multiple sections](#multi-section-prop), you need to tell Autosuggest how to render a section title.
 
-This function gets the section to render (an item in the [suggestions](#suggestionsProp) array), and it should return a string or a `ReactElement`. For example:
+This function gets the section to render (an item in the [suggestions](#suggestions-prop) array), and it should return a string or a `ReactElement`. For example:
 
 ```js
 function renderSectionTitle(section) {
@@ -461,12 +461,12 @@ function renderSectionTitle(section) {
 
 If `renderSectionTitle` returns `null` or `undefined`, section title is not rendered.
 
-<a name="getSectionSuggestionsProp"></a>
+<a name="get-section-suggestions-prop"></a>
 #### getSectionSuggestions (required when `multiSection={true}`)
 
-When rendering [multiple sections](#multiSectionProp), you need to tell Autosuggest where to find the suggestions for a given section.
+When rendering [multiple sections](#multi-section-prop), you need to tell Autosuggest where to find the suggestions for a given section.
 
-This function gets the section to render (an item in the [suggestions](#suggestionsProp) array), and it should return an array of suggestions to render in the given section. For example:
+This function gets the section to render (an item in the [suggestions](#suggestions-prop) array), and it should return an array of suggestions to render in the given section. For example:
 
 ```js
 function getSectionSuggestions(section) {
@@ -476,7 +476,7 @@ function getSectionSuggestions(section) {
 
 **Note:** Sections with no suggestions are not rendered.
 
-<a name="renderInputComponentProp"></a>
+<a name="render-input-component-prop"></a>
 #### renderInputComponent (optional)
 
 You shouldn't specify `renderInputComponent` unless you want to customize the rendering of the input.
@@ -498,9 +498,9 @@ const renderInputComponent = inputProps => (
 
 ```
 
-**Note:** When using `renderInputComponent`, you still need to specify the usual [`inputProps`](#inputPropsProp). Autosuggest will merge the `inputProps` that you provide with other props that are needed for accessibility (e.g. `'aria-activedescendant'`), and will pass the **merged `inputProps`** to `renderInputComponent`.
+**Note:** When using `renderInputComponent`, you still need to specify the usual [`inputProps`](#input-props-prop). Autosuggest will merge the `inputProps` that you provide with other props that are needed for accessibility (e.g. `'aria-activedescendant'`), and will pass the **merged `inputProps`** to `renderInputComponent`.
 
-<a name="renderSuggestionsContainerProp"></a>
+<a name="render-suggestions-container-prop"></a>
 #### renderSuggestionsContainer (optional)
 
 You shouldn't specify `renderSuggestionsContainer` unless you want to customize the content or behaviour of the suggestions container beyond rendering the suggestions themselves. For example, you might want to add a custom text before/after the suggestions list, or to [customize the scrolling behaviour of the suggestions container](https://github.com/moroshko/react-autosuggest/blob/master/FAQ.md#limitSuggestionsContainerScrolling).
@@ -515,7 +515,7 @@ where:
 
 * `containerProps` - props that you MUST pass to the topmost element that is returned from `renderSuggestionsContainer`.
 * `children` - the suggestions themselves. It's up to you where to render them.
-* `query` - Same as `query` in [`renderSuggestion`](#renderSuggestionProp).
+* `query` - Same as `query` in [`renderSuggestion`](#render-suggestion-prop).
 
 For example:
 
@@ -555,7 +555,7 @@ function renderSuggestionsContainer({ containerProps, children }) {
 }
 ```
 
-<a name="themeProp"></a>
+<a name="theme-prop"></a>
 #### theme (optional)
 
 Autosuggest comes with no styles.
@@ -607,7 +607,7 @@ The following picture illustrates how `theme` keys correspond to Autosuggest DOM
 
 ![DOM structure](dom-structure.png)
 
-<a name="idProp"></a>
+<a name="id-prop"></a>
 #### id (required when multiple Autosuggest components are rendered on a page)
 
 The only reason `id` exists, is to set ARIA attributes (they require a unique id).
