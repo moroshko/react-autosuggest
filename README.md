@@ -417,6 +417,8 @@ this.state = {
 };
 ```
 
+As mentioned in the [`onSuggestionsClearRequested` section](#on-suggestions-clear-requested-prop), you don't need to implement `onSuggestionsClearRequested` if you set `alwaysRenderSuggestions={true}`. If you do implement it, don't set `suggestions` to an empty array in `onSuggestionsClearRequested`, or else the suggestions will no longer be rendered.
+
 <a name="highlight-first-suggestion-prop"></a>
 #### highlightFirstSuggestion (optional)
 
