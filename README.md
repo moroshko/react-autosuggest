@@ -328,7 +328,7 @@ Provides arbitrary properties to the outer `div` container of Autosuggest. Allow
 
 ```js
 const containerProps = {
-  role: button,         // if you use Autosuggest to not allow editing of the input, then the <div> is a button that opens a list
+  role: 'button',         // if you use Autosuggest to not allow editing of the input, then the <div> is a button that opens a list
   dataId: 'my-data-id'
 };
 ```
