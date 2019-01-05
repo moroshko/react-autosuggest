@@ -573,6 +573,10 @@ export default class Autosuggest extends Component {
 
         this.maybeCallOnChange(event, value, 'type');
 
+        if (this.suggestionsContainer) {
+          this.suggestionsContainer.scrollTop = 0;
+        }
+
         this.setState({
           ...(highlightFirstSuggestion
             ? {}
