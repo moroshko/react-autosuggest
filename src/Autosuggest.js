@@ -666,6 +666,7 @@ export default class Autosuggest extends Component {
             }
 
             if (highlightedSuggestion != null) {
+              event.preventDefault();
               const newValue = getSuggestionValue(highlightedSuggestion);
 
               this.maybeCallOnChange(event, newValue, 'enter');
