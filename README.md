@@ -486,15 +486,17 @@ To keep Autosuggest [accessible](https://rawgit.com/w3c/aria-practices/master/ar
 * render an input
 * pass through all the provided `inputProps` to the input
 
+Additionally, the rendered component requires a [forwarded ref](https://reactjs.org/docs/forwarding-refs.html) to the actual `input` component.
+
 Example:
 
 ```js
-const renderInputComponent = inputProps => (
+const renderInputComponent = React.forwardRef((inputProps, ref) => (
   <div>
-    <input {...inputProps} />
+    <input {...inputProps} ref={ref} />
     <div>custom stuff</div>
   </div>
-);
+));
 
 ```
 
