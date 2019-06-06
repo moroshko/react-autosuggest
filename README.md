@@ -168,6 +168,7 @@ class Example extends React.Component {
 | [`renderInputComponent`](#render-input-component-prop) | Function | | Use it only if you need to customize the rendering of the input. |
 | [`renderSuggestionsContainer`](#render-suggestions-container-prop) | Function | | Use it if you want to customize things inside the suggestions container beyond rendering the suggestions themselves. |
 | [`theme`](#theme-prop) | Object | | Use your imagination to style the Autosuggest. |
+| [`ariaLabel`] | String | | Use it if you need to set an aria-label to select box. |
 | [`id`](#id-prop) | String | | Use it only if you have multiple Autosuggest components on a page. |
 
 <a name="suggestions-prop"></a>
