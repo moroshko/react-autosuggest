@@ -633,7 +633,7 @@ The following picture illustrates how `theme` keys correspond to Autosuggest DOM
 ![DOM structure](dom-structure.png)
 
 <a name="aria-label-prop"></a>
-#### theme (optional)
+#### ariaLabel (optional)
 
 Aria-label can be added to props, so that the input field of AutoSuggest is accessible. By default it is set to `search`.
 
