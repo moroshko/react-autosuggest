@@ -159,6 +159,7 @@ class Example extends React.Component {
 | [`onSuggestionSelected`](#on-suggestion-selected-prop) | Function | | Will be called every time suggestion is selected via mouse or keyboard. |
 | [`onSuggestionHighlighted`](#on-suggestion-highlighted-prop) | Function | | Will be called every time the highlighted suggestion changes. |
 | [`shouldRenderSuggestions`](#should-render-suggestions-prop) | Function | | When the input is focused, Autosuggest will consult this function when to render suggestions. Use it, for example, if you want to display suggestions when input value is at least 2 characters long. |
+| [`renderSuggestionsOnInputClick`](#render-suggestions-on-input-click-prop) | Boolean | | Set it to `true` if you'd like to render suggestions when input is clicked. |
 | [`alwaysRenderSuggestions`](#always-render-suggestions-prop) | Boolean | | Set it to `true` if you'd like to render suggestions even when the input is not focused. |
 | [`highlightFirstSuggestion`](#highlight-first-suggestion-prop) | Boolean | | Set it to `true` if you'd like Autosuggest to automatically highlight the first suggestion. |
 | [`focusInputOnSuggestionClick`](#focus-input-on-suggestion-click-prop) | Boolean | | Set it to `false` if you don't want Autosuggest to keep the input focused when suggestions are clicked/tapped. |
@@ -250,6 +251,7 @@ where:
 * `reason` - string describing why `onSuggestionsFetchRequested` was called. The possible values are:
   * `'input-changed'` - user typed something
   * `'input-focused'` - input was focused
+  * `'input-clicked'` - input was clicked
   * `'escape-pressed'` - user pressed <kbd>Escape</kbd> to clear the input (and suggestions are shown for empty input)
   * `'suggestions-revealed'` - user pressed <kbd>Up</kbd> or <kbd>Down</kbd> to reveal suggestions
   * `'suggestion-selected'` - user selected a suggestion when `alwaysRenderSuggestions={true}`
@@ -403,6 +405,15 @@ function shouldRenderSuggestions(value) {
 When `shouldRenderSuggestions` returns `true`, **suggestions will be rendered only when the input is focused**.
 
 If you would like to render suggestions regardless of whether the input is focused or not, set `alwaysRenderSuggestions={true}` (`shouldRenderSuggestions` is ignored in this case).
+
+<a name="render-suggestions-on-input-click-prop"></a>
+#### renderSuggestionsOnInputClick (optional)
+
+When `renderSuggestionsOnInputClick` is set to `true`, **suggestions are rendered when the input is clicked**. This can be useful if you'd like click events to reveal a comprehensive list of suggestions before any input value is entered, or you just want an alternative to keyboard event reveals.
+
+Unlike `alwaysRenderSuggestions={true}`, when `renderSuggestionsOnInputClick={true}` you can still close suggestions with <kbd>Escape</kbd> or when a suggestion is selected.
+
+Note, setting this prop to `true` will cause `shouldRenderSuggestions` to be ignored.
 
 <a name="always-render-suggestions-prop"></a>
 #### alwaysRenderSuggestions (optional)

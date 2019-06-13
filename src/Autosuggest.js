@@ -52,6 +52,7 @@ export default class Autosuggest extends Component {
       }
     },
     shouldRenderSuggestions: PropTypes.func,
+    renderSuggestionsOnInputClick: PropTypes.bool,
     alwaysRenderSuggestions: PropTypes.bool,
     multiSection: PropTypes.bool,
     renderSectionTitle: (props, propName) => {
@@ -87,6 +88,7 @@ export default class Autosuggest extends Component {
   static defaultProps = {
     renderSuggestionsContainer: defaultRenderSuggestionsContainer,
     shouldRenderSuggestions: defaultShouldRenderSuggestions,
+    renderSuggestionsOnInputClick: false,
     alwaysRenderSuggestions: false,
     multiSection: false,
     focusInputOnSuggestionClick: true,
@@ -322,10 +324,23 @@ export default class Autosuggest extends Component {
   }
 
   willRenderSuggestions(props) {
-    const { suggestions, inputProps, shouldRenderSuggestions } = props;
+    const {
+      suggestions,
+      inputProps,
+      shouldRenderSuggestions,
+      renderSuggestionsOnInputClick
+    } = props;
     const { value } = inputProps;
 
-    return suggestions.length > 0 && shouldRenderSuggestions(value);
+    let willRender;
+
+    if (renderSuggestionsOnInputClick) {
+      willRender = suggestions.length > 0;
+    } else {
+      willRender = suggestions.length > 0 && shouldRenderSuggestions(value);
+    }
+
+    return willRender;
   }
 
   storeAutowhateverRef = autowhatever => {
@@ -514,6 +529,7 @@ export default class Autosuggest extends Component {
       getSectionSuggestions,
       theme,
       getSuggestionValue,
+      renderSuggestionsOnInputClick,
       alwaysRenderSuggestions,
       highlightFirstSuggestion
     } = this.props;
@@ -524,10 +540,11 @@ export default class Autosuggest extends Component {
       highlightedSuggestionIndex,
       valueBeforeUpDown
     } = this.state;
-    const shouldRenderSuggestions = alwaysRenderSuggestions
-      ? alwaysTrue
-      : this.props.shouldRenderSuggestions;
-    const { value, onFocus, onKeyDown } = inputProps;
+    const shouldRenderSuggestions =
+      alwaysRenderSuggestions || renderSuggestionsOnInputClick
+        ? alwaysTrue
+        : this.props.shouldRenderSuggestions;
+    const { value, onClick, onFocus, onKeyDown } = inputProps;
     const willRenderSuggestions = this.willRenderSuggestions(this.props);
     const isOpen =
       alwaysRenderSuggestions ||
@@ -535,6 +552,21 @@ export default class Autosuggest extends Component {
     const items = isOpen ? suggestions : [];
     const autowhateverInputProps = {
       ...inputProps,
+      onClick: event => {
+        if (renderSuggestionsOnInputClick) {
+          const shouldRender = shouldRenderSuggestions(value);
+
+          this.setState({
+            isCollapsed: !shouldRender
+          });
+
+          onClick && onClick(event);
+
+          if (shouldRender) {
+            onSuggestionsFetchRequested({ value, reason: 'input-clicked' });
+          }
+        }
+      },
       onFocus: event => {
         if (
           !this.justSelectedSuggestion &&
