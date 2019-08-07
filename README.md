@@ -8,6 +8,9 @@
 
 # React Autosuggest
 
+## Ricardo Fork
+This project has been forked to be able to render a custom wrapper for each section of the autocomplete (this is done in **react-autowhatever** that has also been forked)
+
 ## Demo
 
 Check out the [Homepage](http://react-autosuggest.js.org) and the [Codepen examples](http://codepen.io/collection/DkkYaQ).
