@@ -607,6 +607,9 @@ The following picture illustrates how `theme` keys correspond to Autosuggest DOM
 
 ![DOM structure](dom-structure.png)
 
+For a basic example theme you can reference the css from this project's homepage,
+[here](http://react-autosuggest.js.org/autosuggest.css).
+
 <a name="id-prop"></a>
 #### id (required when multiple Autosuggest components are rendered on a page)
 
