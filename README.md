@@ -169,7 +169,7 @@ class Example extends React.Component {
 | [`renderSectionTitle`](#render-section-title-prop) | Function | ✓<br>when `multiSection={true}` | Use your imagination to define how section titles are rendered. |
 | [`getSectionSuggestions`](#get-section-suggestions-prop) | Function | ✓<br>when `multiSection={true}` | Implement it to teach Autosuggest where to find the suggestions for every section. |
 | [`renderInputComponent`](#render-input-component-prop) | Function | | Use it only if you need to customize the rendering of the input. |
-| [`renderSectionContainer`](#render-section-component-prop) | Function | | Use it only if you need to customize the rendering of the sections. |
+| [`renderSectionContainer`](#render-section-container-prop) | Function | | Use it only if you need to customize the rendering of the sections. |
 | [`renderSuggestionsContainer`](#render-suggestions-container-prop) | Function | | Use it if you want to customize things inside the suggestions container beyond rendering the suggestions themselves. |
 | [`theme`](#theme-prop) | Object | | Use your imagination to style the Autosuggest. |
 | [`id`](#id-prop) | String | | Use it only if you have multiple Autosuggest components on a page. |
