@@ -510,6 +510,12 @@ const renderInputComponent = inputProps => (
 
 You shouldn't specify `renderSectionContainer` unless you want to customize the rendering of the sections.
 
+The signature is:
+
+```js
+function renderSectionContainer(section, children)
+```
+
 <a name="render-suggestions-container-prop"></a>
 #### renderSuggestionsContainer (optional)
 
