@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "prop-types": "^15.5.10",
-    "react-autowhatever": "^10.1.2",
+    "react-autowhatever": "github:holidayextras/react-autowhatever",
     "shallow-equal": "^1.0.0"
   },
   "peerDependencies": {
