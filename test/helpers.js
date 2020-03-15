@@ -1,7 +1,6 @@
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import SyntheticEvent from 'react-dom/lib/SyntheticEvent';
 import TestUtils, { Simulate } from 'react-dom/test-utils';
 
 chai.use(sinonChai);
@@ -39,7 +38,19 @@ export const init = application => {
   clearButton = TestUtils.scryRenderedDOMComponentsWithTag(app, 'button')[0];
 };
 
-export const syntheticEventMatcher = sinon.match.instanceOf(SyntheticEvent);
+// Since react-dom doesn't export SyntheticEvent anymore
+export const syntheticEventMatcher = sinon.match(value => {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+
+  const proto = Object.getPrototypeOf(value);
+
+  if ('_dispatchListeners' in value && proto && proto.constructor.Interface) {
+    return true;
+  }
+  return false;
+}, 'of SyntheticEvent type');
 export const childrenMatcher = sinon.match.any;
 export const containerPropsMatcher = sinon.match({
   id: sinon.match.string,
