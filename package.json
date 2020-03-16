@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "prop-types": "^15.5.10",
-    "react-autowhatever": "^10.1.2",
+    "react-autowhatever": "^10.2.1",
     "shallow-equal": "^1.0.0"
   },
   "peerDependencies": {
@@ -40,7 +40,7 @@
     "babel-eslint": "^7.2.3",
     "babel-loader": "^6.4.1",
     "babel-plugin-react-transform": "^2.0.2",
-    "babel-plugin-transform-react-remove-prop-types": "^0.4.6",
+    "babel-plugin-transform-react-remove-prop-types": "0.4.19",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
@@ -65,8 +65,8 @@
     "openurl": "^1.1.1",
     "postcss-loader": "^1.3.3",
     "prettier": "1.14.2",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
     "react-modal": "^1.7.7",
     "react-transform-hmr": "^1.0.4",
     "sinon": "^1.17.7",
