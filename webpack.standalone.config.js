@@ -1,9 +1,11 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = [
   {
     entry: './src/index.js',
+    mode: 'production',
 
     output: {
       filename: './dist/standalone/autosuggest.js',
@@ -11,11 +13,20 @@ module.exports = [
       library: 'Autosuggest'
     },
 
+    optimization: {
+      minimizer: [
+        new TerserPlugin({
+          cache: true,
+          parallel: true
+        })
+      ]
+    },
+
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.js$/,
-          loader: 'babel',
+          loader: 'babel-loader',
           include: [
             path.join(__dirname, 'src') // Must be an absolute path
           ]
@@ -29,6 +40,7 @@ module.exports = [
   },
   {
     entry: './src/index.js',
+    mode: 'production',
 
     output: {
       filename: './dist/standalone/autosuggest.min.js',
@@ -37,10 +49,10 @@ module.exports = [
     },
 
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.js$/,
-          loader: 'babel',
+          loader: 'babel-loader',
           include: [
             path.join(__dirname, 'src') // Must be an absolute path
           ]
@@ -56,14 +68,6 @@ module.exports = [
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: JSON.stringify('production')
-        }
-      }),
-      new webpack.optimize.UglifyJsPlugin({
-        output: {
-          comments: false
-        },
-        compress: {
-          warnings: false
         }
       })
     ]

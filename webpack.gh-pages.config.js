@@ -1,20 +1,32 @@
-var path = require('path');
-var webpack = require('webpack');
-var autoprefixer = require('autoprefixer');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const autoprefixer = require('autoprefixer');
+const TerserPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: './demo/src/index',
+  mode: 'production',
 
   output: {
-    filename: './demo/dist/index.js'
+    path: path.join(__dirname, 'demo', 'dist'),
+    filename: 'index.js'
+  },
+
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        cache: true,
+        parallel: true
+      })
+    ]
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        loaders: ['babel'],
+        loader: 'babel-loader',
         include: [
           path.join(__dirname, 'src'), // Must be an absolute path
           path.join(__dirname, 'demo', 'src') // Must be an absolute path
@@ -22,44 +34,56 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        loader: ExtractTextPlugin.extract(
-          'style',
-          'css?modules&localIdentName=[name]__[local]___[hash:base64:5]!postcss!less'
-        ),
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName: '[name]__[local]___[hash:base64:5]'
+              }
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [autoprefixer()]
+            }
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              paths: [path.resolve(__dirname, 'demo', 'src')]
+            }
+          }
+        ],
         exclude: /node_modules/
       },
       {
         test: /\.jpg$/,
-        loader: 'url?limit=8192' // 8kb
+        loader: 'url-loader?limit=8192' // 8kb
       },
       {
         test: /\.svg$/,
-        loader: 'url?limit=8192!svgo' // 8kb
+        use: [
+          'url-loader?limit=8192!', // 8kb
+          'svgo-loader'
+        ]
       }
     ]
   },
 
-  postcss: function() {
-    return [autoprefixer];
-  },
-
   resolve: {
-    modulesDirectories: ['node_modules', 'components', 'src']
+    modules: ['node_modules', 'components', 'src']
   },
 
   plugins: [
-    new ExtractTextPlugin('./demo/dist/app.css'),
+    new MiniCssExtractPlugin({
+      filename: 'app.css'
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production')
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      output: {
-        comments: false
-      },
-      compress: {
-        warnings: false
       }
     })
   ]
