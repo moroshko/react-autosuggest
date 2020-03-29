@@ -53,13 +53,13 @@
     "eslint": "^6.8.0",
     "eslint-plugin-react": "^7.19.0",
     "file-loader": "^6.0.0",
-    "husky": "^0.13.4",
+    "husky": "^4.2.3",
     "ismobilejs": "^0.4.1",
     "isomorphic-fetch": "^2.2.1",
     "jsdom": "15.1.1",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
-    "lint-staged": "^3.6.1",
+    "lint-staged": "^10.0.10",
     "mini-css-extract-plugin": "^0.9.0",
     "mocha": "^7.1.1",
     "nyc": "^15.0.0",
@@ -77,37 +77,36 @@
     "svgo-loader": "^2.2.1",
     "terser-webpack-plugin": "^2.3.5",
     "url-loader": "^4.0.0",
-    "webpack": "^4.42.0",
+    "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
   },
   "files": [
     "dist"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     ".*.js": [
-      "npm run prettier",
-      "git add"
+      "npm run prettier"
     ],
     "*.js": [
-      "npm run prettier",
-      "git add"
+      "npm run prettier"
     ],
     "demo/src/**/*.js": [
-      "npm run prettier",
-      "git add"
+      "npm run prettier"
     ],
     "demo/standalone/app.js": [
-      "npm run prettier",
-      "git add"
+      "npm run prettier"
     ],
     "src/**/*.js": [
-      "npm run prettier",
-      "git add"
+      "npm run prettier"
     ],
     "test/**/*.js": [
-      "npm run prettier",
-      "git add"
+      "npm run prettier"
     ]
   },
   "keywords": [
