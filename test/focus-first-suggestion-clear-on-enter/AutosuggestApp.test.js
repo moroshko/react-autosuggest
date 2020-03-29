@@ -39,12 +39,12 @@ describe('Autosuggest with highlightFirstSuggestion={true} and clear on Enter', 
 
   describe('onSuggestionSelected', () => {
     beforeEach(() => {
-      onSuggestionSelected.reset();
+      onSuggestionSelected.resetHistory();
       focusAndSetInputValue('j');
     });
 
     it('should be called after inputProps.onChange when Enter is pressed', () => {
-      onChange.reset();
+      onChange.resetHistory();
       clearEvents();
       clickEnter();
       expect(getEvents()).to.deep.equal(['onChange', 'onSuggestionSelected']);

@@ -40,7 +40,15 @@ module.exports = {
     ],
     'no-template-curly-in-string': 2,
     'no-unused-vars': 2,
-    'newline-after-var': [2, 'always'],
+    'padding-line-between-statements': [
+      'error',
+      { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
+      {
+        blankLine: 'any',
+        prev: ['const', 'let', 'var'],
+        next: ['const', 'let', 'var']
+      }
+    ],
     'prefer-destructuring': [2, { array: false, object: true }],
     'prefer-rest-params': 2,
 

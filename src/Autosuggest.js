@@ -43,11 +43,11 @@ export default class Autosuggest extends Component {
     inputProps: (props, propName) => {
       const inputProps = props[propName];
 
-      if (!inputProps.hasOwnProperty('value')) {
+      if (!Object.prototype.hasOwnProperty.call(inputProps, 'value')) {
         throw new Error("'inputProps' must have 'value'.");
       }
 
-      if (!inputProps.hasOwnProperty('onChange')) {
+      if (!Object.prototype.hasOwnProperty.call(inputProps, 'onChange')) {
         throw new Error("'inputProps' must have 'onChange'.");
       }
     },

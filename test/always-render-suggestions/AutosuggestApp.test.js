@@ -165,7 +165,7 @@ describe('Autosuggest with alwaysRenderSuggestions={true}', () => {
   describe('onSuggestionsFetchRequested', () => {
     it('should be called once with the right parameters when suggestion is selected', () => {
       focusAndSetInputValue('j');
-      onSuggestionsFetchRequested.reset();
+      onSuggestionsFetchRequested.resetHistory();
       clickSuggestion(1);
       expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
       expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({

@@ -1,6 +1,7 @@
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
+import ReactDom from 'react-dom';
 import TestUtils, { Simulate } from 'react-dom/test-utils';
 
 chai.use(sinonChai);
@@ -325,4 +326,9 @@ export const clickClearButton = () => {
   } else {
     throw new Error("Clear button doesn't exist");
   }
+};
+
+export const unmountApp = () => {
+  // eslint-disable-next-line react/no-find-dom-node
+  ReactDom.unmountComponentAtNode(ReactDom.findDOMNode(app).parentNode);
 };
