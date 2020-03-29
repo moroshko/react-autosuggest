@@ -32,7 +32,8 @@ import {
   clearEvents,
   getEvents,
   mouseUpDocument,
-  dragSuggestionOutAndIn
+  dragSuggestionOutAndIn,
+  unmountApp
 } from '../helpers';
 import AutosuggestApp, {
   getSuggestionValue,
@@ -910,6 +911,14 @@ describe('Default Autosuggest', () => {
         expect(getSuggestion(0).getAttribute('role')).to.equal('option');
         expect(getSuggestion(1).getAttribute('role')).to.equal('option');
       });
+    });
+  });
+
+  describe('on unmount', () => {
+    it('should not throw', () => {
+      // pretty dump test since we can't check event listeners on document directly
+      // at least we know it doesn't throw on unmount
+      expect(unmountApp).to.not.throw();
     });
   });
 });

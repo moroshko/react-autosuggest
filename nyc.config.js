@@ -9,5 +9,6 @@ module.exports = {
   include: ['src/*.js'],
   exclude: ['test/**/*.js'],
   reporter: ['lcov', 'text-summary'],
+  all: true,
   'check-coverage': true
 };
