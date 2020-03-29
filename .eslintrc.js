@@ -3,7 +3,7 @@ module.exports = {
     es6: true,
     node: true,
     browser: true,
-    mocha: true
+    mocha: true,
   },
   parser: 'babel-eslint',
   plugins: ['react'],
@@ -20,23 +20,23 @@ module.exports = {
       {
         object: 'describe',
         property: 'only',
-        message: 'Please run all tests!'
+        message: 'Please run all tests!',
       },
       {
         object: 'describe',
         property: 'skip',
-        message: 'Please run all tests!'
+        message: 'Please run all tests!',
       },
       {
         object: 'it',
         property: 'only',
-        message: 'Please run all tests!'
+        message: 'Please run all tests!',
       },
       {
         object: 'it',
         property: 'skip',
-        message: 'Please run all tests!'
-      }
+        message: 'Please run all tests!',
+      },
     ],
     'no-template-curly-in-string': 2,
     'no-unused-vars': 2,
@@ -46,8 +46,8 @@ module.exports = {
       {
         blankLine: 'any',
         prev: ['const', 'let', 'var'],
-        next: ['const', 'let', 'var']
-      }
+        next: ['const', 'let', 'var'],
+      },
     ],
     'prefer-destructuring': [2, { array: false, object: true }],
     'prefer-rest-params': 2,
@@ -93,6 +93,11 @@ module.exports = {
     'react/jsx-pascal-case': 2,
     'react/jsx-sort-props': 0,
     'react/jsx-uses-react': 2,
-    'react/jsx-uses-vars': 2
-  }
+    'react/jsx-uses-vars': 2,
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
 };
