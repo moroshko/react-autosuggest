@@ -10,7 +10,8 @@
   "author": "Misha Moroshko <michael.moroshko@gmail.com>",
   "scripts": {
     "start": "mkdir -p demo/dist && npm run copy-static-files && node server",
-    "prettier": "prettier --single-quote --write \".*.js\" \"*.js\" \"demo/src/**/*.js\" \"demo/standalone/app.js\" \"src/**/*.js\" \"test/**/*.js\"",
+    "prettier": "prettier --single-quote --write",
+    "prettier:all": "npm run prettier -- \".*.js\" \"*.js\" \"demo/src/**/*.js\" \"demo/standalone/app.js\" \"src/**/*.js\" \"test/**/*.js\"",
     "lint": "eslint src test demo/src demo/standalone/app.js server.js webpack.*.js",
     "test": "NODE_ENV=test nyc mocha \"test/**/*.test.js\"",
     "copy-static-files": "cp demo/src/index.html demo/src/components/App/components/Examples/components/Basic/autosuggest.css demo/dist/",
@@ -90,22 +91,7 @@
     }
   },
   "lint-staged": {
-    ".*.js": [
-      "npm run prettier"
-    ],
     "*.js": [
-      "npm run prettier"
-    ],
-    "demo/src/**/*.js": [
-      "npm run prettier"
-    ],
-    "demo/standalone/app.js": [
-      "npm run prettier"
-    ],
-    "src/**/*.js": [
-      "npm run prettier"
-    ],
-    "test/**/*.js": [
       "npm run prettier"
     ]
   },
