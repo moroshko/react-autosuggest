@@ -14,7 +14,7 @@ import AutosuggestApp, { renderSuggestionsContainer } from './AutosuggestApp';
 describe('Autosuggest with renderSuggestionsContainer', () => {
   beforeEach(() => {
     init(TestUtils.renderIntoDocument(<AutosuggestApp />));
-    renderSuggestionsContainer.reset();
+    renderSuggestionsContainer.resetHistory();
     setInputValue('c ');
   });
 
