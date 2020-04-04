@@ -1,11 +1,13 @@
-var path = require('path');
-var webpack = require('webpack');
-var autoprefixer = require('autoprefixer');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var host = process.env.NODE_HOST || 'localhost';
-var port = process.env.NODE_PORT || 3000;
+const path = require('path');
+const webpack = require('webpack');
+const autoprefixer = require('autoprefixer');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const host = process.env.NODE_HOST || 'localhost';
+const port = process.env.NODE_PORT || 3000;
 
 module.exports = {
+  mode: 'development',
   entry: [
     `webpack-dev-server/client?http://${host}:${port}`,
     './demo/src/index'
@@ -14,14 +16,14 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'), // Must be an absolute path
     filename: 'index.js',
-    publicPath: '/demo/dist'
+    publicPath: '/demo/dist/'
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         include: [
           path.join(__dirname, 'src'), // Must be an absolute path
           path.join(__dirname, 'demo', 'src') // Must be an absolute path
@@ -29,29 +31,47 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        loader: ExtractTextPlugin.extract(
-          'style',
-          'css?modules&localIdentName=[name]__[local]___[hash:base64:5]!postcss!less'
-        ),
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName: '[name]__[local]___[hash:base64:5]'
+              }
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [autoprefixer()]
+            }
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              paths: [path.resolve(__dirname, 'demo', 'src')]
+            }
+          }
+        ],
         exclude: /node_modules/
       },
       {
         test: /\.jpg$/,
-        loader: 'url?limit=8192' // 8kb
+        loader: 'url-loader?limit=8192' // 8kb
       },
       {
         test: /\.svg$/,
-        loader: 'url?limit=8192!svgo' // 8kb
+        use: [
+          'url-loader?limit=8192!', // 8kb
+          'svgo-loader'
+        ]
       }
     ]
   },
 
-  postcss: function() {
-    return [autoprefixer];
-  },
-
   resolve: {
-    modulesDirectories: [
+    modules: [
       'node_modules',
       'components',
       'src',
@@ -63,6 +83,8 @@ module.exports = {
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin('app.css')
+    new MiniCssExtractPlugin({
+      filename: 'app.css'
+    })
   ]
 };

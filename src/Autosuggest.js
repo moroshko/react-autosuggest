@@ -43,11 +43,11 @@ export default class Autosuggest extends Component {
     inputProps: (props, propName) => {
       const inputProps = props[propName];
 
-      if (!inputProps.hasOwnProperty('value')) {
+      if (!Object.prototype.hasOwnProperty.call(inputProps, 'value')) {
         throw new Error("'inputProps' must have 'value'.");
       }
 
-      if (!inputProps.hasOwnProperty('onChange')) {
+      if (!Object.prototype.hasOwnProperty.call(inputProps, 'onChange')) {
         throw new Error("'inputProps' must have 'onChange'.");
       }
     },
@@ -121,7 +121,8 @@ export default class Autosuggest extends Component {
     this.suggestionsContainer = this.autowhatever.itemsContainer;
   }
 
-  componentWillReceiveProps(nextProps) {
+  // eslint-disable-next-line camelcase, react/sort-comp
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (shallowEqualArrays(nextProps.suggestions, this.props.suggestions)) {
       if (
         nextProps.highlightFirstSuggestion &&
@@ -283,7 +284,10 @@ export default class Autosuggest extends Component {
       event.target;
 
     while (node !== null && node !== document) {
-      if (node.getAttribute('data-suggestion-index') !== null) {
+      if (
+        node.getAttribute &&
+        node.getAttribute('data-suggestion-index') !== null
+      ) {
         // Suggestion was clicked
         return;
       }
@@ -302,7 +306,10 @@ export default class Autosuggest extends Component {
     let node = startNode;
 
     do {
-      if (node.getAttribute('data-suggestion-index') !== null) {
+      if (
+        node.getAttribute &&
+        node.getAttribute('data-suggestion-index') !== null
+      ) {
         return node;
       }
 
@@ -572,6 +579,10 @@ export default class Autosuggest extends Component {
         const shouldRender = shouldRenderSuggestions(value);
 
         this.maybeCallOnChange(event, value, 'type');
+
+        if (this.suggestionsContainer) {
+          this.suggestionsContainer.scrollTop = 0;
+        }
 
         this.setState({
           ...(highlightFirstSuggestion
