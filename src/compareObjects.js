@@ -43,7 +43,7 @@ export default function compareObjects(objA, objB, keys = []) {
       return true;
     }
 
-    for (let n = 0, length = aValueKeys.length; n < length; n++) {
+    for (let n = 0, { length } = aValueKeys; n < length; n++) {
       const aValueKey = aValueKeys[n];
 
       if (aValue[aValueKey] !== bValue[aValueKey]) {
