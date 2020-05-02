@@ -34,10 +34,10 @@ export default class Autowhatever extends Component {
     renderInputComponent: PropTypes.func, // When specified, it is used to render the input element.
     renderItemsContainer: PropTypes.func, // Renders the items container.
     items: PropTypes.array.isRequired, // Array of items or sections to render.
-    renderItem: PropTypes.func.isRequired, // This function renders a single item.
+    renderItem: PropTypes.func, // This function renders a single item.
     renderItemData: PropTypes.object, // Arbitrary data that will be passed to renderItem()
-    renderSectionTitle: PropTypes.func.isRequired, // This function gets a section and renders its title.
-    getSectionItems: PropTypes.func.isRequired, // This function gets a section and returns its items, which will be passed into `renderItem` for rendering.
+    renderSectionTitle: PropTypes.func, // This function gets a section and renders its title.
+    getSectionItems: PropTypes.func, // This function gets a section and returns its items, which will be passed into `renderItem` for rendering.
     containerProps: PropTypes.object, // Arbitrary container props
     inputProps: PropTypes.object, // Arbitrary input props
     itemProps: PropTypes.oneOfType([
@@ -59,7 +59,16 @@ export default class Autowhatever extends Component {
     multiSection: false,
     renderInputComponent: defaultRenderInputComponent,
     renderItemsContainer: defaultRenderItemsContainer,
+    renderItem: () => {
+      throw new Error('`renderItem` must be provided');
+    },
     renderItemData: emptyObject,
+    renderSectionTitle: () => {
+      throw new Error('`renderSectionTitle` must be provided');
+    },
+    getSectionItems: () => {
+      throw new Error('`getSectionItems` must be provided');
+    },
     containerProps: emptyObject,
     inputProps: emptyObject,
     itemProps: emptyObject,
