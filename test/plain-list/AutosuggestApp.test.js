@@ -32,7 +32,8 @@ import {
   clearEvents,
   getEvents,
   mouseUpDocument,
-  dragSuggestionOutAndIn
+  dragSuggestionOutAndIn,
+  unmountApp
 } from '../helpers';
 import AutosuggestApp, {
   getSuggestionValue,
@@ -357,7 +358,7 @@ describe('Default Autosuggest', () => {
 
   describe('getSuggestionValue', () => {
     beforeEach(() => {
-      getSuggestionValue.reset();
+      getSuggestionValue.resetHistory();
       focusAndSetInputValue('r');
     });
 
@@ -390,7 +391,7 @@ describe('Default Autosuggest', () => {
 
     it('should not be called when input is focused', () => {
       clickDown();
-      getSuggestionValue.reset();
+      getSuggestionValue.resetHistory();
       clickUp();
       expect(getSuggestionValue).not.to.have.been.called;
     });
@@ -398,7 +399,7 @@ describe('Default Autosuggest', () => {
 
   describe('renderSuggestion', () => {
     beforeEach(() => {
-      renderSuggestion.reset();
+      renderSuggestion.resetHistory();
       focusAndSetInputValue('r');
     });
 
@@ -407,7 +408,7 @@ describe('Default Autosuggest', () => {
         { name: 'Ruby', year: 1995 },
         { query: 'r', isHighlighted: false }
       );
-      renderSuggestion.reset();
+      renderSuggestion.resetHistory();
       clickDown();
       expect(renderSuggestion).to.have.been.calledWithExactly(
         { name: 'Ruby', year: 1995 },
@@ -422,7 +423,7 @@ describe('Default Autosuggest', () => {
     it('should be called twice when the highlighted suggestion is changed', () => {
       focusAndSetInputValue('c');
       clickDown();
-      renderSuggestion.reset();
+      renderSuggestion.resetHistory();
       clickDown();
       expect(renderSuggestion).to.have.callCount(2);
     });
@@ -446,7 +447,7 @@ describe('Default Autosuggest', () => {
   describe('inputProps.onChange', () => {
     beforeEach(() => {
       focusAndSetInputValue('c');
-      onChange.reset();
+      onChange.resetHistory();
     });
 
     it('should be called once with the right parameters when user types', () => {
@@ -503,7 +504,7 @@ describe('Default Autosuggest', () => {
 
     it('should not be called when pressing Down highlight a suggestion which value equals to input value', () => {
       focusAndSetInputValue('C++');
-      onChange.reset();
+      onChange.resetHistory();
       clickDown();
       expect(onChange).not.to.have.been.called;
     });
@@ -516,7 +517,7 @@ describe('Default Autosuggest', () => {
 
     it('should not be called when pressing Up highlight a suggestion which value equals to input value', () => {
       focusAndSetInputValue('C++');
-      onChange.reset();
+      onChange.resetHistory();
       clickUp();
       expect(onChange).not.to.have.been.called;
     });
@@ -528,21 +529,21 @@ describe('Default Autosuggest', () => {
 
     it('should not be called when Escape is pressed, suggestions are hidden, and input is empty', () => {
       focusAndSetInputValue('');
-      onChange.reset();
+      onChange.resetHistory();
       clickEscape();
       expect(onChange).not.to.have.been.called;
     });
 
     it('should not be called when suggestion which value equals to input value is clicked', () => {
       focusAndSetInputValue('C++');
-      onChange.reset();
+      onChange.resetHistory();
       clickSuggestion(0);
       expect(onChange).not.to.have.been.called;
     });
 
     it('should not be called when Enter is pressed and input value has not changed', () => {
       clickDown();
-      onChange.reset();
+      onChange.resetHistory();
       clickEnter();
       expect(onChange).not.to.have.been.called;
     });
@@ -551,7 +552,7 @@ describe('Default Autosuggest', () => {
   describe('inputProps.onFocus', () => {
     beforeEach(() => {
       focusAndSetInputValue('c');
-      onFocus.reset();
+      onFocus.resetHistory();
     });
 
     it('should not call onFocus when suggestions container is clicked', () => {
@@ -563,7 +564,7 @@ describe('Default Autosuggest', () => {
   describe('inputProps.onBlur', () => {
     beforeEach(() => {
       focusAndSetInputValue('c');
-      onBlur.reset();
+      onBlur.resetHistory();
     });
 
     it('should not call onBlur when suggestions container is clicked', () => {
@@ -574,7 +575,7 @@ describe('Default Autosuggest', () => {
 
   describe('shouldRenderSuggestions', () => {
     beforeEach(() => {
-      shouldRenderSuggestions.reset();
+      shouldRenderSuggestions.resetHistory();
     });
 
     it('should be called with the right parameters', () => {
@@ -595,7 +596,7 @@ describe('Default Autosuggest', () => {
 
   describe('onSuggestionSelected', () => {
     beforeEach(() => {
-      onSuggestionSelected.reset();
+      onSuggestionSelected.resetHistory();
       focusAndSetInputValue('j');
     });
 
@@ -644,7 +645,7 @@ describe('Default Autosuggest', () => {
     });
 
     it('should be called after inputProps.onChange when suggestion is clicked', () => {
-      onChange.reset();
+      onChange.resetHistory();
       clearEvents();
       clickSuggestion(1);
       expect(
@@ -658,7 +659,7 @@ describe('Default Autosuggest', () => {
   describe('onSuggestionHighlighted', () => {
     beforeEach(() => {
       focusAndSetInputValue('j');
-      onSuggestionHighlighted.reset();
+      onSuggestionHighlighted.resetHistory();
     });
 
     it('should be called once with the highlighted suggestion when mouse enters a suggestion', () => {
@@ -671,7 +672,7 @@ describe('Default Autosuggest', () => {
 
     it('should be called once with null when mouse leaves a suggestion and there is no more highlighted suggestion', () => {
       mouseEnterSuggestion(0);
-      onSuggestionHighlighted.reset();
+      onSuggestionHighlighted.resetHistory();
       mouseLeaveSuggestion(0);
       expect(onSuggestionHighlighted).to.have.been.calledOnce;
       expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
@@ -683,7 +684,7 @@ describe('Default Autosuggest', () => {
   describe('onSuggestionsFetchRequested', () => {
     it('should be called once with the right parameters when user types', () => {
       focusInput();
-      onSuggestionsFetchRequested.reset();
+      onSuggestionsFetchRequested.resetHistory();
       setInputValue('j');
       expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
       expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({
@@ -695,7 +696,7 @@ describe('Default Autosuggest', () => {
     it('should be called once with the right parameters when Up is pressed to reveal suggestions', () => {
       focusAndSetInputValue('j');
       clickSuggestion(1);
-      onSuggestionsFetchRequested.reset();
+      onSuggestionsFetchRequested.resetHistory();
       clickDown();
       expect(onSuggestionsFetchRequested).to.have.been.calledOnce;
       expect(onSuggestionsFetchRequested).to.have.been.calledWithExactly({
@@ -705,28 +706,28 @@ describe('Default Autosuggest', () => {
     });
 
     it('should not be called when input gets focus and shouldRenderSuggestions returns false', () => {
-      onSuggestionsFetchRequested.reset();
+      onSuggestionsFetchRequested.resetHistory();
       focusInput();
       expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
     it('should not be called when user types and shouldRenderSuggestions returns false', () => {
       focusInput();
-      onSuggestionsFetchRequested.reset();
+      onSuggestionsFetchRequested.resetHistory();
       setInputValue(' ');
       expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
     it('should not be called when Down is pressed to highlight the next suggestion', () => {
       focusAndSetInputValue('j');
-      onSuggestionsFetchRequested.reset();
+      onSuggestionsFetchRequested.resetHistory();
       clickDown();
       expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
     it('should not be called when Up is pressed to highlight the previous suggestion', () => {
       focusAndSetInputValue('j');
-      onSuggestionsFetchRequested.reset();
+      onSuggestionsFetchRequested.resetHistory();
       clickUp();
       expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
@@ -734,28 +735,28 @@ describe('Default Autosuggest', () => {
     it('should not be called when input is blurred, user interacted with Up/Down, and the value before Up/Down is not equal to current input value', () => {
       focusAndSetInputValue('j');
       clickDown();
-      onSuggestionsFetchRequested.reset();
+      onSuggestionsFetchRequested.resetHistory();
       blurInput();
       expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
     it('should not be called when Escape is pressed and suggestions are hidden and shouldRenderSuggestions returns false for empty value', () => {
       focusAndSetInputValue('jr');
-      onSuggestionsFetchRequested.reset();
+      onSuggestionsFetchRequested.resetHistory();
       clickEscape();
       expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
     it('should not be called when Enter is pressed and there is no highlighted suggestion', () => {
       focusAndSetInputValue('j');
-      onSuggestionsFetchRequested.reset();
+      onSuggestionsFetchRequested.resetHistory();
       clickEnter();
       expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
     it('should not be called when Enter is pressed and there is no highlighted suggestion after Up/Down interaction', () => {
       focusAndSetInputValue('j');
-      onSuggestionsFetchRequested.reset();
+      onSuggestionsFetchRequested.resetHistory();
       clickDown();
       clickDown();
       clickDown();
@@ -765,7 +766,7 @@ describe('Default Autosuggest', () => {
 
     it('should not be called when input is blurred and user did not interact with Up/Down', () => {
       focusAndSetInputValue('j');
-      onSuggestionsFetchRequested.reset();
+      onSuggestionsFetchRequested.resetHistory();
       blurInput();
       expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
@@ -773,14 +774,14 @@ describe('Default Autosuggest', () => {
     it('should not be called when input is blurred, user interacted with Up/Down, but the value before Up/Down is equal to current input value', () => {
       focusAndSetInputValue('Java');
       clickDown();
-      onSuggestionsFetchRequested.reset();
+      onSuggestionsFetchRequested.resetHistory();
       blurInput();
       expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
 
     it('should not be called when Escape is pressed to close suggestions', () => {
       focusAndSetInputValue('j');
-      onSuggestionsFetchRequested.reset();
+      onSuggestionsFetchRequested.resetHistory();
       clickEscape();
       expect(onSuggestionsFetchRequested).not.to.have.been.called;
     });
@@ -789,28 +790,28 @@ describe('Default Autosuggest', () => {
   describe('onSuggestionsClearRequested', () => {
     it('should be called once when input is blurred', () => {
       focusAndSetInputValue('p');
-      onSuggestionsClearRequested.reset();
+      onSuggestionsClearRequested.resetHistory();
       blurInput();
       expect(onSuggestionsClearRequested).to.have.been.calledOnce;
     });
 
     it('should be called once when suggestion is clicked', () => {
       focusAndSetInputValue('p');
-      onSuggestionsClearRequested.reset();
+      onSuggestionsClearRequested.resetHistory();
       clickSuggestion(1);
       expect(onSuggestionsClearRequested).to.have.been.calledOnce;
     });
 
     it('should be called once when shouldRenderSuggestions returns false', () => {
       focusInput();
-      onSuggestionsClearRequested.reset();
+      onSuggestionsClearRequested.resetHistory();
       setInputValue(' ');
       expect(onSuggestionsClearRequested).to.have.been.calledOnce;
     });
 
     it('should be called once when Escape is pressed to close suggestions', () => {
       focusAndSetInputValue('p');
-      onSuggestionsClearRequested.reset();
+      onSuggestionsClearRequested.resetHistory();
       clickEscape();
       expect(onSuggestionsClearRequested).to.have.been.calledOnce;
     });
@@ -818,7 +819,7 @@ describe('Default Autosuggest', () => {
 
   describe('when focusInputOnSuggestionClick is true', () => {
     beforeEach(() => {
-      onBlur.reset();
+      onBlur.resetHistory();
       focusAndSetInputValue('p');
     });
 
@@ -910,6 +911,14 @@ describe('Default Autosuggest', () => {
         expect(getSuggestion(0).getAttribute('role')).to.equal('option');
         expect(getSuggestion(1).getAttribute('role')).to.equal('option');
       });
+    });
+  });
+
+  describe('on unmount', () => {
+    it('should not throw', () => {
+      // pretty dump test since we can't check event listeners on document directly
+      // at least we know it doesn't throw on unmount
+      expect(unmountApp).to.not.throw();
     });
   });
 });
