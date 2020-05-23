@@ -78,6 +78,10 @@ export default class Item extends Component {
       restProps.onClick = this.onClick;
     }
 
+    if (typeof item.key === 'string') {
+      restProps.key = item.key;
+    }
+
     return (
       <li role="option" {...restProps} ref={this.storeItemReference}>
         {renderItem(item, { isHighlighted, ...renderItemData })}
