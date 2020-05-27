@@ -28,7 +28,6 @@
   "dependencies": {
     "es6-promise": "^4.2.8",
     "prop-types": "^15.7.2",
-    "react-autowhatever": "^10.2.1",
     "react-themeable": "^1.1.0",
     "section-iterator": "^2.0.0",
     "shallow-equal": "^1.2.1"
