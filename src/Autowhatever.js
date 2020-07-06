@@ -330,13 +330,12 @@ export default class Autowhatever extends Component {
   };
 
   ensureHighlightedItemIsVisible() {
-    const { highlightedItem } = this;
+    const { highlightedItem, itemsContainer } = this;
 
-    if (!highlightedItem) {
+    if (!highlightedItem || !itemsContainer) {
       return;
     }
 
-    const { itemsContainer } = this;
     const itemOffsetRelativeToContainer =
       highlightedItem.offsetParent === itemsContainer
         ? highlightedItem.offsetTop
