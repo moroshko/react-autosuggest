@@ -15,12 +15,13 @@ import {
   clickEnter,
   clickDown,
   setInputValue,
-  focusAndSetInputValue
+  focusAndSetInputValue,
 } from '../helpers';
 import AutosuggestApp, {
   onChange,
   onSuggestionSelected,
-  onSuggestionHighlighted
+  onSuggestionHighlighted,
+  getHighlightFirstSuggestion,
 } from './AutosuggestApp';
 
 describe('Autosuggest with highlightFirstSuggestion={true}', () => {
@@ -28,9 +29,21 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
     init(TestUtils.renderIntoDocument(<AutosuggestApp />));
   });
 
+  describe('when highlightFirstSuggestion changes from true to false', () => {
+    it('should not have highlighted suggestions', () => {
+      focusAndSetInputValue('j');
+      getHighlightFirstSuggestion(true, 'j');
+      expectHighlightedSuggestion('Java');
+      focusAndSetInputValue('');
+      getHighlightFirstSuggestion(false, '');
+      expectHighlightedSuggestion(null);
+    });
+  });
+
   describe('when typing and matches exist', () => {
     beforeEach(() => {
       focusAndSetInputValue('j');
+      getHighlightFirstSuggestion(true, 'j');
     });
 
     it('should highlight the first suggestion', () => {
@@ -117,7 +130,7 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
       expect(onChange).to.have.been.calledOnce;
       expect(onChange).to.be.calledWith(syntheticEventMatcher, {
         newValue: 'Perl',
-        method: 'enter'
+        method: 'enter',
       });
     });
   });
@@ -135,7 +148,7 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
           suggestionValue: 'Perl',
           suggestionIndex: 0,
           sectionIndex: null,
-          method: 'enter'
+          method: 'enter',
         }
       );
     });
@@ -147,7 +160,7 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
       focusAndSetInputValue('p');
       expect(onSuggestionHighlighted).to.have.been.calledOnce;
       expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
-        suggestion: { name: 'Perl', year: 1987 }
+        suggestion: { name: 'Perl', year: 1987 },
       });
     });
 
@@ -157,7 +170,7 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
       focusAndSetInputValue('c+');
       expect(onSuggestionHighlighted).to.have.been.calledOnce;
       expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
-        suggestion: { name: 'C++', year: 1983 }
+        suggestion: { name: 'C++', year: 1983 },
       });
     });
   });
