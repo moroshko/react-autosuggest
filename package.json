@@ -18,7 +18,7 @@
     "dist": "rm -rf dist && mkdir dist && babel src -d dist",
     "demo-dist": "rm -rf demo/dist && mkdir demo/dist && npm run copy-static-files && cross-env BABEL_ENV=production webpack --config webpack.gh-pages.config.js",
     "standalone": "cross-env BABEL_ENV=production webpack --config webpack.standalone.config.js && webpack --config webpack.standalone-demo.config.js",
-    "prebuild": "npm run prettier && npm run lint && npm test",
+    "prebuild": "npm run prettier:all && npm run lint && npm test",
     "build": "npm run dist && npm run standalone",
     "gh-pages-build": "npm run prebuild && npm run demo-dist",
     "postversion": "git push && git push --tags",
