@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import shallowEqualArrays from 'shallow-equal/arrays';
-import Autowhatever from 'react-autowhatever';
+import Autowhatever from './Autowhatever';
 import { defaultTheme, mapToAutowhateverTheme } from './theme';
 
 const alwaysTrue = () => true;
