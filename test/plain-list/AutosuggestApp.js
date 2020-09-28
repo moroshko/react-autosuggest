@@ -5,7 +5,7 @@ import parse from 'autosuggest-highlight/parse';
 import Autosuggest from '../../src/Autosuggest';
 import languages from './languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
-import { addEvent } from '../helpers';
+import { addEvent, saveKeyDown } from '../helpers';
 
 const getMatchingLanguages = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -92,6 +92,7 @@ export default class AutosuggestApp extends Component {
       id: 'my-awesome-autosuggest',
       placeholder: 'Type a programming language',
       type: 'search',
+      onKeyDown: saveKeyDown,
       value,
       onChange,
       onFocus,

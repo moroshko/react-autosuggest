@@ -13,6 +13,8 @@ import {
   expectInputReferenceToBeSet,
   expectSuggestions,
   expectHighlightedSuggestion,
+  expectLetBrowserHandleKeyDown,
+  expectDontLetBrowserHandleKeyDown,
   getSuggestionsContainerAttribute,
   mouseEnterSuggestion,
   mouseLeaveSuggestion,
@@ -78,6 +80,23 @@ describe('Default Autosuggest', () => {
 
     it('should set the input reference', () => {
       expectInputReferenceToBeSet();
+    });
+  });
+
+  describe('when input field is focused and empty', () => {
+    beforeEach(() => {
+      focusInput();
+      clearEvents();
+    });
+
+    it('should let browser handle dpad_down', () => {
+      clickDown();
+      expectLetBrowserHandleKeyDown();
+    });
+
+    it('should let browser handle dpad_up', () => {
+      clickUp();
+      expectLetBrowserHandleKeyDown();
     });
   });
 
@@ -153,6 +172,18 @@ describe('Default Autosuggest', () => {
       setInputValue('Per');
       expectHighlightedSuggestion(null);
     });
+
+    it('should not let browser handle dpad_down', () => {
+      clearEvents();
+      clickDown();
+      expectDontLetBrowserHandleKeyDown();
+    });
+
+    it('should not let browser handle dpad_up', () => {
+      clearEvents();
+      clickUp();
+      expectDontLetBrowserHandleKeyDown();
+    });
   });
 
   describe('when typing and matches do not exist', () => {
@@ -171,6 +202,18 @@ describe('Default Autosuggest', () => {
     it('should clear the input when Escape is pressed', () => {
       clickEscape();
       expectInputValue('');
+    });
+
+    it('should let browser handle dpad_down', () => {
+      clearEvents();
+      clickDown();
+      expectLetBrowserHandleKeyDown();
+    });
+
+    it('should let browser handle dpad_down', () => {
+      clearEvents();
+      clickUp();
+      expectLetBrowserHandleKeyDown();
     });
   });
 
@@ -236,8 +279,10 @@ describe('Default Autosuggest', () => {
     });
 
     it('should highlight the first suggestion again', () => {
+      clearEvents();
       clickDown(5);
       expectHighlightedSuggestion('Perl');
+      expectDontLetBrowserHandleKeyDown();
     });
   });
 
@@ -269,8 +314,10 @@ describe('Default Autosuggest', () => {
     });
 
     it('should highlight the last suggestion again', () => {
+      clearEvents();
       clickUp(5);
       expectHighlightedSuggestion('Python');
+      expectDontLetBrowserHandleKeyDown();
     });
   });
 
