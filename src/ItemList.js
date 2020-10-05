@@ -15,6 +15,7 @@ export default class ItemsList extends Component {
     getItemId: PropTypes.func.isRequired,
     theme: PropTypes.func.isRequired,
     keyPrefix: PropTypes.string.isRequired,
+    ariaLabel: PropTypes.string,
   };
 
   static defaultProps = {
@@ -42,6 +43,7 @@ export default class ItemsList extends Component {
       getItemId,
       theme,
       keyPrefix,
+      ariaLabel,
     } = this.props;
     const sectionPrefix =
       sectionIndex === null
@@ -50,7 +52,7 @@ export default class ItemsList extends Component {
     const isItemPropsFunction = typeof itemProps === 'function';
 
     return (
-      <ul role="listbox" {...theme(`${sectionPrefix}items-list`, 'itemsList')}>
+      <ul role="listbox" aria-label={ariaLabel} {...theme(`${sectionPrefix}items-list`, 'itemsList')}>
         {items.map((item, itemIndex) => {
           const isFirst = itemIndex === 0;
           const isHighlighted = itemIndex === highlightedItemIndex;
