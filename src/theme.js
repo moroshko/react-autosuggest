@@ -12,10 +12,10 @@ export const defaultTheme = {
   suggestionHighlighted: 'react-autosuggest__suggestion--highlighted',
   sectionContainer: 'react-autosuggest__section-container',
   sectionContainerFirst: 'react-autosuggest__section-container--first',
-  sectionTitle: 'react-autosuggest__section-title'
+  sectionTitle: 'react-autosuggest__section-title',
 };
 
-export const mapToAutowhateverTheme = theme => {
+export const mapToAutowhateverTheme = (theme) => {
   let result = {};
 
   for (const key in theme) {

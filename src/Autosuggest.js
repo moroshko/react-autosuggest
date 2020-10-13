@@ -535,7 +535,10 @@ export default class Autosuggest extends Component {
       ? alwaysTrue
       : this.props.shouldRenderSuggestions;
     const { value, onFocus, onKeyDown } = inputProps;
-    const willRenderSuggestions = this.willRenderSuggestions(this.props, 'render');
+    const willRenderSuggestions = this.willRenderSuggestions(
+      this.props,
+      'render'
+    );
     const isOpen =
       alwaysRenderSuggestions ||
       (isFocused && !isCollapsed && willRenderSuggestions);
