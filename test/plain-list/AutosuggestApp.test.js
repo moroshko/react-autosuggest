@@ -580,7 +580,11 @@ describe('Default Autosuggest', () => {
 
     it('should be called with the right parameters', () => {
       focusAndSetInputValue('e');
-      expect(shouldRenderSuggestions).to.be.calledWithExactly('e');
+      expect(shouldRenderSuggestions.callCount).to.equal(4);
+      expect(shouldRenderSuggestions.getCall(0).args).to.deep.equal(['', 'input-focused']);
+      expect(shouldRenderSuggestions.getCall(1).args).to.deep.equal(['e', 'input-changed']);
+      expect(shouldRenderSuggestions.getCall(2).args).to.deep.equal(['e', 'suggestions-updated']);
+      expect(shouldRenderSuggestions.getCall(3).args).to.deep.equal(['e', 'render']);
     });
 
     it('should show suggestions when true is returned', () => {
