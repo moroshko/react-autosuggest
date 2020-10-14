@@ -301,11 +301,13 @@ export default class Autowhatever extends Component {
       highlightedSectionIndex,
       highlightedItemIndex,
     } = this.props;
+    const { keyCode } = event;
 
-    switch (event.key) {
-      case 'ArrowDown':
-      case 'ArrowUp': {
-        const nextPrev = event.key === 'ArrowDown' ? 'next' : 'prev';
+    switch (keyCode) {
+      case 40: // ArrowDown
+      case 38: {
+        // ArrowUp
+        const nextPrev = keyCode === 40 ? 'next' : 'prev';
         const [
           newHighlightedSectionIndex,
           newHighlightedItemIndex,
