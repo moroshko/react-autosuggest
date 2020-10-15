@@ -170,6 +170,24 @@ export const expectHighlightedSuggestion = suggestion => {
   }
 };
 
+export const saveKeyDown = (event) => {
+  let runBrowserDefault = event.defaultPrevented
+    ? 'defaultPrevented'
+    : 'runBrowserDefault';
+
+  addEvent('onKeyDown-' + runBrowserDefault);
+};
+
+export const expectLetBrowserHandleKeyDown = () => {
+  expect(getEvents()).to.not.deep.include('onKeyDown-defaultPrevented');
+  expect(getEvents()).to.deep.include('onKeyDown-runBrowserDefault');
+};
+
+export const expectDontLetBrowserHandleKeyDown = () => {
+  expect(getEvents()).to.not.deep.include('onKeyDown-runBrowserDefault');
+  expect(getEvents()).to.deep.include('onKeyDown-defaultPrevented');
+};
+
 export const mouseEnterSuggestion = suggestionIndex => {
   Simulate.mouseEnter(getSuggestion(suggestionIndex));
 };

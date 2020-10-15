@@ -13,6 +13,8 @@ import {
   expectInputReferenceToBeSet,
   expectSuggestions,
   expectHighlightedSuggestion,
+  expectLetBrowserHandleKeyDown,
+  expectDontLetBrowserHandleKeyDown,
   getSuggestionsContainerAttribute,
   mouseEnterSuggestion,
   mouseLeaveSuggestion,
@@ -81,6 +83,23 @@ describe('Default Autosuggest', () => {
     });
   });
 
+  describe('when input field is focused and empty', () => {
+    beforeEach(() => {
+      focusInput();
+      clearEvents();
+    });
+
+    it('should let browser handle ArrowDown', () => {
+      clickDown();
+      expectLetBrowserHandleKeyDown();
+    });
+
+    it('should let browser handle ArrowUp', () => {
+      clickUp();
+      expectLetBrowserHandleKeyDown();
+    });
+  });
+
   describe('when typing and matches exist', () => {
     beforeEach(() => {
       focusAndSetInputValue('p');
@@ -95,7 +114,9 @@ describe('Default Autosuggest', () => {
     });
 
     it('should hide suggestions when Escape is pressed', () => {
+      clearEvents();
       clickEscape();
+      expectDontLetBrowserHandleKeyDown();
       expectSuggestions([]);
     });
 
@@ -153,6 +174,18 @@ describe('Default Autosuggest', () => {
       setInputValue('Per');
       expectHighlightedSuggestion(null);
     });
+
+    it('should not let browser handle ArrowDown', () => {
+      clearEvents();
+      clickDown();
+      expectDontLetBrowserHandleKeyDown();
+    });
+
+    it('should not let browser handle ArrowUp', () => {
+      clearEvents();
+      clickUp();
+      expectDontLetBrowserHandleKeyDown();
+    });
   });
 
   describe('when typing and matches do not exist', () => {
@@ -171,6 +204,18 @@ describe('Default Autosuggest', () => {
     it('should clear the input when Escape is pressed', () => {
       clickEscape();
       expectInputValue('');
+    });
+
+    it('should let browser handle ArrowDown', () => {
+      clearEvents();
+      clickDown();
+      expectLetBrowserHandleKeyDown();
+    });
+
+    it('should let browser handle ArrowDown', () => {
+      clearEvents();
+      clickUp();
+      expectLetBrowserHandleKeyDown();
     });
   });
 
@@ -197,7 +242,7 @@ describe('Default Autosuggest', () => {
       mouseEnterSuggestion(2);
     });
 
-    describe('when pressing down', () => {
+    describe('when pressing ArrowDown', () => {
       beforeEach(() => {
         clickDown();
       });
@@ -213,9 +258,16 @@ describe('Default Autosuggest', () => {
       focusAndSetInputValue('p');
     });
 
-    it('should show suggestions with no highlighted suggestion, if they are hidden', () => {
+    it('should show suggestions with no highlighted suggestion if they were hidden', () => {
+      expectSuggestions(['Perl', 'PHP', 'Python']);
+
+      clearEvents();
       clickEscape();
+      expectDontLetBrowserHandleKeyDown();
+      expectSuggestions([]);
+
       clickDown();
+      expectDontLetBrowserHandleKeyDown();
       expectSuggestions(['Perl', 'PHP', 'Python']);
       expectHighlightedSuggestion(null);
     });
@@ -236,8 +288,10 @@ describe('Default Autosuggest', () => {
     });
 
     it('should highlight the first suggestion again', () => {
+      clearEvents();
       clickDown(5);
       expectHighlightedSuggestion('Perl');
+      expectDontLetBrowserHandleKeyDown();
     });
   });
 
@@ -246,9 +300,16 @@ describe('Default Autosuggest', () => {
       focusAndSetInputValue('p');
     });
 
-    it('should show suggestions with no highlighted suggestion, if they are hidden', () => {
+    it('should show suggestions with no highlighted suggestion if they were hidden', () => {
+      expectSuggestions(['Perl', 'PHP', 'Python']);
+
+      clearEvents();
       clickEscape();
+      expectDontLetBrowserHandleKeyDown();
+      expectSuggestions([]);
+
       clickUp();
+      expectDontLetBrowserHandleKeyDown();
       expectSuggestions(['Perl', 'PHP', 'Python']);
       expectHighlightedSuggestion(null);
     });
@@ -269,8 +330,10 @@ describe('Default Autosuggest', () => {
     });
 
     it('should highlight the last suggestion again', () => {
+      clearEvents();
       clickUp(5);
       expectHighlightedSuggestion('Python');
+      expectDontLetBrowserHandleKeyDown();
     });
   });
 
