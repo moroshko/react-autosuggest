@@ -615,6 +615,7 @@ export default class Autosuggest extends Component {
                   reason: 'suggestions-revealed',
                 });
                 this.revealSuggestions();
+                event.preventDefault(); // We act on the key.
               }
             } else if (suggestions.length > 0) {
               const {
@@ -647,7 +648,7 @@ export default class Autosuggest extends Component {
                 newValue,
                 keyCode === 40 ? 'down' : 'up'
               );
-              event.preventDefault(); // Prevents the cursor from moving.
+              event.preventDefault(); // We act on the key.
             }
 
             this.justPressedUpDown = true;
