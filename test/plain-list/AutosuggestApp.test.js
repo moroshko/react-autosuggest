@@ -89,12 +89,12 @@ describe('Default Autosuggest', () => {
       clearEvents();
     });
 
-    it('should let browser handle dpad_down', () => {
+    it('should let browser handle ArrowDown', () => {
       clickDown();
       expectLetBrowserHandleKeyDown();
     });
 
-    it('should let browser handle dpad_up', () => {
+    it('should let browser handle ArrowUp', () => {
       clickUp();
       expectLetBrowserHandleKeyDown();
     });
@@ -173,13 +173,13 @@ describe('Default Autosuggest', () => {
       expectHighlightedSuggestion(null);
     });
 
-    it('should not let browser handle dpad_down', () => {
+    it('should not let browser handle ArrowDown', () => {
       clearEvents();
       clickDown();
       expectDontLetBrowserHandleKeyDown();
     });
 
-    it('should not let browser handle dpad_up', () => {
+    it('should not let browser handle ArrowUp', () => {
       clearEvents();
       clickUp();
       expectDontLetBrowserHandleKeyDown();
@@ -204,13 +204,13 @@ describe('Default Autosuggest', () => {
       expectInputValue('');
     });
 
-    it('should let browser handle dpad_down', () => {
+    it('should let browser handle ArrowDown', () => {
       clearEvents();
       clickDown();
       expectLetBrowserHandleKeyDown();
     });
 
-    it('should let browser handle dpad_down', () => {
+    it('should let browser handle ArrowDown', () => {
       clearEvents();
       clickUp();
       expectLetBrowserHandleKeyDown();
@@ -240,7 +240,7 @@ describe('Default Autosuggest', () => {
       mouseEnterSuggestion(2);
     });
 
-    describe('when pressing down', () => {
+    describe('when pressing ArrowDown', () => {
       beforeEach(() => {
         clickDown();
       });
