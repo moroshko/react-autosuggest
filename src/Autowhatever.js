@@ -40,6 +40,7 @@ export default class Autowhatever extends Component {
     getSectionItems: PropTypes.func, // This function gets a section and returns its items, which will be passed into `renderItem` for rendering.
     containerProps: PropTypes.object, // Arbitrary container props
     inputProps: PropTypes.object, // Arbitrary input props
+    ariaLabel: PropTypes.string, // value for `aria-label` on ItemList
     itemProps: PropTypes.oneOfType([
       // Arbitrary item props
       PropTypes.object,
@@ -195,6 +196,7 @@ export default class Autowhatever extends Component {
       highlightedSectionIndex,
       highlightedItemIndex,
       itemProps,
+      ariaLabel,
     } = this.props;
 
     return items.map((section, sectionIndex) => {
@@ -234,6 +236,7 @@ export default class Autowhatever extends Component {
             theme={theme}
             keyPrefix={keyPrefix}
             ref={this.storeItemsListReference}
+            ariaLabel={ariaLabel}
           />
         </div>
       );
@@ -256,6 +259,7 @@ export default class Autowhatever extends Component {
       highlightedSectionIndex,
       highlightedItemIndex,
       itemProps,
+      ariaLabel
     } = this.props;
 
     return (
@@ -271,6 +275,7 @@ export default class Autowhatever extends Component {
         getItemId={this.getItemId}
         theme={theme}
         keyPrefix={`react-autowhatever-${id}-`}
+        ariaLabel={ariaLabel}
       />
     );
   }

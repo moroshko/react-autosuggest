@@ -175,6 +175,7 @@ class Example extends React.Component {
 | [`renderInputComponent`](#render-input-component-prop)                 | Function |                                                  | Use it only if you need to customize the rendering of the input.                                                                                                                                      |
 | [`renderSuggestionsContainer`](#render-suggestions-container-prop)     | Function |                                                  | Use it if you want to customize things inside the suggestions container beyond rendering the suggestions themselves.                                                                                  |
 | [`theme`](#theme-prop)                                                 | Object   |                                                  | Use your imagination to style the Autosuggest.                                                                                                                                                        |
+| [`ariaLabel`](#aria-label-prop)                                        | String   |                                                  | Use it if you need to set an aria-label to select box. |
 | [`id`](#id-prop)                                                       | String   |                                                  | Use it only if you have multiple Autosuggest components on a page.                                                                                                                                    |
 
 <a name="suggestions-prop"></a>
@@ -631,6 +632,11 @@ When not specified, `theme` defaults to:
 The following picture illustrates how `theme` keys correspond to Autosuggest DOM structure:
 
 ![DOM structure](dom-structure.png)
+
+<a name="aria-label-prop"></a>
+#### ariaLabel (optional)
+
+Aria-label can be added to props, so that the input field of AutoSuggest is accessible. By default it is set to `search`.
 
 <a name="id-prop"></a>
 

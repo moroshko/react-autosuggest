@@ -58,6 +58,7 @@ export default class Autosuggest extends Component {
     shouldRenderSuggestions: PropTypes.func,
     alwaysRenderSuggestions: PropTypes.bool,
     multiSection: PropTypes.bool,
+    ariaLabel: PropTypes.string,
     renderSectionTitle: (props, propName) => {
       const renderSectionTitle = props[propName];
 
@@ -526,7 +527,8 @@ export default class Autosuggest extends Component {
       theme,
       getSuggestionValue,
       alwaysRenderSuggestions,
-      highlightFirstSuggestion,
+      ariaLabel,
+      highlightFirstSuggestion
     } = this.props;
     const {
       isFocused,
@@ -766,6 +768,7 @@ export default class Autosuggest extends Component {
         itemProps={this.itemProps}
         theme={mapToAutowhateverTheme(theme)}
         id={id}
+        ariaLabel={ariaLabel}
         ref={this.storeAutowhateverRef}
       />
     );
