@@ -44,9 +44,10 @@ export const onChange = sinon.spy((event, { newValue }) => {
 export const onFocus = sinon.spy();
 export const onBlur = sinon.spy();
 
-export const shouldRenderSuggestions = sinon.spy(value => {
+export const defaultShouldRenderSuggestionsStub = (value) => {
   return value.trim().length > 0 && value[0] !== ' ';
-});
+};
+export const shouldRenderSuggestions = sinon.stub().callsFake(defaultShouldRenderSuggestionsStub);
 
 export const onSuggestionsFetchRequested = sinon.spy(({ value }) => {
   app.setState({

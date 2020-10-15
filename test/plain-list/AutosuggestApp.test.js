@@ -42,6 +42,7 @@ import AutosuggestApp, {
   onFocus,
   onBlur,
   shouldRenderSuggestions,
+  defaultShouldRenderSuggestionsStub,
   onSuggestionsFetchRequested,
   onSuggestionsClearRequested,
   onSuggestionSelected,
@@ -578,13 +579,31 @@ describe('Default Autosuggest', () => {
       shouldRenderSuggestions.resetHistory();
     });
 
-    it('should be called with the right parameters', () => {
+    it('should be called with the right parameters during input', () => {
       focusAndSetInputValue('e');
       expect(shouldRenderSuggestions.callCount).to.equal(4);
       expect(shouldRenderSuggestions.getCall(0).args).to.deep.equal(['', 'input-focused']);
       expect(shouldRenderSuggestions.getCall(1).args).to.deep.equal(['e', 'input-changed']);
       expect(shouldRenderSuggestions.getCall(2).args).to.deep.equal(['e', 'suggestions-updated']);
       expect(shouldRenderSuggestions.getCall(3).args).to.deep.equal(['e', 'render']);
+
+      blurInput();
+      expect(shouldRenderSuggestions.callCount).to.equal(5);
+      expect(shouldRenderSuggestions.getCall(4).args).to.deep.equal(['e', 'input-blurred']);
+    });
+
+    it('should be called with the right parameters when revealing/hiding suggestions', () => {
+      focusInput();
+      expect(shouldRenderSuggestions.callCount).to.equal(1);
+      expect(shouldRenderSuggestions.getCall(0).args).to.deep.equal(['', 'input-focused']);
+
+      clickUp();
+      expect(shouldRenderSuggestions.callCount).to.equal(2);
+      expect(shouldRenderSuggestions.getCall(1).args).to.deep.equal(['', 'suggestions-revealed']);
+
+      clickEscape();
+      expect(shouldRenderSuggestions.callCount).to.equal(3);
+      expect(shouldRenderSuggestions.getCall(2).args).to.deep.equal(['', 'escape-pressed']);
     });
 
     it('should show suggestions when true is returned', () => {
@@ -595,6 +614,42 @@ describe('Default Autosuggest', () => {
     it('should hide suggestions when false is returned', () => {
       focusAndSetInputValue(' e');
       expectSuggestions([]);
+    });
+
+    describe("when ignoring certain reasons", () => {
+      beforeEach(() => {
+        shouldRenderSuggestions.callsFake((value, reason) => {
+          return reason !== 'input-focused'; // Show suggestions always, except on input focus
+        });
+      });
+
+      afterEach(() => {
+        shouldRenderSuggestions.resetBehavior();
+        shouldRenderSuggestions.callsFake(defaultShouldRenderSuggestionsStub);
+      });
+
+      it('should be able to show suggestions only in certain cases', () => {
+        focusInput();
+        expectSuggestions([]);
+
+        clickUp();
+        expectSuggestions([
+          'C',
+          'C#',
+          'C++',
+          'Clojure',
+          'Elm',
+          'Go',
+          'Haskell',
+          'Java',
+          'JavaScript',
+          'Perl',
+          'PHP',
+          'Python',
+          'Ruby',
+          'Scala'
+        ]);
+      });
     });
   });
 
