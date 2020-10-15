@@ -10,6 +10,14 @@ const defaultRenderSuggestionsContainer = ({ containerProps, children }) => (
   <div {...containerProps}>{children}</div>
 );
 
+const REASON_SUGGESTIONS_REVEALED = 'suggestions-revealed';
+const REASON_SUGGESTIONS_UPDATED = 'suggestions-updated';
+const REASON_SUGGESTION_SELECTED = 'suggestion-selected';
+const REASON_INPUT_FOCUSED = 'input-focused';
+const REASON_INPUT_CHANGED = 'input-changed';
+const REASON_INPUT_BLURRED = 'input-blurred';
+const REASON_ESCAPE_PRESSED = 'escape-pressed';
+
 export default class Autosuggest extends Component {
   static propTypes = {
     suggestions: PropTypes.array.isRequired,
@@ -133,7 +141,7 @@ export default class Autosuggest extends Component {
         this.highlightFirstSuggestion();
       }
     } else {
-      if (this.willRenderSuggestions(nextProps, 'suggestions-updated')) {
+      if (this.willRenderSuggestions(nextProps, REASON_SUGGESTIONS_UPDATED)) {
         if (this.state.isCollapsed && !this.justSelectedSuggestion) {
           this.revealSuggestions();
         }
@@ -393,7 +401,7 @@ export default class Autosuggest extends Component {
     if (alwaysRenderSuggestions) {
       onSuggestionsFetchRequested({
         value: data.suggestionValue,
-        reason: 'suggestion-selected',
+        reason: REASON_SUGGESTION_SELECTED,
       });
     } else {
       this.onSuggestionsClearRequested();
@@ -440,7 +448,7 @@ export default class Autosuggest extends Component {
     const { inputProps, shouldRenderSuggestions } = this.props;
     const { value, onBlur } = inputProps;
     const highlightedSuggestion = this.getHighlightedSuggestion();
-    const shouldRender = shouldRenderSuggestions(value, 'input-blurred');
+    const shouldRender = shouldRenderSuggestions(value, REASON_INPUT_BLURRED);
 
     this.setState({
       isFocused: false,
@@ -550,7 +558,10 @@ export default class Autosuggest extends Component {
           !this.justSelectedSuggestion &&
           !this.justClickedOnSuggestionsContainer
         ) {
-          const shouldRender = shouldRenderSuggestions(value, 'input-focused');
+          const shouldRender = shouldRenderSuggestions(
+            value,
+            REASON_INPUT_FOCUSED
+          );
 
           this.setState({
             isFocused: true,
@@ -560,7 +571,10 @@ export default class Autosuggest extends Component {
           onFocus && onFocus(event);
 
           if (shouldRender) {
-            onSuggestionsFetchRequested({ value, reason: 'input-focused' });
+            onSuggestionsFetchRequested({
+              value,
+              reason: REASON_INPUT_FOCUSED,
+            });
           }
         }
       },
@@ -579,7 +593,10 @@ export default class Autosuggest extends Component {
       },
       onChange: (event) => {
         const { value } = event.target;
-        const shouldRender = shouldRenderSuggestions(value, 'input-changed');
+        const shouldRender = shouldRenderSuggestions(
+          value,
+          REASON_INPUT_CHANGED
+        );
 
         this.maybeCallOnChange(event, value, 'type');
 
@@ -600,7 +617,7 @@ export default class Autosuggest extends Component {
         });
 
         if (shouldRender) {
-          onSuggestionsFetchRequested({ value, reason: 'input-changed' });
+          onSuggestionsFetchRequested({ value, reason: REASON_INPUT_CHANGED });
         } else {
           this.onSuggestionsClearRequested();
         }
@@ -612,10 +629,10 @@ export default class Autosuggest extends Component {
           case 40: // ArrowDown
           case 38: // ArrowUp
             if (isCollapsed) {
-              if (shouldRenderSuggestions(value, 'suggestions-revealed')) {
+              if (shouldRenderSuggestions(value, REASON_SUGGESTIONS_REVEALED)) {
                 onSuggestionsFetchRequested({
                   value,
-                  reason: 'suggestions-revealed',
+                  reason: REASON_SUGGESTIONS_REVEALED,
                 });
                 this.revealSuggestions();
               }
@@ -717,10 +734,10 @@ export default class Autosuggest extends Component {
 
                 this.maybeCallOnChange(event, newValue, 'escape');
 
-                if (shouldRenderSuggestions(newValue, 'escape-pressed')) {
+                if (shouldRenderSuggestions(newValue, REASON_ESCAPE_PRESSED)) {
                   onSuggestionsFetchRequested({
                     value: newValue,
-                    reason: 'escape-pressed',
+                    reason: REASON_ESCAPE_PRESSED,
                   });
                 } else {
                   this.onSuggestionsClearRequested();
