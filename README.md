@@ -407,15 +407,25 @@ where:
 
 By default, suggestions are rendered when the input isn't blank. Feel free to override this behaviour.
 
-This function gets the current value of the input, and it should return a boolean.
+This function gets the current value of the input and the reason why the suggestions might be rendered, and it should return a boolean.
 
 For example, to display suggestions only when input value is at least 3 characters long, do:
 
 ```js
-function shouldRenderSuggestions(value) {
+function shouldRenderSuggestions(value, reason) {
   return value.trim().length > 2;
 }
 ```
+
+You can use the second `reason` argument to finely control exactly when the suggestions are rendered. The possible values are closely related to those for `onSuggestionsFetchRequested`, plus a few extra cases:
+
+- `'input-changed'` - user typed something
+- `'input-focused'` - input was focused
+- `'input-blurred'` - input was un-focused
+- `'escape-pressed'` - user pressed <kbd>Escape</kbd> to clear the input (and suggestions are shown for empty input)
+- `'suggestions-revealed'` - user pressed <kbd>Up</kbd> or <kbd>Down</kbd> to reveal suggestions
+- `'suggestions-updated'` - the suggestions were updated
+- `'render'` - the component is re-rendering
 
 When `shouldRenderSuggestions` returns `true`, **suggestions will be rendered only when the input is focused**.
 
