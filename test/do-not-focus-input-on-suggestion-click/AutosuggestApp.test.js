@@ -22,8 +22,8 @@ describe('Autosuggest with focusInputOnSuggestionClick={false}', () => {
   describe('when suggestion is clicked', () => {
     beforeEach(() => {
       focusAndSetInputValue('p');
-      onBlur.reset();
-      onSuggestionsClearRequested.reset();
+      onBlur.resetHistory();
+      onSuggestionsClearRequested.resetHistory();
       clickSuggestion(1);
     });
 

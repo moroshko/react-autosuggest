@@ -5,7 +5,7 @@ import parse from 'autosuggest-highlight/parse';
 import Autosuggest from '../../src/Autosuggest';
 import languages from './languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
-import { addEvent } from '../helpers';
+import { addEvent, saveKeyDown } from '../helpers';
 
 const getMatchingLanguages = value => {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -44,9 +44,10 @@ export const onChange = sinon.spy((event, { newValue }) => {
 export const onFocus = sinon.spy();
 export const onBlur = sinon.spy();
 
-export const shouldRenderSuggestions = sinon.spy(value => {
+export const defaultShouldRenderSuggestionsStub = (value) => {
   return value.trim().length > 0 && value[0] !== ' ';
-});
+};
+export const shouldRenderSuggestions = sinon.stub().callsFake(defaultShouldRenderSuggestionsStub);
 
 export const onSuggestionsFetchRequested = sinon.spy(({ value }) => {
   app.setState({
@@ -92,6 +93,7 @@ export default class AutosuggestApp extends Component {
       id: 'my-awesome-autosuggest',
       placeholder: 'Type a programming language',
       type: 'search',
+      onKeyDown: saveKeyDown,
       value,
       onChange,
       onFocus,
