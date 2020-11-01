@@ -21,6 +21,7 @@ import AutosuggestApp, {
   onChange,
   onSuggestionSelected,
   onSuggestionHighlighted,
+  getHighlightFirstSuggestion,
 } from './AutosuggestApp';
 
 describe('Autosuggest with highlightFirstSuggestion={true}', () => {
@@ -28,9 +29,21 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
     init(TestUtils.renderIntoDocument(<AutosuggestApp />));
   });
 
+  describe('when highlightFirstSuggestion changes from true to false', () => {
+    it('should not have highlighted suggestions', () => {
+      focusAndSetInputValue('j');
+      getHighlightFirstSuggestion(true, 'j');
+      expectHighlightedSuggestion('Java');
+      focusAndSetInputValue('');
+      getHighlightFirstSuggestion(false, '');
+      expectHighlightedSuggestion(null);
+    });
+  });
+
   describe('when typing and matches exist', () => {
     beforeEach(() => {
       focusAndSetInputValue('j');
+      getHighlightFirstSuggestion(true, 'j');
     });
 
     it('should highlight the first suggestion', () => {
