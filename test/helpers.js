@@ -31,7 +31,10 @@ export const init = application => {
     app,
     'react-autosuggest__container'
   );
-  input = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
+  input = TestUtils.findRenderedDOMComponentWithClass(
+    app,
+    'react-autosuggest__input'
+  );
   suggestionsContainer = TestUtils.findRenderedDOMComponentWithClass(
     app,
     'react-autosuggest__suggestions-container'
