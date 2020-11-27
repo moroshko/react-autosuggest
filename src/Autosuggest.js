@@ -135,6 +135,13 @@ export default class Autosuggest extends Component {
 
   // eslint-disable-next-line camelcase, react/sort-comp
   UNSAFE_componentWillReceiveProps(nextProps) {
+    // When highlightFirstSuggestion becomes deactivated, if the first suggestion was
+    // set, we should reset the suggestion back to the unselected default state.
+    const shouldResetHighlighting =
+      this.state.highlightedSuggestionIndex === 0 &&
+      this.props.highlightFirstSuggestion &&
+      !nextProps.highlightFirstSuggestion;
+
     if (shallowEqualArrays(nextProps.suggestions, this.props.suggestions)) {
       if (
         nextProps.highlightFirstSuggestion &&
@@ -143,11 +150,17 @@ export default class Autosuggest extends Component {
         this.justMouseEntered === false
       ) {
         this.highlightFirstSuggestion();
+      } else if (shouldResetHighlighting) {
+        this.resetHighlightedSuggestion();
       }
     } else {
       if (this.willRenderSuggestions(nextProps, REASON_SUGGESTIONS_UPDATED)) {
         if (this.state.isCollapsed && !this.justSelectedSuggestion) {
           this.revealSuggestions();
+        }
+
+        if (shouldResetHighlighting) {
+          this.resetHighlightedSuggestion();
         }
       } else {
         this.resetHighlightedSuggestion();

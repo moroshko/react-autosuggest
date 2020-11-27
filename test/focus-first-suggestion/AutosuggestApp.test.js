@@ -15,17 +15,50 @@ import {
   clickEnter,
   clickDown,
   setInputValue,
-  focusAndSetInputValue
+  focusAndSetInputValue,
 } from '../helpers';
 import AutosuggestApp, {
   onChange,
   onSuggestionSelected,
-  onSuggestionHighlighted
+  onSuggestionHighlighted,
+  setHighlightFirstSuggestion,
 } from './AutosuggestApp';
 
 describe('Autosuggest with highlightFirstSuggestion={true}', () => {
   beforeEach(() => {
     init(TestUtils.renderIntoDocument(<AutosuggestApp />));
+    setHighlightFirstSuggestion(true);
+  });
+
+  describe('when highlightFirstSuggestion changes from true to false', () => {
+    it("should unhighlight the suggestion", () => {
+      focusAndSetInputValue('j');
+      expectHighlightedSuggestion('Java');
+
+      setHighlightFirstSuggestion(false);
+      expectHighlightedSuggestion(null);
+    });
+
+    it("should retain the selected suggestion if it was set manually", () => {
+      focusAndSetInputValue('j');
+      expectHighlightedSuggestion('Java');
+      clickDown();
+      expectHighlightedSuggestion('JavaScript');
+
+      setHighlightFirstSuggestion(false);
+      expectHighlightedSuggestion('JavaScript');
+    });
+
+    it("should re-highlight the suggestion if it becomes true again", () => {
+      focusAndSetInputValue('j');
+      expectHighlightedSuggestion('Java');
+
+      setHighlightFirstSuggestion(false);
+      expectHighlightedSuggestion(null);
+
+      setHighlightFirstSuggestion(true);
+      expectHighlightedSuggestion('Java');
+    });
   });
 
   describe('when typing and matches exist', () => {
@@ -117,7 +150,7 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
       expect(onChange).to.have.been.calledOnce;
       expect(onChange).to.be.calledWith(syntheticEventMatcher, {
         newValue: 'Perl',
-        method: 'enter'
+        method: 'enter',
       });
     });
   });
@@ -135,7 +168,7 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
           suggestionValue: 'Perl',
           suggestionIndex: 0,
           sectionIndex: null,
-          method: 'enter'
+          method: 'enter',
         }
       );
     });
@@ -147,7 +180,7 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
       focusAndSetInputValue('p');
       expect(onSuggestionHighlighted).to.have.been.calledOnce;
       expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
-        suggestion: { name: 'Perl', year: 1987 }
+        suggestion: { name: 'Perl', year: 1987 },
       });
     });
 
@@ -157,7 +190,7 @@ describe('Autosuggest with highlightFirstSuggestion={true}', () => {
       focusAndSetInputValue('c+');
       expect(onSuggestionHighlighted).to.have.been.calledOnce;
       expect(onSuggestionHighlighted).to.have.been.calledWithExactly({
-        suggestion: { name: 'C++', year: 1983 }
+        suggestion: { name: 'C++', year: 1983 },
       });
     });
   });
