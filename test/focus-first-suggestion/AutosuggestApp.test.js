@@ -21,29 +21,49 @@ import AutosuggestApp, {
   onChange,
   onSuggestionSelected,
   onSuggestionHighlighted,
-  getHighlightFirstSuggestion,
+  setHighlightFirstSuggestion,
 } from './AutosuggestApp';
 
 describe('Autosuggest with highlightFirstSuggestion={true}', () => {
   beforeEach(() => {
     init(TestUtils.renderIntoDocument(<AutosuggestApp />));
+    setHighlightFirstSuggestion(true);
   });
 
   describe('when highlightFirstSuggestion changes from true to false', () => {
-    it('should not have highlighted suggestions', () => {
+    it("should unhighlight the suggestion", () => {
       focusAndSetInputValue('j');
-      getHighlightFirstSuggestion(true, 'j');
       expectHighlightedSuggestion('Java');
-      focusAndSetInputValue('');
-      getHighlightFirstSuggestion(false, '');
+
+      setHighlightFirstSuggestion(false);
       expectHighlightedSuggestion(null);
+    });
+
+    it("should retain the selected suggestion if it was set manually", () => {
+      focusAndSetInputValue('j');
+      expectHighlightedSuggestion('Java');
+      clickDown();
+      expectHighlightedSuggestion('JavaScript');
+
+      setHighlightFirstSuggestion(false);
+      expectHighlightedSuggestion('JavaScript');
+    });
+
+    it("should re-highlight the suggestion if it becomes true again", () => {
+      focusAndSetInputValue('j');
+      expectHighlightedSuggestion('Java');
+
+      setHighlightFirstSuggestion(false);
+      expectHighlightedSuggestion(null);
+
+      setHighlightFirstSuggestion(true);
+      expectHighlightedSuggestion('Java');
     });
   });
 
   describe('when typing and matches exist', () => {
     beforeEach(() => {
       focusAndSetInputValue('j');
-      getHighlightFirstSuggestion(true, 'j');
     });
 
     it('should highlight the first suggestion', () => {
