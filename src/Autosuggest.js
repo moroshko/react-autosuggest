@@ -42,7 +42,7 @@ export default class Autosuggest extends Component {
         );
       }
     },
-    keepSuggestionsOnSelect: PropTypes.bool,
+    shouldKeepSuggestionsOnSelect: PropTypes.func,
     onSuggestionSelected: PropTypes.func,
     onSuggestionHighlighted: PropTypes.func,
     renderInputComponent: PropTypes.func,
@@ -102,7 +102,7 @@ export default class Autosuggest extends Component {
     shouldRenderSuggestions: defaultShouldRenderSuggestions,
     alwaysRenderSuggestions: false,
     multiSection: false,
-    keepSuggestionsOnSelect: false,
+    shouldKeepSuggestionsOnSelect: () => false,
     focusInputOnSuggestionClick: true,
     highlightFirstSuggestion: false,
     theme: defaultTheme,
@@ -412,11 +412,14 @@ export default class Autosuggest extends Component {
     const {
       alwaysRenderSuggestions,
       onSuggestionSelected,
-      keepSuggestionsOnSelect,
       onSuggestionsFetchRequested,
     } = this.props;
 
     onSuggestionSelected && onSuggestionSelected(event, data);
+
+    const keepSuggestionsOnSelect = this.props.shouldKeepSuggestionsOnSelect(
+      data.suggestion
+    );
 
     if (alwaysRenderSuggestions || keepSuggestionsOnSelect) {
       onSuggestionsFetchRequested({
@@ -431,11 +434,7 @@ export default class Autosuggest extends Component {
   };
 
   onSuggestionClick = (event) => {
-    const {
-      alwaysRenderSuggestions,
-      focusInputOnSuggestionClick,
-      keepSuggestionsOnSelect,
-    } = this.props;
+    const { alwaysRenderSuggestions, focusInputOnSuggestionClick } = this.props;
     const { sectionIndex, suggestionIndex } = this.getSuggestionIndices(
       this.findSuggestionElement(event.target)
     );
@@ -452,6 +451,10 @@ export default class Autosuggest extends Component {
       sectionIndex,
       method: 'click',
     });
+
+    const keepSuggestionsOnSelect = this.props.shouldKeepSuggestionsOnSelect(
+      clickedSuggestion
+    );
 
     if (!(alwaysRenderSuggestions || keepSuggestionsOnSelect)) {
       this.closeSuggestions();
