@@ -509,7 +509,9 @@ export default class Autosuggest extends Component {
   onSuggestionTouchMove = () => {
     this.justSelectedSuggestion = false;
     this.pressedSuggestion = null;
-    this.input.focus();
+    if (this.input.focus) {
+      this.input.focus();
+    }
   };
 
   itemProps = ({ sectionIndex, itemIndex }) => {
