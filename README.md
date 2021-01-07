@@ -163,6 +163,7 @@ class Example extends React.Component {
 | [`getSuggestionValue`](#get-suggestion-value-prop)                     | Function |                        ✓                         | Implement it to teach Autosuggest what should be the input value when suggestion is clicked.                                                                                                          |
 | [`renderSuggestion`](#render-suggestion-prop)                          | Function |                        ✓                         | Use your imagination to define how suggestions are rendered.                                                                                                                                          |
 | [`inputProps`](#input-props-prop)                                      | Object   |                        ✓                         | Pass through arbitrary props to the input. It must contain at least `value` and `onChange`.                                                                                                           |
+| [`containerProps`](#container-props-prop) | Object | | Pass through arbitrary props to the container. Useful if you need to override the default props set by Autowhatever, for example, for accessibility. |
 | [`onSuggestionSelected`](#on-suggestion-selected-prop)                 | Function |                                                  | Will be called every time suggestion is selected via mouse or keyboard.                                                                                                                               |
 | [`onSuggestionHighlighted`](#on-suggestion-highlighted-prop)           | Function |                                                  | Will be called every time the highlighted suggestion changes.                                                                                                                                         |
 | [`shouldRenderSuggestions`](#should-render-suggestions-prop)           | Function |                                                  | When the input is focused, Autosuggest will consult this function when to render suggestions. Use it, for example, if you want to display suggestions when input value is at least 2 characters long. |
@@ -366,6 +367,19 @@ function onBlur(event, { highlightedSuggestion })
 where:
 
 - `highlightedSuggestion` - the suggestion that was highlighted just before the input lost focus, or `null` if there was no highlighted suggestion.
+
+<a name="container-props-prop"></a>
+
+#### containerProps
+
+Provides arbitrary properties to the outer `div` container of Autosuggest. Allows the override of accessibility properties.
+
+```js
+const containerProps = {
+  dataId: 'my-data-id'
+  // ... any other properties
+};
+```
 
 <a name="on-suggestion-selected-prop"></a>
 
