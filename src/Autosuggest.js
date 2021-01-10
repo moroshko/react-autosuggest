@@ -111,11 +111,11 @@ export default class Autosuggest extends Component {
     containerProps: {},
   };
 
-  constructor({ alwaysRenderSuggestions }) {
+  constructor({ alwaysRenderSuggestions, inputProps }) {
     super();
 
     this.state = {
-      isFocused: false,
+      isFocused: inputProps.autoFocus,
       isCollapsed: !alwaysRenderSuggestions,
       highlightedSectionIndex: null,
       highlightedSuggestionIndex: null,
@@ -135,6 +135,8 @@ export default class Autosuggest extends Component {
 
     this.input = this.autowhatever.input;
     this.suggestionsContainer = this.autowhatever.itemsContainer;
+
+    this.ensureFocusState();
   }
 
   // eslint-disable-next-line camelcase, react/sort-comp
@@ -198,11 +200,25 @@ export default class Autosuggest extends Component {
         });
       }
     }
+
+    this.ensureFocusState();
   }
 
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.onDocumentMouseDown);
     document.removeEventListener('mouseup', this.onDocumentMouseUp);
+  }
+
+  // This works only when the `renderInputComponent` is not set. Otherwise
+  // input ref is out of react-autowhatever control.
+  ensureFocusState() {
+    if (
+      this.input &&
+      document.activeElement === this.input &&
+      !this.state.isFocused
+    ) {
+      this.setState({ isFocused: true });
+    }
   }
 
   updateHighlightedSuggestion(sectionIndex, suggestionIndex, prevValue) {

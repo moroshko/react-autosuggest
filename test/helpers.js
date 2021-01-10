@@ -298,6 +298,10 @@ export const focusInput = () => {
   Simulate.focus(input);
 };
 
+export const focusInputNatively = () => {
+  input.focus();
+};
+
 export const blurInput = () => {
   Simulate.blur(input);
 };
