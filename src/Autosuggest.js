@@ -9,6 +9,9 @@ const defaultShouldRenderSuggestions = (value) => value.trim().length > 0;
 const defaultRenderSuggestionsContainer = ({ containerProps, children }) => (
   <div {...containerProps}>{children}</div>
 );
+const defaultRenderSectionContainer = ({ containerProps, children }) => (
+  <div {...containerProps}>{children}</div>
+);
 
 const REASON_SUGGESTIONS_REVEALED = 'suggestions-revealed';
 const REASON_SUGGESTIONS_UPDATED = 'suggestions-updated';
@@ -47,6 +50,7 @@ export default class Autosuggest extends Component {
     onSuggestionHighlighted: PropTypes.func,
     renderInputComponent: PropTypes.func,
     renderSuggestionsContainer: PropTypes.func,
+    renderSectionContainer: PropTypes.func,
     getSuggestionValue: PropTypes.func.isRequired,
     renderSuggestion: PropTypes.func.isRequired,
     inputProps: (props, propName) => {
@@ -100,6 +104,7 @@ export default class Autosuggest extends Component {
 
   static defaultProps = {
     renderSuggestionsContainer: defaultRenderSuggestionsContainer,
+    renderSectionContainer: defaultRenderSectionContainer,
     shouldRenderSuggestions: defaultShouldRenderSuggestions,
     alwaysRenderSuggestions: false,
     multiSection: false,
@@ -545,6 +550,17 @@ export default class Autosuggest extends Component {
     });
   };
 
+  renderSectionContainer = ({ containerProps, children, section }) => {
+    const { renderSectionContainer } = this.props;
+
+    return renderSectionContainer({
+      containerProps,
+      children,
+      query: this.getQuery(),
+      section,
+    });
+  };
+
   render() {
     const {
       suggestions,
@@ -803,6 +819,7 @@ export default class Autosuggest extends Component {
         items={items}
         renderInputComponent={renderInputComponent}
         renderItemsContainer={this.renderSuggestionsContainer}
+        renderSectionContainer={this.renderSectionContainer}
         renderItem={renderSuggestion}
         renderItemData={renderSuggestionData}
         renderSectionTitle={renderSectionTitle}

@@ -175,6 +175,7 @@ class Example extends React.Component {
 | [`getSectionSuggestions`](#get-section-suggestions-prop)               | Function |         ✓<br>when `multiSection={true}`          | Implement it to teach Autosuggest where to find the suggestions for every section.                                                                                                                    |
 | [`renderInputComponent`](#render-input-component-prop)                 | Function |                                                  | Use it only if you need to customize the rendering of the input.                                                                                                                                      |
 | [`renderSuggestionsContainer`](#render-suggestions-container-prop)     | Function |                                                  | Use it if you want to customize things inside the suggestions container beyond rendering the suggestions themselves.                                                                                  |
+| [`renderSectionContainer`](#render-sections-container-prop)            | Function |                                                  | Use it if you want to customize things inside the sections container beyond rendering the sections themselves.                                                                                        |
 | [`theme`](#theme-prop)                                                 | Object   |                                                  | Use your imagination to style the Autosuggest.                                                                                                                                                        |
 | [`id`](#id-prop)                                                       | String   |                                                  | Use it only if you have multiple Autosuggest components on a page.                                                                                                                                    |
 
@@ -598,6 +599,39 @@ function renderSuggestionsContainer({ containerProps, children }) {
     <IsolatedScroll ref={callRef} {...restContainerProps}>
       {children}
     </IsolatedScroll>
+  );
+}
+```
+
+<a name="render-sections-container-prop"></a>
+
+#### renderSectionContainer (optional)
+
+You shouldn't specify `renderSectionContainer` unless you want to customize the content or behaviour of the sections container beyond rendering the sections themselves. For example, you might want to add a custom text before/after the sections list.
+
+The signature is:
+
+```js
+function renderSectionContainer({ containerProps, children, query })
+```
+
+where:
+
+- `containerProps` - props that you MUST pass to the topmost element that is returned from `renderSectionContainer`.
+- `children` - the sections themselves. It's up to you where to render them.
+- `query` - Same as `query` in [`renderSuggestion`](#render-suggestion-prop).
+
+For example:
+
+```js
+function renderSectionContainer({ containerProps, children, query }) {
+  return (
+    <div {...containerProps}>
+      {children}
+      <div>
+        Press Enter to search <strong>{query}</strong>
+      </div>
+    </div>
   );
 }
 ```
