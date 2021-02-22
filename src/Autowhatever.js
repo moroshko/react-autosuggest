@@ -210,6 +210,7 @@ export default class Autowhatever extends Component {
 
       // `key` is provided by theme()
       return renderSectionContainer({
+        section,
         containerProps: theme(
           `${sectionKeyPrefix}container`,
           'sectionContainer',

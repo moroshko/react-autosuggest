@@ -19,7 +19,7 @@ describe('Autosuggest with renderSectionContainer', () => {
   });
 
   it('should render whatever renderSectionContainer returns', () => {
-    expect(getElementWithClass('my-section-container-footer')).not.to.equal(
+    expect(getElementWithClass('my-section-container-header')).not.to.equal(
       null
     );
     expect(getInnerHTML(getElementWithClass('my-query'))).to.equal('c');
@@ -33,7 +33,14 @@ describe('Autosuggest with renderSectionContainer', () => {
         className: sinon.match.string,
       }),
       children: childrenMatcher,
-      query: 'c'
+      query: 'c',
+      section: sinon.match({
+        title: sinon.match.string,
+        languages: sinon.match.every(sinon.match({
+          name: sinon.match.string,
+          year: sinon.match.number
+        }))
+      })
     });
   });
 });

@@ -550,13 +550,14 @@ export default class Autosuggest extends Component {
     });
   };
 
-  renderSectionContainer = ({ containerProps, children }) => {
+  renderSectionContainer = ({ containerProps, children, section }) => {
     const { renderSectionContainer } = this.props;
 
     return renderSectionContainer({
       containerProps,
       children,
       query: this.getQuery(),
+      section,
     });
   };
 

@@ -21,7 +21,7 @@ const onChange = (event, { newValue }) => {
 
 const onSuggestionsFetchRequested = ({ value }) => {
   app.setState({
-    suggestions: [{ languages: getMatchingLanguages(value) }]
+    suggestions: [{ title: 'languages', languages: getMatchingLanguages(value) }]
   });
 };
 
@@ -36,14 +36,12 @@ const getSuggestionValue = suggestion => suggestion.name;
 const renderSuggestion = suggestion => suggestion.name;
 
 export const renderSectionContainer = sinon.spy(
-  ({ containerProps, children, query }) => (
-    <div {...containerProps}>
-      {children}
-      <div className="my-section-container-footer">
-        Press Enter to search <strong className="my-query">{query}</strong>
-      </div>
+  ({ containerProps, children, query, section }) => <div {...containerProps}>
+    <div className="my-section-container-header">
+      Showing results for <strong className="my-query">{query}</strong> in {section.title}
     </div>
-  )
+    {children}
+  </div>
 );
 
 const renderSectionTitle = () => null;
