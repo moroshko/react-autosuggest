@@ -16,7 +16,7 @@ Unfortunately, I don't have the time to maintain this project anymore. If you ar
 
 ## Demo
 
-Check out the [Homepage](http://react-autosuggest.js.org) the [jinno example(http://jinno.io/app/11/id)] or the [Codepen examples](http://codepen.io/collection/DkkYaQ).
+Check out the [Homepage](http://react-autosuggest.js.org) the [jinno example](http://jinno.io/app/11/id) or the [Codepen examples](http://codepen.io/collection/DkkYaQ).
 
 ## Features
 
