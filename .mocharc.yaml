@@ -1,3 +1,0 @@
-require: '@babel/register'
-file:
-  - ./test/setup.js
