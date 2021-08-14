@@ -1,9 +1,0 @@
-node_modules
-coverage
-.nyc_output
-dist
-demo/dist
-npm-debug.log
-yarn.lock
-*.log
-.DS
