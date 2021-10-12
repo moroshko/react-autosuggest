@@ -419,7 +419,6 @@ export default class Autowhatever extends Component {
     const itemsContainer = renderItemsContainer({
       containerProps: {
         id: itemsContainerId,
-        role: 'listbox',
         ...theme(
           `react-autowhatever-${id}-items-container`,
           'itemsContainer',
