@@ -6,9 +6,16 @@ import SectionTitle from './SectionTitle';
 import ItemList from './ItemList';
 
 const emptyObject = {};
-const defaultRenderInputComponent = (props) => <input {...props} />;
-const defaultRenderItemsContainer = ({ containerProps, children }) => (
-  <div {...containerProps}>{children}</div>
+const defaultRenderInputComponent = ({ innerRef, ...otherContainerProps }) => (
+  <input {...otherContainerProps} ref={innerRef} />
+);
+const defaultRenderItemsContainer = ({
+  containerProps: { innerRef, ...otherContainerProps },
+  children,
+}) => (
+  <div {...otherContainerProps} ref={innerRef}>
+    {children}
+  </div>
 );
 const defaultTheme = {
   container: 'react-autowhatever__container',
@@ -414,7 +421,7 @@ export default class Autowhatever extends Component {
       onFocus: this.onFocus,
       onBlur: this.onBlur,
       onKeyDown: this.props.inputProps.onKeyDown && this.onKeyDown,
-      ref: this.storeInputReference,
+      innerRef: this.storeInputReference,
     });
     const itemsContainer = renderItemsContainer({
       containerProps: {
@@ -425,7 +432,7 @@ export default class Autowhatever extends Component {
           'itemsContainer',
           isOpen && 'itemsContainerOpen'
         ),
-        ref: this.storeItemsContainerReference,
+        innerRef: this.storeItemsContainerReference,
       },
       children: renderedItems,
     });

@@ -6,8 +6,13 @@ import { defaultTheme, mapToAutowhateverTheme } from './theme';
 
 const alwaysTrue = () => true;
 const defaultShouldRenderSuggestions = (value) => value.trim().length > 0;
-const defaultRenderSuggestionsContainer = ({ containerProps, children }) => (
-  <div {...containerProps}>{children}</div>
+const defaultRenderSuggestionsContainer = ({
+  containerProps: { innerRef, ...otherContainerProps },
+  children,
+}) => (
+  <div {...otherContainerProps} ref={innerRef}>
+    {children}
+  </div>
 );
 
 const REASON_SUGGESTIONS_REVEALED = 'suggestions-revealed';
@@ -127,14 +132,16 @@ export default class Autosuggest extends Component {
     this.justMouseEntered = false;
 
     this.pressedSuggestion = null;
+
+    this.autowhatever = React.createRef();
   }
 
   componentDidMount() {
     document.addEventListener('mousedown', this.onDocumentMouseDown);
     document.addEventListener('mouseup', this.onDocumentMouseUp);
 
-    this.input = this.autowhatever.input;
-    this.suggestionsContainer = this.autowhatever.itemsContainer;
+    this.input = this.autowhatever.current.input;
+    this.suggestionsContainer = this.autowhatever.current.itemsContainer;
   }
 
   // eslint-disable-next-line camelcase, react/sort-comp
@@ -363,12 +370,6 @@ export default class Autosuggest extends Component {
 
     return suggestions.length > 0 && shouldRenderSuggestions(value, reason);
   }
-
-  storeAutowhateverRef = (autowhatever) => {
-    if (autowhatever !== null) {
-      this.autowhatever = autowhatever;
-    }
-  };
 
   onSuggestionMouseEnter = (event, { sectionIndex, itemIndex }) => {
     this.updateHighlightedSuggestion(sectionIndex, itemIndex);
@@ -814,7 +815,7 @@ export default class Autosuggest extends Component {
         itemProps={this.itemProps}
         theme={mapToAutowhateverTheme(theme)}
         id={id}
-        ref={this.storeAutowhateverRef}
+        ref={this.autowhatever}
       />
     );
   }
