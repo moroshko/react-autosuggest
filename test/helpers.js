@@ -17,7 +17,7 @@ export const clearEvents = () => {
   eventsArray = [];
 };
 
-export const addEvent = event => {
+export const addEvent = (event) => {
   eventsArray.push(event);
 };
 
@@ -25,7 +25,7 @@ export const getEvents = () => {
   return eventsArray;
 };
 
-export const init = application => {
+export const init = (application) => {
   app = application;
   container = TestUtils.findRenderedDOMComponentWithClass(
     app,
@@ -43,7 +43,7 @@ export const init = application => {
 };
 
 // Since react-dom doesn't export SyntheticEvent anymore
-export const syntheticEventMatcher = sinon.match(value => {
+export const syntheticEventMatcher = sinon.match((value) => {
   if (typeof value !== 'object' || value === null) {
     return false;
   }
@@ -60,17 +60,18 @@ export const containerPropsMatcher = sinon.match({
   id: sinon.match.string,
   key: sinon.match.string,
   className: sinon.match.string,
-  ref: sinon.match.func
+  innerRef: sinon.match.func,
 });
 
 const reactAttributesRegex = / data-react[-\w]+="[^"]+"/g;
 
 // See: http://stackoverflow.com/q/28979533/247243
-const stripReactAttributes = html => html.replace(reactAttributesRegex, '');
+const stripReactAttributes = (html) => html.replace(reactAttributesRegex, '');
 
-export const getInnerHTML = element => stripReactAttributes(element.innerHTML);
+export const getInnerHTML = (element) =>
+  stripReactAttributes(element.innerHTML);
 
-export const getElementWithClass = className =>
+export const getElementWithClass = (className) =>
   TestUtils.findRenderedDOMComponentWithClass(app, className);
 
 export const expectContainerAttribute = (attributeName, expectedValue) => {
@@ -81,10 +82,10 @@ export const expectInputAttribute = (attributeName, expectedValue) => {
   expect(input.getAttribute(attributeName)).to.equal(expectedValue);
 };
 
-export const getSuggestionsContainerAttribute = attributeName =>
+export const getSuggestionsContainerAttribute = (attributeName) =>
   suggestionsContainer.getAttribute(attributeName);
 
-export const expectInputValue = expectedValue => {
+export const expectInputValue = (expectedValue) => {
   expect(input.value).to.equal(expectedValue);
 };
 
@@ -100,7 +101,7 @@ export const getSuggestions = () =>
     'react-autosuggest__suggestion'
   );
 
-export const getSuggestion = suggestionIndex => {
+export const getSuggestion = (suggestionIndex) => {
   const suggestions = getSuggestions();
 
   if (suggestionIndex >= suggestions.length) {
@@ -137,7 +138,7 @@ export const getTitles = () =>
     'react-autosuggest__section-title'
   );
 
-export const getTitle = titleIndex => {
+export const getTitle = (titleIndex) => {
   const titles = getTitles();
 
   if (titleIndex >= titles.length) {
@@ -148,18 +149,18 @@ export const getTitle = titleIndex => {
 };
 
 export const expectInputReferenceToBeSet = () => {
-  expect(app.input).to.equal(input);
+  expect(app.getInput()).to.equal(input);
 };
 
-export const expectSuggestions = expectedSuggestions => {
+export const expectSuggestions = (expectedSuggestions) => {
   const suggestions = getSuggestions().map(
-    suggestion => suggestion.textContent
+    (suggestion) => suggestion.textContent
   );
 
   expect(suggestions).to.deep.equal(expectedSuggestions);
 };
 
-export const expectHighlightedSuggestion = suggestion => {
+export const expectHighlightedSuggestion = (suggestion) => {
   const highlightedSuggestions = TestUtils.scryRenderedDOMComponentsWithClass(
     app,
     'react-autosuggest__suggestion--highlighted'
@@ -191,30 +192,30 @@ export const expectDontLetBrowserHandleKeyDown = () => {
   expect(getEvents()).to.deep.include('onKeyDown-defaultPrevented');
 };
 
-export const mouseEnterSuggestion = suggestionIndex => {
+export const mouseEnterSuggestion = (suggestionIndex) => {
   Simulate.mouseEnter(getSuggestion(suggestionIndex));
 };
 
-export const mouseLeaveSuggestion = suggestionIndex => {
+export const mouseLeaveSuggestion = (suggestionIndex) => {
   Simulate.mouseLeave(getSuggestion(suggestionIndex));
 };
 
-export const mouseDownSuggestion = suggestionIndex => {
+export const mouseDownSuggestion = (suggestionIndex) => {
   Simulate.mouseDown(getSuggestion(suggestionIndex));
 };
 
-const mouseDownDocument = target => {
+const mouseDownDocument = (target) => {
   document.dispatchEvent(
     new window.CustomEvent('mousedown', {
       detail: {
         // must be 'detail' accoring to docs: https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events#Adding_custom_data_–_CustomEvent()
-        target
-      }
+        target,
+      },
     })
   );
 };
 
-export const mouseUpDocument = target => {
+export const mouseUpDocument = (target) => {
   document.dispatchEvent(
     new window.CustomEvent(
       'mouseup',
@@ -222,25 +223,25 @@ export const mouseUpDocument = target => {
         ? {
             detail: {
               // must be 'detail' accoring to docs: https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events#Adding_custom_data_–_CustomEvent()
-              target
-            }
+              target,
+            },
           }
         : null
     )
   );
 };
 
-const touchStartSuggestion = suggestionIndex => {
+const touchStartSuggestion = (suggestionIndex) => {
   Simulate.touchStart(getSuggestion(suggestionIndex));
 };
 
-const touchMoveSuggestion = suggestionIndex => {
+const touchMoveSuggestion = (suggestionIndex) => {
   Simulate.touchMove(getSuggestion(suggestionIndex));
 };
 
 // It doesn't feel right to emulate all the DOM events by copying the implementation.
 // Please show me a better way to emulate this.
-export const clickSuggestion = suggestionIndex => {
+export const clickSuggestion = (suggestionIndex) => {
   const suggestion = getSuggestion(suggestionIndex);
 
   mouseEnterSuggestion(suggestionIndex);
@@ -254,7 +255,7 @@ export const clickSuggestion = suggestionIndex => {
 };
 
 // Simulates only mouse events since on touch devices dragging considered as a scroll and is a different case.
-export const dragSuggestionOut = suggestionIndex => {
+export const dragSuggestionOut = (suggestionIndex) => {
   const suggestion = getSuggestion(suggestionIndex);
 
   mouseEnterSuggestion(suggestionIndex);
@@ -264,7 +265,7 @@ export const dragSuggestionOut = suggestionIndex => {
   mouseUpDocument();
 };
 
-export const dragSuggestionOutAndIn = suggestionIndex => {
+export const dragSuggestionOutAndIn = (suggestionIndex) => {
   const suggestion = getSuggestion(suggestionIndex);
 
   mouseEnterSuggestion(suggestionIndex);
@@ -281,7 +282,7 @@ export const dragSuggestionOutAndIn = suggestionIndex => {
 
 // Simulates mouse events as well as touch events since some browsers (chrome) mirror them and we should handle this.
 // Order of events is implemented according to docs: https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent
-export const dragSuggestionOutTouch = suggestionIndex => {
+export const dragSuggestionOutTouch = (suggestionIndex) => {
   touchStartSuggestion(suggestionIndex);
   touchMoveSuggestion(suggestionIndex);
   mouseDownSuggestion(suggestionIndex);
@@ -329,12 +330,12 @@ export const clickUp = (count = 1) => {
   }
 };
 
-export const setInputValue = value => {
+export const setInputValue = (value) => {
   input.value = value;
   Simulate.change(input);
 };
 
-export const focusAndSetInputValue = value => {
+export const focusAndSetInputValue = (value) => {
   focusInput();
   setInputValue(value);
 };

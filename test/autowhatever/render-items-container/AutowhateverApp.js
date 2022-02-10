@@ -6,8 +6,8 @@ import items from './items';
 export const renderItem = (item) => item.text;
 
 export const renderItemsContainer = sinon.spy(
-  ({ containerProps, children }) => (
-    <div {...containerProps}>
+  ({ containerProps: { innerRef, ...otherContainerProps }, children }) => (
+    <div {...otherContainerProps} ref={innerRef}>
       {children}
       <div className="my-items-container-footer">Footer</div>
     </div>

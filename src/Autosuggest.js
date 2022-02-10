@@ -6,8 +6,13 @@ import { defaultTheme, mapToAutowhateverTheme } from './theme';
 
 const alwaysTrue = () => true;
 const defaultShouldRenderSuggestions = (value) => value.trim().length > 0;
-const defaultRenderSuggestionsContainer = ({ containerProps, children }) => (
-  <div {...containerProps}>{children}</div>
+const defaultRenderSuggestionsContainer = ({
+  containerProps: { innerRef, ...otherContainerProps },
+  children,
+}) => (
+  <div {...otherContainerProps} ref={innerRef}>
+    {children}
+  </div>
 );
 
 const REASON_SUGGESTIONS_REVEALED = 'suggestions-revealed';
@@ -127,14 +132,13 @@ export default class Autosuggest extends Component {
     this.justMouseEntered = false;
 
     this.pressedSuggestion = null;
+
+    this.autowhatever = React.createRef();
   }
 
   componentDidMount() {
     document.addEventListener('mousedown', this.onDocumentMouseDown);
     document.addEventListener('mouseup', this.onDocumentMouseUp);
-
-    this.input = this.autowhatever.input;
-    this.suggestionsContainer = this.autowhatever.itemsContainer;
   }
 
   // eslint-disable-next-line camelcase, react/sort-comp
@@ -203,6 +207,14 @@ export default class Autosuggest extends Component {
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.onDocumentMouseDown);
     document.removeEventListener('mouseup', this.onDocumentMouseUp);
+  }
+
+  getInput() {
+    return this.autowhatever.current.input;
+  }
+
+  getSuggestionsContainer() {
+    return this.autowhatever.current.itemsContainer;
   }
 
   updateHighlightedSuggestion(sectionIndex, suggestionIndex, prevValue) {
@@ -321,7 +333,7 @@ export default class Autosuggest extends Component {
         return;
       }
 
-      if (node === this.suggestionsContainer) {
+      if (node === this.getSuggestionsContainer()) {
         // Something else inside suggestions container was clicked
         this.justClickedOnSuggestionsContainer = true;
         return;
@@ -364,12 +376,6 @@ export default class Autosuggest extends Component {
     return suggestions.length > 0 && shouldRenderSuggestions(value, reason);
   }
 
-  storeAutowhateverRef = (autowhatever) => {
-    if (autowhatever !== null) {
-      this.autowhatever = autowhatever;
-    }
-  };
-
   onSuggestionMouseEnter = (event, { sectionIndex, itemIndex }) => {
     this.updateHighlightedSuggestion(sectionIndex, itemIndex);
 
@@ -390,7 +396,7 @@ export default class Autosuggest extends Component {
 
   onDocumentMouseUp = () => {
     if (this.pressedSuggestion && !this.justSelectedSuggestion) {
-      this.input.focus();
+      this.getInput().focus();
     }
     this.pressedSuggestion = null;
   };
@@ -463,7 +469,7 @@ export default class Autosuggest extends Component {
     }
 
     if (focusInputOnSuggestionClick === true) {
-      this.input.focus();
+      this.getInput().focus();
     } else {
       this.onBlur();
     }
@@ -511,7 +517,7 @@ export default class Autosuggest extends Component {
   onSuggestionTouchMove = () => {
     this.justSelectedSuggestion = false;
     this.pressedSuggestion = null;
-    this.input.focus();
+    this.getInput().focus();
   };
 
   itemProps = ({ sectionIndex, itemIndex }) => {
@@ -610,7 +616,7 @@ export default class Autosuggest extends Component {
       },
       onBlur: (event) => {
         if (this.justClickedOnSuggestionsContainer) {
-          this.input.focus();
+          this.getInput().focus();
           return;
         }
 
@@ -630,8 +636,8 @@ export default class Autosuggest extends Component {
 
         this.maybeCallOnChange(event, value, 'type');
 
-        if (this.suggestionsContainer) {
-          this.suggestionsContainer.scrollTop = 0;
+        if (this.getSuggestionsContainer()) {
+          this.getSuggestionsContainer().scrollTop = 0;
         }
 
         this.setState({
@@ -814,7 +820,7 @@ export default class Autosuggest extends Component {
         itemProps={this.itemProps}
         theme={mapToAutowhateverTheme(theme)}
         id={id}
-        ref={this.storeAutowhateverRef}
+        ref={this.autowhatever}
       />
     );
   }
