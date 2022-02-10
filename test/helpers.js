@@ -149,7 +149,7 @@ export const getTitle = (titleIndex) => {
 };
 
 export const expectInputReferenceToBeSet = () => {
-  expect(app.input).to.equal(input);
+  expect(app.getInput()).to.equal(input);
 };
 
 export const expectSuggestions = (expectedSuggestions) => {

@@ -7,16 +7,16 @@ import languages from './languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
 import { addEvent, saveKeyDown } from '../helpers';
 
-const getMatchingLanguages = value => {
+const getMatchingLanguages = (value) => {
   const escapedValue = escapeRegexCharacters(value.trim());
   const regex = new RegExp('^' + escapedValue, 'i');
 
-  return languages.filter(language => regex.test(language.name));
+  return languages.filter((language) => regex.test(language.name));
 };
 
 let app = null;
 
-export const getSuggestionValue = sinon.spy(suggestion => {
+export const getSuggestionValue = sinon.spy((suggestion) => {
   return suggestion.name;
 });
 
@@ -37,7 +37,7 @@ export const onChange = sinon.spy((event, { newValue }) => {
   addEvent('onChange');
 
   app.setState({
-    value: newValue
+    value: newValue,
   });
 });
 
@@ -47,17 +47,19 @@ export const onBlur = sinon.spy();
 export const defaultShouldRenderSuggestionsStub = (value) => {
   return value.trim().length > 0 && value[0] !== ' ';
 };
-export const shouldRenderSuggestions = sinon.stub().callsFake(defaultShouldRenderSuggestionsStub);
+export const shouldRenderSuggestions = sinon
+  .stub()
+  .callsFake(defaultShouldRenderSuggestionsStub);
 
 export const onSuggestionsFetchRequested = sinon.spy(({ value }) => {
   app.setState({
-    suggestions: getMatchingLanguages(value)
+    suggestions: getMatchingLanguages(value),
   });
 });
 
 export const onSuggestionsClearRequested = sinon.spy(() => {
   app.setState({
-    suggestions: []
+    suggestions: [],
   });
 });
 
@@ -77,15 +79,15 @@ export default class AutosuggestApp extends Component {
 
     this.state = {
       value: '',
-      suggestions: []
+      suggestions: [],
     };
+
+    this.autosuggest = React.createRef();
   }
 
-  storeAutosuggestReference = autosuggest => {
-    if (autosuggest !== null) {
-      this.input = autosuggest.input;
-    }
-  };
+  getInput() {
+    return this.autosuggest.current.getInput();
+  }
 
   render() {
     const { value, suggestions } = this.state;
@@ -97,7 +99,7 @@ export default class AutosuggestApp extends Component {
       value,
       onChange,
       onFocus,
-      onBlur
+      onBlur,
     };
 
     return (
@@ -111,7 +113,7 @@ export default class AutosuggestApp extends Component {
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
         shouldRenderSuggestions={shouldRenderSuggestions}
-        ref={this.storeAutosuggestReference}
+        ref={this.autosuggest}
       />
     );
   }

@@ -50,13 +50,13 @@ export default class AutosuggestApp extends Component {
       value: '',
       suggestions: [],
     };
+
+    this.autosuggest = React.createRef();
   }
 
-  storeAutosuggestReference = (autosuggest) => {
-    if (autosuggest !== null) {
-      this.input = autosuggest.input;
-    }
-  };
+  getInput() {
+    return this.autosuggest.current.getInput();
+  }
 
   render() {
     const { value, suggestions } = this.state;
@@ -74,7 +74,7 @@ export default class AutosuggestApp extends Component {
         renderSuggestion={renderSuggestion}
         renderInputComponent={renderInputComponent}
         inputProps={inputProps}
-        ref={this.storeAutosuggestReference}
+        ref={this.autosuggest}
       />
     );
   }

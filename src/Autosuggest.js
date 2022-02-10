@@ -139,9 +139,6 @@ export default class Autosuggest extends Component {
   componentDidMount() {
     document.addEventListener('mousedown', this.onDocumentMouseDown);
     document.addEventListener('mouseup', this.onDocumentMouseUp);
-
-    this.input = this.autowhatever.current.input;
-    this.suggestionsContainer = this.autowhatever.current.itemsContainer;
   }
 
   // eslint-disable-next-line camelcase, react/sort-comp
@@ -210,6 +207,14 @@ export default class Autosuggest extends Component {
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.onDocumentMouseDown);
     document.removeEventListener('mouseup', this.onDocumentMouseUp);
+  }
+
+  getInput() {
+    return this.autowhatever.current.input;
+  }
+
+  getSuggestionsContainer() {
+    return this.autowhatever.current.itemsContainer;
   }
 
   updateHighlightedSuggestion(sectionIndex, suggestionIndex, prevValue) {
@@ -328,7 +333,7 @@ export default class Autosuggest extends Component {
         return;
       }
 
-      if (node === this.suggestionsContainer) {
+      if (node === this.getSuggestionsContainer()) {
         // Something else inside suggestions container was clicked
         this.justClickedOnSuggestionsContainer = true;
         return;
@@ -391,7 +396,7 @@ export default class Autosuggest extends Component {
 
   onDocumentMouseUp = () => {
     if (this.pressedSuggestion && !this.justSelectedSuggestion) {
-      this.input.focus();
+      this.getInput().focus();
     }
     this.pressedSuggestion = null;
   };
@@ -464,7 +469,7 @@ export default class Autosuggest extends Component {
     }
 
     if (focusInputOnSuggestionClick === true) {
-      this.input.focus();
+      this.getInput().focus();
     } else {
       this.onBlur();
     }
@@ -512,7 +517,7 @@ export default class Autosuggest extends Component {
   onSuggestionTouchMove = () => {
     this.justSelectedSuggestion = false;
     this.pressedSuggestion = null;
-    this.input.focus();
+    this.getInput().focus();
   };
 
   itemProps = ({ sectionIndex, itemIndex }) => {
@@ -611,7 +616,7 @@ export default class Autosuggest extends Component {
       },
       onBlur: (event) => {
         if (this.justClickedOnSuggestionsContainer) {
-          this.input.focus();
+          this.getInput().focus();
           return;
         }
 
@@ -631,8 +636,8 @@ export default class Autosuggest extends Component {
 
         this.maybeCallOnChange(event, value, 'type');
 
-        if (this.suggestionsContainer) {
-          this.suggestionsContainer.scrollTop = 0;
+        if (this.getSuggestionsContainer()) {
+          this.getSuggestionsContainer().scrollTop = 0;
         }
 
         this.setState({
