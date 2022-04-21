@@ -173,11 +173,8 @@ export default class Autosuggest extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const {
-      suggestions,
-      onSuggestionHighlighted,
-      highlightFirstSuggestion,
-    } = this.props;
+    const { suggestions, onSuggestionHighlighted, highlightFirstSuggestion } =
+      this.props;
 
     if (
       !shallowEqualArrays(suggestions, prevProps.suggestions) &&
@@ -282,6 +279,26 @@ export default class Autosuggest extends Component {
       highlightedSectionIndex,
       highlightedSuggestionIndex
     );
+  }
+
+  getNewHighlightedSuggestionData(
+    highlightedSectionIndex,
+    highlightedSuggestionIndex
+  ) {
+    const highlightedSuggestion = this.getSuggestion(
+      highlightedSectionIndex,
+      highlightedSuggestionIndex
+    );
+
+    if (highlightedSuggestionIndex === null) {
+      return null;
+    }
+
+    return {
+      highlightedSectionIndex,
+      highlightedSuggestionIndex,
+      highlightedSuggestion,
+    };
   }
 
   getSuggestionValueByIndex(sectionIndex, suggestionIndex) {
@@ -441,9 +458,8 @@ export default class Autosuggest extends Component {
       this.findSuggestionElement(event.target)
     );
     const clickedSuggestion = this.getSuggestion(sectionIndex, suggestionIndex);
-    const clickedSuggestionValue = this.props.getSuggestionValue(
-      clickedSuggestion
-    );
+    const clickedSuggestionValue =
+      this.props.getSuggestionValue(clickedSuggestion);
 
     this.maybeCallOnChange(event, clickedSuggestionValue, 'click');
     this.onSuggestionSelected(event, {
@@ -454,9 +470,8 @@ export default class Autosuggest extends Component {
       method: 'click',
     });
 
-    const keepSuggestionsOnSelect = this.props.shouldKeepSuggestionsOnSelect(
-      clickedSuggestion
-    );
+    const keepSuggestionsOnSelect =
+      this.props.shouldKeepSuggestionsOnSelect(clickedSuggestion);
 
     if (!(alwaysRenderSuggestions || keepSuggestionsOnSelect)) {
       this.closeSuggestions();
@@ -668,10 +683,8 @@ export default class Autosuggest extends Component {
                 event.preventDefault(); // We act on the key.
               }
             } else if (suggestions.length > 0) {
-              const {
-                newHighlightedSectionIndex,
-                newHighlightedItemIndex,
-              } = data;
+              const { newHighlightedSectionIndex, newHighlightedItemIndex } =
+                data;
 
               let newValue;
 
@@ -790,7 +803,13 @@ export default class Autosuggest extends Component {
           }
         }
 
-        onKeyDown && onKeyDown(event);
+        const { newHighlightedSectionIndex, newHighlightedItemIndex } = data;
+        const highlightedSuggestionData = this.getNewHighlightedSuggestionData(
+          newHighlightedSectionIndex,
+          newHighlightedItemIndex
+        );
+
+        onKeyDown && onKeyDown(event, highlightedSuggestionData);
       },
     };
     const renderSuggestionData = {
