@@ -59,7 +59,7 @@
     "husky": "^4.2.3",
     "ismobilejs": "^1.0.3",
     "isomorphic-fetch": "^2.2.1",
-    "jsdom": "15.1.1",
+    "jsdom": "16.5.0",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
     "lint-staged": "^10.0.10",
