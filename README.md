@@ -14,6 +14,10 @@ Looking for maintainers!
 
 Unfortunately, I don't have the time to maintain this project anymore. If you are interested to help, please reach out to me on Twitter [@moroshko](https://twitter.com/moroshko).
 
+## React-Autosuggest AI Bot
+
+[React-Autosuggest](https://codeparrot.ai/oracle?owner=moroshko&repo=react-autosuggest) Bot will help you understand this repository better. You can ask for code examples, installation guide, debugging help and much more.
+
 ## Demo
 
 Check out the [Homepage](http://react-autosuggest.js.org) and the [Codepen examples](http://codepen.io/collection/DkkYaQ).
