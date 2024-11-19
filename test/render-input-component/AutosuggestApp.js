@@ -3,40 +3,40 @@ import Autosuggest from '../../src/Autosuggest';
 import languages from '../plain-list/languages';
 import { escapeRegexCharacters } from '../../demo/src/components/utils/utils.js';
 
-const getMatchingLanguages = value => {
+const getMatchingLanguages = (value) => {
   const escapedValue = escapeRegexCharacters(value.trim());
   const regex = new RegExp('^' + escapedValue, 'i');
 
-  return languages.filter(language => regex.test(language.name));
+  return languages.filter((language) => regex.test(language.name));
 };
 
 let app = null;
 
 const onChange = (event, { newValue }) => {
   app.setState({
-    value: newValue
+    value: newValue,
   });
 };
 
 const onSuggestionsFetchRequested = ({ value }) => {
   app.setState({
-    suggestions: getMatchingLanguages(value)
+    suggestions: getMatchingLanguages(value),
   });
 };
 
 const onSuggestionsClearRequested = () => {
   app.setState({
-    suggestions: []
+    suggestions: [],
   });
 };
 
-const getSuggestionValue = suggestion => suggestion.name;
+const getSuggestionValue = (suggestion) => suggestion.name;
 
-const renderSuggestion = suggestion => suggestion.name;
+const renderSuggestion = (suggestion) => suggestion.name;
 
-const renderInputComponent = inputProps => (
+const renderInputComponent = ({ innerRef, ...otherInputProps }) => (
   <div>
-    <input id="my-custom-input" {...inputProps} />
+    <input id="my-custom-input" {...otherInputProps} ref={innerRef} />
   </div>
 );
 
@@ -48,21 +48,21 @@ export default class AutosuggestApp extends Component {
 
     this.state = {
       value: '',
-      suggestions: []
+      suggestions: [],
     };
+
+    this.autosuggest = React.createRef();
   }
 
-  storeAutosuggestReference = autosuggest => {
-    if (autosuggest !== null) {
-      this.input = autosuggest.input;
-    }
-  };
+  getInput() {
+    return this.autosuggest.current.getInput();
+  }
 
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
       value,
-      onChange
+      onChange,
     };
 
     return (
@@ -74,7 +74,7 @@ export default class AutosuggestApp extends Component {
         renderSuggestion={renderSuggestion}
         renderInputComponent={renderInputComponent}
         inputProps={inputProps}
-        ref={this.storeAutosuggestReference}
+        ref={this.autosuggest}
       />
     );
   }
