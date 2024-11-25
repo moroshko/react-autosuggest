@@ -10,6 +10,9 @@ const defaultRenderInputComponent = (props) => <input {...props} />;
 const defaultRenderItemsContainer = ({ containerProps, children }) => (
   <div {...containerProps}>{children}</div>
 );
+const defaultRenderSectionContainer = ({ containerProps, children }) => (
+  <div {...containerProps}>{children}</div>
+);
 const defaultTheme = {
   container: 'react-autowhatever__container',
   containerOpen: 'react-autowhatever__container--open',
@@ -33,6 +36,7 @@ export default class Autowhatever extends Component {
     multiSection: PropTypes.bool, // Indicates whether a multi section layout should be rendered.
     renderInputComponent: PropTypes.func, // When specified, it is used to render the input element.
     renderItemsContainer: PropTypes.func, // Renders the items container.
+    renderSectionContainer: PropTypes.func, // Renders the section container.
     items: PropTypes.array.isRequired, // Array of items or sections to render.
     renderItem: PropTypes.func, // This function renders a single item.
     renderItemData: PropTypes.object, // Arbitrary data that will be passed to renderItem()
@@ -59,6 +63,7 @@ export default class Autowhatever extends Component {
     multiSection: false,
     renderInputComponent: defaultRenderInputComponent,
     renderItemsContainer: defaultRenderItemsContainer,
+    renderSectionContainer: defaultRenderSectionContainer,
     renderItem: () => {
       throw new Error('`renderItem` must be provided');
     },
@@ -191,6 +196,7 @@ export default class Autowhatever extends Component {
       items,
       renderItem,
       renderItemData,
+      renderSectionContainer,
       renderSectionTitle,
       highlightedSectionIndex,
       highlightedItemIndex,
@@ -203,41 +209,41 @@ export default class Autowhatever extends Component {
       const isFirstSection = sectionIndex === 0;
 
       // `key` is provided by theme()
-      /* eslint-disable react/jsx-key */
-      return (
-        <div
-          {...theme(
-            `${sectionKeyPrefix}container`,
-            'sectionContainer',
-            isFirstSection && 'sectionContainerFirst'
-          )}
-        >
-          <SectionTitle
-            section={section}
-            renderSectionTitle={renderSectionTitle}
-            theme={theme}
-            sectionKeyPrefix={sectionKeyPrefix}
-          />
-          <ItemList
-            items={this.sectionsItems[sectionIndex]}
-            itemProps={itemProps}
-            renderItem={renderItem}
-            renderItemData={renderItemData}
-            sectionIndex={sectionIndex}
-            highlightedItemIndex={
-              highlightedSectionIndex === sectionIndex
-                ? highlightedItemIndex
-                : null
-            }
-            onHighlightedItemChange={this.onHighlightedItemChange}
-            getItemId={this.getItemId}
-            theme={theme}
-            keyPrefix={keyPrefix}
-            ref={this.storeItemsListReference}
-          />
-        </div>
-      );
-      /* eslint-enable react/jsx-key */
+      return renderSectionContainer({
+        section,
+        containerProps: theme(
+          `${sectionKeyPrefix}container`,
+          'sectionContainer',
+          isFirstSection && 'sectionContainerFirst'
+        ),
+        children: (
+          <React.Fragment>
+            <SectionTitle
+              section={section}
+              renderSectionTitle={renderSectionTitle}
+              theme={theme}
+              sectionKeyPrefix={sectionKeyPrefix}
+            />
+            <ItemList
+              items={this.sectionsItems[sectionIndex]}
+              itemProps={itemProps}
+              renderItem={renderItem}
+              renderItemData={renderItemData}
+              sectionIndex={sectionIndex}
+              highlightedItemIndex={
+                highlightedSectionIndex === sectionIndex
+                  ? highlightedItemIndex
+                  : null
+              }
+              onHighlightedItemChange={this.onHighlightedItemChange}
+              getItemId={this.getItemId}
+              theme={theme}
+              keyPrefix={keyPrefix}
+              ref={this.storeItemsListReference}
+            />
+          </React.Fragment>
+        ),
+      });
     });
   }
 
